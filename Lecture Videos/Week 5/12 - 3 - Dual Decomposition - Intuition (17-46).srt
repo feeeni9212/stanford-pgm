@@ -1,0 +1,840 @@
+
+1
+00:00:00,000 --> 00:00:04,009
+We previously defined the map inference
+problem, which is that of finding the,
+
+2
+00:00:05,001 --> 00:00:09,008
+highest probability assignment to a
+graphical model. And we talked about
+
+3
+00:00:09,008 --> 00:00:15,002
+particular classes of models for which the
+map problem was tractable. One was a class
+
+4
+00:00:15,002 --> 00:00:20,002
+that, of models that had sufficiently low
+tree width. So that one could use
+
+5
+00:00:20,002 --> 00:00:25,003
+techniques such as variable elimination or
+clique tree methods. And then we also
+
+6
+00:00:25,003 --> 00:00:30,002
+talked about a variety of other special
+purpose classes where one could do
+
+7
+00:00:30,002 --> 00:00:35,008
+tractable inference. We are going to talk
+about now is a general purpose algorithm
+
+8
+00:00:35,008 --> 00:00:41,000
+that can be used to solve any MAP
+problem, keeping in mind of course that
+
+9
+00:00:41,000 --> 00:00:46,004
+the MAP problem is an NP-hard
+problem, so you're not going to get a
+
+10
+00:00:46,004 --> 00:00:52,000
+fully polynomial time algorithm that, that
+one can utilizes in the context of any
+
+11
+00:00:52,000 --> 00:00:57,006
+problem. So the class of methods that
+we're going to talk about is in, is called
+
+12
+00:00:57,006 --> 00:01:03,002
+Dual Decomposition. And it's derived from
+the increasingly prevalent view of the MAP
+
+13
+00:01:03,002 --> 00:01:08,004
+inference problem as an optimization
+problem and building on techniques from
+
+14
+00:01:08,004 --> 00:01:14,003
+the field of optimization theory. Let's go
+ahead and first reformulate the problem in
+
+15
+00:01:14,003 --> 00:01:19,007
+a way that makes it amenable to this kind
+of analysis and this is just a convenience
+
+16
+00:01:19,007 --> 00:01:26,006
+so here we are going to assume that the
+MAP problem that we are trying to optimize
+
+17
+00:01:26,006 --> 00:01:29,009
+remember we've reformulated this
+as a max sum as opposed to a max product
+
+18
+00:01:29,009 --> 00:01:35,003
+which is a convenient reformulation and we
+are going to assume that the data that we
+
+19
+00:01:35,003 --> 00:01:41,001
+are trying to optimize is comprised of a sum
+of two different kinds of factors. The
+
+20
+00:01:41,001 --> 00:01:46,008
+first is singleton factors. Which are over
+the scope of single variable XI and the
+
+21
+00:01:46,008 --> 00:01:52,001
+second are larger factors that are over
+the scope of multiple variables.
+
+22
+00:01:52,001 --> 00:01:57,004
+And clearly one can fold in the singleton
+factors into some larger factor that
+
+23
+00:01:57,004 --> 00:02:03,002
+contains a variable in its scope but it
+turns out to be convenient to keep them in
+
+24
+00:02:03,002 --> 00:02:08,008
+the model for reasons that will become
+clear in a minute. So now our goal is to
+
+25
+00:02:08,008 --> 00:02:14,000
+find the value for the moment. We're going
+to talk about how to find an actual
+
+26
+00:02:14,000 --> 00:02:19,001
+assignment in a little bit, but imagine
+that our goal is to just figure out what
+
+27
+00:02:19,001 --> 00:02:24,003
+is the value of the highest probability
+assignment X. And so we're trying to find
+
+28
+00:02:24,003 --> 00:02:33,000
+the X that maximizes this total summation.
+One thing that we could do, which would be
+
+29
+00:02:33,000 --> 00:02:38,000
+wrong, but we could do it, is to say,
+well, let's forget about the fact that
+
+30
+00:02:38,000 --> 00:02:43,001
+we're trying to do a single joint
+assignment. Rather, we're going to think
+
+31
+00:02:43,001 --> 00:02:48,007
+about each problem with blinders on. So
+we're going to think about, each theta I,
+
+32
+00:02:48,007 --> 00:02:54,005
+XI, by itself. And we're going to find the
+XI that optimizes that, factor. And we're
+
+33
+00:02:54,005 --> 00:03:00,003
+going to do the same for the larger
+factors. Now, that of course is going to
+
+34
+00:03:00,003 --> 00:03:05,004
+be a very poor solution because the XI
+that going to optimize one data I, Is going to be
+
+35
+00:03:10,004 --> 00:03:15,005
+completely inconsistent with the Xi that is selected by 
+one of the larger factors that contains XI.
+
+36
+00:03:15,005 --> 00:03:22,009
+So, you're going to get a completely incoherent joint
+assignment. It's not going to be a joint assignment.
+
+37
+00:03:22,009 --> 00:03:26,003
+It's going to be a bunch of different assignments
+that don't that don't agree with each
+
+38
+00:03:26,003 --> 00:03:31,006
+other. So, what dual decomposition does is
+it's going to try and do the same kind of
+
+39
+00:03:31,006 --> 00:03:36,007
+divide and conquer, but it's going to do
+it in a way that tries to force these
+
+40
+00:03:36,007 --> 00:03:44,002
+local decision-making problems to agree
+with each other. And so how are we going
+
+41
+00:03:44,002 --> 00:03:48,006
+to do that. We are going to do that by
+introducing a set of costs. And the costs
+
+42
+00:03:48,006 --> 00:03:53,001
+are going to be things that are going to
+drive each of these local problems to
+
+43
+00:03:53,001 --> 00:03:58,007
+hopefully, eventually agree with the
+decisions made in other local problems. So
+
+44
+00:03:58,007 --> 00:04:05,001
+going back to this, what we're going to
+do, and now this is actually an equality.
+
+45
+00:04:06,000 --> 00:04:11,007
+Is, we're going to do the following. For
+the variable I, we have its own local
+
+46
+00:04:11,007 --> 00:04:17,004
+potential, theta I. And then we have a
+bunch of costs. And these are the costs
+
+47
+00:04:17,004 --> 00:04:23,005
+that are derived from the [inaudible], and
+we have a cost for each factor F that
+
+48
+00:04:23,005 --> 00:04:29,002
+contains I in its scope. And that cost is
+going to try and pull the little I,
+
+49
+00:04:29,004 --> 00:04:35,001
+decision maker, which is called the slave,
+by the way. Each of these decision
+
+50
+00:04:35,001 --> 00:04:42,009
+problems is called a slave. So this is the
+I slave. And here is a little term that's
+
+51
+00:04:42,009 --> 00:04:50,006
+suppose to pull the i slave, to agree
+with the decision made in factor f.
+
+52
+00:04:51,005 --> 00:05:03,007
+Similarly, we have an F slave. And what
+we're trying to do, is we're trying to get
+
+53
+00:05:03,007 --> 00:05:18,000
+the F slave to agree with the i slaves.
+For the variable Xi and its scope. Now, as
+
+54
+00:05:18,000 --> 00:05:24,006
+written over here, let's convince
+ourselves that this expression is, in
+
+55
+00:05:24,006 --> 00:05:32,000
+fact, equal to the first line. And then
+reason is that, here, I add a term, lambda
+
+56
+00:05:32,000 --> 00:05:39,005
+FI of XI, for I in the scope of F. And
+here, I subtract that same expression over
+
+57
+00:05:39,005 --> 00:05:47,002
+here. So each of these expressions, lambda
+FI gets added in at I, and subtracted out
+
+58
+00:05:47,002 --> 00:05:54,004
+at F. And so they cancel out. So far, I've
+had equality. But now, I'm going to really
+
+59
+00:05:54,004 --> 00:05:59,008
+let each agent make their own decision. So
+now, before, there was still the
+
+60
+00:05:59,008 --> 00:06:05,009
+maximization on the outside. Now I'm going
+to let each agent look at its little set
+
+61
+00:06:05,009 --> 00:06:11,008
+of factors, that, it owns. Including the
+sort of penalty terms that it has in, in
+
+62
+00:06:11,008 --> 00:06:17,007
+order to agree with the other slaves. And
+each one is going to make its separate
+
+63
+00:06:17,007 --> 00:06:25,005
+optimization with all of those terms
+together. So, you can think of these,
+
+64
+00:06:25,005 --> 00:06:35,009
+these penalty terms as messages from, or
+between, F and I. Their, their way to
+
+65
+00:06:35,009 --> 00:06:42,000
+communicate. For F to communicate to I
+what it thinks ought to be done and for I
+
+66
+00:06:42,000 --> 00:06:49,009
+to communicate with F at the same time.
+Now one important point that we'll come
+
+67
+00:06:49,009 --> 00:06:55,009
+back to, in a little bit, is that this,
+function here which is called L of Lambda,
+
+68
+00:06:55,009 --> 00:07:03,004
+notice that this is a function of Lambda.
+And only a function of lambda because it's
+
+69
+00:07:03,004 --> 00:07:09,004
+no longer a function of x because of
+maximize over the x. So you're going to
+
+70
+00:07:09,004 --> 00:07:15,006
+get a different value of this function
+depending on the choices of the penalty
+
+71
+00:07:15,006 --> 00:07:21,003
+parameters. This function is an upper
+bound on max theta for any value of
+
+72
+00:07:21,003 --> 00:07:27,005
+lambda. Now let's understand why that is.
+It's, we've seen in this line over here
+
+73
+00:07:27,005 --> 00:07:34,004
+that this is actually equal to that.
+Anyways, we've shown that everything
+
+74
+00:07:34,004 --> 00:07:42,001
+cancels here. And what I've done here is,
+over here, I'm forcing a single X to
+
+75
+00:07:42,001 --> 00:07:49,008
+maximize this entire expression together.
+And here, I'm letting each term be
+
+76
+00:07:49,008 --> 00:07:56,008
+optimized separately. And that give me
+more degrees of freedom, because here I
+
+77
+00:07:56,008 --> 00:08:03,001
+have to pick the same x across the board,
+and here this one gets to pick one x and
+
+78
+00:08:03,001 --> 00:08:09,001
+this one get to pick another value of x.
+And so since, the assignment where they
+
+79
+00:08:09,001 --> 00:08:15,005
+all agree is a, is one of the assignments
+that can be consider in this optimization
+
+80
+00:08:15,005 --> 00:08:22,006
+problem over here. The overall value that
+can be gained is only higher than if I had
+
+81
+00:08:22,006 --> 00:08:27,009
+to force them all to agree which is a more
+constrained optimization problem. In
+
+82
+00:08:27,009 --> 00:08:33,002
+general, the more constraints I have on
+the space that I'm optimizing the lower
+
+83
+00:08:33,002 --> 00:08:41,008
+the value that I, the lower the value that
+I can get. So introducing some notation
+
+84
+00:08:41,008 --> 00:08:48,005
+which we'll use in a little, which we'll
+use in the rest of this presentation,
+
+85
+00:08:48,005 --> 00:08:55,008
+we're going to call the function that the
+I slave is optimizing, theta I lambda. And
+
+86
+00:08:55,008 --> 00:09:04,002
+the function that is being optimized by
+the F slave, theta F lambda. So let's take
+
+87
+00:09:04,002 --> 00:09:10,005
+an example to make this a little bit more
+concrete because this was a little bit
+
+88
+00:09:10,005 --> 00:09:16,009
+abstract. So let's go back to our to, to
+our example of a four way loop where we
+
+89
+00:09:16,009 --> 00:09:23,000
+have X1, X2, X3, and X4 and we're going to
+have these four pairwise potentials
+
+90
+00:09:23,000 --> 00:09:29,006
+which we're going to denote with letters
+this time to disambiguate indices a little
+
+91
+00:09:29,006 --> 00:09:35,005
+bit. So we have theta F of X1, X2, theta G
+of X2, X3, theta H, and theta K. So, now
+
+92
+00:09:35,005 --> 00:09:41,000
+how is this decomposition going to work
+here? Let's assume for the moment that
+
+93
+00:09:41,000 --> 00:09:48,006
+we're going to decompose this over edges.
+So our factors are going to be, for
+
+94
+00:09:48,006 --> 00:09:57,005
+example, the edge X1, X2. So now what is
+the optimization problem that this factor
+
+95
+00:09:57,005 --> 00:10:05,001
+chooses? Well it has its own potential,
+say the f x1, x2, and then it's going to
+
+96
+00:10:05,001 --> 00:10:13,002
+have these little costs that are going to
+try and get it to agree with x1 on the,
+
+97
+00:10:13,002 --> 00:10:23,000
+with the one slave on x1 and the two slave
+on x2. We're similarly going to have, for
+
+98
+00:10:23,000 --> 00:10:34,008
+x1x4, this is the k, so this is the f
+slave. This is the k slave. And it's going
+
+99
+00:10:34,008 --> 00:10:41,003
+to have its own potential, theta K. And
+two penalty terms that are going to try to
+
+100
+00:10:41,003 --> 00:10:47,008
+make, to make it agree with the one slave
+on X1, and the four slaves on X4. And we
+
+101
+00:10:47,008 --> 00:10:54,006
+similarly have exactly the same form for
+the other two, slaves, the G slave and the
+
+102
+00:10:54,006 --> 00:11:01,002
+H slave. In addition, we have slaves for
+the individual variables, the one, two,
+
+103
+00:11:01,002 --> 00:11:06,009
+three, four slaves. So here is the one
+slave. And notice that the one slave has
+
+104
+00:11:06,009 --> 00:11:12,009
+its own potential theta one, X1. And at
+the same time, it has these two terms that
+
+105
+00:11:12,009 --> 00:11:18,008
+are trying to make it agree on the one
+side with F, which is over here. So this
+
+106
+00:11:18,008 --> 00:11:27,005
+is because of this. And on the other side
+with K, because of that. And the same
+
+107
+00:11:27,005 --> 00:11:33,006
+thing applies to the other slaves, so the
+two slave for example, is going to agree
+
+108
+00:11:33,006 --> 00:11:39,005
+with F. And is going to try to be, is
+going to be [inaudible] with F and with G,
+
+109
+00:11:39,005 --> 00:11:52,001
+so it has a lambda F2 and a lambda G2. Now
+I've done this in the context of a very
+
+110
+00:11:52,001 --> 00:11:58,002
+simple scenario where I've broken up my
+model into the factors that existed in the
+
+111
+00:11:58,002 --> 00:12:03,005
+original specification. So, for example I
+had factors that were pair wise
+
+112
+00:12:03,005 --> 00:12:09,002
+potentials. I had a slave for each such
+factor. But that doesn't have to be the
+
+113
+00:12:09,002 --> 00:12:15,004
+case. [cough] In fact, the only constraint
+that I need to satisfy is that I need the
+
+114
+00:12:15,004 --> 00:12:21,004
+sl, to define a slave to be defined as a
+subset of factors that admit a tractable
+
+115
+00:12:21,004 --> 00:12:28,003
+solution. So that each one can be
+optimized. Efficiently, when considered in
+
+116
+00:12:28,003 --> 00:12:35,008
+isolation. So, for example if we can, if
+we'll return to this network, say one
+
+117
+00:12:35,008 --> 00:12:44,001
+thing we could do is, we can introduce two
+larger slaves, instead of the four smaller
+
+118
+00:12:44,001 --> 00:12:52,004
+FGKH slaves, which one is corresponding to
+F and G together so this is the FG slave.
+
+119
+00:12:53,009 --> 00:13:03,005
+And the other one, representing the k, the
+KH slave. And, in this case, if we think
+
+120
+00:13:03,005 --> 00:13:08,009
+about the agreement, we still have the
+one, two, three, four slaves that
+
+121
+00:13:08,009 --> 00:13:15,003
+represent the individual variables. And so
+now we're going to have to require that
+
+122
+00:13:15,003 --> 00:13:21,008
+theta F agrees with X1, with the one slave
+on X1, with a two slave on X2, and with a
+
+123
+00:13:21,008 --> 00:13:27,009
+three slave on X3. And so we have this
+expression, which has a lambda term for
+
+124
+00:13:27,009 --> 00:13:34,007
+each of those three variables. And we have
+a similar term for a similar expression
+
+125
+00:13:34,007 --> 00:13:41,000
+for the KH slave, where in this case, the
+KH slave has to agree with the one slave
+
+126
+00:13:41,000 --> 00:13:47,005
+on X1, the four slave on X4, and the three
+slave on X3. If we now think about the
+
+127
+00:13:47,005 --> 00:13:53,008
+singleton slaves, for example X1, we see
+that X1 has to agree with the FG slave, so
+
+128
+00:13:53,008 --> 00:14:00,002
+there's a term to encourage that, and with
+the KH slave because it's present in both.
+
+129
+00:14:00,002 --> 00:14:06,004
+On the other hand, the X2 variable only
+occurs in the first slave and so it only
+
+130
+00:14:06,004 --> 00:14:16,009
+has a single agreement term with the FG
+slave. And similarly for x3 and x4. So,
+
+131
+00:14:16,009 --> 00:14:22,002
+how do we then construct the slaves? In
+pair wise networks, what we typically do
+
+132
+00:14:22,002 --> 00:14:27,008
+is we divide the factors into a set of
+disjoint trees. And this is in fact what I
+
+133
+00:14:27,008 --> 00:14:33,002
+showed in the previous slide. We divided
+it into one tree that went through the
+
+134
+00:14:33,002 --> 00:14:38,008
+first wedges, and a second one that went
+through the second wedges. And then, and
+
+135
+00:14:38,008 --> 00:14:43,002
+these, and they are destroying such means
+as every edge is assigned to exactly one
+
+136
+00:14:43,002 --> 00:14:47,001
+tree. And because they're trees we know
+how to optimize in efficiency using
+
+137
+00:14:47,001 --> 00:14:51,004
+[inaudible], [inaudible], [inaudible]
+variation or [inaudible] tree. But we also
+
+138
+00:14:51,004 --> 00:14:56,002
+discuss that there is other classes of
+factors that are, that offer tractable
+
+139
+00:14:56,002 --> 00:15:00,007
+inference. So for example, we talked about
+matching, or models that are
+
+140
+00:15:00,007 --> 00:15:06,000
+associative, or regular, or super modular,
+or whatever we call them. And all of these
+
+141
+00:15:06,000 --> 00:15:11,000
+are tractable classes we can take a whole
+bunch of factors that satis, that, that
+
+142
+00:15:11,000 --> 00:15:16,003
+fit into one of these tractable categories
+and optimize them together in one svelte
+
+143
+00:15:16,003 --> 00:15:20,007
+swoop. We don't need to divide into
+separate edges. So let's look at an
+
+144
+00:15:20,007 --> 00:15:25,007
+example of this. Remember a while ago, we
+talked about the problem of 3D cell
+
+145
+00:15:25,007 --> 00:15:30,009
+reconstruction, where we have a, a cell
+over here that we're imaging. And we're
+
+146
+00:15:30,009 --> 00:15:36,004
+taking various images that are slices, two
+dimensional slices through that cell. And
+
+147
+00:15:36,004 --> 00:15:42,003
+we'd like to reconstruct three dimensional
+structure. So here as, as we discussed, we
+
+148
+00:15:42,003 --> 00:15:47,007
+have the slices and we would like to
+correspond the beads, that we see, this
+
+149
+00:15:47,007 --> 00:15:53,006
+little gold beads that we see and these
+different images to each other. So try to
+
+150
+00:15:53,006 --> 00:15:59,006
+figure out that this bead corresponds to
+the bead over there. And from that we can,
+
+151
+00:15:59,006 --> 00:16:06,004
+then subsequently. Obtain the 3D
+reconstruction. Now when we last talked
+
+152
+00:16:06,004 --> 00:16:12,008
+about this we described this as a matching
+problem, where the matching waits between
+
+153
+00:16:12,008 --> 00:16:18,008
+a point here and the point here. Are
+derived from the similarity of both the
+
+154
+00:16:18,008 --> 00:16:23,008
+location and the 2D slice, and the
+appearance of the local neighborhood. But
+
+155
+00:16:23,008 --> 00:16:28,009
+it turns out that neither of these is
+sufficiently distinctive in order to
+
+156
+00:16:28,009 --> 00:16:34,004
+really make that determination robustly
+that one point in an image matches another
+
+157
+00:16:34,004 --> 00:16:39,009
+point in the other image. And so in order
+to do this with a reasonable success we
+
+158
+00:16:39,009 --> 00:16:45,001
+need to have another set of potentials
+which are pair wise potentials. Which
+
+159
+00:16:45,001 --> 00:16:52,000
+basically preserved distances of these
+marker positions. So tell us that if we
+
+160
+00:16:52,000 --> 00:16:59,000
+had, if we want to correspond this point
+over here to this point, and this point to
+
+161
+00:16:59,000 --> 00:17:05,003
+that point, then the distances between
+them. Should also roughly be preserved.
+
+162
+00:17:05,003 --> 00:17:11,005
+Now, this set of potentials is relatively
+sparse and therefore can be solved usually
+
+163
+00:17:11,005 --> 00:17:17,002
+using exact difference, this set of
+potentials is not complicated on its own,
+
+164
+00:17:17,002 --> 00:17:22,009
+cause it's a matching problem. If you put
+them together it turns out to be a
+
+165
+00:17:22,009 --> 00:17:28,009
+difficult problem to solve. In fact you
+could show that a joint set of potentials
+
+166
+00:17:28,009 --> 00:17:34,005
+like this, with these two different
+categories is in general [inaudible] but
+
+167
+00:17:34,005 --> 00:17:41,001
+using dual decomposition we can solve each
+of these separately. And then communicate
+
+168
+00:17:41,001 --> 00:17:46,002
+information between them. So each of these
+would form a tractable slave.

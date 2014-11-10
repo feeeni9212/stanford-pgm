@@ -1,0 +1,727 @@
+
+1
+00:00:00,000 --> 00:00:04,510
+Having defined the principal of Maximum
+Likelihood Estimation for a single,
+
+2
+00:00:04,691 --> 00:00:09,021
+parameter, we can now consider the more
+complicated scenario where we're
+
+3
+00:00:09,021 --> 00:00:13,532
+interested in doing Maximum Likelihood
+Estimation for the full ensemble of
+
+4
+00:00:13,532 --> 00:00:19,682
+parameters for a given Bayesian network
+structure. So let's look at the more
+
+5
+00:00:19,682 --> 00:00:25,048
+general case where now we have a general
+Bayesian network, not necessarily
+
+6
+00:00:25,048 --> 00:00:30,348
+binary valued. And our parameters now
+consist of a set of parameters theta x for
+
+7
+00:00:30,348 --> 00:00:35,912
+all possible values of the variable x and
+the set of parameters theta y given x for
+
+8
+00:00:35,912 --> 00:00:41,411
+all values of the parent x and the child y
+and that's the parameterization of this
+
+9
+00:00:41,411 --> 00:00:46,795
+Bayesian network in this general case of
+table CPDs. Now let's think about the
+
+10
+00:00:46,795 --> 00:00:52,736
+likelihood of, the parameters, the set of
+parameters, theta, What does the
+
+11
+00:00:52,736 --> 00:00:58,522
+likelihood function look like? Well, the
+likelihood function, remember, is the
+
+12
+00:00:58,522 --> 00:01:04,230
+probability of the data given the
+parameters which decomposes because the
+
+13
+00:01:04,230 --> 00:01:10,634
+parameters are iid as the product of all
+data instances Xm and Ym, relative to
+
+14
+00:01:10,634 --> 00:01:17,749
+the parameterization theta. Well so
+we're going to break that probability up
+
+15
+00:01:17,749 --> 00:01:25,229
+using the chain rule for Bayesian
+networks. And that's going to give me a
+
+16
+00:01:25,229 --> 00:01:29,859
+decomposition of this joint [inaudible]
+probability. As a product of the
+
+17
+00:01:29,859 --> 00:01:34,682
+probability of, the parent x times, the
+conditional probability of y given x,
+
+18
+00:01:34,682 --> 00:01:39,955
+which is, just again the [inaudible]
+application of the chain rule in this very
+
+19
+00:01:39,955 --> 00:01:49,957
+simple example. And now I'm going to,
+Basically break this up first into two
+
+20
+00:01:49,957 --> 00:01:56,273
+separate products. So I'm going to move
+this product here, so I have one product
+
+21
+00:01:56,273 --> 00:02:02,989
+over just the first set of terms, and then
+a second product over the y given x terms.
+
+22
+00:02:02,989 --> 00:02:09,465
+And then I'm going to observe that the
+first set of terms, the probability of x m
+
+23
+00:02:09,465 --> 00:02:15,701
+only depends on the parameters theta x.
+And the probability y m given x m only
+
+24
+00:02:15,701 --> 00:02:22,157
+depends on theta y given x. And so now
+we've broken up the likelihood function
+
+25
+00:02:22,157 --> 00:02:32,632
+into a product of two, what are called local
+likelihoods. Where a local likelihood is a
+
+26
+00:02:32,632 --> 00:02:39,827
+likelihood of just the variable X or just
+the variable Y given its parents in
+
+27
+00:02:39,827 --> 00:02:48,616
+this case, X. So more generally, I
+can do this exact same process in a somewhat
+
+28
+00:02:48,616 --> 00:02:57,450
+more general case where if we have a set
+of variables x one up to x m then we can
+
+29
+00:02:57,450 --> 00:03:05,863
+once again look at the product over all
+theta instances break this up using the
+
+30
+00:03:05,863 --> 00:03:13,900
+chain rule for Bayesian networks, as for each
+instance the product of xi given its
+
+31
+00:03:13,900 --> 00:03:20,417
+parents where assuming that UI are the
+parents, xi. Switch the order of the
+
+32
+00:03:20,417 --> 00:03:27,380
+products, so that's instead of doing, so I
+switch it here, so instead of doing m.
+
+33
+00:03:28,714 --> 00:03:35,086
+First I do the, first the product over
+variables, then the product over data
+
+34
+00:03:35,086 --> 00:03:42,800
+cases. And that gives me once again. A
+product of terms which I'm going to call Li
+
+35
+00:03:42,800 --> 00:04:00,411
+Of the CPD for XI. And if we're willing
+to assume that variables, that the
+
+36
+00:04:00,411 --> 00:04:07,959
+different CPDs don't share. Any parameter
+so each CPD is effectively an
+
+37
+00:04:07,959 --> 00:04:15,446
+independent entity that can be estimated
+separately then I can now, estimate, now
+
+38
+00:04:15,446 --> 00:04:22,843
+optimize theta of the ith variable
+separately from all other variables by
+
+39
+00:04:22,843 --> 00:04:37,244
+optimizing this local likelihood term. If we
+have table CPDs, it turns out we can
+
+40
+00:04:37,244 --> 00:04:44,027
+further decompose. So remember that we
+started out with the probability now we
+
+41
+00:04:44,027 --> 00:04:49,656
+are looking at the local likelihood for
+variable x given its parents U,
+
+42
+00:04:49,656 --> 00:04:56,520
+and as it depends on the CPD
+for x given U. And what we are going to
+
+43
+00:04:56,520 --> 00:05:02,766
+do now is we are going to break up the
+data cases into separate buckets so
+
+44
+00:05:02,766 --> 00:05:09,946
+for every value little x of X and
+every value little u of the parent U,
+
+45
+00:05:09,946 --> 00:05:17,720
+we're going to multiply separately all the
+instances M for which the Mth instance
+
+46
+00:05:17,720 --> 00:05:26,019
+takes that value little x and that value
+little u. And so what I have basically
+
+47
+00:05:26,019 --> 00:05:32,251
+done is that I have divided all the instances
+into these disjoint buckets. Now the
+
+48
+00:05:32,251 --> 00:05:37,938
+point is we know what this is, the
+probability that xm takes the value of
+
+49
+00:05:37,938 --> 00:05:52,890
+little x. And given that Um takes the
+value little u. Is simply the appropriate
+
+50
+00:05:52,890 --> 00:06:02,056
+CPD entry, theta X given U. And so this
+turns into this expression over here. And
+
+51
+00:06:02,056 --> 00:06:10,521
+so now the question is how many
+occurrences. Of theta x given u do I get?
+
+52
+00:06:10,521 --> 00:06:16,715
+Well, the answer is how many times I
+multiply it in. The number of times that
+
+53
+00:06:16,715 --> 00:06:24,137
+little u, x occurs in the data. And so
+this turns out to be simply a product over
+
+54
+00:06:24,137 --> 00:06:35,876
+all possible values of the child X and the
+parent U. Of the appropriate CPD entry,
+
+55
+00:06:35,876 --> 00:06:50,104
+P of little x given u to the power of the
+number of occurrences. Of little x comma
+
+56
+00:06:50,104 --> 00:07:02,167
+u. And if we now. Consider maximum likelihood
+estimation. It's turns out the maximum
+
+57
+00:07:02,167 --> 00:07:12,720
+likelihood estimate of X of theta X given U, is
+simply as one would expect, the fraction.
+
+58
+00:07:15,080 --> 00:07:29,142
+Of X = x among cases. Where U equals the
+little u. So what happens with maximum
+
+59
+00:07:29,142 --> 00:07:33,499
+likelihood estimation when we have a model with
+shared parameters. Let's consider that
+
+60
+00:07:33,499 --> 00:07:38,258
+question in the context of a hidden Markov
+model where initially we are actually just going to look
+
+61
+00:07:38,258 --> 00:07:43,136
+at a Markov chain, that is a case where we
+have just a single state variable. S and
+
+62
+00:07:43,136 --> 00:07:48,753
+we transition from one state to the other.
+So let's look at the likelihood function
+
+63
+00:07:48,753 --> 00:07:54,234
+in this context before we consider what
+maximum likelihood estimation would look like.
+
+64
+00:07:54,234 --> 00:07:59,377
+So the likelihood function of the
+parameter vector theta, which dictates the
+
+65
+00:07:59,377 --> 00:08:04,250
+transition model, given a set of
+observations of the states between time
+
+66
+00:08:04,250 --> 00:08:09,529
+zero and time T decomposes using the
+Markov assumption as a product of t from
+
+67
+00:08:09,529 --> 00:08:15,378
+one to T of the probability of the state
+at time t given the state at time t+1. Now
+
+68
+00:08:15,378 --> 00:08:22,987
+we can further reformulate this product by
+looking at how it decomposes across
+
+69
+00:08:22,987 --> 00:08:30,328
+specific pairs of states S i and S j so we can first multiply over
+
+70
+00:08:30,328 --> 00:08:37,668
+all possible pairs of states i and j and
+then consider all the time points
+
+71
+00:08:37,668 --> 00:08:43,643
+in which we transition from s i to s j And
+then we have the probability of that
+
+72
+00:08:43,643 --> 00:08:48,429
+transition of Si to Sj. Now the critical
+observation is that this probability is the
+
+73
+00:08:48,429 --> 00:08:53,578
+same regardless of the time point. This is
+indicative of the time invariance assumption
+
+74
+00:08:53,578 --> 00:08:58,424
+that we have in these models. And so the
+parameters specifically that we will be
+
+75
+00:08:58,424 --> 00:09:03,415
+multiplying in this context is simply the
+transition parameter theta Si to Sj. Now
+
+76
+00:09:03,415 --> 00:09:08,718
+if we look at this expression, which has
+all these products in it. The product of
+
+77
+00:09:08,718 --> 00:09:13,890
+IEJ, and then the product of the time
+points, consistent with the transition, or
+
+78
+00:09:13,890 --> 00:09:19,127
+in which the transition from I to J took
+place. We end up with the product over
+
+79
+00:09:19,127 --> 00:09:24,829
+here, which multiplies, over all IJ of the
+parameter associated with that transition,
+
+80
+00:09:24,829 --> 00:09:29,668
+exponentiated by the sufficient
+statistics. Msi to SJ, which is simply the
+
+81
+00:09:29,668 --> 00:09:34,972
+number of times in which the, in the data
+stream that we saw, we had a transition
+
+82
+00:09:34,972 --> 00:09:40,358
+between those two states. Now if we now
+consider what maximum likelihood estimation
+
+83
+00:09:40,358 --> 00:09:45,743
+would look like for this parameter,
+theta.hat, sorry for the parameter theta
+
+84
+00:09:45,743 --> 00:09:51,336
+Si to Sj. The maximum likelihood estimate
+theta.hat Si to Sj would be exactly what
+
+85
+00:09:51,336 --> 00:09:57,273
+we would expect. The number of transitions
+in which, Si transitions to Sj, divided by
+
+86
+00:09:57,273 --> 00:10:02,885
+the number of total, occurrences, of the
+state Si within the time sequenced. Let's
+
+87
+00:10:02,885 --> 00:10:07,789
+now elaborate this to the context of the
+hidden Markov model just to see what
+
+88
+00:10:07,789 --> 00:10:12,339
+it would look like so here we have in
+addition to the first component of the
+
+89
+00:10:12,339 --> 00:10:16,770
+likelihood function which is the same one
+we had before just the transition
+
+90
+00:10:16,770 --> 00:10:21,734
+probabilities of the state sequence
+we also have an additional component that
+
+91
+00:10:21,734 --> 00:10:25,929
+looks at every state from one to
+big T of the probability of the
+
+92
+00:10:25,929 --> 00:10:30,866
+particular observation O of t given
+state s of t. So we can just do the exact
+
+93
+00:10:30,866 --> 00:10:35,607
+same process of reformulating the
+likelihood function. We've already seen
+
+94
+00:10:35,607 --> 00:10:40,472
+what the first term looks like, it's
+exactly the same as the one we had on the
+
+95
+00:10:40,472 --> 00:10:44,901
+previous slide. Theta SI to SJ
+exponentiated with sufficient statistics.
+
+96
+00:10:44,901 --> 00:10:50,470
+And we have. [inaudible] a very analogous
+term that looks for over pairs of
+
+97
+00:10:50,470 --> 00:10:55,422
+[inaudible] of states i and
+observations k the parameter that
+
+98
+00:10:55,422 --> 00:11:00,771
+corresponds to the kth observation in
+state i exponentiated for the
+
+99
+00:11:00,771 --> 00:11:06,318
+sufficient statistics which is the number
+of times that we saw in the same state in
+
+100
+00:11:06,318 --> 00:11:11,918
+the same time point the observation k and
+the state i And so, adding now to our set
+
+101
+00:11:11,918 --> 00:11:17,483
+of sufficient statistics, in addition to
+the counts of going from SI to SJ. We also
+
+102
+00:11:17,483 --> 00:11:23,049
+have sufficient statistics that count the
+number of times, time points in which we
+
+103
+00:11:23,049 --> 00:11:29,227
+had the state SI and the observation O k.
+[sound]. So to summarize maximum likelihood
+
+104
+00:11:29,227 --> 00:11:35,839
+estimation in the case of discreet. Graph
+of Bayesian networks
+
+105
+00:11:35,839 --> 00:11:41,738
+that has disjoint sets of parameters in
+the CPD. That is where each c p d has its
+
+106
+00:11:41,738 --> 00:11:47,285
+own set of parameters the likelihood
+function decomposes as a product of local
+
+107
+00:11:47,285 --> 00:11:53,184
+likelihood functions and this is important
+because we're going to use that later on,
+
+108
+00:11:53,184 --> 00:11:58,661
+one per variable. So the likelihood
+function is a product of small likelihoods
+
+109
+00:11:58,661 --> 00:12:05,018
+or local likelihoods one per variable Now,
+when we have table CPD, we get a further
+
+110
+00:12:05,018 --> 00:12:11,137
+decomposition. Specifically, even the
+local likelihood now decomposes as a
+
+111
+00:12:11,137 --> 00:12:16,067
+product of. Likelihoods for specific
+multinomials one for each combination of
+
+112
+00:12:16,067 --> 00:12:20,986
+the parents. And so now we get a further
+decomposition that is basically going to
+
+113
+00:12:20,986 --> 00:12:25,359
+allow us to estimate each of those
+multinomials separately via the same
+
+114
+00:12:25,359 --> 00:12:30,399
+maximum likelihood estimation that we had in the
+original case estimating parameters for
+
+115
+00:12:30,399 --> 00:12:35,439
+single multinomials [inaudible] product of
+these likelihood functions each of them
+
+116
+00:12:35,439 --> 00:12:40,998
+can be optimized separately. Finally, in the
+very common case of networks that have
+
+117
+00:12:40,998 --> 00:12:46,428
+shared CPDs so this is the case
+unlike the first bullet where we had
+
+118
+00:12:46,428 --> 00:12:52,359
+dis-joined sets of parameters here we have
+shared CPDs we simply accumulate
+
+119
+00:12:52,359 --> 00:12:57,718
+the sufficient statistics over all
+occurrences or uses of that CPD and then
+
+120
+00:12:57,718 --> 00:13:03,543
+once we do that, maximum likelihood estimation can be done in effectively the same way. Now
+
+121
+00:13:03,543 --> 00:13:10,020
+one important observation that arises from
+the maximum likelihood estimation is worth
+
+122
+00:13:10,020 --> 00:13:16,901
+remembering and, and thinking about when
+one uses this, so let's look at the form of
+
+123
+00:13:16,901 --> 00:13:24,106
+the, of the maximum likelihood estimate
+for, for parameter theta x given u. And as
+
+124
+00:13:24,106 --> 00:13:30,420
+we have seen that is a ratio between m
+between the number of counts of the
+
+125
+00:13:30,420 --> 00:13:38,852
+instantiation little x and the parent assignment u
+divided by the sum of all. M X prime, U
+
+126
+00:13:38,852 --> 00:13:46,730
+for different values of X prime. Or
+written otherwise is MXU divided by MU.
+
+127
+00:13:46,730 --> 00:13:53,138
+Now what are the consequences of this
+expression when the number of parents
+
+128
+00:13:53,138 --> 00:13:58,293
+grows large. When the number of parents
+grows larger, the number of buckets, that
+
+129
+00:13:58,293 --> 00:14:02,487
+is, the number of different possible
+assignments, little U, increases
+
+130
+00:14:02,487 --> 00:14:07,620
+exponentially with the number of parents.
+If you have two parents it's it grows
+
+131
+00:14:07,620 --> 00:14:12,625
+exponentially with 2 the number of
+different buckets u but if you have
+
+132
+00:14:12,625 --> 00:14:18,314
+fifteen or twenty parents then the number
+of buckets into which we need to partition
+
+133
+00:14:18,314 --> 00:14:23,534
+the data increases very quickly and that
+means that most buckets, that is most
+
+134
+00:14:23,534 --> 00:14:29,023
+assignments little u will have very few
+instances assigned to them which means
+
+135
+00:14:29,023 --> 00:14:34,645
+that effectively most of these estimates
+which divide m of x u divided by m of u
+
+136
+00:14:34,645 --> 00:14:39,810
+will be done with Few or even zero
+instances and review, at which point any
+
+137
+00:14:39,810 --> 00:14:45,229
+estimate is just totally bogus. And
+specifically the that means that the
+
+138
+00:14:45,229 --> 00:14:51,204
+parameter estimate that we're going to get
+in most of the multinomial parameters once
+
+139
+00:14:51,204 --> 00:14:57,217
+U gets large are going to be very poor. So this concept is called
+
+140
+00:14:57,217 --> 00:15:05,042
+fragmentation of the data. And, it has
+following important consequence. If the
+
+141
+00:15:05,042 --> 00:15:13,852
+amount of data is limited. Relative to the
+model dimensionality we can often get
+
+142
+00:15:13,852 --> 00:15:21,751
+better estimates of the parameters with
+simpler structures even when these
+
+143
+00:15:21,751 --> 00:15:29,549
+structures are actually wrong. That is even
+if we make incorrect independence
+
+144
+00:15:29,549 --> 00:15:35,482
+assumptions, that are Making, that a
+removing edges that really ought to be
+
+145
+00:15:35,482 --> 00:15:40,570
+there. We can sometimes get better
+generalization in terms of say log likelihood
+
+146
+00:15:40,570 --> 00:15:45,659
+of test data. Than when using
+the much more complicated correct structure.

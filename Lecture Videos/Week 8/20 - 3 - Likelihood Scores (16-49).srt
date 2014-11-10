@@ -1,0 +1,815 @@
+
+1
+00:00:00,000 --> 00:00:05,062
+[sound] So we talked about the fact that
+we can view Bayes net structure learning
+
+2
+00:00:05,062 --> 00:00:09,419
+as two pieces. One is, defining a scoring
+function, allowed us, allows us to
+
+3
+00:00:09,419 --> 00:00:13,490
+evaluate different networks. And the
+second is, as a search procedure, an
+
+4
+00:00:13,490 --> 00:00:18,076
+optimization procedure that allows us to
+select among the networks, the one that
+
+5
+00:00:18,076 --> 00:00:22,605
+has the highest score. We're going to
+first talk about scoring functions. And
+
+6
+00:00:22,605 --> 00:00:27,364
+initially, we're going to talk about what
+is perhaps the simplest score that we can
+
+7
+00:00:27,364 --> 00:00:32,709
+consider, which is the likelihood score.
+So we've talked about likelihood as a way
+
+8
+00:00:32,709 --> 00:00:38,559
+of evaluating the quality of a different,
+of, of a given network. And so here the
+
+9
+00:00:38,559 --> 00:00:44,335
+likelihood score can be defined as the
+graph and the parameters, that maximize
+
+10
+00:00:44,335 --> 00:00:50,460
+the likelihood, or in this case, the log
+likelihood of the data. So the score, or
+
+11
+00:00:50,460 --> 00:00:58,414
+the likelihood score of a graph. Is the
+log likelihood of the graph accompanied by
+
+12
+00:00:58,414 --> 00:01:06,672
+the parameter setting, theta hat, which
+is the maximum likelihood estimate of the
+
+13
+00:01:06,672 --> 00:01:14,692
+parameters. Given the graph G and data D.
+So first, so for any graph we figure out
+
+14
+00:01:14,692 --> 00:01:21,185
+what are the best possible parameters to
+use for that graph and then we use that as
+
+15
+00:01:21,185 --> 00:01:29,252
+a way of evaluating the quality of the
+graph that we learned. So let's look at
+
+16
+00:01:29,252 --> 00:01:34,080
+some of the... Let's look at a simple
+example to see what the what the
+
+17
+00:01:34,080 --> 00:01:39,311
+likelihood score looks like. So here we
+have a distribution over two, random
+
+18
+00:01:39,311 --> 00:01:44,809
+variables X and Y and lets consider two
+graphs G0 on the left has no edge between
+
+19
+00:01:44,809 --> 00:01:50,241
+X and Y and G1 on the right has an edge
+from X to Y and the Y to X case would be
+
+20
+00:01:50,241 --> 00:01:56,027
+symmetrical, so we're just gonna look at
+these two graphs. [sound] The likelihood
+
+21
+00:01:56,027 --> 00:02:04,118
+score of, a graph, of this graph, relative
+to, to D, by the decomposition of the
+
+22
+00:02:04,118 --> 00:02:11,637
+likelihood function that we've already
+seen. Is the sum over all instances M, of
+
+23
+00:02:11,637 --> 00:02:19,918
+the log of the parameter for, the value of
+X in the mth data instance. Plus the log of
+
+24
+00:02:19,918 --> 00:02:26,894
+the parameter for Y in the M, for the Y
+value in the mth data instance. So this is just
+
+25
+00:02:26,894 --> 00:02:31,098
+the, the decomposition of the log likelihood
+that we used when we talked about
+
+26
+00:02:31,098 --> 00:02:37,408
+parameter estimation. Conversely when we
+look at G1, we have a very similar formula
+
+27
+00:02:37,408 --> 00:02:43,809
+where again we sum over all instances. And
+for the X that has no parents, we have log
+
+28
+00:02:43,809 --> 00:02:50,133
+of theta hat XM, where again XM is the
+value of X in the Mth data instance. And
+
+29
+00:02:50,133 --> 00:02:56,229
+for the Y value we have log of theta hat
+of YM given XM. And in both cases, theta
+
+30
+00:02:56,229 --> 00:03:02,478
+hat are the maximum likelihood parameters
+in the respective graphs. So on the left
+
+31
+00:03:02,478 --> 00:03:07,691
+it's theta hat, it. For the graph G zero
+and on the right it's the maximum
+
+32
+00:03:07,691 --> 00:03:12,922
+likelihood, theta hat for the graph G
+one. Now let's refine this analysis a
+
+33
+00:03:12,922 --> 00:03:18,698
+little bit more by converting into a
+somewhat different notation. First we're
+
+34
+00:03:18,698 --> 00:03:24,690
+going to look at the difference between
+these two likelihood scores. So we're
+
+35
+00:03:24,690 --> 00:03:30,538
+going to see, we're going to look at the
+score for G1, and subtract away the score
+
+36
+00:03:30,538 --> 00:03:35,520
+for G0. And then we're going to see
+whether that score is positive or
+
+37
+00:03:35,520 --> 00:03:41,296
+negative. That is, whether we prefer G1 to
+G0 or not. So notice that the term over
+
+38
+00:03:41,296 --> 00:03:47,840
+here, the first term. The X term is the
+same. In both of these graphs, and so it
+
+39
+00:03:47,840 --> 00:03:55,385
+cancels out, and so what we have left over
+is the sum over M of log of Theta Hat YM
+
+40
+00:03:55,385 --> 00:04:05,214
+given XM, minus log of Theta Hat of YM.
+Now. We can, reformulate this, by looking
+
+41
+00:04:05,214 --> 00:04:13,024
+at the sufficient statistics and,
+specifically we're going to have, the term
+
+42
+00:04:13,024 --> 00:04:19,427
+Theta Hat, YM given X-M occur
+[inaudible]. Recur every time we have a
+
+43
+00:04:19,427 --> 00:04:24,329
+particular value Y and a particular value
+X. So we're going to sum up over all
+
+44
+00:04:24,329 --> 00:04:29,169
+values little X and little Y, and the
+parameter log of theta hat Y given X is
+
+45
+00:04:29,169 --> 00:04:34,323
+going to occur M of X Y times. Where M of
+X Y is the sufficient statistics for the
+
+46
+00:04:34,323 --> 00:04:39,463
+counts for that particular configuration
+of events, in the data set D. The second
+
+47
+00:04:39,463 --> 00:04:45,449
+term, the, the one that we're subtracting,
+is a sum over Y of M of Y. Log of theta,
+
+48
+00:04:45,449 --> 00:04:50,852
+hat of Y. Where, again, M of Y is
+sufficient statistics. Now we're going to
+
+49
+00:04:50,852 --> 00:04:56,327
+rewrite this in terms of this,
+distribution over here called P hat. P hat
+
+50
+00:04:56,327 --> 00:05:01,992
+is what's called the empirical
+distribution. It's what happens when we
+
+51
+00:05:01,992 --> 00:05:09,633
+look at our data set D and just look at
+the frequencies of different events. So M
+
+52
+00:05:09,633 --> 00:05:15,513
+of XY. Is simply the number of data
+instances M times P hat, of XY. Because
+
+53
+00:05:15,513 --> 00:05:21,649
+this is the frequency of the event and
+this is the total number of data instances
+
+54
+00:05:21,873 --> 00:05:29,328
+and, so, M of XY is just the product of
+those two. So we can write the first term
+
+55
+00:05:29,328 --> 00:05:36,881
+as M times sum of XY P hat of XY. And
+interestingly, we can also rewrite the,
+
+56
+00:05:37,136 --> 00:05:43,157
+the maximum likelihood estimation
+parameters in terms of p hat as well,
+
+57
+00:05:43,157 --> 00:05:50,196
+because theta hat of y given x is simply
+the, the fraction of the y-cases among all
+
+58
+00:05:50,196 --> 00:05:57,065
+the x-cases, which is exactly the same as
+p hat of y given x. Similarly, the second
+
+59
+00:05:57,065 --> 00:06:03,850
+term turns into m times p hat times the
+sum over y, p hat of y, log of p hat of y.
+
+60
+00:06:03,850 --> 00:06:11,041
+So, that now converted all of the
+expressions, the Ms and the, M thetas into
+
+61
+00:06:11,041 --> 00:06:18,185
+a single vocabulary, which are these,
+empirical distributions p-hat. So now
+
+62
+00:06:18,185 --> 00:06:25,633
+let's take the M out of the equation. And,
+furthermore, look at the sum over Y as the
+
+63
+00:06:25,633 --> 00:06:32,480
+sum over pairs XY. So we've artificially
+introduced a variable X into the second
+
+64
+00:06:32,480 --> 00:06:39,328
+summation, sum over Y, P hat of Y. And now
+we're going to rewrite that as sum over
+
+65
+00:06:39,328 --> 00:06:45,918
+XY, P hat of XY. And because X doesn't
+appear in the expression log, P hat of Y,
+
+66
+00:06:45,918 --> 00:06:52,978
+we can, we can do that because sum over X,
+P hat of XY is equal to P hat of Y. So,
+
+67
+00:06:52,978 --> 00:07:01,634
+looking at these two expressions together,
+we can now move around some things by use,
+
+68
+00:07:01,634 --> 00:07:09,395
+utilizing properties of the logarithm and
+derive that the follow, that this is
+
+69
+00:07:09,395 --> 00:07:17,454
+equivalent to the following equation. This
+is M times the sum over XY, p-hat of XY
+
+70
+00:07:17,454 --> 00:07:24,647
+log p-hat of XY divided by p-hat of X,
+p-hat of Y. And the reason why that's the
+
+71
+00:07:24,647 --> 00:07:30,750
+case is that p-hat of Y given X is equal
+to p-hat of Y, X divided by p-hat of Y,
+
+72
+00:07:30,981 --> 00:07:37,007
+the, sorry, divided by p-hat of X. And
+now, by moving around the logarithms, we
+
+73
+00:07:37,007 --> 00:07:44,200
+get exactly this expression. Now
+importantly, this expression here, inside.
+
+74
+00:07:44,200 --> 00:07:50,052
+Listen. This summation over here, has a
+name. And that summation is called the
+
+75
+00:07:50,052 --> 00:07:56,821
+mutual information. And is usually denoted
+as I sub p hat, in this case the
+
+76
+00:07:56,821 --> 00:08:04,493
+distribution p hat between x and y. So,
+why, why is this called mutual information
+
+77
+00:08:04,493 --> 00:08:11,481
+because it measures, if you, if you look
+at this the distance. On average between
+
+78
+00:08:11,481 --> 00:08:17,169
+the joint distribution x and y, p hat of
+xy in numerator relative to the
+
+79
+00:08:17,169 --> 00:08:22,857
+distribution of we would get if, if we, if
+the distribution was a product of
+
+80
+00:08:22,857 --> 00:08:28,566
+marginals. So p hat x times p hat of y. So
+you can think of this term inside the log
+
+81
+00:08:28,566 --> 00:08:32,923
+as a relative error, if you will, a
+distance between the joint distribution
+
+82
+00:08:32,923 --> 00:08:37,633
+and the product of the marginals. And now
+we're taking the average of the log of
+
+83
+00:08:37,633 --> 00:08:42,462
+this expression averaged by how frequent
+the different cases xy are. And so that's
+
+84
+00:08:42,638 --> 00:08:47,172
+so you can think of it as an average
+distance between the joint distribution
+
+85
+00:08:47,172 --> 00:08:51,944
+and the one that we would get if this was
+a product of marginals. So this is an
+
+86
+00:08:51,944 --> 00:08:58,084
+information theoretic property which as I
+said is called the mutual information. And
+
+87
+00:08:58,084 --> 00:09:07,312
+so if we now generalize this analysis to
+an arbitrary network, it turns out that
+
+88
+00:09:07,312 --> 00:09:16,541
+the likelihood score for any graph can be
+viewed as the can be rewritten as the
+
+89
+00:09:16,541 --> 00:09:24,990
+number of data instances m, times the sum
+over all variables I, of the mutual
+
+90
+00:09:24,990 --> 00:09:33,404
+information again between a node. And its
+parents in the graph. Minus a constant
+
+91
+00:09:33,404 --> 00:09:39,888
+term that is constant relative to the
+graph structure. The second term is M
+
+92
+00:09:39,888 --> 00:09:46,622
+times the sum of the entropies of the
+individual variables and this term doesn't
+
+93
+00:09:46,622 --> 00:09:56,500
+depend on G. [inaudible]. Now why is this
+a significant result? It's significant
+
+94
+00:09:56,500 --> 00:10:03,628
+because it tells us that the value of a
+network, the score of the network if you
+
+95
+00:10:03,628 --> 00:10:13,425
+use the likelihood score, is higher, so
+score is higher. If X I is correlated with
+
+96
+00:10:13,425 --> 00:10:21,205
+his parents. Which is a very intuitive
+property. The more a variable is
+
+97
+00:10:21,205 --> 00:10:26,246
+correlated with a parent the better the
+network structure which means we would
+
+98
+00:10:26,246 --> 00:10:31,410
+want to put as a parent of a variable a
+parent that is highly correlated with it
+
+99
+00:10:31,410 --> 00:10:37,106
+which is kind of exactly the behavior that
+you would intuitively hope for. So this is
+
+100
+00:10:37,106 --> 00:10:41,831
+a good result because it tells us that the
+parents that we pick for a variable are
+
+101
+00:10:41,831 --> 00:10:46,214
+the ones that are, ha, have, have the
+highest correlation with it, the ones that
+
+102
+00:10:46,214 --> 00:10:50,711
+have the highest mutual information, and
+that?s a very satisfying result. However,
+
+103
+00:10:50,711 --> 00:10:54,639
+as we now show this mutual information
+result also has some negative
+
+104
+00:10:54,639 --> 00:11:00,333
+consequences. So to understand that, let's
+go back to our simple example. And let's
+
+105
+00:11:00,333 --> 00:11:05,196
+look at the difference between the scores
+of the two graphs. The graph G1 on the
+
+106
+00:11:05,196 --> 00:11:10,059
+left that has the edge, and the graph G
+zero on the right that doesn't. And let's
+
+107
+00:11:10,059 --> 00:11:14,983
+look at the difference between those two
+scores. That difference, if it's positive,
+
+108
+00:11:14,983 --> 00:11:20,089
+suggests that we should pick the graph G1,
+and if it's negative, tells us that, the
+
+109
+00:11:20,089 --> 00:11:25,327
+maximum likelihood score will pick the graph G zero.
+And that difference is M, the number of
+
+110
+00:11:25,327 --> 00:11:30,767
+samples times the mutual information
+between the variables X and Y, in the
+
+111
+00:11:30,767 --> 00:11:37,221
+empirical distribution P hat. Now a
+well-known result from information theory
+
+112
+00:11:37,221 --> 00:11:43,960
+is that the mutual information, this, this
+quantity over here is always non-negative.
+
+113
+00:11:43,960 --> 00:11:50,702
+For any distribution P. Furthermore, this
+mutual information is equal to zero. That
+
+114
+00:11:50,702 --> 00:11:56,767
+is, this inequality turns into an equality
+if and only if X and Y are actually
+
+115
+00:11:56,767 --> 00:12:02,532
+independent. In the distribution relative
+to which we're computing the mutual
+
+116
+00:12:02,532 --> 00:12:08,109
+information. Which, in this case, is the
+distribution, P hat. Now even if X and Y
+
+117
+00:12:08,109 --> 00:12:13,414
+were actually independent in the original
+distribution, the one the generated the
+
+118
+00:12:13,414 --> 00:12:18,391
+training instances, it is still very
+unlikely that we will achieve exact and
+
+119
+00:12:18,391 --> 00:12:23,564
+perfect independence in the empirical
+distribution, just because of statistical
+
+120
+00:12:23,564 --> 00:12:28,738
+fluctuations in the set of samples
+that are generated. And so, even if X and
+
+121
+00:12:28,738 --> 00:12:33,976
+Y are independent it is almost never the
+case that they are independent in p hat
+
+122
+00:12:33,976 --> 00:12:39,879
+which means that in almost all cases. This
+mutual information between X and Y is
+
+123
+00:12:39,879 --> 00:12:49,590
+going to be greater than zero, almost
+always. Which tells us that adding this edge
+
+124
+00:12:49,590 --> 00:12:56,102
+can never hurt and almost always helps and
+that's true not just in the simple example
+
+125
+00:12:56,102 --> 00:13:02,160
+but in other cases as well. That is, it's
+almost always as better in terms of the
+
+126
+00:13:02,160 --> 00:13:07,991
+likelihood score to have more edges rather
+than fewer edges, that will always
+
+127
+00:13:07,991 --> 00:13:15,404
+increase the likelihood score. Which means
+that in general, except for very unusual
+
+128
+00:13:15,404 --> 00:13:22,285
+circumstances, the likelihood score will
+be maximized for the fully connected
+
+129
+00:13:22,285 --> 00:13:27,305
+network. So that gives rise to a very
+significant over fitting effect, because
+
+130
+00:13:27,305 --> 00:13:32,421
+as we have already seen we now, the more
+edges we have more difficult it is to fit
+
+131
+00:13:32,421 --> 00:13:36,913
+the parameters because we have
+fragmentation of our data set into these
+
+132
+00:13:36,913 --> 00:13:41,974
+tiny little buckets each of which have a
+very small number of instances in it. So
+
+133
+00:13:41,974 --> 00:13:46,776
+how do we avoid over fitting? It turns out
+that there are several different
+
+134
+00:13:46,776 --> 00:13:51,708
+strategies that, that are typically
+employed. The first is to restrict the
+
+135
+00:13:51,708 --> 00:13:57,030
+hypothesis space, to basically prevent the
+algorithm from over fitting. And we can do
+
+136
+00:13:57,030 --> 00:14:02,481
+that by, restricting the number of parents
+that we allow per node. Or some kind of
+
+137
+00:14:02,481 --> 00:14:07,673
+restriction on number of parameters. This
+is usually easier to enforce, and so
+
+138
+00:14:07,673 --> 00:14:13,134
+that's a more common strategy. A second
+more flexible strategy is to use a scoring
+
+139
+00:14:13,134 --> 00:14:17,934
+function that makes a better set of
+tradeoffs. That is, where there is a
+
+140
+00:14:17,934 --> 00:14:23,544
+penalty on the complexity of the model at
+the same time that we're trying to get a
+
+141
+00:14:23,544 --> 00:14:28,816
+good fit to the training data. And that's
+a more flexible strategy than a hard
+
+142
+00:14:28,816 --> 00:14:34,494
+constraint on the model complexity, because
+if there is a very strong signal for some
+
+143
+00:14:34,494 --> 00:14:39,429
+correlation between a pair of variables
+that can eventually outweigh the
+
+144
+00:14:39,429 --> 00:14:44,823
+complexity penalty and allow that edge to
+be added in, whereas. If we have a hard
+
+145
+00:14:44,823 --> 00:14:50,440
+constraint we might never be able to learn
+a model that is the appropriate one simply
+
+146
+00:14:50,440 --> 00:14:56,123
+because it's, it's never going to be is,
+is not going to fit into the restricted
+
+147
+00:14:56,123 --> 00:15:00,299
+hypothesis space. These
+complexity-penalizing scores generally
+
+148
+00:15:00,299 --> 00:15:05,635
+fall into two categories. There is ones
+that explicitly penalize complexity. And
+
+149
+00:15:05,635 --> 00:15:11,240
+then there is the class of models called
+the Bayesian, a class of scores called the
+
+150
+00:15:11,240 --> 00:15:17,116
+Bayesian scores which as we'll see average
+over all possible parameter values
+
+151
+00:15:17,116 --> 00:15:22,790
+following the Bayesian paradigm that says
+that anything we have uncertainty over we
+
+152
+00:15:22,790 --> 00:15:28,396
+should have a distribution over. And as
+we'll see that gives rise naturally to a
+
+153
+00:15:28,396 --> 00:15:37,966
+score that avoids over fitting. [sound] To
+summarize the likelihood score, is a score
+
+154
+00:15:37,966 --> 00:15:47,693
+that evaluates a model G by looking at the
+log likelihood of the data, relative to G,
+
+155
+00:15:47,693 --> 00:15:55,374
+using the MLE parameters, for G. And that
+set of parameters was optimized to
+
+156
+00:15:55,374 --> 00:16:01,077
+maximize the likelihood of D. And
+therefore, is very, very well geared to
+
+157
+00:16:01,077 --> 00:16:06,459
+trying to capture the exact
+characteristics of the data, for better
+
+158
+00:16:06,459 --> 00:16:12,402
+and for worse. So, for better, it gives us
+a very nice information theoretic
+
+159
+00:16:12,402 --> 00:16:18,828
+interpretation of, the set of edges that
+are chosen, the set of parent that are
+
+160
+00:16:18,828 --> 00:16:26,960
+chosen for a given variable, in terms of
+the dependencies that, That we encode in
+
+161
+00:16:26,960 --> 00:16:34,207
+the graph G. Conversely, that same
+characterization also shows us that we're
+
+162
+00:16:34,207 --> 00:16:40,282
+guaranteed to over fit the model to the
+training data unless we somehow
+
+163
+00:16:40,282 --> 00:16:49,040
+impose constraints or otherwise penalize
+model complexity. [sound]

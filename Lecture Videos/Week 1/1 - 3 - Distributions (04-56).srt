@@ -1,0 +1,300 @@
+
+1
+00:00:00,000 --> 00:00:03,008
+So before we get into the details of
+probabilistic graphical models, we need to
+
+2
+00:00:03,008 --> 00:00:07,008
+talk a little bit about what a probability
+distribution is, just so we all have a
+
+3
+00:00:07,008 --> 00:00:12,007
+shared vocabulary. So let's start with a
+very simple example of a joint distribution,
+
+4
+00:00:12,007 --> 00:00:17,004
+one that is going to be extended in
+examples later on, in other parts of the
+
+5
+00:00:17,004 --> 00:00:22,007
+course. And let's start with an example
+that involves just three random variables.
+
+6
+00:00:22,009 --> 00:00:27,009
+This is what I call the "student example", and
+you have a student who has, who can be
+
+7
+00:00:27,009 --> 00:00:32,009
+described in this case by a variable
+representing his intelligence, and that could
+
+8
+00:00:32,009 --> 00:00:37,007
+be high or low. The student is taking a
+class. The class might be difficult or
+
+9
+00:00:37,007 --> 00:00:42,007
+not. So this random variable B, this
+random variable I has two values.
+
+10
+00:00:42,007 --> 00:00:47,005
+Difficulty variable also has two values.
+And then there's the grade that the
+
+11
+00:00:47,005 --> 00:00:52,007
+student gets in the course, and that has
+three values, in this case we're going to
+
+12
+00:00:52,007 --> 00:00:58,004
+assume A, B, and C. Now here is an example
+joint distribution over this, over this
+
+13
+00:00:58,004 --> 00:01:04,001
+set of three random variables. So this is
+an example of P of I comma D comma G, it's a joint
+
+14
+00:01:04,001 --> 00:01:09,004
+distribution. And let's think about how
+many entries are in such a joint
+
+15
+00:01:09,004 --> 00:01:14,007
+distribution. Well, since we have three
+variables, and we want to, we need to
+
+16
+00:01:14,007 --> 00:01:20,001
+represent the probability of every
+combination of values for each of these
+
+17
+00:01:20,001 --> 00:01:26,001
+three variables, And so we have two, times
+two, times three possible combinations for a
+
+18
+00:01:26,001 --> 00:01:32,001
+total of twelve possible values that we
+need to assign a probability to. So
+
+19
+00:01:32,001 --> 00:01:38,003
+there's twelve total parameters in this
+probability dis[tribution]. And I'm going to introduce the
+
+20
+00:01:38,003 --> 00:01:44,002
+notion of independent parameters which
+were going to talk about later, as well.
+
+21
+00:01:44,002 --> 00:01:48,006
+Independent parameters are parameters
+whose value is not completely determined
+
+22
+00:01:48,006 --> 00:01:52,007
+by the values of other parameters. So in
+this case, because this thing's a
+
+23
+00:01:52,007 --> 00:01:57,004
+probability distribution, we know that all
+of the numbers here on the right have to
+
+24
+00:01:57,004 --> 00:02:02,000
+sum to one, and therefore if you tell me
+eleven out of the twelve I know what the
+
+25
+00:02:02,000 --> 00:02:05,009
+twelfth is, and so the number of
+independent parameters is eleven. And
+
+26
+00:02:05,009 --> 00:02:10,004
+we'll see that that's a useful notion
+later on when we start evaluating the
+
+27
+00:02:10,004 --> 00:02:15,004
+relative expressive power of different probability
+distributions. What are things that we can
+
+28
+00:02:15,004 --> 00:02:20,003
+do with probability distributions? Well,
+one important thing that we can do is
+
+29
+00:02:20,003 --> 00:02:25,005
+condition the probability distribution on
+a particular observation. So for example,
+
+30
+00:02:25,005 --> 00:02:30,002
+assume that we observed that the student
+got an A. And so we have, now, an
+
+31
+00:02:30,002 --> 00:02:35,003
+assignment to the variable G, which is g1.
+And that immediately eliminates all
+
+32
+00:02:35,003 --> 00:02:41,009
+possible assignments that are not
+consistent with my observation. So
+
+33
+00:02:41,009 --> 00:02:47,008
+everything but the g1 observations. Okay?
+And so that gives me a reduced probability
+
+34
+00:02:47,008 --> 00:02:53,000
+distribution, and so this is an operation
+that's called reduction. I've taken the
+
+35
+00:02:53,000 --> 00:02:58,000
+probability distribution. I've reduced
+away stuff that is not consistent with
+
+36
+00:02:58,000 --> 00:03:03,000
+what I observed. Now that by itself
+doesn't give me a probability distribution
+
+37
+00:03:03,000 --> 00:03:08,001
+because notice that these numbers no
+longer sum to one because they summed to
+
+38
+00:03:08,001 --> 00:03:13,005
+one before I threw out a bunch of stuff.
+And so in order to get a probability
+
+39
+00:03:13,005 --> 00:03:22,005
+distribution, what I do is I take this
+unnormalized measure. An indication -- the word
+
+40
+00:03:22,005 --> 00:03:26,003
+measure indicates that it's a form of
+distribution, but the fact that it's
+
+41
+00:03:26,003 --> 00:03:30,002
+unnormalized, means, that it doesn't
+sum to one, it doesn't normalize to one,
+
+42
+00:03:30,002 --> 00:03:33,009
+so this unnormalized measure, if you
+want to turn it into a probability
+
+43
+00:03:33,009 --> 00:03:37,008
+distribution, the obvious thing to do is
+to normalize it. And so, what we're
+
+44
+00:03:37,008 --> 00:03:42,000
+going to do is, we're going to take all of
+these entries, we're going to sum them up.
+
+45
+00:03:42,000 --> 00:03:46,006
+And that's going to give us a number, which
+in this case is 0.447. And we can now
+
+46
+00:03:46,006 --> 00:03:50,007
+divide each of these by 0.447 and that's
+going to give us a normalized
+
+47
+00:03:50,007 --> 00:03:55,006
+distribution, which in this case corresponds
+to the probability of I comma D given
+
+48
+00:03:55,006 --> 00:04:00,000
+g1. So that's a way of taking an
+unnormalized measure and turning it into a
+
+49
+00:04:00,000 --> 00:04:03,008
+normalized probability
+distribution. We'll see that this
+
+50
+00:04:03,008 --> 00:04:08,006
+operation is one of the more important
+ones that we'll be using throughout the
+
+51
+00:04:08,006 --> 00:04:13,003
+course. Okay. The final operation I am
+going to talk about regarding probability
+
+52
+00:04:13,003 --> 00:04:17,008
+distribution is the operation of
+marginalization. And that is an operation
+
+53
+00:04:17,008 --> 00:04:23,001
+that takes the probability distribution of
+a larger subset of variables and produces
+
+54
+00:04:23,001 --> 00:04:27,008
+a probability distribution over a subset
+of those. So in this case we have a
+
+55
+00:04:27,008 --> 00:04:32,009
+probability distribution over I and D, and
+say we want to marginalize I, which means
+
+56
+00:04:32,009 --> 00:04:37,005
+we are going to basically sum up, we are
+going to throw away, I am going to
+
+57
+00:04:37,005 --> 00:04:42,005
+restrict attention to D, and so what that
+does is: for example, if I want to compute
+
+58
+00:04:42,005 --> 00:04:47,001
+the probability of D0, I'm going to add up
+both of the entries that have D0
+
+59
+00:04:47,003 --> 00:04:51,007
+associated with them, and that's the one
+corresponding to I0 and the one
+
+60
+00:04:51,007 --> 00:04:56,001
+corresponding to I1. And that's the
+marginalization of this probability distribution.

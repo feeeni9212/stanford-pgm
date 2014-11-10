@@ -1,0 +1,455 @@
+
+1
+00:00:01,015 --> 00:00:06,075
+So now, we're going to look more closely
+into the belief propagation algorithm, and
+
+2
+00:00:06,075 --> 00:00:12,020
+understand some of the improper, important
+properties that it has. So here is our
+
+3
+00:00:12,020 --> 00:00:17,059
+example cluster graph, with the four
+clusters over the loop. And now, let's
+
+4
+00:00:17,059 --> 00:00:22,098
+remind ourselves that the cluster beliefs
+are defined to be the product of the
+
+5
+00:00:22,098 --> 00:00:28,043
+cluster, of the factors assigned to the to
+the clusters, psi 1 up to
+
+6
+00:00:28,043 --> 00:00:33,082
+psi 4, times the product of the
+messages that were incoming into the
+
+7
+00:00:33,082 --> 00:00:39,095
+clusters. So for example, the beliefs over
+cluster one is psi 1 of AB times the
+
+8
+00:00:39,095 --> 00:00:46,012
+message coming in from cluster four, whose
+scope is A and the message coming in from
+
+9
+00:00:46,012 --> 00:00:52,066
+cluster two, whose scope is B. Now, a
+cluster graph is said to calibrated. If
+
+10
+00:00:52,066 --> 00:00:57,058
+the clusters agree with each other. So
+specifically, if, in terms of their
+
+11
+00:00:57,058 --> 00:01:03,011
+beliefs, beta i, if we were to ask cluster
+one what it thinks about, say, a variable
+
+12
+00:01:03,011 --> 00:01:08,057
+B. And we were to ask cluster two what it
+thinks about the variable B, they would
+
+13
+00:01:08,057 --> 00:01:14,031
+agree with each other. Formally, this says
+that if we marginalize out the belief that
+
+14
+00:01:14,051 --> 00:01:19,098
+say, cluster I. And marginalize out the
+beliefs in cluster J. And we asked them
+
+15
+00:01:19,098 --> 00:01:25,016
+what they agree about their joint
+sepset. Sij, they would agree
+
+16
+00:01:25,016 --> 00:01:31,055
+with each other in terms of the, marginal
+beliefs. Now, an important property of
+
+17
+00:01:31,055 --> 00:01:37,021
+cluster graph, belief propagation, is that
+convergence of the belief propagation
+
+18
+00:01:37,021 --> 00:01:42,066
+algorithm implies calibration. So to
+understand why that's the case, let's, go
+
+19
+00:01:42,066 --> 00:01:47,091
+through a simple derivation. So the
+convergence of belief propagation occurs
+
+20
+00:01:47,091 --> 00:01:53,036
+when the message at the next time step
+equals the message at the previous time
+
+21
+00:01:53,036 --> 00:01:59,023
+step. So, now let's see what the
+implications of that are. So, if this is
+
+22
+00:01:59,023 --> 00:02:05,068
+the, message at the next time step, it's
+computed as, the product of the.
+
+23
+00:02:05,090 --> 00:02:11,058
+psi i's, which are the factors
+assigned to the, to the cluster i, times
+
+24
+00:02:11,058 --> 00:02:20,025
+all of the messages. Other. Except for.
+Cluster j. And those are all multiplied
+
+25
+00:02:20,025 --> 00:02:26,008
+together and marginalized out over the
+sepset. So now let's remind ourselves of
+
+26
+00:02:26,008 --> 00:02:32,020
+what the beliefs would be at this point in
+the process if you were to compute them.
+
+27
+00:02:32,020 --> 00:02:38,018
+And that's derived from this expression
+over here. So this is the same psi i that
+
+28
+00:02:38,018 --> 00:02:44,085
+we have over here and this is the product
+of all messages. So if this, if here, we
+
+29
+00:02:44,085 --> 00:02:51,034
+have the product of psi i, and all messages
+except one. And here we have psi i and all
+
+30
+00:02:51,034 --> 00:02:57,067
+messages, we can equally well rewrite it
+in this form over here, where we multiply
+
+31
+00:02:57,067 --> 00:03:03,077
+in all of the messages, and then divide
+out the one that wasn't included, delta j,i
+
+32
+00:03:03,077 --> 00:03:11,059
+So now, because of convergence, we
+have that this is equal to, this is equal
+
+33
+00:03:11,059 --> 00:03:19,046
+to delta ij, because of this equality over
+here. And so if we rewrite that, we can
+
+34
+00:03:19,046 --> 00:03:27,063
+see that we have that delta ij times delta
+ji is equal to this summation over here.
+
+35
+00:03:27,063 --> 00:03:35,051
+Because we can multiply delta ji on the
+right hand side by delta ij on the left
+
+36
+00:03:35,051 --> 00:03:42,079
+hand side. So we have shown that delta ji
+times delta ij is, is effectively the
+
+37
+00:03:42,079 --> 00:03:50,033
+marginal over the beliefs at that point in
+the process. But we can equally well using
+
+38
+00:03:50,033 --> 00:03:57,069
+the identical argument, show that delta ji
+times delta ij is also the marginal over
+
+39
+00:03:57,069 --> 00:04:04,063
+the beliefs for cluster J. So if this is
+the beliefs for cluster I. This is the
+
+40
+00:04:04,063 --> 00:04:11,008
+beliefs for cluster J and so and, but
+we've shown that in both cases. The
+
+41
+00:04:11,008 --> 00:04:16,011
+marginals are equal to the same
+expression, which is the product of the
+
+42
+00:04:16,011 --> 00:04:22,007
+messages on both sides of the link. And so
+because both expressions are equal to the
+
+43
+00:04:22,007 --> 00:04:27,075
+same thing they must be equal to each
+other and this is exactly the calibration
+
+44
+00:04:27,075 --> 00:04:33,063
+property that we were trying to prove. So
+we've shown the convergence of the belief
+
+45
+00:04:33,063 --> 00:04:39,052
+propagation algorithm implies calibration.
+This expression, which corresponds to the
+
+46
+00:04:39,073 --> 00:04:47,037
+sepset beliefs. Cuz it's the marginal over
+the cluster beliefs is called mu I j. And
+
+47
+00:04:47,037 --> 00:04:53,038
+it's an expression that we'll use a little
+bit later. In particular, one of the
+
+48
+00:04:53,038 --> 00:04:59,062
+important properties that we get by
+putting these pieces together. Is another
+
+49
+00:04:59,062 --> 00:05:05,077
+property called reparameterization. Now that's a
+bit of a mouthful. Let's first do the
+
+50
+00:05:05,077 --> 00:05:12,050
+derivation and understand what the word
+means. So remember that as we run belief
+
+51
+00:05:12,050 --> 00:05:19,028
+propagation it'll be evident that we have
+these beliefs over the clusters. Which are
+
+52
+00:05:19,028 --> 00:05:24,077
+defined in this expression. So,
+specifically for example we have for
+
+53
+00:05:24,077 --> 00:05:30,074
+cluster one we have would have psi1
+times delta 4-1 times delta 2-1 and
+
+54
+00:05:30,074 --> 00:05:37,002
+similarly for these other clusters. We
+also just now defined these cluster, these
+
+55
+00:05:37,002 --> 00:05:44,097
+sepset beliefs. Which are, which we've
+just shown are a product of two messages
+
+56
+00:05:44,097 --> 00:05:50,063
+on the two differ-, going in each
+direction. So, specifically here we would
+
+57
+00:05:50,063 --> 00:05:56,037
+have, for example that mu of one two is
+equal to delta one two times delta two
+
+58
+00:05:56,037 --> 00:06:02,001
+one. Now if we look at this graph, with
+all these, all these little factors
+
+59
+00:06:02,001 --> 00:06:07,094
+attached to the clusters and the sepsets,
+we see that there's a lot of repetition
+
+60
+00:06:07,094 --> 00:06:13,058
+here. So delta 4-1 appears, for example,
+here, but it also appears there. And, in
+
+61
+00:06:13,058 --> 00:06:19,022
+fact, if we look at it, we see that each
+of these expressions appears, each of
+
+62
+00:06:19,022 --> 00:06:25,037
+these message expressions appears exactly
+twice. So Delta 4-1 appears here and here.
+
+63
+00:06:25,037 --> 00:06:31,075
+And, for example, delta 1-2 appears here
+and, and here. And so if we write all of
+
+64
+00:06:31,075 --> 00:06:39,033
+these together in, in a different form, we
+can see that we, if we multiply all of the
+
+65
+00:06:39,033 --> 00:06:47,074
+beliefs and divide by all of the sepsets.
+We would end up with multiplying in delta
+
+66
+00:06:47,074 --> 00:06:55,084
+four one, for example, on the on the
+belief side but then canceling it out when
+
+67
+00:06:55,084 --> 00:07:03,091
+we divide by nu one comma four. And
+similarly delta one two would be
+
+68
+00:07:03,091 --> 00:07:11,009
+multiplied in on. In terms of beta two,
+but then canceling out in the denominator
+
+69
+00:07:11,009 --> 00:07:17,017
+in Mu one two. So, if we wanted to write
+this in a little bit of a broader,
+
+70
+00:07:17,042 --> 00:07:24,006
+setting. So if we have a product of the
+beliefs over here, multiplied, and then
+
+71
+00:07:24,006 --> 00:07:30,045
+divided by a product of all of the
+sepsets, we can see that this numerator is
+
+72
+00:07:30,045 --> 00:07:36,084
+equal to the product over i, of psi i,
+times the product of all of the incoming
+
+73
+00:07:36,084 --> 00:07:43,081
+messages into clique i. The denominator is
+simply equal to the product of all of the
+
+74
+00:07:43,081 --> 00:07:49,089
+messages on each direction. And we can see
+that, here, we're just counting the same
+
+75
+00:07:49,089 --> 00:07:55,079
+message in two different ways. And so,
+each message appears once in the numerator
+
+76
+00:07:55,079 --> 00:08:01,055
+and once in the denominator, which means
+that they all cancel with each other. And
+
+77
+00:08:01,055 --> 00:08:07,023
+so what we end up with is the product of
+all of the initial potentials psi i. And
+
+78
+00:08:07,023 --> 00:08:18,036
+that product is simply the unnormalized.
+Measure. And so. The implication of this
+
+79
+00:08:18,036 --> 00:08:24,001
+is that this expression over here. This
+ratio is simply a different set of
+
+80
+00:08:24,001 --> 00:08:29,089
+parameters that captures the original
+un-normalized measure that defines our
+
+81
+00:08:29,089 --> 00:08:35,091
+distribution. And so we haven't lost
+information. No information lost. As, as a
+
+82
+00:08:35,091 --> 00:08:42,001
+result of belief propagation algorithm.
+The representation of the unnormalized
+
+83
+00:08:42,001 --> 00:08:47,089
+measure is still there just using a
+different set of parameters, specifically
+
+84
+00:08:47,089 --> 00:08:53,084
+the cluster sepsets, the cluster beliefs and
+the sepset beliefs. So, to summarize.
+
+85
+00:08:53,084 --> 00:08:59,001
+We've seen that, at convergence of belief
+propagation. The cluster graph beliefs all
+
+86
+00:08:59,001 --> 00:09:03,078
+agree with each other on the variables
+that are shared among them. And as a
+
+87
+00:09:03,078 --> 00:09:09,015
+consequence of that, the cluster graph
+beliefs are simply an alternative
+
+88
+00:09:09,015 --> 00:09:14,051
+parameterization of the original
+un-normalized density. But one that has
+
+89
+00:09:14,051 --> 00:09:20,069
+this nice calibration property, which
+allows us to read, off information, about
+
+90
+00:09:20,069 --> 00:09:26,050
+a variable from any clique in which it
+appears. And so, we have reparameterized
+
+91
+00:09:26,050 --> 00:09:31,087
+the original distribution into a more
+convenient and easily usable form.

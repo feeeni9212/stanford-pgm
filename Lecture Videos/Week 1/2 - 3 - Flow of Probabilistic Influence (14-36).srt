@@ -1,0 +1,670 @@
+
+1
+00:00:00,000 --> 00:00:05,012
+So we've seen reasoning patterns where
+intuitively, at least that's how we argue,
+
+2
+00:00:05,012 --> 00:00:10,038
+probabilistic influence kind of starts in
+one node and flows through the graph on
+
+3
+00:00:10,038 --> 00:00:15,039
+another node. And that might seem like,
+you know, a bunch of hand waving, but it
+
+4
+00:00:15,054 --> 00:00:20,045
+turns out that this is actually exactly
+what goes on in a Bayesian network. So, what
+
+5
+00:00:20,045 --> 00:00:25,018
+we're going to do now is we're going to make
+this argument much more rigorous by trying
+
+6
+00:00:25,018 --> 00:00:29,058
+to understand exactly when one variable X
+can influence another variable Y, and
+
+7
+00:00:29,058 --> 00:00:33,097
+we're going to start with a case where
+there is no evidence going on and we're
+
+8
+00:00:33,097 --> 00:00:38,054
+just asking, can variable X influence Y.
+And let's look at a few simple cases. So first, if
+
+9
+00:00:38,071 --> 00:00:45,012
+X and Y are connected, so say X
+is a parent of Y, then, yep, pretty much
+
+10
+00:00:45,012 --> 00:00:53,000
+it's pretty clear cut that X can influence
+Y. If Y is a child of X, we already talked
+
+11
+00:00:53,000 --> 00:00:59,010
+about evidential reasoning. We also saw in
+this case, X can influence Y, in the sense
+
+12
+00:00:59,010 --> 00:01:05,021
+that observing X can change my probability
+distribution of Y. That's what I mean by
+
+13
+00:01:05,021 --> 00:01:16,006
+influence, influence means beliefs in Y,
+or about Y. More interesting are the
+
+14
+00:01:16,006 --> 00:01:22,007
+cases, where we have indirect influence,
+between, X and Y, so, let's consider a
+
+15
+00:01:22,007 --> 00:01:28,025
+case, where there is an intervening
+variable, W, and, let's think about that, can X
+
+16
+00:01:28,025 --> 00:01:34,042
+influence Y, via W? And, the first case of
+the causal chain such as,
+
+17
+00:01:34,042 --> 00:01:39,072
+for example, the one going from
+Difficulty, to Letter, via Grade, and,
+
+18
+00:01:39,072 --> 00:01:48,004
+we've already seen, that, in this case, X
+can influence Y via W in the
+
+19
+00:01:48,004 --> 00:01:54,093
+example that we saw. This is exactly the
+same idea, except that we're going
+
+20
+00:01:54,093 --> 00:02:01,043
+evidential and as we'll see in general,
+probabilistic influence is symmetrical.
+
+21
+00:02:01,043 --> 00:02:07,085
+That is, if X can influence Y, Y can
+influence X. And so, that's here also,
+
+22
+00:02:07,085 --> 00:02:13,019
+we have probabilistic influence
+[inaudible]. Okay. The third is a
+
+23
+00:02:13,019 --> 00:02:21,036
+structure that looks like this. So we have
+a common cause W that has two effect X and
+
+24
+00:02:21,036 --> 00:02:27,039
+Y. And again, it seems to make sense that
+if, we observe the value of the SAT, then,
+
+25
+00:02:27,061 --> 00:02:32,069
+that changes my beliefs in the student's
+intelligence, and subsequently, my
+
+26
+00:02:32,069 --> 00:02:40,020
+probability distribution over their grade.
+Okay, so the last and most interesting one
+
+27
+00:02:40,020 --> 00:02:47,098
+is this case which is the case of two
+causes that have a joint effect. This
+
+28
+00:02:47,098 --> 00:02:53,051
+place is also called a V structure, for
+obvious reasons, because it's shaped like
+
+29
+00:02:53,056 --> 00:02:58,090
+a V. And [inaudible], remember, I haven't
+given you any information. The question
+
+30
+00:02:58,090 --> 00:03:04,022
+is, if I tell you that a student took a
+class, and the class is difficult, does
+
+31
+00:03:04,022 --> 00:03:09,096
+that tell me anything about the student's
+intelligence? And the answer is no. And so
+
+32
+00:03:09,096 --> 00:03:15,024
+this, in this case, the one and only
+exception in this particular case. So then
+
+33
+00:03:15,024 --> 00:03:20,050
+let's define this notion of active trail
+in the context of no evidence. So a trail
+
+34
+00:03:20,050 --> 00:03:25,044
+in general, is a sequence of nodes that
+are connected to each other by single
+
+35
+00:03:25,044 --> 00:03:30,051
+edges in the graph. So X1 up to actually
+we should make this XK, so as not to
+
+36
+00:03:30,051 --> 00:03:35,065
+confuse with [inaudible] variables. And
+the fact that these edges are undirected
+
+37
+00:03:35,065 --> 00:03:40,040
+means that they can go in either
+direction. So I'm not stipulating that it
+
+38
+00:03:40,040 --> 00:03:46,057
+goes up or down. So basically we saw that
+in, that influence can flow from one
+
+39
+00:03:46,057 --> 00:03:53,007
+variable to another variable, in the
+graph. And what this definition basically
+
+40
+00:03:53,007 --> 00:03:59,033
+says is that the, is that the, this
+influence can continue to flow. So if it
+
+41
+00:03:59,033 --> 00:04:05,058
+flows from one variable to the next, to
+the next, to the next, to the next, that
+
+42
+00:04:05,058 --> 00:04:11,087
+still defines an active trail. The only
+thing that blocks an active trail is a
+
+43
+00:04:11,087 --> 00:04:17,074
+V estructure because that is the one case
+where we have with no influence flows as
+
+44
+00:04:17,074 --> 00:04:25,075
+an example that we showed before. So this
+is a block in the trail. Now let's look
+
+45
+00:04:25,075 --> 00:04:31,006
+at a more interesting case, now we have
+some set of observations which we're going
+
+46
+00:04:31,006 --> 00:04:36,056
+to define which we're going to denote as a
+set of variables Z, so now we have this
+
+47
+00:04:36,056 --> 00:04:42,000
+set of variable Z and the question is when
+can X influence Y given evidence about Z
+
+48
+00:04:42,000 --> 00:04:47,031
+so the first two cases are fairly straight
+forward, having evidence about Z that's
+
+49
+00:04:47,031 --> 00:04:52,004
+not related that's not either X or Y
+doesn't change the variability of a
+
+50
+00:04:52,004 --> 00:04:57,054
+variable to influence one which is not
+directly connected, so here also. If x is
+
+51
+00:04:57,054 --> 00:05:03,010
+directly connected to y and either of the
+causal or the evidential direction if you
+
+52
+00:05:03,010 --> 00:05:08,046
+tell me something about one of them it can
+change my beliefs about the other. Now
+
+53
+00:05:08,046 --> 00:05:13,081
+let's look at these four cases that are,
+the later of the cases that are the most
+
+54
+00:05:13,081 --> 00:05:19,002
+interesting ones. That is one where  X can
+influence Y through an intervening node W. And
+
+55
+00:05:19,002 --> 00:05:28,018
+others really two cases either w is in my
+evidence set z. Opps, sorry, either it's in
+
+56
+00:05:28,018 --> 00:05:37,012
+my evidence set z or it's not. Now, lets
+start with a case where w's not in my
+
+57
+00:05:37,012 --> 00:05:45,019
+evidence case in my evidence set z. Well,
+in this case, I didn't get to observe w.
+
+58
+00:05:45,019 --> 00:05:50,088
+So, I'm asking whether x can influence y
+via w, and there's really no difference
+
+59
+00:05:50,088 --> 00:05:56,065
+between this case and the previous one.
+That is, for example, difficulty can still
+
+60
+00:05:56,065 --> 00:06:03,013
+influence letter via grade if grade is not
+observed. So here, here, and here, we have
+
+61
+00:06:03,013 --> 00:06:09,090
+exactly the same, behavior as before. That
+is, the intermediate variables through
+
+62
+00:06:09,090 --> 00:06:15,060
+which the influence flowed was not
+observed, and therefore, there's no
+
+63
+00:06:15,060 --> 00:06:21,018
+reason, why, While observing x can change
+things. Before we go down to the final
+
+64
+00:06:21,018 --> 00:06:26,023
+case, let's contrast this for these three
+cases with a case where w is observed. W
+
+65
+00:06:26,023 --> 00:06:30,072
+is evidence. So now let's consider for
+example, this tray over here where
+
+66
+00:06:30,072 --> 00:06:35,033
+difficulty influences the letter by a
+grade. So this is not an edge in the
+
+67
+00:06:35,033 --> 00:06:39,064
+Bayesian network, this is just
+demonstrating the flow of influence on
+
+68
+00:06:39,064 --> 00:06:45,020
+[inaudible] double lines. So now the
+question is we know that's, that, that
+
+69
+00:06:45,020 --> 00:06:50,049
+observing difficulty can change my
+distribution in the value of the letter.
+
+70
+00:06:50,049 --> 00:06:56,006
+But what if I tell you the grade, that is
+I know that a student got an A in the
+
+71
+00:06:56,006 --> 00:07:01,001
+class. Now I'm telling you that the class
+is really hard, does that change the
+
+72
+00:07:01,001 --> 00:07:06,043
+probability of distribution of the letter?
+No because we already know the student got
+
+73
+00:07:06,043 --> 00:07:11,072
+an A the letter only depends on the grade
+and so in this case insolence can't flow
+
+74
+00:07:11,072 --> 00:07:18,000
+through grade if grade is observed, so in
+this case, we have, this situation. What
+
+75
+00:07:18,000 --> 00:07:22,075
+about the evidential case? Well, we've
+already talked about the fact that
+
+76
+00:07:22,075 --> 00:07:28,008
+evidential, that probabilistic influence
+is symmetrical. So if difficulty can't
+
+77
+00:07:28,008 --> 00:07:33,035
+influence letter where grade is observed,
+letter can't influence difficulty when
+
+78
+00:07:33,035 --> 00:07:39,046
+grade is observed. And so once again, we
+have no influence here. Finally well not
+
+79
+00:07:39,046 --> 00:07:46,078
+finally but the third case is the one
+where we have a common cause that has two
+
+80
+00:07:46,078 --> 00:07:54,028
+effects so in this case take for example
+the SAT changing my beliefs in grade via
+
+81
+00:07:54,028 --> 00:08:00,033
+intelligence. And again we know we've
+already seen examples in fact that the SAT
+
+82
+00:08:00,033 --> 00:08:05,041
+can change the probability of
+distributioning grade but if I tell you
+
+83
+00:08:05,041 --> 00:08:11,044
+that the student is intelligent then, then
+it doesn't, there's no way for the SAT to
+
+84
+00:08:11,044 --> 00:08:17,084
+change my probability distribution in
+grade. Now, I'm giving you this as sort of
+
+85
+00:08:17,084 --> 00:08:23,028
+a high level intuitive argument. But it's,
+it's possible, and we'll actually go
+
+86
+00:08:23,028 --> 00:08:28,093
+through an argument to demonstrate that,
+this is really what's going on here. And
+
+87
+00:08:28,093 --> 00:08:34,044
+that these, probalistic influences
+[inaudible] really do hold, in, in a graph
+
+88
+00:08:34,044 --> 00:08:40,089
+such as this. Okay so let's talk about the
+last and most interesting case which is
+
+89
+00:08:41,013 --> 00:08:47,066
+the case where we have a V structure so
+this is this case over here X and so for
+
+90
+00:08:47,066 --> 00:08:53,056
+example difficulty can difficulty
+insolence intelligence via grade. And if
+
+91
+00:08:53,056 --> 00:08:59,026
+grade is observed, this is exactly
+the case that we've seen before. This is
+
+92
+00:08:59,026 --> 00:09:05,003
+the case of inter-causal reasoning or,
+that, that, we demonstrated earlier. So in
+
+93
+00:09:05,003 --> 00:09:10,095
+this case if W is in Z, actually we're in
+the case where influence can flow, so this
+
+94
+00:09:10,095 --> 00:09:18,073
+case is working in exactly the opposite to
+the previous three cases. [inaudible] we
+
+95
+00:09:18,073 --> 00:09:24,054
+have one tricky thing left, which is, what
+happens if W is not in Z? Now, the
+
+96
+00:09:24,054 --> 00:09:30,007
+main conclusion might be to say, well, you
+know, if W's not observed, than it's
+
+97
+00:09:30,007 --> 00:09:35,081
+exactly the same as before. And influence
+can't flow, so I'm tempted to put an X
+
+98
+00:09:35,081 --> 00:09:43,036
+right over here. Except, that this is not
+quite right. Because what happens if I
+
+99
+00:09:43,036 --> 00:09:50,023
+don't observe grade, but I actually
+observe. Letter. I don't observe the grade
+
+100
+00:09:50,023 --> 00:09:55,013
+directly but I observe something that
+gives me a strong indication of what value
+
+101
+00:09:55,013 --> 00:10:00,083
+the grade took. In this case this tool
+activates the v structure. That is it
+
+102
+00:10:00,083 --> 00:10:07,014
+gives me in evidence that needs to be
+explained. I can explain it by difficulty
+
+103
+00:10:07,014 --> 00:10:13,094
+or via intelligence and so and so that
+point it establishes the connection, the
+
+104
+00:10:13,094 --> 00:10:19,069
+correlation between them. So that
+observing one does influence the other.
+
+105
+00:10:19,069 --> 00:10:26,001
+And so this one is not actually quite
+right. What you'd actually like to say is
+
+106
+00:10:26,001 --> 00:10:39,010
+that if w, cause of their. So this is X
+if. W and R all the way to the descendents.
+
+107
+00:10:43,008 --> 00:11:05,044
+Are not observed. Or conversely that this
+influences control either, if W or
+
+108
+00:11:09,003 --> 00:11:25,081
+one of its descendants is observed. So
+this tells us a taxonomy of how influence
+
+109
+00:11:25,081 --> 00:11:34,035
+can flow through an intervening variable
+and now we can take that and we can put it
+
+110
+00:11:34,035 --> 00:11:42,069
+together to define an overall model, of a
+more general flow of influence. So for
+
+111
+00:11:42,069 --> 00:11:55,034
+example, one can influence flow from S
+through I. Og into D. Well? Let's look at
+
+112
+00:11:55,034 --> 00:12:05,000
+a couple cases. What if I is observed?
+Well, if I is observed, then it blocks the
+
+113
+00:12:05,000 --> 00:12:11,061
+trail. And if it blocks the trail, you're,
+you're, there's no more opportunity for it
+
+114
+00:12:11,061 --> 00:12:17,065
+to flow. So that's a no. What about if I
+is not observed but nothing else is
+
+115
+00:12:17,065 --> 00:12:30,035
+observed? I not observed. Ignores anything
+else. Well. What happens then? Well, you
+
+116
+00:12:30,035 --> 00:12:36,009
+can climb up [inaudible], but you kinda
+fall down the river when you hit the
+
+117
+00:12:36,009 --> 00:12:42,020
+grade. And you can't climb back up, 'cause
+there's nothing stopping you. And so that
+
+118
+00:12:42,020 --> 00:12:54,043
+two doesn't allow influence to flow. On
+the other hand, if I is not observed. And
+
+119
+00:12:54,043 --> 00:13:04,036
+G is observed. Well, now you can climb up
+here, continue through here. Grade is
+
+120
+00:13:04,036 --> 00:13:10,020
+observed so the water can kind of go back
+up the hill into difficulty. So you can
+
+121
+00:13:10,020 --> 00:13:16,025
+think of it as a flow, sort of a flow of
+water except that different nodes behave
+
+122
+00:13:16,025 --> 00:13:21,044
+differently in terms of the valve
+structure. So here if you observe a
+
+123
+00:13:21,044 --> 00:13:27,038
+variable, it closes valves that go like
+this. But if you have a V structure,
+
+124
+00:13:27,038 --> 00:13:32,082
+closing this valve actually lets the water
+climb back upstream, so it's kind of an
+
+125
+00:13:32,082 --> 00:13:37,086
+analogy. So how do we turn this into a
+formal definition? We have [inaudible]
+
+126
+00:13:37,086 --> 00:13:43,052
+trail, X1 of the XN. And I have this,
+should have been a K here as well. Is
+
+127
+00:13:43,052 --> 00:13:50,043
+active given the if and we have two cases.
+First every V structure needs to be
+
+128
+00:13:50,043 --> 00:13:57,061
+activated and the only way we can activate
+a V structure is if XI or one of it's
+
+129
+00:13:57,061 --> 00:14:10,008
+decendants is observed. Now this is
+activate. V structures. Now all the other
+
+130
+00:14:10,008 --> 00:14:18,054
+valves have to be open so no other X I
+that are not on these structures so X I
+
+131
+00:14:18,054 --> 00:14:23,038
+not in. Whe-, whereby v, not in v
+structures, I mean not at the, sort of,
+
+132
+00:14:23,038 --> 00:14:28,015
+the nexus. The bottom of the v in the v
+structure. No other Xi can be observed.
+
+133
+00:14:28,015 --> 00:14:33,011
+And that's the definition of an active
+trail. And basically what we have, is that
+
+134
+00:14:33,011 --> 00:14:36,059
+influence can flow in the network through
+active trails.

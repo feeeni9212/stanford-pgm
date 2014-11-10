@@ -1,0 +1,3 @@
+Describe your method used to recognize the unknown actions here.
+
+Currently RecognizeActions is used to produce the predictions as a place holder for submission. Other approaches to recognition task will be tried later.

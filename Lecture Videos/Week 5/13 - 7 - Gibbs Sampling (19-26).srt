@@ -1,0 +1,845 @@
+
+1
+00:00:00,098 --> 00:00:05,008
+We defined the notion of a general Markov
+chain. We talked about how certain
+
+2
+00:00:05,008 --> 00:00:09,052
+conditions guaranteed that if we sample
+from the chain, we achieve convergence to
+
+3
+00:00:09,052 --> 00:00:13,069
+a stationary distribution. We then
+described how, if we then generate samples
+
+4
+00:00:13,069 --> 00:00:18,007
+from the Markov chain, we can use that to
+estimate properties of that stationary
+
+5
+00:00:18,007 --> 00:00:22,056
+distribution, like various statistics that
+we might care about. But the question of
+
+6
+00:00:22,056 --> 00:00:27,011
+where the Markov chain might come from was
+left very vague. It turns out that for
+
+7
+00:00:27,011 --> 00:00:32,006
+graphical models people have constructed a
+general purpose [inaudible] that can be
+
+8
+00:00:32,006 --> 00:00:36,060
+used to sample from any graphical model in
+that class of changes called the
+
+9
+00:00:36,060 --> 00:00:41,008
+[inaudible] change. So now let?s talk
+about [inaudible] change and how it is
+
+10
+00:00:41,008 --> 00:00:46,060
+used in the context of graphical models.
+So, here our target distribution, the one
+
+11
+00:00:46,060 --> 00:00:53,019
+from which we would like to sample, is the
+good old Gibbs distribution p of phi of x
+
+12
+00:00:53,019 --> 00:00:58,095
+one up to x n. And just as a reminder that
+P of Phi can equally well represent a, a
+
+13
+00:00:58,095 --> 00:01:04,059
+Gibbs distribution that we got from just a
+product of undirected factors, a Markov
+
+14
+00:01:04,059 --> 00:01:09,094
+net style distribution. Or it could as
+well represent a set of factors that we
+
+15
+00:01:09,094 --> 00:01:14,096
+bought from a Bayesian network reduced by
+evidence. So that is the factor
+
+16
+00:01:14,096 --> 00:01:20,052
+[inaudible]. Everything that I'm gonna say
+from now on is agnostic to where those,
+
+17
+00:01:20,073 --> 00:01:26,022
+factors Phi came from. If it came from a
+directed or undirected model. So now our
+
+18
+00:01:26,022 --> 00:01:31,040
+Markov chain states space. Is a set of
+complete assignments, little x to the set
+
+19
+00:01:31,040 --> 00:01:36,028
+of variables, big x. So we're sampling
+over, note, an exponentially large state
+
+20
+00:01:36,028 --> 00:01:41,009
+space. The space of all possible
+assignments of the random variables in our
+
+21
+00:01:41,009 --> 00:01:46,016
+graphical model. So those little circles
+that we saw when we were talking about
+
+22
+00:01:46,016 --> 00:01:51,048
+Markov chains, and we were going from one
+state to the other. Each of these is now a
+
+23
+00:01:51,048 --> 00:01:59,026
+complete assignment, [inaudible]. So, it
+turns out that the Gibbs chain is actually
+
+24
+00:01:59,026 --> 00:02:06,005
+a very simple and, easy to understand
+Markof chain. And here is what it does.
+
+25
+00:02:06,005 --> 00:02:12,040
+Assume that I have a starting state,
+little x. What I'm going to do, is I'm
+
+26
+00:02:12,040 --> 00:02:19,027
+going to take each variable in its turn
+using some arbitrate ordering and I'm
+
+27
+00:02:19,027 --> 00:02:26,027
+going to sample. A new value for that
+variable given values for all of the rest.
+
+28
+00:02:26,027 --> 00:02:39,010
+So let me introduce this notation this is
+an assignment. Who all. X one up to x n,
+
+29
+00:02:39,010 --> 00:02:49,094
+except x i. So, for example, if we had
+three random variables, X1, X2, and X3, we
+
+30
+00:02:49,094 --> 00:02:56,093
+would sample X1, given X2 and X3; X2,
+given X1 and X3; and, X3, given X1 and X2.
+
+31
+00:02:57,050 --> 00:03:05,089
+Right? So, one at a time. Okay. So, let
+me, let me draw that out because in order
+
+32
+00:03:05,089 --> 00:03:12,084
+to make that clear. So, here we would
+have, here is my current assignment. Let's
+
+33
+00:03:12,084 --> 00:03:20,024
+say here's x-1, x-2, x-3, and let's say
+that we have 000 as my initial assignment.
+
+34
+00:03:20,024 --> 00:03:29,063
+So, I'm going to start by. Sampling x1
+from the probability of x1 given, x to
+
+35
+00:03:29,063 --> 00:03:39,007
+equal zero. And X3 equals zero. And let's
+say I end up with one, the other two
+
+36
+00:03:39,007 --> 00:03:46,094
+haven't changed yet. I now sample from P
+of X two, given X1 equals the new value
+
+37
+00:03:46,094 --> 00:03:57,090
+one and X three equals zero. And say that
+stays zero. It could. And then I sample X3
+
+38
+00:03:57,090 --> 00:04:06,010
+from X, the probability of X3 given X1
+equals one and X2 equals zero and say that
+
+39
+00:04:06,010 --> 00:04:13,089
+changes to the value one and so now this
+is my new assignment 101 which gets
+
+40
+00:04:13,089 --> 00:04:21,033
+[inaudible] in X file. That is the single
+step of the Gibbs chain. It goes and
+
+41
+00:04:21,033 --> 00:04:27,095
+perpetually modifies, it has to modify
+because you might end up staying in a same
+
+42
+00:04:27,095 --> 00:04:33,051
+assignment. We sampled every single
+variable in its turn and when all of them
+
+43
+00:04:33,051 --> 00:04:41,078
+are done, that's my new state. So let's do
+this example in the context of a real
+
+44
+00:04:41,078 --> 00:04:48,052
+graphical model. So here is the good old
+student Bayesian network and I'm assuming
+
+45
+00:04:48,052 --> 00:04:54,076
+that I have observed two of the values,
+values for two of the variables. I've
+
+46
+00:04:54,076 --> 00:05:01,094
+observed L equals L zero and S equals S
+one. And so now I have a product of
+
+47
+00:05:02,023 --> 00:05:09,035
+reduced factors that represent the
+evidence that I've received. And only
+
+48
+00:05:09,035 --> 00:05:17,035
+three variables are now getting sampled,
+because the other two are fixed to their
+
+49
+00:05:17,035 --> 00:05:25,005
+observed values. So now, I'm sampling from
+P of P [inaudible] of phi. I mean, I'd
+
+50
+00:05:25,005 --> 00:05:32,086
+like to sample from P [inaudible] phi of
+DI [inaudible], given little s1 and L0.
+
+51
+00:05:33,033 --> 00:05:40,000
+And so what I'm going to do in the
+sampling process is I'm going to start out
+
+52
+00:05:40,000 --> 00:05:46,024
+with some arbitrary assignment to these
+three variables, d, I, and g. So for
+
+53
+00:05:46,024 --> 00:05:52,056
+example, since it's arbitrary, d zero, I
+zero, g zero. And now I'm going to go
+
+54
+00:05:52,056 --> 00:05:59,023
+ahead and sample each of these in turn.
+And so I'm going to initially sample d
+
+55
+00:05:59,023 --> 00:06:22,045
+from. Of the given. I've. Zero. G zero.
+Sl0 and S1. Kay. And, we'll talk about how
+
+56
+00:06:22,045 --> 00:06:29,060
+that?s done in just a moment, and that
+might give me, D-1, I-0, G-0 and now I
+
+57
+00:06:29,060 --> 00:06:37,015
+continue and I might sample I, so I'm
+going to sample I, from probability of, I
+
+58
+00:06:37,015 --> 00:06:49,079
+given D-1. B. Zero, L. Zero, S. One, and,
+I end up with I. One. Finally I sample G
+
+59
+00:06:49,079 --> 00:06:57,028
+and it couldn't be G zero, I apologize cuz
+G only goes 1,2,3 so let's say it was G
+
+60
+00:06:57,028 --> 00:07:04,062
+one and now I sample G from the
+probability of G. Okay so this was you on
+
+61
+00:07:04,062 --> 00:07:12,048
+here too. And this is the probability of
+now sampling G from the probability of G
+
+62
+00:07:12,048 --> 00:07:20,046
+given, D1, I1, cause that's where I am
+right now, L0, and S1 And that was G3. So
+
+63
+00:07:20,046 --> 00:07:31,022
+my new assignment. Is this one. D1, i1,
+t3. So how do I do this in a tractable
+
+64
+00:07:31,022 --> 00:07:36,067
+way? So here is the trick that, I mean,
+you might say well you're doing this
+
+65
+00:07:36,067 --> 00:07:42,011
+intractable distribution. I mean you just
+moved the problem from the original
+
+66
+00:07:42,011 --> 00:07:47,082
+problem that we had to computing these
+conditional probabilities. Why is that any
+
+67
+00:07:47,082 --> 00:07:53,048
+easier? Well, turns out it is. So let's
+look at the sampling step over here. Where
+
+68
+00:07:53,048 --> 00:07:58,075
+I sample XI from this conditional
+distribution, and let's break that down
+
+69
+00:07:58,075 --> 00:08:04,010
+into these into its constituent
+definitions. So this distribution, this
+
+70
+00:08:04,010 --> 00:08:09,069
+conditional distribution, is a ratio.
+Between the joint distribution of the
+
+71
+00:08:09,069 --> 00:08:16,007
+value xi and the stuff on the right hand
+side of the conditioning bar divided by
+
+72
+00:08:16,007 --> 00:08:23,012
+the stuff on the right hand side of the
+conditioning bar. Now importantly, because
+
+73
+00:08:23,012 --> 00:08:30,052
+each of these is the, is an un-normalized
+measure divided by the partition function,
+
+74
+00:08:30,052 --> 00:08:38,061
+the partition function cancels. And so I
+end up, since I had a one over Z here. The
+
+75
+00:08:38,061 --> 00:08:46,092
+one over z canceled, then I end up with
+the ratio to unnormalized measures. So,
+
+76
+00:08:46,092 --> 00:09:01,062
+and the point being, now, that this. In a
+complete assignment. And therefore is a
+
+77
+00:09:01,062 --> 00:09:11,032
+product of factors. So let's look at that
+in the context of a concrete example and
+
+78
+00:09:11,032 --> 00:09:17,082
+see how that might help us. So now we're
+doing an example that's a Markov network,
+
+79
+00:09:17,082 --> 00:09:24,087
+in order to demonstrate that this is
+equally applicable to both. So this is our
+
+80
+00:09:24,087 --> 00:09:32,019
+good old misconception network, where we
+have these four factors, PHI1, PHI2, PHI3
+
+81
+00:09:32,019 --> 00:09:38,098
+and PHI4. And let's imagine that we're
+trying to do P-PHI of A, given B, C, and
+
+82
+00:09:38,098 --> 00:09:45,091
+D. And we can see that we have here is P
+[inaudible] PHI of A, B, C, D. Divided by
+
+83
+00:09:45,091 --> 00:09:53,003
+the sum over A prime, and I'm using the A
+prime to distinguish it from this a over
+
+84
+00:09:53,003 --> 00:10:00,059
+here just to avoid ambiguity. P tilda phi,
+sum over a prime, p tilda phi, of A prime
+
+85
+00:10:00,059 --> 00:10:06,052
+bcd. And now I'm going to, since each of
+these [inaudible] is a product of factors,
+
+86
+00:10:06,052 --> 00:10:11,096
+I'm going to inject that product of
+factors into each of the numerator and
+
+87
+00:10:11,096 --> 00:10:17,010
+denominators separately. And so, over
+here, I end up with phi of AB times
+
+88
+00:10:17,010 --> 00:10:22,054
+phi2-BC, phi3-CD, phi4-AD. And similarly,
+end up with exactly the same form of
+
+89
+00:10:22,054 --> 00:10:34,022
+expression as the denominator, except that
+I sum out over A prime. And what do we?
+
+90
+00:10:34,091 --> 00:10:41,085
+Determine by looking at this expression.
+Well, some things are immediately jump to
+
+91
+00:10:41,085 --> 00:10:48,095
+one's eye. Which is that 5-2BC appears in
+the numerator and in the denominator and
+
+92
+00:10:48,095 --> 00:10:56,042
+therefore, I can cancel it. And similarly
+with 5-3 of CD. And so what I end up with
+
+93
+00:10:56,042 --> 00:11:04,054
+here is a product of just two factors, phi
+one of AD and phi four of AD. Which are
+
+94
+00:11:04,054 --> 00:11:19,016
+the two factors. That involved a.
+[inaudible] that's for the numerator. What
+
+95
+00:11:19,016 --> 00:11:24,056
+about the denominator? Well the
+denominator is just a good old normalizing
+
+96
+00:11:24,056 --> 00:11:37,087
+constant. So really, what we have here, is
+that this is proportional to FI1 of A
+
+97
+00:11:37,087 --> 00:11:47,011
+little b, times FI4 of A little d. So this
+is a factor over A that I can compute by
+
+98
+00:11:47,011 --> 00:11:54,095
+multiplying two singleton factors in this
+case over A. Multiply them together, and
+
+99
+00:11:54,095 --> 00:11:58,087
+renormalize, and get a distribution over
+eight, from which we can sample. And we
+
+100
+00:11:58,087 --> 00:12:04,018
+already talked about this sample from this
+week?s [inaudible]. So what is the
+
+101
+00:12:04,018 --> 00:12:12,044
+computational cost now of this algorithm?
+The sampling step 4XI given all of the
+
+102
+00:12:12,044 --> 00:12:20,049
+others is simply this expression over
+here, which is proportional to a product
+
+103
+00:12:20,049 --> 00:12:31,056
+of factors, and not just any old product
+of factors but just the factors. That
+
+104
+00:12:31,056 --> 00:12:44,027
+involve xi. Involve. Just the factors that
+have XI in its scope. Which means that I
+
+105
+00:12:44,027 --> 00:12:50,071
+only care about XI and its neighbors in
+the graph. Which for a large graph with
+
+106
+00:12:50,071 --> 00:12:56,050
+tens of thousands of notes can be a
+considerable savings. [inaudible]. So,
+
+107
+00:12:56,050 --> 00:13:09,086
+only XI and its neighbors. So, do we like
+the gives chain? We've certainly defined
+
+108
+00:13:09,086 --> 00:13:15,034
+it. Does it have the properties that we
+would like it to have? Well, the answer
+
+109
+00:13:15,034 --> 00:13:20,008
+is, unfortunately, not always. So let's
+look at, and specifically is a regular
+
+110
+00:13:20,008 --> 00:13:25,007
+chain, do we have guaranteed convergence
+to a unique stationary distribution? So
+
+111
+00:13:25,007 --> 00:13:29,094
+the answer is unfortunately not and to
+that we're going to return to our old
+
+112
+00:13:29,094 --> 00:13:34,099
+enemy, the exclusive or network which, as
+I said, in other examples, is the counter
+
+113
+00:13:34,099 --> 00:13:39,061
+example to pretty much anything, is the
+exclusive or. So let's look at the
+
+114
+00:13:39,061 --> 00:13:44,053
+exclusive or network, so here we have Y
+which is the exclusive or of X1 and X2.
+
+115
+00:13:44,053 --> 00:13:59,019
+And let's imagine that I observe. Y equals
+one. And so these two disappear. And now
+
+116
+00:13:59,019 --> 00:14:07,028
+I'm going to try and sample. X1 x2 which I
+should be both, you know if, if, if I were
+
+117
+00:14:07,028 --> 00:14:14,008
+so lucky I would get that each of two as
+possible states for x1 and x2 occurs the
+
+118
+00:14:14,008 --> 00:14:20,088
+probability pass. Towards imagine that I
+turn out on this one, and I'm going to now
+
+119
+00:14:20,088 --> 00:14:27,035
+sample x1 given x2 and y. So I have, my
+initial state is zero one for x1 and x2.
+
+120
+00:14:27,035 --> 00:14:34,053
+And of course y equals one is my evidence
+and I'm going to sample. I'm going to
+
+121
+00:14:34,053 --> 00:14:42,077
+sample x1 given x2 and y. And that is a
+deterministic dependence, and the only
+
+122
+00:14:42,077 --> 00:14:51,064
+possible value that I get is zero for x1.
+Well, am I gonna have any better luck with
+
+123
+00:14:51,064 --> 00:14:58,020
+x2? Nope. I'm going to end up with exactly
+the same 01 that I started out with and I
+
+124
+00:14:58,020 --> 00:15:03,087
+can do the exact same thing again and you
+know what? It will work the same way every
+
+125
+00:15:03,087 --> 00:15:09,041
+single time and I will always end up with
+01. Conversely, if I started out with ten,
+
+126
+00:15:09,041 --> 00:15:14,034
+I will never leave ten. This is a
+classical example of a non-mixing chain.
+
+127
+00:15:15,058 --> 00:15:22,006
+On the other hand if all factors are
+positive, that is if there are no zero
+
+128
+00:15:22,006 --> 00:15:30,055
+entries in any of the factors than you can
+show that the Gibbs chain is regular. Now,
+
+129
+00:15:30,055 --> 00:15:37,095
+however, it's important to realize that
+regular doesn't mean good. So I can make
+
+130
+00:15:37,095 --> 00:15:44,097
+this chain regular by adding a tiny
+probability epsilon, of having Y not be
+
+131
+00:15:44,097 --> 00:15:51,013
+the exact, exclusive orb X1 and X2. So
+now, the chain is regular, because all
+
+132
+00:15:51,013 --> 00:15:56,094
+possibilities have probability non zero.
+And it's still going to mix extremely
+
+133
+00:15:56,094 --> 00:16:02,067
+slowly for values of epsilon that are
+small. So, regularity, remember, is a very
+
+134
+00:16:02,067 --> 00:16:08,071
+weak condition. It says if you sample long
+enough, we will eventually converge. But
+
+135
+00:16:08,071 --> 00:16:17,023
+it doesn't mean it'll happen in a
+reasonable time frame. And one such
+
+136
+00:16:17,023 --> 00:16:22,068
+example, of a very slow to mix chain
+absolutely occurs in tractable
+
+137
+00:16:22,068 --> 00:16:29,019
+application. So here is one example. Here
+is an example in our image segmentation
+
+138
+00:16:29,019 --> 00:16:35,094
+domain. And imagine that we're trying to
+re sample say the class. Of let me use a
+
+139
+00:16:35,094 --> 00:16:41,014
+different color. Of this superpixel here,
+and, that we have some fairly strong
+
+140
+00:16:41,014 --> 00:16:46,034
+potentials that tell me that the class of
+this superpixel should be very highly
+
+141
+00:16:46,034 --> 00:16:51,053
+correlated with the class of its adjacent
+superpixels, because of the appearance
+
+142
+00:16:51,053 --> 00:16:56,065
+being, very similar to each other. 'Cause
+I have some, 'cause I have a pair wise
+
+143
+00:16:56,066 --> 00:17:01,014
+Markov network with some very strong
+potentials that try and enforce
+
+144
+00:17:01,014 --> 00:17:06,066
+consistency between adjacent superpixels.
+So if it turns out that for whatever
+
+145
+00:17:06,066 --> 00:17:12,028
+reason my initial assignment was
+absolutely wrong so for example what is
+
+146
+00:17:12,028 --> 00:17:18,075
+often an error mode for sub segmentation
+models, is that is that road is often
+
+147
+00:17:18,075 --> 00:17:24,045
+labeled water or sky because the
+appearance is actually kind of a similar
+
+148
+00:17:24,045 --> 00:17:30,093
+grayish kind of appearance. So say that
+for example if I happened to label all of
+
+149
+00:17:30,093 --> 00:17:36,094
+these super pixels as say, water and now
+I'm going to use [inaudible] sampling.
+
+150
+00:17:37,024 --> 00:17:42,047
+None of them are likely to move away from
+their current assignment, because each of
+
+151
+00:17:42,047 --> 00:17:47,051
+the superpixels is really constrained by
+strong pair wise potentials [inaudible]
+
+152
+00:17:47,051 --> 00:17:52,005
+neighbors. And so this notion of slow to
+mix Markov chains is not just a
+
+153
+00:17:52,005 --> 00:17:56,078
+theoretical construct that occurs with
+exclusive or, it actually happens in
+
+154
+00:17:56,078 --> 00:18:02,076
+practice a fair amount. Now to summarize
+what [inaudible] sampling does is it takes
+
+155
+00:18:02,076 --> 00:18:07,098
+a challenging problem of inferencing a
+[inaudible] distribution and converts it
+
+156
+00:18:07,098 --> 00:18:13,052
+to a sequence of sampling stuff where each
+sampling stuff samples one variable given
+
+157
+00:18:13,052 --> 00:18:19,061
+all of the others. This method has the
+advantage that it's probably the simplest
+
+158
+00:18:19,061 --> 00:18:25,096
+mark up change for probabilistic graphical
+models, and it's very efficient to compute
+
+159
+00:18:26,018 --> 00:18:32,053
+each of the different steps the cons are
+that it is actually very slow to mix when
+
+160
+00:18:32,053 --> 00:18:38,027
+the probabilities are peaked and variables
+are very highly correlated. And it's only
+
+161
+00:18:38,027 --> 00:18:43,070
+applicable in cases where we can sample
+from a product of factors. Now, we could
+
+162
+00:18:43,070 --> 00:18:49,000
+always do that in a discrete graphical
+model, if our factors aren't too large.
+
+163
+00:18:49,000 --> 00:18:53,095
+But if our samples are, but if we have,
+for example, either a very densely
+
+164
+00:18:53,095 --> 00:18:59,066
+connected say, Markov network. Or, we have
+one with continuous distributions, where
+
+165
+00:18:59,066 --> 00:19:05,009
+the product of factors isn't something
+that has a nice parametric form that we
+
+166
+00:19:05,009 --> 00:19:10,068
+can sample, [inaudible] sampling might not
+actually be applicable. And so, there is
+
+167
+00:19:10,068 --> 00:19:15,064
+non trivial limitations to the
+applicability of gift sampling. And even
+
+168
+00:19:15,064 --> 00:19:21,037
+when it applies it is actually very slow
+to mix and we often want to do something
+
+169
+00:19:21,037 --> 00:19:25,092
+more clever. And we'll talk about more
+clever algorithms later on.

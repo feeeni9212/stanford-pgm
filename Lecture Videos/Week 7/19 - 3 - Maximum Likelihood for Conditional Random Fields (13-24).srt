@@ -1,0 +1,684 @@
+
+1
+00:00:00,000 --> 00:00:05,422
+We previously talked about maximum
+likelihood estimation for Markov random
+
+2
+00:00:05,422 --> 00:00:10,916
+fields. Then when we first defined Markov
+random fields, we also defined a, an
+
+3
+00:00:10,916 --> 00:00:16,121
+extension on MRFs called conditional
+random fields, or CRFs. So, now let's
+
+4
+00:00:16,121 --> 00:00:21,471
+think about how the ideas that we
+developed in the context of MRFs, can be
+
+5
+00:00:21,471 --> 00:00:27,110
+utilized for the maximum likelihood
+destination of a conditional random field.
+
+6
+00:00:27,110 --> 00:00:35,733
+So as a reminder, the point of the CRF was
+to compute the probability of a particular
+
+7
+00:00:35,733 --> 00:00:43,503
+set of target variables, Y, given in a set
+of observed variables, X. And the. Idea
+
+8
+00:00:43,503 --> 00:00:49,034
+behind this was that although, the
+unnormalize density, P-tilda of x, y was
+
+9
+00:00:49,034 --> 00:00:54,783
+defined in exactly the same kind of
+parameterization whether it's a product of
+
+10
+00:00:54,783 --> 00:01:00,532
+factors, or as logginer model. As in the
+MRF case, the difference here, is that we
+
+11
+00:01:00,532 --> 00:01:06,500
+have a, an X specific partition function
+that guarantees that what we have is a
+
+12
+00:01:06,500 --> 00:01:11,812
+normalize distribution over the Y
+variables given a particular x. So, this
+
+13
+00:01:11,812 --> 00:01:17,578
+partition function is the sum of over all
+y's of the. A normalized measure
+
+14
+00:01:17,578 --> 00:01:23,381
+[inaudible] theta of x, y. So it
+normalizes only over they y's and not the
+
+15
+00:01:23,381 --> 00:01:28,703
+x's. When learning [inaudible], our data
+is now a set of pairs. It's a set of input
+
+16
+00:01:28,703 --> 00:01:34,226
+variables or observed features x and a set
+of target variables y. And in the training
+
+17
+00:01:34,226 --> 00:01:39,100
+data both these are observed. And we like
+to use these to learn conditional
+
+18
+00:01:39,100 --> 00:01:44,675
+distribution of y given x. So the right
+objective function that we're going to
+
+19
+00:01:44,675 --> 00:01:50,055
+apply in this context, is the, what's
+often called the conditional log
+
+20
+00:01:50,055 --> 00:01:55,884
+likelihood, but really should be called
+the log conditional likelihood, because
+
+21
+00:01:55,884 --> 00:02:03,029
+the conditioning is inside the log. And
+what we have in terms of this of this
+
+22
+00:02:03,029 --> 00:02:07,956
+objective is the sum over all data
+instances and of the log of the
+
+23
+00:02:07,956 --> 00:02:15,607
+conditional probability of Y and X. So if
+we look at the conditional [inaudible] we
+
+24
+00:02:15,607 --> 00:02:24,809
+basically open it up. We end up with a, an
+expression that looks very similar to what
+
+25
+00:02:24,809 --> 00:02:32,863
+we saw in the case of MRF's. We have a sum
+over I of. And this is for the case of a
+
+26
+00:02:32,863 --> 00:02:39,757
+log linear model. We have a sum over I of
+the parameter theta I, multiplied by the
+
+27
+00:02:39,757 --> 00:02:46,565
+value of the feature FI. This is for a
+particular instance XY. So it's theta I,
+
+28
+00:02:46,565 --> 00:02:53,119
+FI of XM, YM. And over here, we have a
+negative minus a log of the partition
+
+29
+00:02:53,119 --> 00:03:00,183
+function for X of M. And this uses the
+exact same derivation that we had for the
+
+30
+00:03:00,183 --> 00:03:07,850
+case of an MRF. And so now we can, sum up
+over multiple data instances M, and
+
+31
+00:03:07,850 --> 00:03:15,662
+compute the derivative relative to a
+particular parameter, theta I of the, one
+
+32
+00:03:15,662 --> 00:03:23,879
+over M of the log conditional likelihood,
+or, And then, what we end up with is a,
+
+33
+00:03:23,879 --> 00:03:31,893
+again, an average of, in this case, the
+sum over two expectations. So what we have
+
+34
+00:03:31,893 --> 00:03:40,111
+in the, we have a summation over M, and
+the first term is the value of the feature
+
+35
+00:03:40,111 --> 00:03:47,414
+function, FI, XM, YM. And the second term
+is the expected. Expectation of that
+
+36
+00:03:47,414 --> 00:03:54,892
+feature phi relative to XM and why? Now
+its important to look carefully at this
+
+37
+00:03:54,892 --> 00:04:01,824
+second expression over here, E theta of
+fI, XM, Y, and note that here the XM is
+
+38
+00:04:01,824 --> 00:04:08,755
+fixed and the expectation is taken only
+over the variables Y, and this is in
+
+39
+00:04:08,755 --> 00:04:16,052
+contrast to the case of MRF when we were
+taking the expectation relative to the
+
+40
+00:04:16,052 --> 00:04:22,026
+entire set of variable. Let's see how this
+pans out in the context of a particular
+
+41
+00:04:22,026 --> 00:04:27,086
+example. So we're going to look a really
+brain dead notion, model for image
+
+42
+00:04:27,086 --> 00:04:32,080
+segmentation, where we just have two
+features, F one and F2. The first feature,
+
+43
+00:04:32,080 --> 00:04:37,792
+F1, is a single tone feature. And it.
+Takes the value of, the average green
+
+44
+00:04:37,792 --> 00:04:44,446
+value for pixels and the super pixels S.
+This is my super pixel S. We average out
+
+45
+00:04:44,446 --> 00:04:51,527
+all of the green super pixels but we only
+put them into that feature in cases where
+
+46
+00:04:51,527 --> 00:04:57,731
+that pixel is labeled with G for graph.
+So, and notice that this feature is
+
+47
+00:04:57,731 --> 00:05:03,113
+repeated across all super pixels S in the
+image. So this is a model with shared
+
+48
+00:05:03,113 --> 00:05:08,425
+parameters. The second feature, F2, is a
+pairwise feature. And here we get a one,
+
+49
+00:05:08,425 --> 00:05:13,324
+four cases where two adjacent super
+pixels, S and T, are labeled the same
+
+50
+00:05:13,324 --> 00:05:18,843
+values. Say, both grass or both cow. And
+this allows the model to learn how likely
+
+51
+00:05:18,843 --> 00:05:24,156
+it is for super pixels that are adjacent
+to each other to have the same class
+
+52
+00:05:24,156 --> 00:05:29,412
+label. Notice that this model too
+[inaudible], this feature too is shared
+
+53
+00:05:29,412 --> 00:05:35,207
+both across pairs of super pixels, but
+also across different classes. That is, we
+
+54
+00:05:35,207 --> 00:05:40,689
+have the same parameter for cow, cow, as
+we do for grass, grass, or sky, sky. So
+
+55
+00:05:40,689 --> 00:05:46,140
+let's plug in these two features into the,
+a model for the gradient that we had on
+
+56
+00:05:46,140 --> 00:05:51,591
+the previous slide. So this is the general
+equation, and let's see what happens for
+
+57
+00:05:51,591 --> 00:05:56,644
+theta one. So the partial derivative,
+relative to the parameter, theta one, has
+
+58
+00:05:56,644 --> 00:06:02,031
+the difference of two expectations. Again,
+an empirical expectation and a, And a
+
+59
+00:06:02,031 --> 00:06:06,913
+model expectation. So, this is for a
+particular, instance M. So we're not
+
+60
+00:06:06,913 --> 00:06:11,861
+currently averaging across multiple
+training images. We have a single image,
+
+61
+00:06:11,861 --> 00:06:16,810
+M, that we're working over. So here,
+because the model has shared parameters,
+
+62
+00:06:16,810 --> 00:06:21,960
+we're selling over all possible super
+pixels S in the image. And the empirical
+
+63
+00:06:21,960 --> 00:06:27,310
+expectation sums up the product of this
+indicator function for the super pixel S,
+
+64
+00:06:27,310 --> 00:06:32,258
+multiplied by the, this average greenness
+of the super pixel. And that's the
+
+65
+00:06:32,258 --> 00:06:37,770
+empirical expectation. The model-based
+expectation has exactly the same form.
+
+66
+00:06:37,770 --> 00:06:43,530
+We're also summing up over all super
+pixels S. And we similarly have a product
+
+67
+00:06:43,530 --> 00:06:49,366
+of two terms, only here, because we don't
+know whether, in, because in this model
+
+68
+00:06:49,366 --> 00:06:55,127
+based expectation, we don't have the Y
+labels. We're computing the probability
+
+69
+00:06:55,127 --> 00:07:00,656
+over the Y label taking the value
+[inaudible]. That is, for each super pixel
+
+70
+00:07:00,663 --> 00:07:06,804
+S, we can compute the probability that YS
+takes the value green, given, But we know
+
+71
+00:07:06,804 --> 00:07:11,771
+about the image, that is, the v, values x
+sub m, and that gets multiplied with the
+
+72
+00:07:11,771 --> 00:07:17,123
+average greenness again. So that's the
+gradient for the first parameter. The
+
+73
+00:07:17,123 --> 00:07:23,302
+gradient for the second parameter is very
+similar in spirit. So here, we're looking
+
+74
+00:07:23,302 --> 00:07:29,028
+at the sum over all pairs of adjacent
+super pixels S and T. And the empirical
+
+75
+00:07:29,028 --> 00:07:35,132
+expectation just sums back over all of
+those pairs, with an indicator function of
+
+76
+00:07:35,132 --> 00:07:41,236
+YS is equal to YT. So we get one if YS is
+the same as YT. Say they're both labeled
+
+77
+00:07:41,236 --> 00:07:46,653
+grass or they're both labeled cow, and
+zero otherwise. And in the, in the
+
+78
+00:07:46,653 --> 00:07:52,901
+model-based expectation term, we have the
+probability of that event, that is the
+
+79
+00:07:52,901 --> 00:07:59,386
+probability that YS is equal to YT given
+the image, and once again that sums up
+
+80
+00:07:59,386 --> 00:08:05,634
+overall pairs of adjacent super-pixels S
+and T. So again, a difference of two
+
+81
+00:08:05,634 --> 00:08:12,120
+expectations in both cases, an empirical
+expectation and a model-based expectation.
+
+82
+00:08:12,900 --> 00:08:19,802
+Taking that and thinking about this, let's
+compare the computational cost of two of
+
+83
+00:08:19,802 --> 00:08:26,303
+two models, of two training [inaudible].
+One is the MRF training, and the second is
+
+84
+00:08:26,303 --> 00:08:32,805
+the CRF training. So in the MRF training,
+remember that our gradient relative to a
+
+85
+00:08:32,805 --> 00:08:38,591
+parameter theta I, was the difference of
+two expectations. And we've already
+
+86
+00:08:38,591 --> 00:08:43,637
+pointed out that the computation of the
+second expectation, the model based
+
+87
+00:08:43,637 --> 00:08:48,482
+expectation, requires that we run
+inference at each gradient step. And we
+
+88
+00:08:48,482 --> 00:08:53,865
+thought that was pretty expensive, or it
+could be. But now, let's see what happens
+
+89
+00:08:53,865 --> 00:08:59,517
+for CRFs. Let's look at that gradient one
+more time, for the case of CRFs. And here,
+
+90
+00:08:59,517 --> 00:09:05,725
+notice that we don't really have, That,
+that we have summation over m. That is the
+
+91
+00:09:05,725 --> 00:09:12,411
+summation over all the data instances of
+the difference of two terms. The second is
+
+92
+00:09:12,411 --> 00:09:18,613
+the feature value in that particular
+instance and the second is the expected
+
+93
+00:09:18,613 --> 00:09:26,809
+feature value in that particular instance,
+x of m. So. The important observation to
+
+94
+00:09:26,809 --> 00:09:32,315
+come out of this, is that this
+expectation, this second expectation,
+
+95
+00:09:32,315 --> 00:09:38,655
+relative to theta, is an expectation that
+is different for each of our input
+
+96
+00:09:38,655 --> 00:09:45,329
+instances. So that means that we need to
+rerun this inference for each and every
+
+97
+00:09:45,329 --> 00:09:51,887
+one of our XM's at each gradient step. So
+whereas, MRS requires one inference. At
+
+98
+00:09:51,887 --> 00:09:57,984
+each radiance step. This requires M in for
+instance at each radiance step, where M is
+
+99
+00:09:57,984 --> 00:10:04,862
+the number of training instances. And so
+here the inference required to do learning
+
+100
+00:10:04,862 --> 00:10:11,784
+is considerably more extensive. However
+one needs to weigh the balance all over
+
+101
+00:10:11,784 --> 00:10:17,070
+the factors that contribute to
+computational cost. So when we're doing
+
+102
+00:10:17,070 --> 00:10:23,412
+inference of the conditional probability P
+of Y given X, we only need to worry about
+
+103
+00:10:23,412 --> 00:10:29,528
+the Y variables, so the Xs are all fixed,
+their values are instantiated and so our
+
+104
+00:10:29,528 --> 00:10:35,870
+factors in the resulting model are factors
+only over the variables one. If we were to
+
+105
+00:10:35,870 --> 00:10:41,400
+once use mrf training because say we
+decided that crf training is too expensive
+
+106
+00:10:41,400 --> 00:10:46,440
+because of the additional cost of
+imprints. We would need to compute the
+
+107
+00:10:46,440 --> 00:10:51,922
+joint probability p of y x which. Might be
+much more complicated. And that might be
+
+108
+00:10:51,922 --> 00:10:57,295
+much more complicated not only because of
+the fact that we have more variables now
+
+109
+00:10:57,295 --> 00:11:02,344
+in the model. Both the Y's and the X's.
+But, also because in many cases where we
+
+110
+00:11:02,344 --> 00:11:06,941
+would like to apply a CRF, the
+distribution that we might have over the
+
+111
+00:11:06,941 --> 00:11:12,444
+X's, becomes quite unmanageable if we want
+to actually compute a distribution over
+
+112
+00:11:12,444 --> 00:11:17,493
+them. So, to understand that, let's go
+back to the previous example, and consider
+
+113
+00:11:17,493 --> 00:11:22,582
+this a very simple image segmentation
+model. And, here notice that the X. But
+
+114
+00:11:22,582 --> 00:11:29,784
+the variable X. And S. Implies this, This
+average [inaudible] of the super pixel,
+
+115
+00:11:29,784 --> 00:11:34,653
+now in the context of [inaudible] we don't
+need to compute the distribution over
+
+116
+00:11:34,653 --> 00:11:39,281
+average [inaudible] because we're
+[inaudible] of the X on S and so G of S is
+
+117
+00:11:39,281 --> 00:11:43,489
+now fix that's instantiating and we're
+only competing the probability
+
+118
+00:11:43,489 --> 00:11:48,538
+distribution over the Y's but if we wanted
+to train this model as MRF, we would need
+
+119
+00:11:48,538 --> 00:11:53,467
+to somehow maintain a distribution over
+this average [inaudible] and since that's
+
+120
+00:11:53,467 --> 00:11:58,516
+a continuous quantity it actually requires
+that we think about parametric forms and
+
+121
+00:11:58,516 --> 00:12:04,260
+[inaudible] or, or mixture of. Celsius and
+it becomes quite hairy to manage. And so.
+
+122
+00:12:04,260 --> 00:12:09,021
+Although, they're, the CRF based training
+in this case, might have additional costs,
+
+123
+00:12:09,021 --> 00:12:13,783
+it can also reduce the cost in terms of
+any particular inference. Stop, as well as
+
+124
+00:12:13,783 --> 00:12:18,545
+avoid a bunch of phony issues regarding
+parameterization of the distribution over
+
+125
+00:12:18,545 --> 00:12:23,632
+the various features. [sound]. So to
+summarize, serious learning, in terms of
+
+126
+00:12:23,632 --> 00:12:28,779
+the mathematical formulation is very
+similar to [inaudible] learning. The
+
+127
+00:12:28,779 --> 00:12:34,420
+likelihood function has the same form.
+It's called cave. It's similarly optimized
+
+128
+00:12:34,420 --> 00:12:40,342
+using gradient [inaudible] usually the
+same lbsgs algorithm. However the gradient
+
+129
+00:12:40,342 --> 00:12:45,842
+computation is now much more expensive
+because it requires inference, not only
+
+130
+00:12:45,842 --> 00:12:51,653
+once per gradient stuff, but also once per
+gradient stuff and beta instance. And as a
+
+131
+00:12:51,653 --> 00:12:56,362
+comparison, once per gradient step in the
+context of MRFs. But as we already, as we
+
+132
+00:12:56,362 --> 00:13:01,188
+just said, the conditional model is often
+much simpler. So the inference calls for a
+
+133
+00:13:01,188 --> 00:13:05,897
+CRF, and the MRF is not the same. So we're
+not really comparing apples and oranges.
+
+134
+00:13:05,897 --> 00:13:10,141
+And so in the context of any given
+[inaudible], one really needs to think
+
+135
+00:13:10,141 --> 00:13:14,618
+about which of these models is more
+appropriate. And not only based on the
+
+136
+00:13:14,618 --> 00:13:19,327
+computational costs of training, but also
+in terms of the overall performance and
+
+137
+00:13:19,327 --> 00:13:24,388
+generalization. [sound]. [sound].

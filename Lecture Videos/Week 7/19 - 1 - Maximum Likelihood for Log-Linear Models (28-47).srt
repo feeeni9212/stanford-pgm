@@ -1,0 +1,1335 @@
+
+1
+00:00:01,860 --> 00:00:08,096
+We previously discussed the notion of
+maximum likely destination, and showed how
+
+2
+00:00:08,096 --> 00:00:13,788
+it can be applied in the context of
+directed networks, daisy networks. And
+
+3
+00:00:13,788 --> 00:00:19,947
+everything was really cool. You could do
+maximum likely destination in enclosed
+
+4
+00:00:19,947 --> 00:00:26,028
+form and, and it could all be really
+efficient and really elegant. Now we're
+
+5
+00:00:26,028 --> 00:00:30,587
+going to. Look at the other class of
+networks, which is mark up networks and
+
+6
+00:00:30,587 --> 00:00:35,088
+we're going to see how maximum likely
+destination pans out in the context of
+
+7
+00:00:35,088 --> 00:00:39,882
+mark up networks and specifically when we
+use the log linear model representation
+
+8
+00:00:39,882 --> 00:00:44,705
+because it's a lot easier to think about a
+parameter destination in that study. So
+
+9
+00:00:44,705 --> 00:00:49,496
+let?s look at what a [inaudible]
+destination would look like a markup
+
+10
+00:00:49,498 --> 00:00:55,250
+network. So first let?s go back and remind
+ourselves that, we use [inaudible] as an
+
+11
+00:00:55,250 --> 00:01:00,591
+objection. So what would the [inaudible]
+look like? So first of all let?s remind
+
+12
+00:01:00,591 --> 00:01:06,137
+ourselves that provability of relative to,
+for a distribution by a set of factors
+
+13
+00:01:06,137 --> 00:01:12,534
+over this network. For data instance A.,
+B., and C., is going to have the form,
+
+14
+00:01:12,534 --> 00:01:19,972
+five, one. Of AB times phi two of BC
+multiplied by normalizing constant which
+
+15
+00:01:19,972 --> 00:01:27,707
+is the [inaudible] function. And so if we
+now take that and put it through the log,
+
+16
+00:01:27,707 --> 00:01:33,701
+in order to define the log likelihood and
+then summing that out for multiple data
+
+17
+00:01:33,701 --> 00:01:39,330
+instances, we see that we have the
+following expressions. We have a summation
+
+18
+00:01:39,330 --> 00:01:46,298
+over instances M, of the log off. The Pi
+one of a. B for that instance plus log of
+
+19
+00:01:46,298 --> 00:01:52,072
+pi two of BC for that instance minus log
+of Z. And here importantly notice that
+
+20
+00:01:52,072 --> 00:01:57,920
+I've included the parameters of the model
+theta as an argument to the partition
+
+21
+00:01:57,920 --> 00:02:03,913
+function which now explains why it's a
+partition function rather than a partition
+
+22
+00:02:03,913 --> 00:02:09,468
+constant. It is a function of the
+parameters and as we change the parameters
+
+23
+00:02:09,468 --> 00:02:15,169
+the partition function changes and, and
+that's going to turn out to be very
+
+24
+00:02:15,169 --> 00:02:22,270
+important. So, now let's continue
+[inaudible] deriving this expression, and
+
+25
+00:02:22,270 --> 00:02:27,988
+We can see that just like in the context
+of daisy network we can gather like term
+
+26
+00:02:27,988 --> 00:02:33,985
+and consider for example how many times a
+particular entry on a factor five, one of
+
+27
+00:02:33,985 --> 00:02:39,145
+A, B is used and its used in every
+instance where the variable A takes the
+
+28
+00:02:39,145 --> 00:02:44,903
+value little A and the variable B takes
+the value little B. And so we can, again,
+
+29
+00:02:44,903 --> 00:02:51,561
+accumulate like terms and we end up with a
+summation over here, over all possible
+
+30
+00:02:51,561 --> 00:02:57,725
+value combinations, little a, little b, of
+the log of that factor [inaudible],
+
+31
+00:02:57,725 --> 00:03:04,590
+multiplied by the counts. A baby. And
+similarly we have exactly the same form
+
+32
+00:03:04,590 --> 00:03:10,796
+for the second factor BC, where for every,
+for every entry in the factor phi two of
+
+33
+00:03:10,796 --> 00:03:16,776
+BC, we have a number of occurrences of
+that which is simply the counts, of BC in
+
+34
+00:03:16,776 --> 00:03:23,477
+our data set. And finally we have, this
+partition function hanging off the end,
+
+35
+00:03:23,477 --> 00:03:29,810
+which is accumulated once for every
+[inaudible]. So this looks great so far.
+
+36
+00:03:29,810 --> 00:03:34,682
+Because we have, as in the context of
+Bayesian networks, we've decomposed the
+
+37
+00:03:34,682 --> 00:03:39,874
+likelihood function, or, in this case, the
+[inaudible] function, rather, into a bunch
+
+38
+00:03:39,874 --> 00:03:45,066
+of these terms, each of which involve one
+parameter, and a count of how many times
+
+39
+00:03:45,066 --> 00:03:49,809
+the parameter is used. So, beautiful
+decomposition, and maybe we can just go
+
+40
+00:03:49,809 --> 00:03:55,141
+ahead and optimize each parameter
+separately. Except that we have that nasty
+
+41
+00:03:55,141 --> 00:04:01,702
+partition function hanging off the M. And
+if we look at the form of the partition
+
+42
+00:04:01,702 --> 00:04:07,616
+function, that form is a sum over all
+possible values of A, B, and C of the
+
+43
+00:04:07,616 --> 00:04:13,529
+product, the FI1-AD, FI2-BC. And one
+important observation is that when you
+
+44
+00:04:13,529 --> 00:04:19,848
+stick the summation into a log, the log
+doesn't flow through the summation. And
+
+45
+00:04:19,848 --> 00:04:26,410
+so, you don't get any decomposition of the
+parameters nicely into isolated pieces.
+
+46
+00:04:26,410 --> 00:04:32,103
+And that is the killer, because the
+partition function is a term that couples
+
+47
+00:04:32,103 --> 00:04:37,280
+the parameters and so there's no
+decomposition of the likelihood into
+
+48
+00:04:37,280 --> 00:04:43,195
+separate independent pieces. There's part
+if it that decompose but the partition
+
+49
+00:04:43,195 --> 00:04:49,404
+function, kills that decomposition. And as
+a consequence, it turns out that there is
+
+50
+00:04:49,404 --> 00:04:54,676
+no closed form solution for this
+optimization problem. Unlike in the case
+
+51
+00:04:54,676 --> 00:04:59,670
+of Bayesian networks where we had maximal
+likelihood estimation having a closed form
+
+52
+00:04:59,670 --> 00:05:04,428
+that you could derive directly from the
+sufficient statistics which are the data
+
+53
+00:05:04,428 --> 00:05:11,886
+counts. So to see this in action, here's a
+picture of, of a projection of a pro, of
+
+54
+00:05:11,886 --> 00:05:18,561
+this of this probability distribution. So
+here we have written the probability
+
+55
+00:05:18,566 --> 00:05:25,793
+distribution, distribution of the function
+of two. [inaudible] features. These are
+
+56
+00:05:25,793 --> 00:05:32,080
+the indicator functions of A. One, B. One.
+And the indicator functions of b0 c1. And
+
+57
+00:05:32,080 --> 00:05:37,177
+so, one of them is an entry in the first
+potential, in this potential, and the
+
+58
+00:05:37,177 --> 00:05:42,208
+other one is an entry in this potential.
+And obviously you could have other
+
+59
+00:05:42,208 --> 00:05:48,177
+features than that but I could only rather
+two dimensional features space. So, so we
+
+60
+00:05:48,177 --> 00:05:53,945
+focus on just two parameters. And so that
+you see here, for the two axis one axis is
+
+61
+00:05:53,945 --> 00:05:59,311
+one of these parameters on the second axis
+and the second of this parameters. So,
+
+62
+00:05:59,311 --> 00:06:04,894
+the. Say that these are the coefficient of
+the indicator function and what you see
+
+63
+00:06:04,894 --> 00:06:11,314
+here is the log likelihood. So, this is
+the surface of the log likelihood. And
+
+64
+00:06:11,314 --> 00:06:16,974
+there's several things that can be seen
+from looking at the surface. First, it
+
+65
+00:06:16,974 --> 00:06:22,781
+seems, and we'll show this in a moment,
+that there is a single global optimum of
+
+66
+00:06:22,781 --> 00:06:28,735
+this function that happens right here in
+the middle of this contour. But we can
+
+67
+00:06:28,735 --> 00:06:33,092
+also see the coupling between the
+parameters coming up, that it doesn't
+
+68
+00:06:33,092 --> 00:06:38,309
+decompose nicely as the product of or in
+this case a summation of a function over
+
+69
+00:06:38,309 --> 00:06:43,691
+one of the dimensions. A plus a functional
+in the second dimension. So, now let?s
+
+70
+00:06:43,691 --> 00:06:49,882
+delve into the mass a little bit more and
+consider what the log-linear of function
+
+71
+00:06:49,882 --> 00:06:55,065
+looks like in general cases of a
+log-linear model. So, just as a reminder,
+
+72
+00:06:55,065 --> 00:07:00,968
+here is the definition of a log-linear
+model and it's defined as the sum of a set
+
+73
+00:07:00,968 --> 00:07:06,494
+of coefficients which are a parameters
+beta i. Multiplied by a set of features.
+
+74
+00:07:06,494 --> 00:07:10,979
+Which could be indicator features as we
+had in the previous slide but we also
+
+75
+00:07:10,979 --> 00:07:15,575
+talked about other forms of features for
+log linear model in a previous modules.
+
+76
+00:07:15,575 --> 00:07:20,793
+So, we're not going to go back there. But
+any function here would work. We add up
+
+77
+00:07:20,793 --> 00:07:27,343
+all of the log linear functions and
+exponentiate that, and then we have the
+
+78
+00:07:27,343 --> 00:07:38,092
+partition function that makes sure. That
+we have in distribution. So plugging this
+
+79
+00:07:38,092 --> 00:07:47,700
+into the form of the log likelihood we.
+Take this and apply it to every single
+
+80
+00:07:47,700 --> 00:07:55,066
+data instance, and so we end up with the
+following expression which is what we get
+
+81
+00:07:55,066 --> 00:08:01,653
+after we do this manipulation of
+accumulating terms all of which involves a
+
+82
+00:08:01,653 --> 00:08:08,760
+particular parameter theta i. And so now
+for each theta I, we have a summation over
+
+83
+00:08:08,760 --> 00:08:15,520
+theta instances m of the value of the
+feature f I, so this is the feature of i.
+
+84
+00:08:15,840 --> 00:08:27,169
+Applied. To the [inaudible] and stuff. Now
+notice that I've changed arguments on you
+
+85
+00:08:27,420 --> 00:08:32,794
+in that. Here the future I has a limited
+scope; a certain subset of the variables.
+
+86
+00:08:32,794 --> 00:08:37,695
+For example, the pair AB and here I've
+given it the entire assignment as an
+
+87
+00:08:37,695 --> 00:08:43,053
+argument. This is a shorthand that we use
+where we allow the function, FI, to forget
+
+88
+00:08:43,053 --> 00:08:48,150
+arguments that it doesn't care about. So
+if we give the function, say the first
+
+89
+00:08:48,150 --> 00:08:53,508
+indicator feature all three arguments, A,
+B and C it's just going to forget about C
+
+90
+00:08:53,508 --> 00:08:58,866
+and look at AB alone. And so this is just
+a convenient shorthand that allows us to
+
+91
+00:08:58,866 --> 00:09:04,502
+sort of use a consistent. And simpler
+notation without as many indices. So this
+
+92
+00:09:04,502 --> 00:09:09,995
+is the first term, of the log likelihood,
+and just as before we have a second term,
+
+93
+00:09:09,995 --> 00:09:15,148
+where we accumulate a log partition
+function, for every instance in our data
+
+94
+00:09:15,148 --> 00:09:22,666
+set. And just as a reminder, the log
+partition function has the following form;
+
+95
+00:09:22,666 --> 00:09:35,091
+it is a log, of unfortunately a summation
+over an exponentially large space. Of
+
+96
+00:09:35,091 --> 00:09:42,141
+this, this exponential function. So it has
+the form log sum X, which is a term that
+
+97
+00:09:42,141 --> 00:09:54,006
+you might hear. In various context. But
+now we can do an analysis on what the log
+
+98
+00:09:54,006 --> 00:10:00,298
+partition function looks like. And in
+order to do that we're going to State what
+
+99
+00:10:00,298 --> 00:10:06,684
+the first and second derivatives of this
+log partition function are, relative to
+
+100
+00:10:06,684 --> 00:10:14,389
+our parameters theta i. And let's first
+understand what, what we're doing here.
+
+101
+00:10:14,389 --> 00:10:21,086
+So, this, the partition function, as we
+said, is a function of a parameter's
+
+102
+00:10:21,086 --> 00:10:31,616
+theta. And what we have here is a vector
+of first derivates. One relative to every
+
+103
+00:10:31,616 --> 00:10:39,504
+parameter theta i. And this is a matrix.
+Known as the Hessian. Of second
+
+104
+00:10:39,504 --> 00:10:46,702
+derivatives relative to pairs of
+coefficients theta I, theta J. What the
+
+105
+00:10:46,702 --> 00:10:53,380
+first line says in the theorem is that the
+first derivative of the log partition
+
+106
+00:10:53,380 --> 00:10:59,728
+function is an expectation of the feature
+phi relative, so it's an expectation,
+
+107
+00:10:59,728 --> 00:11:06,535
+that's what the e stands for. Of the
+feature FI relative to the distribution P
+
+108
+00:11:06,535 --> 00:11:13,384
+sub theta. That is relative to the
+distribution that we get by parameterizing
+
+109
+00:11:13,384 --> 00:11:20,053
+a graphical model using the parameters
+theta that defines the probability
+
+110
+00:11:20,053 --> 00:11:27,352
+distribution, and now I can go ahead and
+compute the expectation. So, this is equal
+
+111
+00:11:27,352 --> 00:11:35,520
+to sum over X, P theta of X, FI of X. And
+that is an expectation. In the same way
+
+112
+00:11:35,520 --> 00:11:41,877
+that we treat FI as a random variable over
+the space X we can now consider the
+
+113
+00:11:41,877 --> 00:11:48,157
+covariance of two random variables FI of X
+and FJ of X and what this second line
+
+114
+00:11:48,157 --> 00:11:53,972
+tells me is that the matrix of second
+derivatives is really the covariance
+
+115
+00:11:53,972 --> 00:12:00,717
+matrix of these of these random variables,
+that are define by a [inaudible] FI and a
+
+116
+00:12:00,717 --> 00:12:08,759
+[inaudible] FJ. Well, let's go ahead and
+prove the first of these, statements. The
+
+117
+00:12:08,759 --> 00:12:15,217
+second is more complicated, but really is,
+in terms of a lot more lines in the
+
+118
+00:12:15,217 --> 00:12:21,675
+derivation, that the intuitions aren't
+considerably different, and there is no
+
+119
+00:12:21,675 --> 00:12:28,217
+point going through the details. So, let's
+go ahead and plug through the, the
+
+120
+00:12:28,217 --> 00:12:34,760
+derivative. And so we have a partial
+derivative of Z theta relative to theta I.
+
+121
+00:12:35,040 --> 00:12:41,237
+And, and sorry, this is a partial
+derivative of log theta, log theta
+
+122
+00:12:41,237 --> 00:12:48,655
+relative to theta I, and derivative of a
+log, is one over, of a log z, is one over
+
+123
+00:12:48,655 --> 00:12:56,347
+z times the derivative of the expression
+in the middle. And so, that gives us this
+
+124
+00:12:56,347 --> 00:13:00,872
+expression over here, where we have one
+over z times, and we've pushed in the
+
+125
+00:13:00,872 --> 00:13:05,872
+derivative into the summation, because the
+derivative of the summation is the sum of
+
+126
+00:13:05,872 --> 00:13:11,200
+the derivatives. And so, that gives us
+this next line of the expression. We can
+
+127
+00:13:11,200 --> 00:13:16,300
+now continue and recall that the
+derivative of exponential is the
+
+128
+00:13:16,300 --> 00:13:22,560
+exponential itself times the derivative of
+whatever is in the exponent of the
+
+129
+00:13:22,560 --> 00:13:29,817
+exponential. And so that is going to give
+us. Here, the exponential itself, times
+
+130
+00:13:29,817 --> 00:13:38,462
+the derivative of this summation relative
+to theta i. And now it's very simple. We
+
+131
+00:13:38,462 --> 00:13:45,794
+have the summation over j, j as j, and we
+are taking the derivative relative to
+
+132
+00:13:45,794 --> 00:13:53,409
+particular state I, and that derivative is
+either zero. So, the derivative relative
+
+133
+00:13:53,409 --> 00:14:01,493
+to data I data I, state to j as j is equal
+to zero, if I is not equal to j, and is
+
+134
+00:14:01,493 --> 00:14:11,911
+equal to. Beta. I, sorry is equal to one,
+or actually is equal to fj, fi if I is
+
+135
+00:14:11,911 --> 00:14:22,699
+equal to j. Because the derivative of beta
+I itself, is one. And so that gives me fi
+
+136
+00:14:22,699 --> 00:14:32,076
+is x over here. And now we just rearrange
+the expression just a little bit. Moving
+
+137
+00:14:32,076 --> 00:14:40,827
+the FI to. This sign. And, what we have
+here, in this box down at the bottom, is
+
+138
+00:14:40,827 --> 00:14:48,086
+really just the definition of the log
+linear model. It's one over the proficient
+
+139
+00:14:48,086 --> 00:14:55,525
+function times the exponential of the sum
+of the weighted features. And so what we
+
+140
+00:14:55,525 --> 00:15:02,874
+end up with is a form that looks like sum
+over X, [inaudible] of theta of X, times
+
+141
+00:15:02,874 --> 00:15:12,348
+FI of X. Which is exactly what we wrote
+over here. A similar procedure will get us
+
+142
+00:15:12,348 --> 00:15:25,797
+the formula in the second expression. Just
+with a lot more algebraic manipulation. So
+
+143
+00:15:25,797 --> 00:15:31,247
+now let's, that was the log of the
+partition function. Now let's think about
+
+144
+00:15:31,247 --> 00:15:36,551
+the implications regarding the log
+likelihood. So if you remember, the log
+
+145
+00:15:36,551 --> 00:15:42,219
+likelihood had this term over here which
+was linear in the theta I's, and this
+
+146
+00:15:42,219 --> 00:15:48,177
+additional term which was m times the log
+partition function. And, and now let's
+
+147
+00:15:48,177 --> 00:15:56,078
+think about what are some of the
+implications. The log partition function
+
+148
+00:15:56,078 --> 00:16:05,753
+because it's Hessian. Has this form. It
+turns out that, that means that it's a
+
+149
+00:16:05,753 --> 00:16:11,894
+convex function. What does a convex
+function mean? It means that it's bowl
+
+150
+00:16:11,894 --> 00:16:24,954
+shaped. It's nice bowl. Or, formally,
+there is a definition of convexity that
+
+151
+00:16:24,954 --> 00:16:34,140
+says that if you have a function g of
+alpha x plus one minus alpha y, then.
+
+152
+00:16:34,600 --> 00:16:41,723
+That's greater than or equal to alpha
+finds, sorry that's less than equal to,
+
+153
+00:16:41,723 --> 00:16:49,221
+alpha times [inaudible] plus one minus
+alpha [inaudible] y and so that means if
+
+154
+00:16:49,221 --> 00:17:01,660
+you draw a line from here is. X. Y. G of
+X. G of Y. Any point, along this line, is
+
+155
+00:17:01,660 --> 00:17:09,246
+greater than or equal to the G value of
+the point in the middle. So that's the
+
+156
+00:17:09,246 --> 00:17:16,832
+formal definition of convexity. And
+because the, [inaudible] is convex, sorry
+
+157
+00:17:16,832 --> 00:17:23,957
+because the. Well's partition function is
+correct. It's negation, which is what we
+
+158
+00:17:23,957 --> 00:17:31,700
+have here, is concave. Which means it's an
+inverted goal. And this function is
+
+159
+00:17:31,700 --> 00:17:41,220
+linear. [inaudible]. So, we have a linear
+function plus a concave function. So, all
+
+160
+00:17:41,220 --> 00:17:51,166
+together L of sayna is a concave function.
+Which means it has this nice cave shaped
+
+161
+00:17:51,166 --> 00:17:58,494
+form. What are the implications of that?
+It means that there are no local optima to
+
+162
+00:17:58,494 --> 00:18:04,109
+this function, and therefore it's going to
+be easy to optimize using techniques such
+
+163
+00:18:04,109 --> 00:18:09,257
+as hill climbing, which climb up this
+inverted bowl, until they hit an optimum,
+
+164
+00:18:09,257 --> 00:18:14,605
+which in that case has to be a global
+optimum, because the function has no local
+
+165
+00:18:14,605 --> 00:18:20,207
+optimum. So let's think about how to
+actually perform this [inaudible]
+
+166
+00:18:20,207 --> 00:18:26,009
+destination. So, let's go back to the log
+likelihood function. Now we're going to
+
+167
+00:18:26,009 --> 00:18:31,038
+add this we're going to multiply by one
+over m so that we don't have a scaling
+
+168
+00:18:31,038 --> 00:18:35,822
+issue with a log likelihood continues to
+grow with a number of data instances
+
+169
+00:18:35,822 --> 00:18:41,184
+growth, and so that gives us. This
+expression over here, where note that the
+
+170
+00:18:41,184 --> 00:18:46,688
+M has disappeared as a multiplier from the
+log partition function and now we have the
+
+171
+00:18:46,688 --> 00:18:54,309
+one over M term in the linear component as
+well. And now if we go back and plug in
+
+172
+00:18:54,309 --> 00:19:01,337
+the derivatives of theta I, we take the
+derivative of this expression relative to
+
+173
+00:19:01,337 --> 00:19:08,018
+a particular parameter theta I, we have
+two cases. We've already said that the
+
+174
+00:19:08,018 --> 00:19:14,958
+derivative of the log partition function
+relative to a parameter theta I is the
+
+175
+00:19:14,958 --> 00:19:23,273
+expectation. Of theta I, of FI, which is
+the col, which is the feature that theta I
+
+176
+00:19:23,273 --> 00:19:30,165
+most applies in [inaudible] theta. On the
+other hand, if we look here at the
+
+177
+00:19:30,165 --> 00:19:36,182
+derivative relative to theta I, we can see
+that what we have here is also an
+
+178
+00:19:36,182 --> 00:19:41,486
+expectation. It's an empirical
+expectation. It is the expectation or
+
+179
+00:19:41,486 --> 00:19:52,477
+average. Of fi. In the data distribution.
+And so the derivative of the log
+
+180
+00:19:52,477 --> 00:19:57,944
+likelihood relative to theta I, is a
+difference of two expectations. An
+
+181
+00:19:57,944 --> 00:20:04,426
+empirical expectation and an expectation
+in the parametric distribution defined by
+
+182
+00:20:04,426 --> 00:20:12,306
+my current set of parameters theta. The
+one immediate consequence from this is
+
+183
+00:20:12,306 --> 00:20:19,098
+that a parameter studying theta hat, if
+there's a, the maximum likelihood estimate
+
+184
+00:20:19,098 --> 00:20:25,640
+if and only if we have an equality of
+expectations. That is, if the expectation.
+
+185
+00:20:26,120 --> 00:20:38,486
+Relative to the model. [inaudible] is
+equal to the expectation. In the day to
+
+186
+00:20:38,486 --> 00:20:44,880
+day. And so the expectation in the model.
+Has to be equal to the expectation in the
+
+187
+00:20:44,880 --> 00:20:50,140
+data. And that has to hold for every one
+of the features. In my log linear model.
+
+188
+00:20:51,080 --> 00:20:58,292
+[inaudible]. Now that we've computed the
+gradient, let's think about how one might
+
+189
+00:20:58,292 --> 00:21:03,778
+use it to actually do the optimization. So
+it turns out that a very commonly used
+
+190
+00:21:03,778 --> 00:21:09,467
+approach to do this kind of likelihood
+optimization in the context of crs is the
+
+191
+00:21:09,467 --> 00:21:15,291
+variance of gradient ascent. So here we
+have a likelihood surface, which is in as
+
+192
+00:21:15,291 --> 00:21:20,374
+in this case a fairly nice. Function. And
+what we're going to do is we're going to,
+
+193
+00:21:20,554 --> 00:21:25,676
+use a gradient process where at each point
+we compute the gradient we take a certain
+
+194
+00:21:25,676 --> 00:21:30,256
+step in that direction and continue to
+climb up and the gradient that we've
+
+195
+00:21:30,256 --> 00:21:35,057
+computed on the previous slide is what
+we're using. Now it turns out that plain
+
+196
+00:21:35,057 --> 00:21:40,117
+vanilla gradient ascent is not actually
+the most efficient way to go. Typically,
+
+197
+00:21:40,117 --> 00:21:44,745
+one uses a variant of gradient ascent
+called LBFGS, which is a quasi mutant
+
+198
+00:21:44,745 --> 00:21:49,682
+method. So, very briefly, a mutant method
+is something that constructs a second
+
+199
+00:21:49,682 --> 00:21:54,680
+order approximation to the function, at
+each point, as opposed to just a linear
+
+200
+00:21:54,680 --> 00:21:59,616
+approximation, which looks only at the
+gradient. But since we don't want to spend
+
+201
+00:21:59,616 --> 00:22:04,121
+the computational cost, in general, to
+compute a second order, or quadratic
+
+202
+00:22:04,121 --> 00:22:08,584
+approximation to the function, a quasi
+mutant method. That kind of makes an
+
+203
+00:22:08,584 --> 00:22:13,258
+approximate guess at what the step would
+be if we were to compute a second order of
+
+204
+00:22:13,258 --> 00:22:17,933
+approximation. And we are not going to go
+into the details of LDFGS here but there
+
+205
+00:22:17,933 --> 00:22:24,720
+is plenty of literature on that, that,
+that you can find. Now. In either case,
+
+206
+00:22:24,720 --> 00:22:30,855
+for computing the gradient. In this
+context. The critical computational cost
+
+207
+00:22:30,855 --> 00:22:36,877
+is the fact that we need the expected
+feature counts. And the expected feature
+
+208
+00:22:36,877 --> 00:22:43,053
+counts come up in two places: in the data,
+that is when we compute this empirical
+
+209
+00:22:43,053 --> 00:22:49,230
+expectation E of, E relative to D of the
+feature F I; but also in the second term
+
+210
+00:22:49,230 --> 00:22:54,634
+in this derivative, relative to the
+current model. So E relative to the
+
+211
+00:22:54,634 --> 00:23:00,827
+parameter vector theta in the current
+model of the feature F i. Now this second
+
+212
+00:23:00,827 --> 00:23:06,385
+piece is really the rate limiting step,
+because it requires that at each point in
+
+213
+00:23:06,385 --> 00:23:11,806
+the process we conduct inference on the
+model in order to compute the gradient,
+
+214
+00:23:11,806 --> 00:23:17,364
+and so this is inexpensive competition
+because it requires that we run inference
+
+215
+00:23:17,364 --> 00:23:22,854
+in a graphical model, which we know to be
+not an expensive step depending on the
+
+216
+00:23:22,854 --> 00:23:28,237
+complexity of a graphical model. So to
+make this concrete, let's look at an
+
+217
+00:23:28,237 --> 00:23:33,852
+actual example. Let's return to our
+example of the [inaudible] model, where
+
+218
+00:23:34,080 --> 00:23:39,847
+the energy function of a set of random
+variables, X1 up to XN, is a, is the
+
+219
+00:23:39,847 --> 00:23:45,463
+product of a bunch of pair wise term, is a
+sum of a bunch of pair wise terms,
+
+220
+00:23:45,463 --> 00:23:51,685
+WIJXIXJ. And a, and a bunch of singleton
+terms, UI, XI and it's an energy function
+
+221
+00:23:51,685 --> 00:23:58,650
+so it's negated. And so. Plugging in to
+the equation that we had before, the
+
+222
+00:23:58,650 --> 00:24:03,576
+gradient equation relative to a particular
+parameter vector. Theta I, [inaudible]
+
+223
+00:24:03,576 --> 00:24:08,503
+let's know look at what this looks like
+for the two types of parameters that we
+
+224
+00:24:08,503 --> 00:24:13,798
+have here. The singleton parameter is UI,
+and the pair wise parameter is WIJ. So for
+
+225
+00:24:13,798 --> 00:24:22,553
+the [inaudible] parameters ui, if we just
+go ahead and plug into this expression
+
+226
+00:24:22,553 --> 00:24:30,570
+here, we're going to have where the
+empirical expectation simply the average
+
+227
+00:24:30,570 --> 00:24:38,175
+of the beta xi of m over them all, over
+the beta instances m. So, assuming that
+
+228
+00:24:38,400 --> 00:24:44,325
+each variable xi has its own parameter ui.
+We're going to sum up over all data
+
+229
+00:24:44,325 --> 00:24:50,250
+instances and the value of the variable xi
+of m. And that is going to be our
+
+230
+00:24:50,250 --> 00:24:57,526
+[inaudible] expectations once we average
+it overall of the beta instances. Now what
+
+231
+00:24:57,526 --> 00:25:06,427
+about the, The model expectation,
+expectation relative to [inaudible]. Well,
+
+232
+00:25:06,427 --> 00:25:14,675
+here we have. Two, two cases. I, we need
+to consider the probability that XI equals
+
+233
+00:25:14,675 --> 00:25:20,976
+to one and the probability that XI is
+equals to -one and the case where XI equal
+
+234
+00:25:20,976 --> 00:25:27,672
+to one makes a contribution of +one to the
+expectation and the case where XI equal to
+
+235
+00:25:27,672 --> 00:25:34,053
+-one makes a contribution of -one to the
+expectation, so altogether we have p theta
+
+236
+00:25:34,289 --> 00:25:40,591
+XI equals one, -p theta XI equals -one and
+that's because these two have, these two
+
+237
+00:25:40,591 --> 00:25:46,899
+different coefficient +one and -one. A
+slightly more complicated version of this
+
+238
+00:25:46,899 --> 00:25:53,745
+comes up when we have the peer wise
+derivative the derivative relative to the
+
+239
+00:25:53,745 --> 00:25:59,504
+parameter wij. And here, once again, the
+empirical explanation is simply the
+
+240
+00:25:59,504 --> 00:26:05,797
+average of XI of M, XJ of M, over the data
+instances M. And the probability term has
+
+241
+00:26:05,797 --> 00:26:12,243
+four different probabilities corresponding
+to the four cases. Xi and XJ are both one,
+
+242
+00:26:12,243 --> 00:26:18,919
+both, negative one, or one takes the value
+one and the other, negative one, and vice
+
+243
+00:26:18,919 --> 00:26:25,677
+versa. And the two cases of +one+1, and
+-1-1, have a coefficient of one. Because
+
+244
+00:26:25,677 --> 00:26:32,068
+of the product XI, XJ, is one in those
+cases. And the other two have a
+
+245
+00:26:32,068 --> 00:26:39,680
+coefficient of negative one. And so we end
+up with this expression, P sub theta of
+
+246
+00:26:39,680 --> 00:26:45,696
+XI=1, XJ=1. Plus, P theta of XY=-1XJ=-1.
+Minus the probability of the other two
+
+247
+00:26:45,696 --> 00:26:53,215
+cases. So to summarize. We've seen that
+the partition function in undirected
+
+248
+00:26:53,215 --> 00:26:58,520
+graphical models couples all of the
+parameters in our likelihood function. And
+
+249
+00:26:58,520 --> 00:27:04,075
+that introduces complexities into this
+setting that we did not see in the context
+
+250
+00:27:04,075 --> 00:27:09,871
+of Bayesian network. Specifically, we've
+seen that this that there's no close form
+
+251
+00:27:09,871 --> 00:27:15,700
+solution for optimizing. The likelihood
+for this under active graphical models. On
+
+252
+00:27:15,700 --> 00:27:21,459
+the other hand, we have also seen that the
+problem is a convex optimization problem.
+
+253
+00:27:21,459 --> 00:27:26,178
+Which allows it to be solved using
+gradient ascent usually in lbfts
+
+254
+00:27:26,178 --> 00:27:32,076
+algorithm. And because of the convexity of
+the function we're guaranteed that this is
+
+255
+00:27:32,076 --> 00:27:38,655
+going to give us the global. Optimum,
+regardless of the initialization. The bad
+
+256
+00:27:38,655 --> 00:27:43,652
+news, the further piece of bad news other
+than the fact that it has no close form of
+
+257
+00:27:43,652 --> 00:27:48,291
+optimization is that in order to perform
+this gradient computation, we need to
+
+258
+00:27:48,291 --> 00:27:53,049
+perform probabilistic inference and we
+need to do that at each gradient step in
+
+259
+00:27:53,049 --> 00:27:58,105
+order to compute the expected [inaudible].
+And we've already seen that inferences are
+
+260
+00:27:58,105 --> 00:28:02,031
+a costly thing. And this really
+dramatically increases the cost of
+
+261
+00:28:02,031 --> 00:28:07,053
+parameter estimation in Markov networks
+say in comparison to Bayesian networks. On
+
+262
+00:28:07,053 --> 00:28:15,363
+the other hand the features that we are
+computing, the expectation, are always
+
+263
+00:28:15,363 --> 00:28:21,563
+within clusters. In a cluster graph or in
+a clique tree because of the family
+
+264
+00:28:21,563 --> 00:28:27,211
+preservation property. And, and that
+implies that a single calibration step
+
+265
+00:28:27,211 --> 00:28:32,345
+suffices for all of the feature
+expectations it wants, and so a single
+
+266
+00:28:32,345 --> 00:28:38,139
+calibration, say, of the clique tree is
+going to be enough for us to compute all
+
+267
+00:28:38,139 --> 00:28:44,299
+of the expected feature counts and, and
+then we can go from there and compute the

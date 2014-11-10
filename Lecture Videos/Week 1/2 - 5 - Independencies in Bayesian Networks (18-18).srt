@@ -1,0 +1,993 @@
+
+1
+00:00:00,000 --> 00:00:04,019
+One of the most elegant properties of
+problems to graphical models is the
+
+2
+00:00:04,019 --> 00:00:08,050
+intricate connection between the
+factorization of distribution as a product
+
+3
+00:00:08,050 --> 00:00:12,058
+of factors, and the independence
+properties that it needs to satisfy. Now
+
+4
+00:00:12,058 --> 00:00:16,077
+we're going to talk about how that
+connection manifests in the context of
+
+5
+00:00:16,077 --> 00:00:21,042
+directed graphical models or Bayesian
+networks. So let's first remind ourselves
+
+6
+00:00:21,042 --> 00:00:25,061
+about why independence and factorization
+are related to each other. So, for
+
+7
+00:00:25,061 --> 00:00:30,037
+example, the independence definition, that
+P of X comma Y is the, is the product of
+
+8
+00:00:30,037 --> 00:00:34,063
+two factors. P of X and P of Y is the
+definition of independence. At the same
+
+9
+00:00:34,063 --> 00:00:38,072
+time it's a factorization of the joint
+distribution of the product of the two
+
+10
+00:00:38,072 --> 00:00:42,056
+factors. Similarily, one of the
+definitions that we gave for conditional
+
+11
+00:00:42,056 --> 00:00:46,060
+independence, which is the joint
+distribution over X, Y, and Z is a factor
+
+12
+00:00:46,060 --> 00:00:50,053
+over X and Z times a factor over Y and Z
+is the definition of conditional
+
+13
+00:00:50,053 --> 00:00:54,050
+independence. So, once again, independence
+and factorization. So we see that
+
+14
+00:00:54,050 --> 00:00:59,046
+factorization of the distribution
+corresponds to independencies that hold in
+
+15
+00:00:59,046 --> 00:01:04,081
+that distribution and the question is if
+we have this, so if we know now that if a
+
+16
+00:01:04,081 --> 00:01:09,077
+distribution P factorizes over G, the
+question is can we know something about
+
+17
+00:01:09,077 --> 00:01:14,086
+the independencies that the distribution P
+must satisfy just by looking at the
+
+18
+00:01:14,086 --> 00:01:24,059
+structure of the graph G. [sound] [cough]
+So what are independencies that need, that
+
+19
+00:01:24,059 --> 00:01:31,025
+might hold in a probabilistic graphical
+model? So we talked about the notion of
+
+20
+00:01:31,025 --> 00:01:37,022
+flow of influence in a probabilistic
+graphical model where we have, for
+
+21
+00:01:37,022 --> 00:01:43,071
+example, the notion of an active trail
+that goes through S, up through I, down
+
+22
+00:01:43,071 --> 00:01:49,094
+through G, and up through D. If, for
+example, we have the G is observed, that
+
+23
+00:01:49,094 --> 00:01:55,067
+is, in Z. And that gave us an
+intuition about which -- when probabilistic
+
+24
+00:01:55,067 --> 00:02:01,044
+influence might flow. We can now turn this
+notion on its head and ask the question
+
+25
+00:02:01,044 --> 00:02:07,027
+well, what happens when we tell you that
+there are no active trails in the graph,
+
+26
+00:02:07,027 --> 00:02:12,083
+that is, influence can't flow. So we're going
+to make that notion formal using the
+
+27
+00:02:12,083 --> 00:02:18,023
+notion of d-separation. And we're going
+to say that X and Y are d-separated in a
+
+28
+00:02:18,023 --> 00:02:23,043
+graph G, given a set of observations Z, if
+there is no an active trail between them. And
+
+29
+00:02:23,043 --> 00:02:28,030
+the intuition that we'd like to
+demonstrate in this context, is that this
+
+30
+00:02:28,030 --> 00:02:32,072
+notion of influence can't flow,
+corresponds much more formally to the
+
+31
+00:02:32,072 --> 00:02:37,040
+rigorous notion of conditional
+independence in the graph. So let's
+
+32
+00:02:37,040 --> 00:02:42,093
+actually prove that that's in fact the
+case so the theorem that we'd like to
+
+33
+00:02:42,093 --> 00:02:49,030
+state that if P factorizes over the graph - if P factorizes over G -  and we have
+
+34
+00:02:49,030 --> 00:02:56,009
+a d-separation property that holds on the graph
+so X and Y are d-separated in the graph
+
+35
+00:02:56,009 --> 00:03:03,021
+there's no active trails between them, then
+P satisfies the conditional independence
+
+36
+00:03:03,021 --> 00:03:09,080
+statement: X is independent of Y given Z.
+So d-separation implies independence - if
+
+37
+00:03:09,080 --> 00:03:15,000
+the probability distribution factorizes
+over G. So we're now going to prove the
+
+38
+00:03:15,000 --> 00:03:20,048
+theorem in its full glory. We're going to
+prove it by example, because that example
+
+39
+00:03:20,048 --> 00:03:25,089
+really just ill-, really does illustrate
+the main points of the derivation. So, the
+
+40
+00:03:25,089 --> 00:03:30,063
+assumption, so here is our graph G, and
+here is the factorization of the
+
+41
+00:03:30,063 --> 00:03:36,079
+distribution. So, according to the chain
+rule of Bayesian networks. And this is the
+
+42
+00:03:36,079 --> 00:03:42,011
+factorization that we have seen before.
+And so now we'd like to prove that a
+
+43
+00:03:42,011 --> 00:03:44,024
+d-separation statement follows from this,
+from this assumption. And, and the
+
+44
+00:03:44,024 --> 00:03:52,034
+d-separation statement that we'll like to
+prove follows as an independents is one
+
+45
+00:03:52,034 --> 00:03:57,086
+that says that the D is independent of S.
+First [inaudible] D and S are in fact de
+
+46
+00:03:57,086 --> 00:04:03,024
+separated in this graph and so we see
+there's only one possible trail between D
+
+47
+00:04:03,024 --> 00:04:08,043
+and S in this graph. It goes. Like that
+and since G's not observed in this case
+
+48
+00:04:08,043 --> 00:04:13,043
+and neither is L, we have the, the trail
+is not activated and so they, the, the two
+
+49
+00:04:13,043 --> 00:04:18,023
+are, who knows? Are they separated? And
+we'd like to prove if this independence
+
+50
+00:04:18,023 --> 00:04:24,082
+holds. So what is the prob- the joint
+probability distribution of D and S. Well,
+
+51
+00:04:24,082 --> 00:04:31,054
+it's the sum over this joint distribution
+over here. Marginalizing out, the three
+
+52
+00:04:31,054 --> 00:04:36,072
+variables that are not D and  S. So G, L, and
+I. So we have the sum over G, L, and I of
+
+53
+00:04:36,072 --> 00:04:42,037
+this, big product that's assigned by the
+chain rule. And as we've previously seen
+
+54
+00:04:42,037 --> 00:04:47,096
+when we have a summation like that, one of
+the things that we can do is we can push
+
+55
+00:04:47,096 --> 00:04:53,034
+in summations into the product so long as
+we don't push them thru, terms that
+
+56
+00:04:53,034 --> 00:04:58,073
+involve a variable. So here for example we
+have, we might have a summation over L.
+
+57
+00:04:58,092 --> 00:05:03,087
+And we can push in that summation because
+the only term that involves L is
+
+58
+00:05:03,087 --> 00:05:09,041
+probability of L given G. So if we push in
+summations in this way we end up with the
+
+59
+00:05:11,084 --> 00:05:14,028
+following expression, and we see that we
+have this summation over L here a
+
+60
+00:05:14,028 --> 00:05:19,056
+summation over G and then finally the
+summation over I at the very beginning. So
+
+61
+00:05:19,056 --> 00:05:25,003
+what do we know about the summation over L
+of the P of L given G we know that this,
+
+62
+00:05:25,023 --> 00:05:29,090
+that this is a probability distribution
+given over L and therefore. It's
+
+63
+00:05:29,090 --> 00:05:33,099
+necessarily sums to one because we're
+summing up over all the possible values of
+
+64
+00:05:33,099 --> 00:05:39,026
+zero. Once this term is one, we can look
+at the next term, which is this one, and
+
+65
+00:05:39,026 --> 00:05:45,004
+we can ask ourselves well, one is I'll
+cancel that and so probability what is the
+
+66
+00:05:45,004 --> 00:05:50,013
+one over g, and the probability
+[inaudible] which is this one and that two
+
+67
+00:05:50,013 --> 00:05:55,077
+is one and by the time we're done we end
+up with the following expression and the
+
+68
+00:05:55,077 --> 00:06:01,007
+important thing to notice about this
+expression is that this is Phi one of d
+
+69
+00:06:01,007 --> 00:06:06,093
+and this is Phi two. Woops. Y2 of S and
+therefore because we partition this joint
+
+70
+00:06:06,093 --> 00:06:12,034
+distribution as a product of two factors
+we end up with something that corresponds
+
+71
+00:06:12,034 --> 00:06:17,023
+directly to the definition of marginal
+dependence therefore proving that P
+
+72
+00:06:17,023 --> 00:06:22,005
+satisfies this independent statement. So
+having convinced ourselves that D
+
+73
+00:06:22,005 --> 00:06:27,058
+separation is an interesting notion let's
+look at some other D separation statements
+
+74
+00:06:27,058 --> 00:06:32,079
+that might hold in a graph, so one of the
+general statements that we can show, is
+
+75
+00:06:32,079 --> 00:06:37,055
+that any node in the graph is
+d-separated. From its non-descendants
+
+76
+00:06:37,055 --> 00:06:43,041
+given its parents, so let's look at the
+variable letter. And let's see what non
+
+77
+00:06:43,041 --> 00:06:48,026
+descend [sound] non, non descendants this
+has that are not its parents. It only has
+
+78
+00:06:48,026 --> 00:06:53,016
+two descendants let's mark those in blue
+that's this one and that one. And what are
+
+79
+00:06:53,016 --> 00:06:59,084
+the non-descendants, so these are the
+descendants. What about the non
+
+80
+00:06:59,084 --> 00:07:04,048
+descendants. Well, here's one non
+descendant, here's another, another, and
+
+81
+00:07:04,048 --> 00:07:09,026
+another. So those are the four non
+descendants in the graph that are not parents.
+
+82
+00:07:09,026 --> 00:07:15,010
+Now let's convince ourselves that
+Letter is d-separated from all of
+
+83
+00:07:15,010 --> 00:07:20,081
+its non descendants given its parents, and
+lets take just an arbitrary one of those,
+
+84
+00:07:20,081 --> 00:07:26,019
+let's take SAT, for example, and let's see
+if we can find and active trail from
+
+85
+00:07:26,019 --> 00:07:31,030
+SAT to Letter that is active given
+parents, which in this case is just a
+
+86
+00:07:31,030 --> 00:07:41,046
+variable grade. Way. What are, what's one
+potential trail? So we can go on this way.
+
+87
+00:07:41,046 --> 00:07:47,070
+Up. And then back down through letter but
+is that trail active? No, it's not active,
+
+88
+00:07:47,070 --> 00:07:52,041
+because grade, is observed and so blocks,
+it blocks the trail. As in fact, it will
+
+89
+00:07:52,041 --> 00:07:56,099
+block any trail that comes in from the
+top. So, any trail inth the letter that
+
+90
+00:07:56,099 --> 00:08:01,094
+comes in through it's parent grade, is
+going to be blocked by the fact the grade
+
+91
+00:08:01,094 --> 00:08:06,093
+is observed. So that means we have to come
+in through the bottom. So let's look at
+
+92
+00:08:06,093 --> 00:08:11,087
+that. Let's look at the trail through SAT
+through job. And up. Again through Letter.
+
+93
+00:08:11,087 --> 00:08:17,008
+Well is that [inaudible] active? No. The
+reason it's not active is because only
+
+94
+00:08:17,008 --> 00:08:22,029
+[inaudible] is observed and job since it's
+not, it can't be [inaudible] letter
+
+95
+00:08:22,029 --> 00:08:27,010
+because it's [inaudible], is necessarily
+not observed so neither job nor
+
+96
+00:08:27,010 --> 00:08:32,045
+[inaudible] observed so we, we cannot
+activate this [inaudible] over here cannot
+
+97
+00:08:32,045 --> 00:08:38,003
+be activated. And so, so coming from the
+[inaudible] don't work either. And so we,
+
+98
+00:08:38,003 --> 00:08:44,059
+if again this is approved by
+demonstration, but it shows again that,
+
+99
+00:08:44,088 --> 00:08:52,024
+that. It shows the general property in a
+very simple way. So, that tells us, by the
+
+100
+00:08:52,024 --> 00:08:59,067
+theorem that we proved on the previous
+slide, that if p factorizes. Over G, then
+
+101
+00:08:59,067 --> 00:09:06,076
+we know that any variable is independent.
+Of its non-descendants, given its parents.
+
+102
+00:09:06,076 --> 00:09:11,076
+Which is kind of a nice intuition when you
+think about it. Because when we motivated
+
+103
+00:09:11,076 --> 00:09:16,034
+the structure of bayesian networks, we
+basically said that, what makes us pick
+
+104
+00:09:16,034 --> 00:09:21,010
+the parents for a node is the set of
+variables that are the only ones that this
+
+105
+00:09:21,010 --> 00:09:25,068
+variable depends on. So the parents of X
+are the variables on which X depends
+
+106
+00:09:25,068 --> 00:09:30,044
+directly. And this gives a formal semantic
+to that intuition. That is, we now have
+
+107
+00:09:30,044 --> 00:09:36,022
+that the variable is depending only on its
+parents. So now that we've defined a set
+
+108
+00:09:36,022 --> 00:09:41,081
+of independencies that holds for any
+distribution that factorizes over a graph
+
+109
+00:09:41,081 --> 00:09:47,047
+we're now going to find a general motion
+which is just a term for this, So we
+
+110
+00:09:47,047 --> 00:09:52,086
+define these separation in a graph G and
+we show that when you have these
+
+111
+00:09:52,086 --> 00:09:58,047
+separations property that satisfies the
+corresponding independent statement. And
+
+112
+00:09:58,047 --> 00:10:03,065
+so now we can basically look at the
+independent C that are implied by the
+
+113
+00:10:03,065 --> 00:10:08,022
+graph G. So I N G which is the set of
+independencies that are implicit in a
+
+114
+00:10:08,022 --> 00:10:12,094
+graph key are all of the independence
+statements, X is independent of Y given Z
+
+115
+00:10:12,094 --> 00:10:17,054
+correspond to B separation statements in
+the graph so this is the set of all
+
+116
+00:10:17,054 --> 00:10:22,050
+independencies that are derived from these
+separation statements and those are the
+
+117
+00:10:22,050 --> 00:10:26,099
+ones that the graph implies hold for
+distribution P as we just showed in a
+
+118
+00:10:26,099 --> 00:10:33,049
+previous demo. So now we can give this a
+name. We're going to say that P if P
+
+119
+00:10:33,049 --> 00:10:40,081
+satisfies all of the independencies in G
+then G is an imap of P and imap stands for
+
+120
+00:10:40,081 --> 00:10:45,084
+independency map. And the reason it's in
+the [inaudible] is by looking at G it's
+
+121
+00:10:45,084 --> 00:10:50,039
+the map of in-dependency that holding T
+that is it masks in-dependencies that we
+
+122
+00:10:50,039 --> 00:10:57,047
+know to be true. So it's a good example an
+Eye Map so let's look at two, two
+
+123
+00:10:57,047 --> 00:11:07,099
+distributions here's one distribution, T1.
+And here's a second distribution P2. Let's
+
+124
+00:11:07,099 --> 00:11:16,035
+look at two possible graphs. One is G1
+that has V and I being separate variables
+
+125
+00:11:16,035 --> 00:11:23,016
+and the other is G2 that has an edge
+between D and I, so what independencies
+
+126
+00:11:23,016 --> 00:11:31,024
+does G1 imply, what's an I of G1? Well I
+of G1. Is, the independence it says D is
+
+127
+00:11:31,024 --> 00:11:39,049
+independence of I because there's no edges
+between them. With the I of G two. Well I
+
+128
+00:11:39,049 --> 00:11:45,036
+see two [inaudible] independencies because
+there are no, because D and I are
+
+129
+00:11:45,036 --> 00:11:51,068
+connected by an edge and there's no other
+dependencies that can be implied and so
+
+130
+00:11:51,068 --> 00:11:57,093
+[inaudible]. So what does that tell us?
+Let's look at the connection between these
+
+131
+00:11:57,093 --> 00:12:04,033
+graphs and these two distributions. Is G1
+an I-Map of P1? Well if you look at P1 you
+
+132
+00:12:04,033 --> 00:12:10,058
+can convince yourselves that P1 satisfies
+these independence of I. Z1 is an I-map.
+
+133
+00:12:10,058 --> 00:12:17,016
+Of P1 what about G is [inaudible] an eye
+map of P2 well if we look at P2 we can
+
+134
+00:12:17,016 --> 00:12:25,076
+again convince ourselves by examination
+that P2 doesn't satisfy. D is independant
+
+135
+00:12:25,076 --> 00:12:33,033
+of I so the answer is no this G1 is not an
+imap for P2. What about the other
+
+136
+00:12:33,033 --> 00:12:39,023
+direction? What about G2? Well G2 has no
+independence assumptions and so it
+
+137
+00:12:39,023 --> 00:12:44,057
+satisfies and so both P1 and P2 satisfy
+the empty set of the independence
+
+138
+00:12:44,057 --> 00:12:49,047
+assumptions, as it happens P1 also
+satisfies additional independence
+
+139
+00:12:49,047 --> 00:12:55,031
+assumptions but the definition of I-Map
+doesn't require that, that G the graph
+
+140
+00:12:55,031 --> 00:13:00,079
+exactly represents the independencies in,
+in a distribution only that any
+
+141
+00:13:00,079 --> 00:13:06,041
+independence that's applied by the graph
+holds further distribution, and so we
+
+142
+00:13:06,041 --> 00:13:17,034
+have. The G2 is actually an imap for both
+P1 and P2. So, now we can restate the
+
+143
+00:13:17,034 --> 00:13:22,073
+theorem that we stated before. Before we
+talked about these separation properties.
+
+144
+00:13:22,073 --> 00:13:28,025
+So now we can just give it, one concise
+statement. Because if P factorizes over G,
+
+145
+00:13:28,025 --> 00:13:33,030
+that is, if it's re presentable as a
+[inaudible] network over G, then G is an
+
+146
+00:13:33,030 --> 00:13:43,005
+[inaudible] for P, which means I can read
+from G. Independencies that's holding P.
+
+147
+00:13:45,062 --> 00:13:57,003
+Regardless of the perimeters. Just by
+knowing that P factorizes over G.
+
+148
+00:13:57,062 --> 00:14:02,007
+Interestingly, the converse of this
+theorem holds also. So this version of
+
+149
+00:14:02,007 --> 00:14:06,040
+this theorem says that if G is an
+[inaudible] for P, then P [inaudible]
+
+150
+00:14:06,040 --> 00:14:10,067
+rises over G. So what does that mean? It
+means that if the graph, if the
+
+151
+00:14:10,067 --> 00:14:15,037
+distribution satisfies the independence
+assumptions that are implicit in the
+
+152
+00:14:15,037 --> 00:14:20,043
+graph, then we can take that distribution,
+and represent it as a [inaudible] network
+
+153
+00:14:20,043 --> 00:14:26,013
+over that graph. So once again, let's do
+proof by example. So now, here we have the
+
+154
+00:14:26,013 --> 00:14:32,026
+little graph that we're going to use. And,
+and so now, what do we know? We're going
+
+155
+00:14:32,026 --> 00:14:38,061
+to run down the probability of the joint
+distribution over these, these five random
+
+156
+00:14:38,061 --> 00:14:44,066
+variables, using this expression, which is
+the chain rule for probabilities. Not the
+
+157
+00:14:44,066 --> 00:14:49,092
+chain rule for [inaudible] networks,
+because. We don't know yet that this is
+
+158
+00:14:49,092 --> 00:14:54,084
+representable as a bayesian network. We're
+going to write the [inaudible] of
+
+159
+00:14:54,084 --> 00:15:00,027
+probabilities, and that has us, writing it
+as P of V times P of I given D. Which, if
+
+160
+00:15:00,027 --> 00:15:05,032
+you multiply the two together using the
+definition of conditional probability,
+
+161
+00:15:05,032 --> 00:15:11,001
+these two together give us probability of
+I [inaudible]. If you multiply that by g,
+
+162
+00:15:11,001 --> 00:15:17,014
+given I and V, then we end up with the
+probability of g, I, V. And so long as we
+
+163
+00:15:17,014 --> 00:15:23,034
+can construct this telescoping product,
+and, all together, we, by multiplying all
+
+164
+00:15:23,034 --> 00:15:30,002
+these conditional probabilities, we have a
+we have the, we can construct the joint
+
+165
+00:15:30,002 --> 00:15:35,000
+probability distribution. Great, now what?
+So we haven't used any notions of
+
+166
+00:15:35,000 --> 00:15:39,028
+independence yet, so where do we use that?
+Well, we're going to look at each one of
+
+167
+00:15:39,028 --> 00:15:43,072
+these terms, and we're going to see how we
+can simplify it. [inaudible] is already as
+
+168
+00:15:43,072 --> 00:15:48,016
+simple as it gets. So now let's look at,
+the next term, which is the probability of
+
+169
+00:15:48,016 --> 00:15:52,012
+I given D. And, let's look at this graph,
+and we can see that I and D are non
+
+170
+00:15:52,012 --> 00:15:56,017
+[inaudible]. And we're not conditioning on
+any parents. And so we have put in this
+
+171
+00:15:56,017 --> 00:16:00,028
+graph, as we've already shown this, that
+I's independent of d. And so we can using
+
+172
+00:16:00,028 --> 00:16:04,034
+one of the definitions that we have on the
+conditions of the parents, we can erase
+
+173
+00:16:04,034 --> 00:16:08,021
+this from the right hand side of the
+conditioning bar, and just get p f i. The
+
+174
+00:16:08,021 --> 00:16:13,029
+next term is actually already in the form
+that we want it so we don't need to do
+
+175
+00:16:13,029 --> 00:16:18,025
+anything with it. But now let's look at
+the probability of S given D I and G. So
+
+176
+00:16:18,025 --> 00:16:23,052
+here we have the probability of a variable
+S given one of it's parent I and two non
+
+177
+00:16:23,052 --> 00:16:28,086
+descendants D and G and we know that S is
+independent of it's non descendant given a
+
+178
+00:16:28,086 --> 00:16:34,013
+non descendant given it's parent I and so
+we can erase both D and G and just, end up
+
+179
+00:16:34,013 --> 00:16:40,045
+with probability of S given I. Finally, we
+have the last term probability of L given
+
+180
+00:16:40,045 --> 00:16:46,044
+D, I, G, and S and here again we have the
+probabilty of a variable L given its
+
+181
+00:16:46,044 --> 00:16:52,090
+parent G and a bunch of non-descendants.
+So we can again erase the non-descendants.
+
+182
+00:16:52,090 --> 00:16:58,027
+And so, altogether, that gives us exactly
+the expression that we wanted. And so now,
+
+183
+00:16:58,027 --> 00:17:03,069
+again, by example, we prove this, we prove
+this independent. We prove that some of
+
+184
+00:17:03,069 --> 00:17:08,092
+these independent statements, we can,
+derive the fact that p factorizes using
+
+185
+00:17:08,092 --> 00:17:16,080
+the product rule for [inaudible] that
+works. To summarize, we've provided two
+
+186
+00:17:16,080 --> 00:17:22,036
+equivalent views of the graph structure.
+The first is the graph as the
+
+187
+00:17:22,036 --> 00:17:27,032
+factorization as a data structure, that
+tells us how the distribution p can be
+
+188
+00:17:27,032 --> 00:17:32,066
+broken up into pieces. So in this case,
+the fact that g allows p to be represented
+
+189
+00:17:32,066 --> 00:17:37,062
+as a set of factors or c p ds over the
+network. The second is in imat view, the
+
+190
+00:17:37,062 --> 00:17:42,013
+fact that the definition, the, the, the,
+the structure of g encoded in the
+
+191
+00:17:42,013 --> 00:17:47,054
+[inaudible] doesn't necessarily hold in p.
+And what we've shown is that each of these
+
+192
+00:17:47,054 --> 00:17:53,002
+actually implies the other. Which means
+if, that if we have a distribution P that
+
+193
+00:17:53,002 --> 00:17:57,009
+we know is represented as a bayesian
+network over a certain graph, we can just
+
+194
+00:17:57,009 --> 00:18:00,074
+look at the graph without even delving
+into the parameters. No certain
+
+195
+00:18:00,074 --> 00:18:04,096
+independencies that have to hold in the
+distribution key. And independencies is a
+
+196
+00:18:04,096 --> 00:18:09,019
+really valuable thing, because it'll, it
+tells you something about what influences
+
+197
+00:18:09,019 --> 00:18:13,031
+what. And if I observe something, what
+else might change? And that helps a lot in
+
+198
+00:18:13,031 --> 00:18:16,085
+understanding the structure of the
+distribution, and consequences of
+
+199
+00:18:16,085 --> 00:18:18,052
+different types of observations.

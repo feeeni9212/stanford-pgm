@@ -1,0 +1,657 @@
+
+1
+00:00:00,000 --> 00:00:04,156
+We begin by discussing the simplest
+learning problem, which is that of
+
+2
+00:00:04,156 --> 00:00:08,432
+estimating a set of parameters. And the
+key building block for parameter
+
+3
+00:00:08,432 --> 00:00:13,421
+estimation is what's called maximum likelihood
+estimation, so we're first going to define
+
+4
+00:00:13,421 --> 00:00:18,785
+that and build on that in the context of
+more interesting problems. So let's go back
+
+5
+00:00:18,785 --> 00:00:24,556
+to the simplest possible learning problem
+where we are generating data from a biased coin,
+
+6
+00:00:24,556 --> 00:00:30,396
+which is a Bernoulli distribution.
+And the probability that X takes the value
+
+7
+00:00:30,396 --> 00:00:35,955
+of one is defined by some parameter, theta.
+And the probability that it takes the
+
+8
+00:00:35,955 --> 00:00:42,290
+value of zero is therefore one minus theta.
+And let's imagine that we're given access to a
+
+9
+00:00:42,290 --> 00:00:49,931
+dataset D, which is a bunch of instances,
+x1 up to xM, that are sampled IID from the
+
+10
+00:00:49,931 --> 00:00:57,295
+distribution P. So let's remind ourselves
+what it means for, what the IID means. So
+
+11
+00:00:57,295 --> 00:01:04,881
+first, the first I means that the tosses
+are independent of each other. And the ID
+
+12
+00:01:04,881 --> 00:01:09,463
+means that they are identically
+distributed which means that they are all
+
+13
+00:01:09,463 --> 00:01:17,962
+sampled from P. And our goal is to
+take D and reconstruct theta. So,
+
+14
+00:01:17,962 --> 00:01:22,756
+let's think about this as a probabilistic
+graphical model. In the fact it's a
+
+15
+00:01:22,756 --> 00:01:27,612
+probabilistic graphical model that we've
+seen before when we first talked about
+
+16
+00:01:27,612 --> 00:01:32,468
+plate models. So, here we have a parameter
+theta and a bunch of replicates of the
+
+17
+00:01:32,468 --> 00:01:42,270
+same experiment. Which are these x's over
+here. Which, are sampled from theta
+
+18
+00:01:42,270 --> 00:01:48,344
+independently. And we can see that if you
+think about this as a graphical model as
+
+19
+00:01:48,344 --> 00:01:53,677
+written over here. We can see that each XI
+depends on theta and that they're
+
+20
+00:01:53,677 --> 00:01:59,677
+conditionally independent of each other
+once theta is known. So they're independent
+
+21
+00:01:59,677 --> 00:02:06,168
+and identically distributed given theta.
+And, if you think about this as a
+
+22
+00:02:06,168 --> 00:02:15,569
+graphical model we'll better have C.P.D's
+and so the C.P.D, for the Mth toss. Given
+
+23
+00:02:15,569 --> 00:02:24,139
+theta is, the part, is that X takes the
+value of X1 with probability theta
+
+24
+00:02:24,139 --> 00:02:30,590
+and the value X0 with probability one
+minus theta. And that is a completely
+
+25
+00:02:30,590 --> 00:02:36,404
+legitimate CPD. It's a CPD whose
+parents is the value theta which is the
+
+26
+00:02:36,404 --> 00:02:44,031
+parent of X variable. It is a continuous
+variable, but we've done those before. So now that
+
+27
+00:02:44,031 --> 00:02:49,644
+we've specified this as a probabilistic
+graphical model, we can go back and think
+
+28
+00:02:49,644 --> 00:02:54,911
+about how maximum likelihood estimation would
+work. And so the goal is to find the
+
+29
+00:02:54,911 --> 00:03:00,323
+parameter, theta, which is in the
+interval zero one that predicts D well. So
+
+30
+00:03:00,323 --> 00:03:07,989
+the quality of a particular parameter, theta, is how well it predicts D. Which
+
+31
+00:03:07,989 --> 00:03:15,844
+can also be viewed as how plausible is D, given
+a particular value of theta. So let's try
+
+32
+00:03:15,844 --> 00:03:23,403
+and figure out what that means. We can ask
+what is the probability of the D that we
+
+33
+00:03:23,403 --> 00:03:29,619
+saw, given a particular value of theta.
+And since the, the tosses or the
+
+34
+00:03:29,619 --> 00:03:36,361
+instantiations Xi are conditionally
+independent given, given theta, we can
+
+35
+00:03:36,361 --> 00:03:43,541
+write this as a product over all of the M
+instances of the probability of the mth
+
+36
+00:03:43,541 --> 00:03:50,360
+instance given theta. And, so now let's
+think about what that is in the context of
+
+37
+00:03:50,360 --> 00:03:56,320
+a concrete example. Let's assume that we
+have tossed this coin five times and we
+
+38
+00:03:56,320 --> 00:04:03,741
+have three heads and two tails, or three
+ones and, two zeroes. So, if we actually
+
+39
+00:04:03,741 --> 00:04:11,119
+write down what this probably function
+looks like, we can see that that's going
+
+40
+00:04:11,119 --> 00:04:20,053
+to be, the probability of getting a head given theta. Times the probability of
+
+41
+00:04:20,053 --> 00:04:26,283
+getting tails given theta. Times the
+probability of the second tails. Times the
+
+42
+00:04:26,283 --> 00:04:34,603
+probability of heads. Times another probability of heads. And the probability of
+
+43
+00:04:34,603 --> 00:04:41,694
+the first head given theta is theta times one minus theta
+for the tail, and one minus theta, theta,
+
+44
+00:04:41,694 --> 00:04:47,941
+theta or theta to the power of three, and
+one minus theta to the power of two. And
+
+45
+00:04:47,941 --> 00:04:54,896
+that is exactly the function that's drawn
+over here. Now if we're looking for
+
+46
+00:04:54,896 --> 00:05:01,486
+the theta that predicts D well, what we
+just define that as the theta that
+
+47
+00:05:01,486 --> 00:05:08,979
+maximizes this function. If we draw a line
+from this maximum down to the bottom, we
+
+48
+00:05:08,979 --> 00:05:16,291
+can see the function is maximized to the
+point 0.6, which not surprisingly is
+
+49
+00:05:16,291 --> 00:05:23,421
+the same was the three heads that we saw
+over the five total tosses. So
+
+50
+00:05:23,421 --> 00:05:30,026
+generalizing that. Let's assume that we
+have observed in this context MH heads and
+
+51
+00:05:30,026 --> 00:05:36,470
+MT tails. And we want to find the theta
+that maximizes the likelihood. And just as
+
+52
+00:05:36,470 --> 00:05:42,966
+in the simple, in the simple example that
+we had. This likelihood function. Is going
+
+53
+00:05:42,966 --> 00:05:48,104
+to have, theta appearing MH times, and
+one minus theta appearing MT times, and, so
+
+54
+00:05:48,104 --> 00:05:53,378
+that's going to give us the
+likelihood function that looks just like
+
+55
+00:05:53,378 --> 00:05:59,133
+the likelihood function that we saw in the
+previous slide. And, if we think about how
+
+56
+00:05:59,133 --> 00:06:03,791
+we can go about maximizing such a
+function, then, usually we take the
+
+57
+00:06:03,791 --> 00:06:09,476
+following steps: first, it's convenient to
+think about not the likelihood, but rather
+
+58
+00:06:09,476 --> 00:06:15,577
+what's called the log likelihood, denoted
+by a small l, which is simply the log. Of
+
+59
+00:06:15,577 --> 00:06:21,912
+this expression over here, and that has
+the benefits of turning a product into a
+
+60
+00:06:21,912 --> 00:06:28,326
+summation. And now that we, so that gives
+us a simpler optimization objective but one
+
+61
+00:06:28,326 --> 00:06:33,873
+that has the exact same maximum. And, we
+can now go ahead and do the standard way
+
+62
+00:06:33,873 --> 00:06:39,083
+of maximizing a function like this, which
+is differentiating the log likelihood, and
+
+63
+00:06:39,083 --> 00:06:44,105
+solving for Theta. And, that's going to
+give us an optimum, which is exactly as we
+
+64
+00:06:44,105 --> 00:06:49,065
+would expect. That is, it's the fraction
+of heads among the total number of coin
+
+65
+00:06:49,065 --> 00:06:53,836
+tosses. And, that's the maximum of this
+log likelihood function. And, therefore,
+
+66
+00:06:53,836 --> 00:06:59,759
+the likelihood as well. Now an important
+notion in the context of maximum likelihood
+
+67
+00:06:59,759 --> 00:07:05,567
+estimation is also important in, in when
+we develop it further, is the notion of a
+
+68
+00:07:05,567 --> 00:07:11,072
+sufficient statistic. So, when we computed
+theta in the coin toss example, we defined
+
+69
+00:07:11,072 --> 00:07:16,366
+the likelihood function as an expression
+that has this form. And notice that this
+
+70
+00:07:16,366 --> 00:07:21,791
+expression didn't care about the order in
+which the heads and the tails came up. It
+
+71
+00:07:21,791 --> 00:07:26,628
+only cared about the number of heads, and
+the number of tails, and that was
+
+72
+00:07:26,628 --> 00:07:31,530
+sufficient in order to define the
+likelihood function, therefore sufficient
+
+73
+00:07:31,530 --> 00:07:37,665
+for maximizing the likelihood function.
+And so in this case MH and MT are what
+
+74
+00:07:37,665 --> 00:07:43,522
+known as sufficient statistics for this
+particular estimation problem. They
+
+75
+00:07:43,522 --> 00:07:49,847
+suffice in order to understand the likelihood
+function and therefore to optimize it. So
+
+76
+00:07:49,847 --> 00:07:58,172
+more generally, a function of a dataset
+is a sufficient statistic if it's a
+
+77
+00:07:58,172 --> 00:08:09,914
+function from instances to some vector in
+RK. Yes. Which has the following property,
+
+78
+00:08:09,914 --> 00:08:17,802
+if this function S of D has the following
+property: for any two data sets D and D prime,
+
+79
+00:08:17,802 --> 00:08:26,275
+and any possible parameter theta,
+we have that the following is true: If. S of D
+
+80
+00:08:26,275 --> 00:08:35,864
+is equal to S of D prime. Then the
+likelihood function for those two data sets is
+
+81
+00:08:35,864 --> 00:08:42,231
+the same. So, what is the S of D? S of D
+is the sum of the sufficient statistics
+
+82
+00:08:42,231 --> 00:08:51,560
+for all of the instances in D. So let's
+make this a little bit more crisp. What
+
+83
+00:08:51,560 --> 00:08:57,027
+we're trying to do is we're trying to look at
+a bunch of datasets. For example, all
+
+84
+00:08:57,027 --> 00:09:04,823
+sequences of coin tosses, and we're trying
+to summarize. Data sets using a smaller,
+
+85
+00:09:04,823 --> 00:09:12,751
+more compact notion, which is statistics,
+that throw out aspects of the data that
+
+86
+00:09:12,751 --> 00:09:21,187
+are not necessary for, for reconstructing
+its likelihood function. So let's look at the
+
+87
+00:09:21,187 --> 00:09:26,426
+multinomial example which is the
+generalization of the Bernoulli example
+
+88
+00:09:26,426 --> 00:09:32,391
+that we had before. So assume that we have
+is a set of measurement of a variable x
+
+89
+00:09:32,391 --> 00:09:37,946
+that takes on k possible values. Then in
+this case the sufficient statistics just like
+
+90
+00:09:37,946 --> 00:09:43,280
+before where we had the number of heads
+and the number of tails. Here we the have
+
+91
+00:09:43,280 --> 00:09:48,613
+the number of values, the number of times
+that each of the K values came up. So we
+
+92
+00:09:48,613 --> 00:09:53,683
+have M1, M2 up to Mk. So for example if
+you're looking for sufficient statistic
+
+93
+00:09:53,683 --> 00:09:58,951
+for a six sided die and you're going to
+have M1- M6 representing how many times
+
+94
+00:09:58,951 --> 00:10:04,153
+the die came up to one and the number of
+times it comes up two, three, four, five
+
+95
+00:10:04,153 --> 00:10:13,839
+and six. And so what is the sufficient
+statistic function in this case? Remember
+
+96
+00:10:13,839 --> 00:10:22,898
+it is a tuple of dimension K, which are
+the different values of the variable and
+
+97
+00:10:22,898 --> 00:10:35,358
+the sufficient statistic value of XI is
+one where We have a one only. In the I
+
+98
+00:10:35,358 --> 00:10:46,500
+position and zero everywhere else. So as
+we sum up. S of X M. Over all instances in
+
+99
+00:10:46,500 --> 00:10:52,682
+our data set. You are going to get a
+vector where you get only a one
+
+100
+00:10:52,682 --> 00:11:00,046
+contribution when the instance, when the
+m, when the m data instance comes up that
+
+101
+00:11:00,046 --> 00:11:10,224
+particular value and so that going to be
+m1, m2. And this is a sufficient statistic
+
+102
+00:11:10,224 --> 00:11:18,284
+because the likelihood function can then
+be reconstructed as the product of theta
+
+103
+00:11:18,284 --> 00:11:31,147
+I, MI, where this theta I here, is the
+parameter for. X equals X over XI. Let's
+
+104
+00:11:31,147 --> 00:11:36,736
+look at different example. Let's look at
+the sufficient statistic for Gaussian
+
+105
+00:11:36,736 --> 00:11:42,848
+distribution. So as a reminder, this is a
+one dimensional Gaussian distribution that
+
+106
+00:11:42,848 --> 00:11:48,884
+has two parameters, mu which is the mean
+and sigma squared which is the variance
+
+107
+00:11:48,884 --> 00:11:54,847
+and that's going to be written in the
+following form which you have seen before.
+
+108
+00:11:54,847 --> 00:12:01,608
+And we can rewrite that exponent in, in
+the following way we can basically blow
+
+109
+00:12:01,608 --> 00:12:09,589
+out the quadratic term in the exponent and
+you end up with the likelihood function
+
+110
+00:12:09,589 --> 00:12:16,859
+that has minus x squared times a term plus
+x times the term minus a constant term.
+
+111
+00:12:16,859 --> 00:12:25,220
+And the sufficient statistics. For
+Gaussian can now be seen to be x squared.
+
+112
+00:12:26,040 --> 00:12:34,975
+X and one. Because when we multiply P of X
+for multiple occurrence of X we're going
+
+113
+00:12:34,975 --> 00:12:44,017
+to end up adding up the X squared for the
+different data cases adding up to the X's
+
+114
+00:12:44,017 --> 00:12:52,845
+in the different data cases. And then this
+is going to be the number of data cases.
+
+115
+00:12:52,845 --> 00:13:02,020
+So the S of the data D is going to be the sum
+over M, X and M squared The sum over m.
+
+116
+00:13:02,521 --> 00:13:14,315
+And this principle. And from that we can
+reconstruct the likely function. How do we
+
+117
+00:13:14,315 --> 00:13:20,682
+now perform maximum likelihood estimation. So as we
+talked about we want to choose theta as to
+
+118
+00:13:20,682 --> 00:13:27,446
+maximize the likelihood function and if we go
+ahead and optimize the function that we've
+
+119
+00:13:27,446 --> 00:13:33,812
+seen on previous slide from multinomial
+that maximizes likelihood estimation turns
+
+120
+00:13:33,812 --> 00:13:42,544
+out to be simply the fraction So for the
+value of XI what would be the fraction of
+
+121
+00:13:42,544 --> 00:13:49,319
+XI in the data. Which again as a perfectly
+very natural estimation to use. For a
+
+122
+00:13:49,319 --> 00:13:56,718
+Gaussian we end up with the following as
+the maximum likelihood estimation, the mean
+
+123
+00:13:56,718 --> 00:14:05,772
+is the empirical mean In the distribution
+that is the average over all of the data
+
+124
+00:14:05,772 --> 00:14:19,470
+cases and the standard deviation is the
+empirical standard deviation. So to
+
+125
+00:14:19,470 --> 00:14:25,780
+summarize, maximum likelihood estimation is a
+very simple principle for selecting among
+
+126
+00:14:25,780 --> 00:14:31,484
+a set of parameters given data set D. We
+can compute that, maximum likelihood
+
+127
+00:14:31,484 --> 00:14:36,629
+estimation by summarizing a data set, in
+terms of sufficient statistics, which are
+
+128
+00:14:36,629 --> 00:14:41,461
+typically considerably more concise than
+the original data set D. And so that
+
+129
+00:14:41,461 --> 00:14:46,167
+provides us with a computationally
+efficient way of summarizing a data set,
+
+130
+00:14:46,167 --> 00:14:51,186
+so as to do the estimation. And it turns out
+that, for many parametric distributions
+
+131
+00:14:51,186 --> 00:14:56,143
+that we care about, the maximum likelihood
+estimation has an easy to compute closed
+
+132
+00:14:56,143 --> 00:14:59,030
+form solution, given the sufficient
+statistics.

@@ -1,0 +1,1129 @@
+
+1
+00:00:00,000 --> 00:00:05,043
+Local structure that doesn’t require full table representations
+
+2
+00:00:05,045 --> 00:00:09,007
+is important in both directed and undirected models.
+
+3
+00:00:09,007 --> 00:00:14,086
+How do we incorporate local structure into undirected models?
+
+4
+00:00:14,086 --> 00:00:22,008
+The framework for that is called “log-linear models” for reasons that will be clear in just a moment.
+
+5
+00:00:23,008 --> 00:00:24,022
+So
+
+6
+00:00:26,056 --> 00:00:33,014
+Whereas, in the original representation of the unnormalized density
+
+7
+00:00:33,014 --> 00:00:39,018
+we defined P tilde as the product of factors φi(Di),
+
+8
+00:00:39,021 --> 00:00:42,030
+each [of] which is potentially a full table.
+
+9
+00:00:42,088 --> 00:00:46,003
+Now we're going to shift that representation
+
+10
+00:00:46,003 --> 00:00:49,097
+to something that uses a linear form
+
+11
+00:00:50,000 --> 00:00:52,044
+(So here's a linear form)
+
+12
+00:00:52,044 --> 00:00:54,089
+that is subsequently exponentiated,
+
+13
+00:00:54,092 --> 00:00:56,096
+and that's why it's called log-linear—
+
+14
+00:00:56,096 --> 00:00:59,063
+because the logarithm is a linear function.
+
+15
+00:00:59,063 --> 00:01:02,074
+So what is this form over here?
+
+16
+00:01:02,074 --> 00:01:06,098
+It's a linear function that has these things that are called “coefficients”
+
+17
+00:01:10,017 --> 00:01:12,063
+and these things that are called “features”.
+
+18
+00:01:14,020 --> 00:01:22,010
+Features, like factors, each have a scope which is a set of variables on which the feature depends.
+
+19
+00:01:24,015 --> 00:01:27,002
+But different features can have the same scope.
+
+20
+00:01:27,002 --> 00:01:31,017
+You can have multiple features all of which are over the same set of variables.
+
+21
+00:01:31,017 --> 00:01:36,047
+Notice that each feature has just a single parameter wj that multiplies it.
+
+22
+00:01:37,065 --> 00:01:40,031
+So, what does this give rise to?
+
+23
+00:01:40,031 --> 00:01:43,045
+I mean if we have a log-linear model,
+
+24
+00:01:43,048 --> 00:01:49,046
+we can push in the exponent through the summation,
+
+25
+00:01:49,046 --> 00:01:58,076
+and that gives us something that is a product of exponential functions.
+
+26
+00:01:58,079 --> 00:02:03,053
+You can think of each of these as effectively a little factor,
+
+27
+00:02:03,053 --> 00:02:07,068
+but it’s a factor that only has a single parameter wj.
+
+28
+00:02:07,068 --> 00:02:11,020
+Since this is a little bit abstract, so let’s look at an example.
+
+29
+00:02:11,020 --> 00:02:17,069
+Specifically lets look at how we might represent a simple table factor as a log linear model.
+
+30
+00:02:17,070 --> 00:02:24,028
+So here’s a param, here’s a factor φ, over two binary random variables X1 and X2.
+
+31
+00:02:24,028 --> 00:02:30,078
+And so a full table factor would have four parameters: a00, a01, a10, and a11.
+
+32
+00:02:30,078 --> 00:02:34,055
+So we can capture this model using a log linear model,
+
+33
+00:02:34,055 --> 00:02:37,095
+using a set of such of features,
+
+34
+00:02:37,095 --> 00:02:41,036
+using a set of these guys, which are indicator functions.
+
+35
+00:02:41,036 --> 00:02:43,022
+So this is an indicator function.
+
+36
+00:02:43,022 --> 00:02:48,096
+It takes one if X1 is zero and X2 is zero,
+
+37
+00:02:48,097 --> 00:02:50,088
+and it takes zero otherwise.
+
+38
+00:02:51,003 --> 00:02:54,009
+So this the general notion of an indicator function.
+
+39
+00:02:54,012 --> 00:03:00,031
+It looks at the event—or constraint—inside the curly braces,
+
+40
+00:03:00,040 --> 00:03:05,022
+and it returns a value of 0 or 1, depending on
+whether that event is true or not.
+
+41
+00:03:05,072 --> 00:03:13,059
+And so, if we wanted to represent this factor as a log-linear model,
+
+42
+00:03:13,062 --> 00:03:19,092
+We can see that we can simply sum up over all the four values of k and ℓ,
+
+43
+00:03:19,092 --> 00:03:22,069
+which are either 0 or 1, each of them.
+
+44
+00:03:22,070 --> 00:03:25,040
+So were summing up over all four entries here.
+
+45
+00:03:25,040 --> 00:03:32,047
+And we have a parameter—or coefficient—w<u>kℓ which multiplies this feature.</u>
+
+46
+00:03:33,029 --> 00:03:44,012
+And so, we would have a summation of w<u>kℓ:</u>
+
+47
+00:03:44,013 --> 00:03:49,022
+of w00 only in the case where X1 is zero and X2 is zero.
+
+48
+00:03:49,025 --> 00:04:00,048
+So we would have exp of negative w00 when X1=0 and X2=0,
+
+49
+00:04:01,011 --> 00:04:12,003
+and we would have exp of negative w01 when
+X1=0 and X2=1, and so on and so forth.
+
+50
+00:04:12,039 --> 00:04:15,050
+And it’s not difficult to convince ourselves that
+
+51
+00:04:15,052 --> 00:04:24,077
+if we define w<u>kℓ to be the negative log of the corresponding entries in this table,</u>
+
+52
+00:04:24,080 --> 00:04:28,065
+then that gives us right back the factor that
+we defined to begin with.
+
+53
+00:04:28,068 --> 00:04:33,014
+So this shows that this is a general representation,
+
+54
+00:04:34,000 --> 00:04:37,026
+in the sense that we can take any factor
+
+55
+00:04:37,089 --> 00:04:40,052
+and represent it as a log-linear model
+
+56
+00:04:40,054 --> 00:04:47,017
+simply by including all of the appropriate features.
+
+57
+00:04:48,060 --> 00:04:52,035
+But we don’t generally want to do that.
+
+58
+00:04:52,035 --> 00:04:55,080
+Generally we want a much finer grain set of features.
+
+59
+00:04:55,080 --> 00:05:01,019
+So let’s look at some of the examples of features that people use in practice.
+
+60
+00:05:01,019 --> 00:05:03,083
+So here are the features used in a language model.
+
+61
+00:05:03,085 --> 00:05:07,093
+This is a language model that we that we discussed previously.
+
+62
+00:05:07,094 --> 00:05:12,027
+And here we have features that relate:
+
+63
+00:05:12,029 --> 00:05:15,083
+First of all, let’s just remind ourselves [that] we have two sets of variables.
+
+64
+00:05:15,083 --> 00:05:23,068
+We have the variables Y which represent the annotations for each word
+
+65
+00:05:23,069 --> 00:05:29,095
+in the sequence corresponding to what category that corresponds to.
+
+66
+00:05:29,095 --> 00:05:32,042
+So this is a person.
+
+67
+00:05:32,042 --> 00:05:34,090
+This is the beginning of a person name.
+
+68
+00:05:34,093 --> 00:05:37,084
+This is the continuation of a person name.
+
+69
+00:05:37,084 --> 00:05:39,030
+The beginning of a location.
+
+70
+00:05:39,030 --> 00:05:42,023
+The continuation of a location, and so on.
+
+71
+00:05:42,023 --> 00:05:45,069
+As well as a bunch of words that are not:
+
+72
+00:05:45,069 --> 00:05:48,044
+[i.e.,] none of person, location, organization.
+
+73
+00:05:48,044 --> 00:05:50,076
+And they’re all labeled “other”.
+
+74
+00:05:50,078 --> 00:05:54,093
+And so the value Y tells us for each word what
+category it belongs to,
+
+75
+00:05:54,093 --> 00:05:59,037
+so that we’re trying to identify people, locations, and
+organizations in the sentence.
+
+76
+00:05:59,037 --> 00:06:02,014
+We have another set of variables X,
+
+77
+00:06:03,031 --> 00:06:08,068
+which are the actual words in the sentence.
+
+78
+00:06:09,022 --> 00:06:12,080
+Now we can go ahead and define…
+
+79
+00:06:12,080 --> 00:06:15,084
+We can use a full table representation that
+
+80
+00:06:15,084 --> 00:06:22,072
+basically tries to relate each and every Y that has a feature,
+
+81
+00:06:22,072 --> 00:06:27,067
+that has a full factor that looks at every possible word in the English language;
+
+82
+00:06:27,067 --> 00:06:31,067
+but those are going to be very, very, expensive,
+
+83
+00:06:31,067 --> 00:06:34,007
+and a very large number of parameters.
+
+84
+00:06:34,011 --> 00:06:40,004
+And so we're going to define a feature that looks, for example, at f of
+
+85
+00:06:40,004 --> 00:06:45,020
+say a particular Y<u>i, which is the label for the i’th word in the sentence,</u>
+
+86
+00:06:45,020 --> 00:06:47,065
+and X<u>i, being that i’th word.</u>
+
+87
+00:06:47,065 --> 00:06:54,083
+And that feature says, for example: Y<u>i equals person.</u>
+
+88
+00:06:55,083 --> 00:07:03,074
+It’s the indicator function for “Y<u>i = person and X<u>i is capitalized”.</u></u>
+
+89
+00:07:05,082 --> 00:07:09,069
+And so that feature doesn’t look at the individual words.
+
+90
+00:07:09,069 --> 00:07:13,019
+It just looks at whether that word is capitalized.
+
+91
+00:07:13,019 --> 00:07:17,043
+Now we have just the single parameter that looks just at capitalization,
+
+92
+00:07:17,043 --> 00:07:23,014
+and parameterizes how important is capitalization for recognizing that something's a person.
+
+93
+00:07:23,015 --> 00:07:26,094
+We could also have another feature.
+
+94
+00:07:26,094 --> 00:07:28,086
+This is an alternative:
+
+95
+00:07:28,086 --> 00:07:32,058
+This a different feature that can and could be part of the same model
+
+96
+00:07:32,058 --> 00:07:38,038
+that says: Y<u>i is equal to location,</u>
+
+97
+00:07:38,038 --> 00:07:41,006
+Or, actually, I was little bit imprecise here—
+
+98
+00:07:41,006 --> 00:07:45,046
+This might be beginning of person. This might be beginning of location.
+
+99
+00:07:45,047 --> 00:07:51,041
+And X<u>i appears in some atlas.</u>
+
+100
+00:07:52,013 --> 00:07:55,036
+Now there is other things that appear in the atlas than locations,
+
+101
+00:07:55,036 --> 00:07:58,064
+but if a word appears in the atlas,
+
+102
+00:07:58,066 --> 00:08:01,097
+there is a much higher probability presumably that it’s actually a location
+
+103
+00:08:02,000 --> 00:08:06,019
+and so we might have, again, [a] weight for this feature
+
+104
+00:08:06,019 --> 00:08:13,061
+that indicates that maybe increases the probability in Y<u>i being labeled in this way.</u>
+
+105
+00:08:13,061 --> 00:08:19,043
+And so you can imagine that constructing a very rich set of features,
+
+106
+00:08:19,043 --> 00:08:24,016
+all of which look at certain aspects of the word,
+
+107
+00:08:24,016 --> 00:08:31,090
+and rather than enumerating all the possible words
+and giving a parameter to each and one of them.
+
+108
+00:08:33,056 --> 00:08:38,007
+Let’s look at some other examples of feature-based models.
+
+109
+00:08:38,011 --> 00:08:40,091
+So this is an example from statistical physics.
+
+110
+00:08:40,091 --> 00:08:43,044
+It’s called the Ising model.
+
+111
+00:08:43,044 --> 00:08:48,077
+And the Ising model is something that looks at pairs
+of variables.
+
+112
+00:08:48,077 --> 00:08:51,077
+It’s a pairwise Markov network.
+
+113
+00:08:53,012 --> 00:08:55,067
+And [it] looks the pairs of adjacent variables,
+
+114
+00:08:55,067 --> 00:08:59,049
+and basically gives us a coefficient for their products.
+
+115
+00:08:59,049 --> 00:09:03,050
+So now, this is a case where variables are in the end are binary,
+
+116
+00:09:03,050 --> 00:09:07,083
+but not in the space {0, 1} but rather
+negative one and positive one.
+
+117
+00:09:07,083 --> 00:09:10,031
+And so now, we have a model that's parametrized
+
+118
+00:09:10,031 --> 00:09:13,096
+as features that are just the product of the values of the adjacent variables.
+
+119
+00:09:14,033 --> 00:09:15,060
+Where might this come up?
+
+120
+00:09:15,060 --> 00:09:23,016
+It comes up in the context, for example, of modeling the spins of electrons in a grid.
+
+121
+00:09:23,070 --> 00:09:28,074
+So here you have a case where the electrons can rotate
+
+122
+00:09:28,074 --> 00:09:31,058
+either along one direction or in the other direction
+
+123
+00:09:31,058 --> 00:09:40,054
+so here is a bunch of the atoms that are marked with a blue arrow.
+
+124
+00:09:40,054 --> 00:09:43,005
+You have one rotational axis,
+
+125
+00:09:43,005 --> 00:09:45,057
+and the red arrow[s] are rotating in the opposite direction.
+
+126
+00:09:46,008 --> 00:09:52,054
+And this basically says we have a term that
+
+127
+00:09:52,054 --> 00:09:57,006
+[whose] probability distribution over the joint set of spins.
+
+128
+00:09:57,006 --> 00:10:01,051
+(So this is the joint spins.)
+
+129
+00:10:01,095 --> 00:10:08,014
+And the model, depends on whether adjacent
+atoms have the same spin or opposite spin.
+
+130
+00:10:08,014 --> 00:10:12,044
+So notice that one times one is the same as negative one times negative one.
+
+131
+00:10:12,044 --> 00:10:16,054
+So this really just looks at whether they have the same spin
+or different spins.
+
+132
+00:10:16,054 --> 00:10:22,088
+And there is a parameter that looks at, you know, same or
+different.
+
+133
+00:10:24,008 --> 00:10:26,070
+That's what this feature represents.
+
+134
+00:10:27,017 --> 00:10:32,051
+And, depending on the value of this parameter over here,
+
+135
+00:10:32,051 --> 00:10:35,001
+if the parameter goes one way,
+
+136
+00:10:35,001 --> 00:10:39,059
+we're going to favor systems
+
+137
+00:10:39,059 --> 00:10:42,050
+where the atoms spin in the same direction.
+
+138
+00:10:42,050 --> 00:10:48,004
+And if it’s going in the opposite direction, you’re going to favor atoms that spin in the different direction.
+
+139
+00:10:48,004 --> 00:10:51,026
+And those are called ferromagnetic and anti-ferromagnetic.
+
+140
+00:10:52,051 --> 00:10:58,053
+Furthermore, you can define in these systems the notion of a temperature.
+
+141
+00:10:58,081 --> 00:11:04,072
+So the temperature here says how strong is this connection.
+
+142
+00:11:04,072 --> 00:11:13,012
+So notice that as T grows—as the temperature grows—the w<u>ij’s get divided by T.</u>
+
+143
+00:11:15,069 --> 00:11:19,026
+And they all kind of go towards zero,
+
+144
+00:11:20,099 --> 00:11:24,081
+which means that the strength of the connection between
+
+145
+00:11:24,081 --> 00:11:27,089
+adjacent atoms, effectively becomes almost moot,
+
+146
+00:11:27,089 --> 00:11:30,098
+and they become almost decoupled from each other.
+
+147
+00:11:30,098 --> 00:11:36,021
+On the other hand, as the temperature decreases,
+
+148
+00:11:38,020 --> 00:11:43,046
+Then the effect of the interaction between the atoms becomes much more significant
+
+149
+00:11:43,046 --> 00:11:46,091
+and they’re going to impose much stronger constraints on each other.
+
+150
+00:11:46,091 --> 00:11:49,042
+And this is actually a model of a real physical system.
+
+151
+00:11:49,042 --> 00:11:51,094
+I mean, this is real temperature, and real atoms, and so on.
+
+152
+00:11:51,094 --> 00:11:57,007
+And sure enough, if you look at what happens to these models as a function of temperature,
+
+153
+00:11:57,007 --> 00:12:00,063
+what we see over here is high temperature.
+
+154
+00:12:02,027 --> 00:12:04,021
+This is high temperature
+
+155
+00:12:04,021 --> 00:12:10,003
+and you can see that there is a lot of mixing between the two types of spin
+
+156
+00:12:10,003 --> 00:12:11,092
+and this is low temperature
+
+157
+00:12:12,058 --> 00:12:20,048
+and you can see that there is much stronger
+constraints in this configuration
+
+158
+00:12:20,048 --> 00:12:23,000
+about the spins of adjacent atoms.
+
+159
+00:12:26,095 --> 00:12:33,084
+Another kind of feature that's used very much in lots of practical applications
+
+160
+00:12:33,084 --> 00:12:37,068
+is the notion of a metric, of a metric feature, an M.R.F.
+
+161
+00:12:37,068 --> 00:12:39,069
+So what's a metric feature?
+
+162
+00:12:39,069 --> 00:12:41,079
+This is something that comes up, mostly in cases
+
+163
+00:12:41,079 --> 00:12:48,043
+where you have a bunch of random variables X<u>i that all take values in some joint label space of V.</u>
+
+164
+00:12:48,043 --> 00:12:50,026
+So, for example, they might all be binary.
+
+165
+00:12:50,026 --> 00:12:52,085
+They all might take values one, two, three, four.
+
+166
+00:12:52,085 --> 00:12:57,024
+And what we'd like to do is
+
+167
+00:12:57,024 --> 00:13:03,046
+we have X<u>i and X<u>j that are connected to each other by an edge.</u></u>
+
+168
+00:13:03,046 --> 00:13:08,021
+We want X and X<u>j to take “similar” values.</u>
+
+169
+00:13:08,021 --> 00:13:11,096
+So in order to enforce the fact that X<u>i and X<u>j should take similar values</u></u>
+
+170
+00:13:11,096 --> 00:13:13,093
+we need a notion of similarity.
+
+171
+00:13:13,093 --> 00:13:24,010
+And we're going to encode that using the distance function µ that takes two values, one for X<u>i and one for X<u>j’s,</u></u>
+
+172
+00:13:24,010 --> 00:13:26,026
+[that] says how close are they to each other.
+
+173
+00:13:26,026 --> 00:13:28,093
+So what does the distance function need to be?
+
+174
+00:13:28,093 --> 00:13:35,055
+Well, the distance function needs to satisfy the standard condition on a distance function or a metric.
+
+175
+00:13:35,055 --> 00:13:39,037
+So first is reflexivity,
+
+176
+00:13:39,037 --> 00:13:43,045
+which means that if the two variables take on the same value,
+
+177
+00:13:43,045 --> 00:13:45,067
+then that distance better be zero.
+
+178
+00:13:48,059 --> 00:13:53,073
+Oh I forgot to say that this. Sorry, this needs to be a non-negative function.
+
+179
+00:13:53,073 --> 00:14:00,073
+Symmetry means that the distances are symetrical.
+
+180
+00:14:00,073 --> 00:14:06,027
+So the distance between two values v1 and v2 are the same as the distance between v2 and v1.
+
+181
+00:14:06,027 --> 00:14:12,032
+And finally is the triangle inequality, which says that the distance between v1 and v2
+
+182
+00:14:12,032 --> 00:14:13,050
+(So here is v1)
+
+183
+00:14:13,050 --> 00:14:14,068
+(Here is v2)
+
+184
+00:14:15,048 --> 00:14:21,009
+and the distance between v1 and v2 is less than the distance between v1 and v3
+
+185
+00:14:21,089 --> 00:14:25,012
+and then going to v2. So the standard triangle inequality.
+
+186
+00:14:26,051 --> 00:14:32,074
+if a distance just satisfies these two conditions, it's called a semi metric.
+
+187
+00:14:33,084 --> 00:14:37,041
+Otherwise, if it satisfies all three, it's called a metric.
+
+188
+00:14:37,084 --> 00:14:41,037
+And both are actually used in practical applications.
+
+189
+00:14:43,093 --> 00:14:48,055
+But how do we take this distance feature and put it in the context of an MRF?
+
+190
+00:14:48,055 --> 00:14:55,066
+We have a feature that looks at two variables, X<u>i and X<u>j.</u></u>
+
+191
+00:14:55,066 --> 00:14:59,047
+And that feature is the distance between X<u>i and X<u>j.</u></u>
+
+192
+00:14:59,047 --> 00:15:08,067
+And now, we put it together by multiplying that with a coefficient, w<u>ij,</u>
+
+193
+00:15:08,067 --> 00:15:13,001
+such that w<u>ij has to be greater than zero.</u>
+
+194
+00:15:13,001 --> 00:15:16,043
+So that we want the metric MRF
+
+195
+00:15:17,027 --> 00:15:21,018
+[to have] the effect  that
+
+196
+00:15:21,018 --> 00:15:29,034
+the lower the distance, the higher this is,
+
+197
+00:15:30,026 --> 00:15:36,043
+because of the negative coefficient, which means that higher the probability. Okay?
+
+198
+00:15:37,000 --> 00:15:43,015
+So, the more pairs you have that are close to each other
+
+199
+00:15:43,015 --> 00:15:47,027
+and the closer they are to each other the higher
+the probability of the overall configuration.
+
+200
+00:15:47,027 --> 00:15:49,065
+Which is exactly what we wanted to have happen.
+
+201
+00:15:53,010 --> 00:15:58,041
+So, conversely, if you have values that are far from
+each other in the distance metric
+
+202
+00:15:58,041 --> 00:16:00,059
+the lower the probability in the model.
+
+203
+00:16:01,079 --> 00:16:04,055
+So, here are some examples of metric MRF’s.
+
+204
+00:16:04,083 --> 00:16:07,081
+So one: The simplest possible metric MRF
+
+205
+00:16:07,081 --> 00:16:11,098
+is one that gives [a] distance of zero when the two classes are equal to each other
+
+206
+00:16:11,098 --> 00:16:13,087
+and [a] distance of one everywhere else.
+
+207
+00:16:13,087 --> 00:16:16,046
+So now, you know, this is just like a step function.
+
+208
+00:16:16,046 --> 00:16:22,058
+And, this gives rise to a potential that looks like this.
+
+209
+00:16:22,058 --> 00:16:26,057
+So we have 0’s on the diagonal.
+
+210
+00:16:26,057 --> 00:16:33,062
+So we get a bump in the probability when the two adjacent variables take on the same label
+
+211
+00:16:33,062 --> 00:16:37,012
+and otherwise we get a reduction in the probability.
+
+212
+00:16:37,013 --> 00:16:40,069
+But it doesn’t matter what particular value they take.
+
+213
+00:16:40,069 --> 00:16:44,008
+That’s one example of a simple metric.
+
+214
+00:16:44,008 --> 00:16:51,099
+A somewhat more expressive example might come up when the values V are actually numerical values.
+
+215
+00:16:52,002 --> 00:16:58,009
+In which case you can look at maybe the difference between the miracle values.
+
+216
+00:16:58,009 --> 00:17:00,079
+So, v<u>k minus v<u>l.</u></u>
+
+217
+00:17:00,079 --> 00:17:05,010
+And you want, and when v<u>k is equal to v<u>l, the distance is zero,</u></u>
+
+218
+00:17:05,010 --> 00:17:14,029
+and then you have a linear function that increases the
+distance as the distance between v<u>k and v<u>l grows.</u></u>
+
+219
+00:17:14,029 --> 00:17:18,073
+So, this is the absolute value of v<u>k minus v<u>l.</u></u>
+
+220
+00:17:20,035 --> 00:17:26,001
+A more interesting notion that comes up a lot in
+practice is:
+
+221
+00:17:26,001 --> 00:17:32,037
+we don’t want to penalize arbitrarily things that are far way from each other in label space.
+
+222
+00:17:32,037 --> 00:17:37,043
+So this is what is called a truncated linear penalty.
+
+223
+00:17:38,016 --> 00:17:41,085
+And you can see that beyond a certain threshold,
+
+224
+00:17:44,006 --> 00:17:48,065
+the penalty just becomes constant, so it plateaus.
+
+225
+00:17:48,066 --> 00:17:54,004
+So that there is a penalty, but it doesn’t keep increasing over as the labels get further from each other
+
+226
+00:17:54,004 --> 00:17:59,076
+One example where metric MRF’s are used is when we’re doing image segmentation.
+
+227
+00:17:59,076 --> 00:18:04,013
+And here we tend to favor segmentations where adjacent superpixels…
+
+228
+00:18:06,055 --> 00:18:09,006
+(These are adjacent superpixels.)
+
+229
+00:18:10,040 --> 00:18:12,069
+And we want them to take the same class.
+
+230
+00:18:18,014 --> 00:18:22,027
+And so here we have no penalty when the superpixels take the same class
+
+231
+00:18:22,027 --> 00:18:25,019
+and we have some penalty when they take different classes.
+
+232
+00:18:25,019 --> 00:18:30,094
+And this is actually a very common, albeit simple, model for
+image segmentation.
+
+233
+00:18:32,016 --> 00:18:37,014
+Let’s look at a different MRF, also in the context of
+computer vision.
+
+234
+00:18:37,014 --> 00:18:40,044
+This is an MRF that’s used for image denoising.
+
+235
+00:18:40,044 --> 00:18:45,019
+So here we have a noisy version of a real image that looks like this.
+
+236
+00:18:45,020 --> 00:18:50,082
+So this is, you can see this kind of, white noise overlayed on top of the image.
+
+237
+00:18:50,082 --> 00:18:53,092
+And what we’d like to do, is we’d like to get a cleaned-up version of the image.
+
+238
+00:18:53,092 --> 00:19:00,079
+So here we have, a set of variables, X, that correspond to the noisy pixels.
+
+239
+00:19:02,022 --> 00:19:07,073
+And we have a set of variables, Y, that corresponds to the cleaned pixels.
+
+240
+00:19:07,073 --> 00:19:15,042
+And we'd like to have a probabilistic model that relates X and Y.
+
+241
+00:19:15,042 --> 00:19:20,052
+And what we’re going to do is we’d like, so, intuiti—, I mean,
+
+242
+00:19:20,052 --> 00:19:25,048
+so you’d like to have two effects on the pixels Y:
+
+243
+00:19:25,048 --> 00:19:33,010
+First, you'd like Y<u>i to be close to X<u>i.</u></u>
+
+244
+00:19:33,010 --> 00:19:36,037
+But if you just do that, then you're just going to stick with
+the original image.
+
+245
+00:19:36,037 --> 00:19:41,034
+So what is the main constraint that we can employ on the image in order to clean it up
+
+246
+00:19:41,034 --> 00:19:46,091
+is the fact that adjacent pixels tend to have the same value.
+
+247
+00:19:46,091 --> 00:19:52,090
+So in this case what we’re going to do is we’re going to model, we’re going to constrain the image
+
+248
+00:19:52,090 --> 00:20:00,021
+so that we’re going to constrain the Y<u>i’s to try and make Y<u>i close to its neighbors.</u></u>
+
+249
+00:20:03,001 --> 00:20:05,083
+And the further away it is, the bigger the penalty.
+
+250
+00:20:05,083 --> 00:20:08,021
+And that's a metric MRF.
+
+251
+00:20:11,052 --> 00:20:17,008
+Now we could use just a linear penalty,
+
+252
+00:20:17,008 --> 00:20:21,089
+but that’s going to be a very fragile model,
+
+253
+00:20:21,089 --> 00:20:28,020
+because, now obviously the right answer isn't the model
+where all pixels are equal to each other
+
+254
+00:20:28,020 --> 00:20:33,087
+in their actual intensity value because that would be just a single, you know, grayish-looking image.
+
+255
+00:20:33,087 --> 00:20:39,069
+So what you like is that you would like to let one pixel depart from its adjacent pixel
+
+256
+00:20:39,069 --> 00:20:44,009
+if it’s getting close in a different direction either by its own observation or by other adjacent pixels.
+
+257
+00:20:44,009 --> 00:20:49,048
+And so the right model to use here is actually the truncated linear model
+
+258
+00:20:49,048 --> 00:20:52,017
+and that one is [the] one that’s commonly used
+
+259
+00:20:52,017 --> 00:20:54,097
+and is very successful for doing image denoising.
+
+260
+00:20:55,043 --> 00:21:02,006
+Interesting, almost exactly the same idea is used in the context of stereo reconstruction.
+
+261
+00:21:02,006 --> 00:21:06,026
+There, the values that you’d like to infer, the Y<u>i’s, </u>
+
+262
+00:21:06,026 --> 00:21:11,055
+are the depth disparity for a given pixel in the image—how deep it is.
+
+263
+00:21:11,055 --> 00:21:13,095
+And here also we have spacial continuity.
+
+264
+00:21:13,095 --> 00:21:19,038
+We like the depth of one pixel to be close to the depth of an adjacent pixel.
+
+265
+00:21:19,038 --> 00:21:22,049
+But once again we don’t want to enforce this too strongly
+
+266
+00:21:22,049 --> 00:21:25,015
+because you do have depth disparity in the image
+
+267
+00:21:25,015 --> 00:21:27,081
+and so eventually you'd like things to be allowed to break away from each other.
+
+268
+00:21:27,081 --> 00:21:33,032
+And so once again, one typically uses some kind of truncated linear model
+
+269
+00:21:33,032 --> 00:21:36,023
+for doing this stereo construction,
+
+270
+00:21:36,023 --> 00:21:38,009
+often augmented by other little tricks.
+
+271
+00:21:38,009 --> 00:21:45,014
+So, for example, here we have the actual pixel appearance,
+
+272
+00:21:45,014 --> 00:21:47,086
+for example, the color and texture.
+
+273
+00:21:47,086 --> 00:21:50,039
+And if the color and texture are very similar to each other,
+
+274
+00:21:50,040 --> 00:21:54,086
+you might want to have the stronger constraint on similarity.
+
+275
+00:21:54,086 --> 00:22:00,025
+Versus: if the color and texture of the adjacent pixels are
+very different from each other,
+
+276
+00:22:00,025 --> 00:22:02,086
+they may be more likely to belong to different objects
+
+277
+00:22:02,086 --> 00:22:07,057
+and you don’t want to enforce quite as strong of a similarity constraint.

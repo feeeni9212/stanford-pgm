@@ -1,0 +1,1027 @@
+
+1
+00:00:02,085 --> 00:00:05,071
+An alternative class of algorithms to the
+variable elimination algorithms, is the
+
+2
+00:00:05,071 --> 00:00:11,049
+class of message passing algorithms. And
+as we'll see this is a class that is in
+
+3
+00:00:11,049 --> 00:00:16,092
+some ways closely related to the variable
+elimination, but also offers us additional
+
+4
+00:00:16,092 --> 00:00:22,021
+flexibility in how we do summation 
+and factor product steps, so as to
+
+5
+00:00:22,021 --> 00:00:28,034
+potentially come up with a lower complexity
+than would be required by even the minimal
+
+6
+00:00:28,034 --> 00:00:34,067
+elimination ordering. So let's consider
+a simple Markov network of the following
+
+7
+00:00:34,067 --> 00:00:39,043
+type. And let's assume that I don't want
+to go to the cost of eliminating
+
+8
+00:00:39,043 --> 00:00:44,058
+variables. Although, in this network, it's
+not gonna be too expensive. And, instead,
+
+9
+00:00:44,058 --> 00:00:50,000
+what we're going to do is we're going to
+construct what we call a cluster graph.
+
+10
+00:00:50,000 --> 00:00:55,024
+The cluster graph is something where... it's...
+is a data structure in which
+
+11
+00:00:55,024 --> 00:01:00,029
+we're going to take little bits of
+knowledge from this graphical model. And
+
+12
+00:01:00,029 --> 00:01:05,059
+we're going to place them in things called
+clusters. So here we have four clusters.
+
+13
+00:01:06,015 --> 00:01:13,061
+In this example, cluster one, is a cluster
+whose jurisdiction of influence is, the,
+
+14
+00:01:13,061 --> 00:01:20,003
+the pair of variables AB. Cluster two has
+jurisdiction over B and C. Three is over C and
+
+15
+00:01:20,003 --> 00:01:24,065
+D. And four is over A and D. And these
+clusters are going to sit there and
+
+16
+00:01:24,065 --> 00:01:29,065
+they're going to talk to each other. And
+they're going to try and convince each
+
+17
+00:01:29,065 --> 00:01:34,034
+other that what they think about a
+variable that they both consider to be
+
+18
+00:01:34,034 --> 00:01:39,041
+under their jurisdiction is correct. So
+for example, cluster one is going to talk
+
+19
+00:01:39,041 --> 00:01:44,041
+to cluster two about the variable B and
+it's going to tell cluster two what it
+
+20
+00:01:44,041 --> 00:01:48,097
+thinks about B so that cluster two might
+become more informed about the
+
+21
+00:01:48,097 --> 00:01:54,085
+distribution over B. And so, what we're
+going to do is, initially, each cluster is
+
+22
+00:01:54,085 --> 00:02:00,087
+going to have its own little piece of
+information. So Phi 1 is going to go here.
+
+23
+00:02:00,087 --> 00:02:07,021
+Phi 2 is going to go there. Phi 3 goes there
+and Phi 4 goes there. And now the variables
+
+24
+00:02:07,021 --> 00:02:14,019
+are going to communicate with each other
+via these things called messages. So we're
+
+25
+00:02:14,019 --> 00:02:19,094
+going to call we're going to slightly
+rename things. We're going to call the
+
+26
+00:02:19,094 --> 00:02:26,035
+[inaudible] initial set of beliefs, if you
+will, or evidence that a factor that a
+
+27
+00:02:26,035 --> 00:02:32,018
+cluster has over the variables in its
+jurisdiction, we're going to those psi. In
+
+28
+00:02:32,018 --> 00:02:38,037
+the example were just have psi were just
+the phis of the original model but as will
+
+29
+00:02:38,037 --> 00:02:44,034
+see sometimes it can become a little bit
+complicated than that. So now factor...
+
+30
+00:02:44,034 --> 00:02:49,099
+The cluster one has the factor of psi 1.
+And cluster two has psi 2 and so on.
+
+31
+00:02:49,099 --> 00:02:55,025
+And now lets imagine that psi 1 wants
+to send a message. I'm sorry, that psi 2,
+
+32
+00:02:55,025 --> 00:03:00,011
+that cluster two wants to send a
+message to cluster one. So it has to
+
+33
+00:03:00,031 --> 00:03:05,096
+figure out what it believes. A priori
+we're going to assume that its just going
+
+34
+00:03:05,096 --> 00:03:10,062
+to, we're going to start out by
+initializing with a totally uninformed
+
+35
+00:03:10,062 --> 00:03:15,047
+message. So because initially they haven't
+even started talking to each other. So all
+
+36
+00:03:15,047 --> 00:03:20,068
+messages are initialized to be one. But
+now, cluster two can come back and say,
+
+37
+00:03:20,068 --> 00:03:26,073
+okay. I'm going to take the information,
+uninformative as it was, that I got from
+
+38
+00:03:26,073 --> 00:03:32,071
+cluster two. And notice that I call this
+message delta 2,1. Delta, 2 being the
+
+39
+00:03:32,071 --> 00:03:38,040
+from. And 1 being the to, and so taken
+delta 2,1, and now factor one, cluster
+
+40
+00:03:38,040 --> 00:03:44,017
+one is going to say well I'm going to pick
+that and I'm going to multiply it, with my
+
+41
+00:03:44,017 --> 00:03:49,034
+current, thoughts about the variables A,B
+and that's going to give me a more
+
+42
+00:03:49,034 --> 00:03:54,071
+informed factor and now I'm going to
+communicate that information to factor
+
+43
+00:03:54,071 --> 00:04:00,091
+four, to cluster four. But cluster 4's
+doesn't care about a, sorry cluster four
+
+44
+00:04:00,091 --> 00:04:06,090
+doesn't care about B. And so what I'm
+going to communicate to cluster four,
+
+45
+00:04:06,090 --> 00:04:13,037
+which is this message delta 1,4, from one
+to four, is the sum over B, which is the
+
+46
+00:04:13,037 --> 00:04:23,009
+variable that four doesn't wanna hear
+about, of the incoming message. Times my
+
+47
+00:04:23,009 --> 00:04:36,025
+initial beliefs. For my initial factors.
+Now this general process is what keeps the
+
+48
+00:04:36,025 --> 00:04:42,029
+message passing algorithm going. So each
+variable. Each cluster is going to send
+
+49
+00:04:42,029 --> 00:04:48,050
+messages to its adjacent cluster that
+reflect this exact same process. So for
+
+50
+00:04:48,050 --> 00:04:54,064
+example, just take a different example
+here is delta 3-4 so this is the message
+
+51
+00:04:54,064 --> 00:05:00,046
+that goes from three to four and that
+message takes onto consideration the
+
+52
+00:05:00,046 --> 00:05:06,067
+evidence the two sent to three which is
+this guy over here finds whatever three
+
+53
+00:05:06,067 --> 00:05:13,076
+thought about CD to begin with. Notice,
+and this is important, that the message
+
+54
+00:05:13,076 --> 00:05:20,003
+that three sends to four doesn't take into
+consideration, the information that it got
+
+55
+00:05:20,003 --> 00:05:25,023
+from four. So there isn't in this
+expression over here The contribution of
+
+56
+00:05:25,023 --> 00:05:29,082
+delta 4,3. Because you want to
+have, you want to avoid this case of I
+
+57
+00:05:29,082 --> 00:05:34,084
+repeat back to you a rumor that you just
+told me and we all become more convinced
+
+58
+00:05:34,084 --> 00:05:39,087
+about the truth of this rumor because, oh,
+you, I, I thought about this first but now
+
+59
+00:05:39,087 --> 00:05:45,007
+you're reinforcing me by telling it to me
+again and the beliefs are just going to go
+
+60
+00:05:45,007 --> 00:05:49,091
+up and up. And so what happens here is
+that we deliberately only restrict
+
+61
+00:05:49,091 --> 00:05:56,013
+attention to evidence that comes in from other
+sources. So three only uses evidence from
+
+62
+00:05:56,013 --> 00:06:02,054
+two, when reporting to four. And it only
+uses, conversely, evidence from four when
+
+63
+00:06:02,054 --> 00:06:09,078
+reporting to two. And so now, this is this defines a set a, a communication
+
+64
+00:06:09,078 --> 00:06:15,000
+protocol by which one factor or one
+cluster rather in the graph can
+
+65
+00:06:15,000 --> 00:06:20,079
+communicate information to its neighbors.
+What do we do with this? So how do we
+
+66
+00:06:20,099 --> 00:06:26,035
+generalize this message passing process?
+Let's construct a more general version of
+
+67
+00:06:26,035 --> 00:06:31,083
+this. So this uses a data structure called
+a cluster graph. A cluster graph is an
+
+68
+00:06:31,083 --> 00:06:36,086
+undirected graph whose nodes are not
+variables any more, not as, not in, this
+
+69
+00:06:36,086 --> 00:06:42,015
+is not a, you know graphical model of the
+type that we've seen. The nodes in this
+
+70
+00:06:42,015 --> 00:06:47,018
+undirected graph are clusters that
+correspond to subsets of variables just
+
+71
+00:06:47,018 --> 00:06:57,089
+like we had before. And we're going to
+connect, two adjacent, two clusters, Ci
+
+72
+00:06:57,089 --> 00:07:05,068
+and Cj. And this, this thing called the
+sepset, is the variable that they choose
+
+73
+00:07:05,068 --> 00:07:16,040
+to talk about. And clearly each one can
+only talk about variables that it knows
+
+74
+00:07:16,040 --> 00:07:21,085
+about which is why the sepset Sij has to
+be a subset of both Ci and Cj. So once
+
+75
+00:07:21,085 --> 00:07:26,061
+again, Ci is the jurisdiction of cluster i,
+these are the variables that it
+
+76
+00:07:26,061 --> 00:07:32,048
+understands, and Sij is the communication
+between two adjacent clusters in the
+
+77
+00:07:32,048 --> 00:07:39,079
+cluster graph. So, now, given a set
+of factors Phi, we're going to initialize
+
+78
+00:07:39,079 --> 00:07:47,008
+the, the model by giving each gra-, each
+cluster in the graph a certain amount of
+
+79
+00:07:47,008 --> 00:07:53,092
+information. So each of my initial
+clusters, each of my initial factors phi k,
+
+80
+00:07:53,092 --> 00:08:05,066
+in my graph, is going to be assigned to
+one and only one cluster. And this is
+
+81
+00:08:05,066 --> 00:08:09,035
+important. It needs to be at least one, so
+that the information is taken into account
+
+82
+00:08:09,035 --> 00:08:12,087
+somewhere. And it shouldn't be more than
+one, because if you give it to more than
+
+83
+00:08:12,087 --> 00:08:16,016
+one person, to more than one cluster,
+they're going to, that you're going to
+
+84
+00:08:16,016 --> 00:08:19,068
+double count the evidence. They're each
+going to think it's an independent piece
+
+85
+00:08:19,068 --> 00:08:24,035
+of evidence, and it's going to be counted
+twice. Now where do we put the information
+
+86
+00:08:24,035 --> 00:08:29,093
+corresponding to factor k? We put this
+only in a fact, we can only put it in a
+
+87
+00:08:29,093 --> 00:08:35,081
+cluster that understands every single
+variable in that factor. So if we have a
+
+88
+00:08:35,081 --> 00:08:41,053
+factor whose scope, has a certain, that
+has a certain scope, that scope better be
+
+89
+00:08:41,053 --> 00:08:45,076
+a subset. Of the variables that the
+cluster understands, because otherwise we
+
+90
+00:08:45,076 --> 00:08:59,082
+can't even talk about those variables. So,
+[sound] So once we've done that. See if I
+
+91
+00:08:59,082 --> 00:09:09,019
+can, erase this. Okay. We can now define
+the initial beliefs of a particular
+
+92
+00:09:09,019 --> 00:09:21,075
+cluster, as the product of all of the
+factors that are assigned to it. Now some
+
+93
+00:09:21,075 --> 00:09:26,051
+variables might, some clusters might be
+assigned one factor. In which case psi is
+
+94
+00:09:26,051 --> 00:09:30,092
+just equal to that phi. Some, because
+that, that was the case in the example
+
+95
+00:09:30,092 --> 00:09:35,092
+that we just saw. Some clusters might have
+several factors assigned to them. In which
+
+96
+00:09:35,092 --> 00:09:40,068
+case we need to multiply them to create a
+single factor that is sorta the total
+
+97
+00:09:40,068 --> 00:09:45,068
+informed beliefs of the cluster. And some
+clusters might have no factors assigned to
+
+98
+00:09:45,068 --> 00:09:51,083
+them. In which case this is a null product
+and is equal to one. So now let's look at
+
+99
+00:09:51,083 --> 00:09:57,056
+an example of the sum of more interesting
+cluster graphs than the trivial one that
+
+100
+00:09:57,056 --> 00:10:02,088
+we showed earlier. Here we have a set of
+factors: phi-1 of ABC; phi-2 of BC; phi-3; phi-4;
+
+101
+00:10:02,088 --> 00:10:08,020
+phi-6 and so on. So initially, we have to
+figure out for each of those factors, a
+
+102
+00:10:08,020 --> 00:10:13,031
+cluster in which to put it. For ABC,
+there's really only one choice because
+
+103
+00:10:13,031 --> 00:10:18,090
+there is only one cluster in this entire
+graph that understands about all of A, B
+
+104
+00:10:18,090 --> 00:10:24,089
+and C, and that is this cluster over here.
+BC however, has two choices. It can go
+
+105
+00:10:24,089 --> 00:10:30,051
+into cluster one, or it can go into
+cluster two, because both cluster one and
+
+106
+00:10:30,051 --> 00:10:37,004
+cluster two understand about B and C. We
+are going to put it in cluster two. I mean
+
+107
+00:10:37,004 --> 00:10:43,017
+you can put it in either one, both are
+fine. Phi-3 has again two choices it can go
+
+108
+00:10:43,017 --> 00:10:49,045
+into cluster two or it can go into cluster
+three. We're going to go ahead and make a
+
+109
+00:10:49,045 --> 00:10:57,073
+decision to put it in cluster two.
+Cluster, phi-4, goes, has only, one choice,
+
+110
+00:10:57,073 --> 00:11:05,030
+because only one cluster has both D and E
+in its scope. So it goes here. Phi-5
+
+111
+00:11:05,030 --> 00:11:11,085
+similarly. Only over here. BD again there
+is more that one choice. We could put it
+
+112
+00:11:11,085 --> 00:11:18,065
+in cluster two or we can put it in cluster
+three. Let's, for simplicity, put it in
+
+113
+00:11:18,065 --> 00:11:25,020
+cluster three, and BDF only one choice.
+This is one possible way of assigning the
+
+114
+00:11:25,020 --> 00:11:31,083
+cluster, the factors to clusters. There is
+other alternatives, as I said, that would
+
+115
+00:11:31,083 --> 00:11:38,064
+work. If we do this we end up, for
+example, with psi 2. Being the product
+
+116
+00:11:38,064 --> 00:11:51,095
+of phi2 times phi3. Where as psi 1 is
+simply equal to phi1. And psi3. Is
+
+117
+00:11:51,095 --> 00:12:05,022
+equal to phi, to phi6 times phi7.
+Here is a different assignment of the same
+
+118
+00:12:05,022 --> 00:12:11,078
+factors to different, to the clusters. And
+we can see that it, that it also equally
+
+119
+00:12:11,078 --> 00:12:20,082
+legitimate. >> Okay this was one cluster
+graph for those set of factors. Here's another
+
+120
+00:12:20,082 --> 00:12:27,020
+cluster graph ... >> So let's compare them
+one two one two for different for the
+
+121
+00:12:27,020 --> 00:12:34,016
+exact same set of factors. Then notice is
+that even the clusters have never changed, what
+
+122
+00:12:34,016 --> 00:12:41,070
+changed is the edges and the sepsets
+between them. >> That's in cluster graph. Okay
+
+123
+00:12:41,070 --> 00:12:46,069
+so now let's think about message passing
+in the context of this more richly
+
+124
+00:12:46,069 --> 00:12:51,087
+structured cluster graph to see what it
+looks like here. So here for example if
+
+125
+00:12:51,087 --> 00:12:57,038
+we're interested in passing a message
+from. Cluster one to cluster four. We're
+
+126
+00:12:57,038 --> 00:13:02,094
+going to take psi 1 which is the factor,
+the set of factors that were initially
+
+127
+00:13:02,094 --> 00:13:08,076
+assigned to cluster four. But we have to
+take in the message that this cluster got
+
+128
+00:13:08,076 --> 00:13:14,038
+from its other neighbor two. We're going
+to multiply them together and then we're
+
+129
+00:13:14,038 --> 00:13:20,007
+going to sum out all of the variables that
+one understands but two doesn't. So here
+
+130
+00:13:20,007 --> 00:13:25,062
+for example, one understands A and C and
+two doesn't, so we have to sum out over A
+
+131
+00:13:25,062 --> 00:13:35,096
+and C. And that is the message delta 1,4. What about Delta 4-1? Delta 4-1 is
+
+132
+00:13:35,096 --> 00:13:45,002
+the message goes in the other direction.
+And here, notice that four gets
+
+133
+00:13:45,002 --> 00:13:51,028
+messages from all sorts of other
+clusters. So in addition to its original
+
+134
+00:13:51,053 --> 00:13:57,084
+factor of psi 4, it gets a message
+from cluster two. It gets a message from
+
+135
+00:13:57,084 --> 00:14:04,029
+cluster five then it gets a message from
+cluster three each over its own scope. All
+
+136
+00:14:04,029 --> 00:14:09,054
+of these are going to be multiplied
+together to give the current, most
+
+137
+00:14:09,054 --> 00:14:14,072
+informed beliefs about, about the
+variables B and E, which are then
+
+138
+00:14:14,072 --> 00:14:20,065
+marginalizing over E, which cluster one
+doesn't understand to produce a message
+
+139
+00:14:20,065 --> 00:14:26,080
+over B. And once again, we know that the
+message from one is not used to inform the
+
+140
+00:14:26,080 --> 00:14:35,023
+message that four sends back. So that
+gives us overall the following expression
+
+141
+00:14:35,023 --> 00:14:42,063
+for message passing, between cluster i and
+cluster j so delta ij, over the scope of
+
+142
+00:14:42,063 --> 00:14:49,051
+this which is the sepset, Sij and
+that has the following general expression.
+
+143
+00:14:49,051 --> 00:14:56,057
+It takes the factors initially assigned to
+cluster i, multiplies in all of the
+
+144
+00:14:56,057 --> 00:15:11,046
+incoming messages. Other than from j.
+Multiply that all together, sums out the
+
+145
+00:15:11,046 --> 00:15:20,064
+variables that cluster j doesn't know
+about. So everything that's in the scope
+
+146
+00:15:20,064 --> 00:15:28,032
+of Ci, but not in the scope of Cj. And
+that gives us a factor over the sepset
+
+147
+00:15:28,032 --> 00:15:36,000
+that is produced as a message. So putting
+that together that gives us an algorithm
+
+148
+00:15:36,000 --> 00:15:41,000
+which is generally called belief
+propagation for the reasons that the
+
+149
+00:15:41,000 --> 00:15:46,028
+clusters are propagating, if you will,
+informed beliefs to each other. And here
+
+150
+00:15:46,028 --> 00:15:51,069
+is the summary of the algorithm. Each
+factor phi is first assigned to a cluster.
+
+151
+00:15:51,069 --> 00:15:56,090
+That is used to construct our initial
+potentials. These psi's that we talked
+
+152
+00:15:56,090 --> 00:16:03,063
+about. We initialize all of the messages
+before anybody starts communicating to be 1.
+
+153
+00:16:03,063 --> 00:16:09,068
+And then we repeat the following process.
+We select some edge in the graph between
+
+154
+00:16:09,068 --> 00:16:15,089
+adjacent clusters and we pass the message
+between cluster i and cluster j over that
+
+155
+00:16:15,089 --> 00:16:22,002
+edge. Okay? And we repeatedly and this is
+the expression for that message. It's the
+
+156
+00:16:22,002 --> 00:16:28,008
+one that we saw on the previous slide. And
+that process is repeated again and again.
+
+157
+00:16:29,063 --> 00:16:34,074
+At the end of the process, we, now, a
+cluster needs to know what to believe
+
+158
+00:16:34,074 --> 00:16:40,053
+about the variables that it understands.
+And so it takes all of the it takes its
+
+159
+00:16:40,053 --> 00:16:45,078
+own initial beliefs, and all of the
+information that it got from all of its
+
+160
+00:16:45,078 --> 00:16:54,047
+neighbors. Multiplies it all together and
+that produces these things which are called
+
+161
+00:16:54,047 --> 00:17:05,009
+beliefs. Now there's several important,
+aspects of this algorithm that are left
+
+162
+00:17:05,009 --> 00:17:12,034
+undefined. And that we're gonna need to
+talk about, later on. The first of these
+
+163
+00:17:12,034 --> 00:17:19,086
+is repeat until when? When do we decide
+that we're done, and that we can stop? And
+
+164
+00:17:19,086 --> 00:17:26,010
+we'll talk about that in the context of
+different variants of this algorithm,
+
+165
+00:17:26,010 --> 00:17:31,024
+later on. The second thing that's left
+undefined is how I select each of the
+
+166
+00:17:31,024 --> 00:17:36,054
+edges, how do I select the edges, which
+edge do I select to pass messages over? So
+
+167
+00:17:36,054 --> 00:17:41,064
+here there is, you know, the obvious
+simple thing, which is just to go in some
+
+168
+00:17:41,064 --> 00:17:47,007
+prespecified order and that's one option,
+is round robin message passing. But it
+
+169
+00:17:47,007 --> 00:17:52,057
+turns out that there are better strategies
+than that and we'll talk about that too.
+
+170
+00:17:54,040 --> 00:18:01,058
+So, is this algorithm any good? Well, it
+turns out that, you know, yes and no. So
+
+171
+00:18:01,058 --> 00:18:08,094
+first of all, if you pass messages over a
+graph like the one that I showed before.
+
+172
+00:18:08,094 --> 00:18:15,085
+Like, the, you know, little A, B, C, D
+loop. Eventually, you see that we achieve
+
+173
+00:18:15,085 --> 00:18:22,094
+convergence. So this is, here we can see
+that, eventually, we do converge to some
+
+174
+00:18:22,094 --> 00:18:31,016
+probability. But, that probability is a
+little bit off. That is, the answer is not
+
+175
+00:18:31,016 --> 00:18:36,040
+exact. Now in general, with exceptions
+that we'll talk about, this is an
+
+176
+00:18:36,040 --> 00:18:43,013
+approximate algorithm. Which shows that
+there's no free lunch. The problem was
+
+177
+00:18:43,013 --> 00:18:49,051
+NP hard, it's not like I have an easy
+way of solving it. So given all these
+
+178
+00:18:49,051 --> 00:18:54,002
+problems with the belief propagation
+algorithm, what makes us think that it's
+
+179
+00:18:54,002 --> 00:18:59,091
+an effective algorithm to use? When the
+algorithm was. [inaudible] discovered in
+
+180
+00:18:59,091 --> 00:19:05,001
+the 1990s Murphy, Weiss, and Jordan, as
+well as others looked at its performance
+
+181
+00:19:05,001 --> 00:19:09,091
+in the context of real networks and
+specifically networks that have a lot of
+
+182
+00:19:09,091 --> 00:19:14,088
+loops, which is what causes [inaudible] to
+misbehave. And so here is an example
+
+183
+00:19:14,088 --> 00:19:20,023
+network. It's, it's called the pyramid
+network. It's a network that is analogous
+
+184
+00:19:20,023 --> 00:19:25,052
+to one that arises in image analysis. And
+what we, what they showed is that when you
+
+185
+00:19:25,052 --> 00:19:29,056
+compute on the one hand the exact
+marginals. On the X axis. And for
+
+186
+00:19:29,056 --> 00:19:34,021
+different marginals in the network. And on
+the Y axis, we see the marginals computed
+
+187
+00:19:34,021 --> 00:19:38,052
+by loopy belief propagation. We see
+that the marginals, by and large, sit
+
+188
+00:19:38,052 --> 00:19:42,083
+almost exactly on a straight line, with
+few exceptions. So you'll see that the
+
+189
+00:19:42,083 --> 00:19:47,021
+loopy belief propagation is very close to
+accurate on this network. Here's another
+
+190
+00:19:47,021 --> 00:19:52,061
+network, this is a simplified version of a
+medical diagnostic network and once again
+
+191
+00:19:52,061 --> 00:19:57,095
+you can see that the when it compared the
+correct marginal on the x axis to the
+
+192
+00:19:57,095 --> 00:20:02,071
+belief propagation marginals on y axis,
+the marginal fit almost exactly on
+
+193
+00:20:02,071 --> 00:20:07,066
+straight line which shows that again
+they're very close... The propagation is
+
+194
+00:20:07,066 --> 00:20:13,034
+very close to accuracy. So, to summarize,
+the belief propagation algorithm passes
+
+195
+00:20:13,034 --> 00:20:19,006
+messages over a graph of clusters that are
+connected to each other via sepsets. The
+
+196
+00:20:19,006 --> 00:20:24,078
+adjacent clusters pass information to each
+other in these messages transmitting
+
+197
+00:20:24,078 --> 00:20:30,030
+information only about the variables in
+the sepset which are the ones that they
+
+198
+00:20:30,030 --> 00:20:36,028
+have in common. The message that cluster-i
+sends to cluster-j, summarizes everything
+
+199
+00:20:36,028 --> 00:20:42,003
+that a i knows about the variables in the
+sepset, except for information that it
+
+200
+00:20:42,003 --> 00:20:47,063
+obtains from j, so that one avoid direct
+double counting of the same piece of
+
+201
+00:20:47,063 --> 00:20:53,036
+evidence where j gets his own information
+back again by i. We've seen that the
+
+202
+00:20:53,036 --> 00:20:59,089
+algorithm may not converge. And it can have
+this oscillatory behavior, And that the
+
+203
+00:20:59,089 --> 00:21:06,005
+resulting beliefs are pseudo-marginals, in
+that they are not necessarily the exact
+
+204
+00:21:06,005 --> 00:21:11,075
+marginals from a theoretical perspective.
+But nevertheless, as we've seen, the
+
+205
+00:21:11,075 --> 00:21:17,091
+algorithm actually performs quite well in
+a range of practical applications, which
+
+206
+00:21:17,091 --> 00:21:20,031
+is why it's quite commonly used.

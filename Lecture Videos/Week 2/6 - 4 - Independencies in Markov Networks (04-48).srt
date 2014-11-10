@@ -1,0 +1,228 @@
+
+1
+00:00:03,074 --> 00:00:06,029
+We've shown the connection between
+independences and the factorization of
+
+2
+00:00:06,029 --> 00:00:08,080
+the distribution in the context of
+bayesian networks. Now we're going to
+
+3
+00:00:08,080 --> 00:00:13,005
+show that, that same kind of connection
+holds also in the case of Markov
+
+4
+00:00:13,005 --> 00:00:20,036
+networks. So how are, so first of all we
+need to come up with a similar notion of
+
+5
+00:00:20,036 --> 00:00:25,094
+what kind of independencies are encoded
+by, by the structure of the graphical
+
+6
+00:00:25,094 --> 00:00:31,005
+model. So in this case we're going to have
+a notion of separation. Which is the
+
+7
+00:00:31,005 --> 00:00:35,005
+analogous notion to d-separation except
+that now there's no D for Directed it's
+
+8
+00:00:35,005 --> 00:00:39,015
+just a separation. And it actually is a
+much simpler notion, because there's not
+
+9
+00:00:39,015 --> 00:00:44,012
+multiple kinds of different flows of
+influence. You only have one type of edge,
+
+10
+00:00:44,012 --> 00:00:49,029
+the undirected edge, so it's very simple.
+And, so we have that X and Y are separated
+
+11
+00:00:49,029 --> 00:00:54,040
+in H given Z if there's no active trail in
+H and the notion of the active trail is
+
+12
+00:00:54,040 --> 00:01:11,075
+just, you know, if no node along the trail
+is observed. So, so let's look at some
+
+13
+00:01:11,075 --> 00:01:19,086
+example separation properties. So for
+example what does it take to separate A
+
+14
+00:01:19,086 --> 00:01:25,098
+from E? Well we can separate A from E in several different ways. So we have that A
+
+15
+00:01:25,098 --> 00:01:41,091
+and E are separated. Given for example, B
+and D Because B and D block both trails.
+
+16
+00:01:41,091 --> 00:01:54,084
+But also given just D, and also given B
+and C, because B and C Again block both
+
+17
+00:01:54,084 --> 00:02:04,031
+trails between A and E. So here's an
+example of separation properties. Now we
+
+18
+00:02:04,031 --> 00:02:09,012
+can go ahead and prove an almost identical
+theorem to the one that we proved in the
+
+19
+00:02:09,012 --> 00:02:14,044
+context of Bayesian networks. And it tells
+us that if we have a separation property,
+
+20
+00:02:14,044 --> 00:02:21,008
+X and Y are separated in H given Z. And we have a distribution P that factorizes over
+
+21
+00:02:21,008 --> 00:02:27,052
+H, then P satisfies The independence statement x is independent of y given z.
+
+22
+00:02:27,052 --> 00:02:32,065
+And so just as in Bayesian networks we can go ahead and define the independencies that
+
+23
+00:02:32,065 --> 00:02:36,083
+are induced by the graph H as the ones that are defined by the separation
+
+24
+00:02:36,083 --> 00:02:42,025
+property. And, just as in the context of
+Bayesian Networks, we can go ahead and
+
+25
+00:02:42,025 --> 00:02:49,007
+define this as a term, we can define the
+notion of an I-map. And say that, in, and
+
+26
+00:02:49,007 --> 00:02:53,001
+say that H is an I-map or independency map of P if P satisfies all of the
+
+27
+00:02:53,001 --> 00:02:59,030
+independencies that we can read off the
+graph structure of H. And the theorem that
+
+28
+00:02:59,030 --> 00:03:05,044
+we just proved, restated, says that if P
+factorizes over H then H is an I-map for P
+
+29
+00:03:05,044 --> 00:03:10,098
+because we have shown that if, P
+factorizes over H then it satisfies all of
+
+30
+00:03:10,098 --> 00:03:15,094
+the independencies that one can read off
+the graph H. Now in the context of
+
+31
+00:03:15,094 --> 00:03:20,096
+Bayesian Networks we also have the
+converse theorem holding. The converse
+
+32
+00:03:20,096 --> 00:03:25,008
+also sort of holds in the context of
+Markov Networks. The converse being that
+
+33
+00:03:25,008 --> 00:03:30,093
+independence, that if P satisfies the
+independence statements associated with the
+
+34
+00:03:30,093 --> 00:03:36,079
+graph then it factorizes over the graph.
+So, stated otherwise, if H is an I-map for
+
+35
+00:03:36,079 --> 00:03:44,022
+P, that is P satisfies I of H, then P
+factorizes over H. The difference here is that it
+
+36
+00:03:44,022 --> 00:03:49,021
+doesn't hold always, it only holds for a
+positive distribution P, which means the
+
+37
+00:03:49,021 --> 00:03:55,076
+distribution P, which is strictly greater
+than zero for all whose probability is
+
+38
+00:03:55,076 --> 00:03:59,088
+strictly greater than zero for all
+assignments X. That is if you have a
+
+39
+00:03:59,088 --> 00:04:04,068
+distribution that involves deterministic
+relationships this property no longer
+
+40
+00:04:04,068 --> 00:04:09,079
+holds. So you almost have the converse
+that you, you, we had in context of
+
+41
+00:04:09,079 --> 00:04:16,086
+Bayesian networks but it requires one
+additional and important assumption. So
+
+42
+00:04:16,086 --> 00:04:21,025
+once again we have two equivalent, almost
+equivalent, views of graph structure.
+
+43
+00:04:21,025 --> 00:04:30,040
+Factorization, in which H allows P to be
+represented. And, again the notion of an
+
+44
+00:04:30,040 --> 00:04:38,018
+I-map, which is that I can read from H
+independencies that hold in P. But once
+
+45
+00:04:38,018 --> 00:04:42,023
+again, if I tell you that a distribution P
+factorizes over a graph, we can read from
+
+46
+00:04:42,023 --> 00:04:46,050
+the graph any independencies that must, we
+can read from the graph a set of
+
+47
+00:04:46,050 --> 99:59:59,000
+independencies that must hold in P.

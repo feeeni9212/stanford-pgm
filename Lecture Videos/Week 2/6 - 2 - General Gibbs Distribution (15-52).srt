@@ -1,0 +1,705 @@
+
+1
+00:00:00,000 --> 00:00:05,010
+So we previously seen the notion of
+pairwise markov networks. But now
+
+2
+00:00:05,010 --> 00:00:09,063
+we're going to define a much general
+notion that is considerably more
+
+3
+00:00:09,063 --> 00:00:14,041
+expressive than the pairwise case.
+And that definition is called
+
+4
+00:00:14,041 --> 00:00:19,019
+the Gibbs distribution. So in oder to
+motivate the notion of a Gibbs
+
+5
+00:00:19,019 --> 00:00:25,007
+distribution, let's look at, the most
+expressive Markov network that we could
+
+6
+00:00:25,007 --> 00:00:31,003
+possibly define in the context of, pairwise
+ interactions. So here we have four
+
+7
+00:00:31,003 --> 00:00:36,076
+random variables, A, B, C, D. And I've
+introduced all of the possible, pairwise
+
+8
+00:00:36,076 --> 00:00:42,072
+edges, between them. And so the question
+is, that we'd like to ask ourselves, is,
+
+9
+00:00:42,072 --> 00:00:50,092
+is this good enough? So, is this fully
+expressive? Or, in other words, can it
+
+10
+00:00:50,092 --> 00:00:56,081
+represent any probability distribution
+over four random variables? So one way to,
+
+11
+00:00:57,003 --> 00:01:02,070
+convince ourselves of, of whether it can
+or can't, is to go and do the general
+
+12
+00:01:02,070 --> 00:01:08,007
+case, and just look at, a little bit of
+asymptotics. So, consider a fully
+
+13
+00:01:08,007 --> 00:01:13,096
+connected pairwise Markov network over N
+random variables. And let's assume that
+
+14
+00:01:13,096 --> 00:01:20,057
+each variable Xi has D values. How many
+parameters does the network have? And for
+
+15
+00:01:20,057 --> 00:01:26,030
+the moment, let's just focus on pairwise
+interactions. Sorry, just the pairwise,
+
+16
+00:01:26,051 --> 00:01:31,041
+potentials. Let's ignore the, the
+potentials associated with singles and
+
+17
+00:01:31,041 --> 00:01:36,087
+nodes. And also, let's do a little bit of
+analysis. If we have, N variables, how
+
+18
+00:01:36,087 --> 00:01:58,034
+many edges are there in the network? How
+many parameters for edge. Now, the total
+
+19
+00:01:58,034 --> 00:02:04,016
+number of parameters in a fully connected pairwise markov network is O(n^2d^2)
+
+20
+00:02:04,016 --> 00:02:11,018
+Great. Can we represent any
+probability distribution, using, O(n^2d^2) parameters
+
+21
+00:02:11,018 --> 00:02:16,054
+How many parameters are there, in a general,
+
+22
+00:02:16,054 --> 00:02:21,084
+probability distribution over N random
+variables, where each has D values? How
+
+23
+00:02:21,084 --> 00:02:34,099
+many free parameters do we have? Well,
+this is much, much bigger than that. Which
+
+24
+00:02:34,099 --> 00:02:40,043
+means that if we just even think about it
+intuitively without getting into formal
+
+25
+00:02:40,043 --> 00:02:45,087
+arguments. Pairwise markov network is not sufficiently
+expressive to have all probability
+
+26
+00:02:45,087 --> 00:02:51,012
+distributions. How do we increase the, the
+coverage of this undirected
+
+27
+00:02:51,012 --> 00:02:58,027
+representation. We need to move away from
+pairwise edges. So in order to parametrize what
+
+28
+00:02:58,027 --> 00:03:03,075
+we call a general Gibb's Distribution,
+we're going to parametrize it using
+
+29
+00:03:03,075 --> 00:03:09,019
+general factors Each of which has a scope
+that might contain more than two
+
+30
+00:03:09,019 --> 00:03:13,095
+variables. So whereas, before, we just had
+factors over pairs, now we have
+
+31
+00:03:13,095 --> 00:03:18,084
+factors over triplets, quadruplets, and
+anything else. Can we now represent every
+
+32
+00:03:18,084 --> 00:03:23,049
+probability distribution? Well, sure,
+because we can have a factor over all N
+
+33
+00:03:23,049 --> 00:03:28,069
+variables together. And by, you know, and
+that immediately defines, allows to define
+
+34
+00:03:28,069 --> 00:03:33,046
+the general probability distribution. In
+fact, we even said that a probability
+
+35
+00:03:33,046 --> 00:03:39,039
+distribution is a factor whose scope is
+the exponential of X of n. So in order to
+
+36
+00:03:39,039 --> 00:03:44,068
+define those general framework more,
+formally it gives distribution that is
+
+37
+00:03:44,068 --> 00:03:54,040
+parameterized by a set of factors phi.
+And we're going to define this
+
+38
+00:03:54,040 --> 00:03:59,058
+distribution in two steps, three steps
+even. The first thing we're going to do,
+
+39
+00:03:59,058 --> 00:04:04,075
+just like in the case of pairwise
+Markov networks, we're going to pick
+
+40
+00:04:04,075 --> 00:04:10,000
+all of the factors, so here we have K
+factors, and we're going to multiply them.
+
+41
+00:04:10,000 --> 00:04:15,024
+And this is just the familiar operation of
+factor product, which we've seen in
+
+42
+00:04:15,024 --> 00:04:20,047
+multiple contexts before. Now this is
+perfectly fine but the problem is that
+
+43
+00:04:20,047 --> 00:04:26,003
+this is not necessarily a probability
+distribution, in fact it almost never will
+
+44
+00:04:26,003 --> 00:04:32,008
+be a probability distribution, because we
+have put no constraints on the factors and
+
+45
+00:04:32,008 --> 00:04:38,006
+so, and so that's why we have this tilda
+here that highlights the fact that this is
+
+46
+00:04:38,006 --> 00:04:45,011
+what we called previously an unnormalized
+measure. And so if we want to turn the
+
+47
+00:04:45,011 --> 00:04:50,012
+unnormalized measure into a probability
+distribution, just like in the Pair Wise
+
+48
+00:04:50,012 --> 00:04:55,000
+case, we're going to define what's called
+a Partition Function. Which is just a
+
+49
+00:04:55,000 --> 00:05:02,026
+normalizing constant. Which we get by
+summing up, over all possible assignments,
+
+50
+00:05:02,026 --> 00:05:07,023
+the variable X1 to Xn, that
+partition function can then be used to
+
+51
+00:05:07,023 --> 00:05:11,076
+divide all of the entries in the
+un-normalized measure to give us... Oops,
+
+52
+00:05:11,076 --> 00:05:16,049
+something that shouldn't have tilda
+on it. But rather is a probability
+
+53
+00:05:16,049 --> 00:05:23,008
+distribution P sub phi of X1 up to Xn.
+Now that was just the definition of the
+
+54
+00:05:23,008 --> 00:05:29,001
+distribution in terms of the set of the
+parameters where's the markov network in
+
+55
+00:05:29,001 --> 00:05:34,066
+all of these. So, let's think about what
+is the markov network that we would like
+
+56
+00:05:34,066 --> 00:05:40,031
+to have for a Gibbs distrubution of the
+certain set of factors, phi. So, in order
+
+57
+00:05:40,031 --> 00:05:45,081
+to get the intuition let's look at a
+distribution that involves two factors.
+
+58
+00:05:45,081 --> 00:05:51,093
+phi<u>1 whose scope is A, B and C and
+phi<u>2 whose scope is B, C and D. And,</u></u>
+
+59
+00:05:51,093 --> 00:05:58,064
+so I'm gonna use a different color for
+phi<u>2. So, what, edges should the</u>
+
+60
+00:05:58,064 --> 00:06:05,093
+markov network have when we wanted to
+encode the fact that a, b and c all get to
+
+61
+00:06:05,093 --> 00:06:12,063
+interact with each other together. And
+intuitively, what we then like to have, is
+
+62
+00:06:12,063 --> 00:06:19,068
+in the network that has an edge between a and b
+and edge between b and c and an edge between a
+
+63
+00:06:19,068 --> 00:06:26,035
+and c. Because that captures the fact that
+there is direct probabilistic relationships
+
+64
+00:06:26,035 --> 00:06:41,039
+between all of them. What about the other
+one. Here we have, between B and C
+
+65
+00:06:42,012 --> 00:06:54,074
+C and D and, B and D. And this is the
+induced markov network in this
+
+66
+00:06:54,074 --> 00:07:05,021
+particular case. More generally, if we
+have a set of factors phi, each of which
+
+67
+00:07:05,021 --> 00:07:10,083
+is, where each phi<u>ihas a
+particular scope Di. The induced</u>
+
+68
+00:07:10,083 --> 00:07:18,004
+markov network, which we're going to
+call H of phi, has an energy between a
+
+69
+00:07:18,004 --> 00:07:32,032
+pair of variables Xi and Xj whenever there
+exists. a factor phi<u>i., inside. Such that</u>
+
+70
+00:07:32,032 --> 00:07:41,083
+Oops, phi<u>m belongs to phi, such that Xi, Xj are both
+in the scope of the factor phi</u>
+
+71
+00:07:41,083 --> 00:07:51,005
+That is two variable are connected to the
+other, they appear together in the same
+
+72
+00:07:51,005 --> 00:08:02,091
+scope. Now we can go ahead and turn this
+around. And define the notion, just like
+
+73
+00:08:02,091 --> 00:08:10,007
+we have for Bayesian network, of when a
+probability distribution P factorizes
+
+74
+00:08:10,007 --> 00:08:17,032
+over the graph H. That is, at what point
+can I can I represent p over a particular
+
+75
+00:08:17,032 --> 00:08:23,078
+graph H. And this basically asks the
+question of, is there a set of parameters
+
+76
+00:08:23,078 --> 00:08:29,019
+phi, that are going to let me represent the
+probability P. So, this is just a
+
+77
+00:08:29,019 --> 00:08:34,067
+straighforward going through the
+defintition that we had before. Does there
+
+78
+00:08:34,067 --> 00:08:40,023
+exist a phi, such that P is equal to P of
+phi, where P of phi is defined as I, we
+
+79
+00:08:40,023 --> 00:09:03,029
+defined previously. As a normalized
+product of factors. And such that H is the
+
+80
+00:09:03,029 --> 00:09:09,077
+induced graph for the set of factors phi.
+So P factorize over H, if there exists a
+
+81
+00:09:09,077 --> 00:09:15,092
+set of factors phi. Such that I can
+represent P using those factors, and H is
+
+82
+00:09:15,092 --> 00:09:21,084
+the induced graph for that set of factors.
+So that's when I can encode the
+
+83
+00:09:21,084 --> 00:09:30,060
+distribution P over graph H. So, now let's
+ask ourselves the question. If you give me
+
+84
+00:09:30,060 --> 00:09:36,038
+a graph H, can I tell you what the
+factorization of distribution p over that
+
+85
+00:09:36,038 --> 00:09:42,047
+graph would be? That is, which, which of
+the representation of the distribution
+
+86
+00:09:42,047 --> 00:09:49,042
+that I had in mind when I drew this graph.
+So, here we have this graph, over A, B, C,
+
+87
+00:09:49,042 --> 00:09:56,093
+and D. And, which gives distribution would
+induce the graph H? Well, let's look at'em
+
+88
+00:09:56,093 --> 00:10:04,035
+one at a, one at a time. So here we have
+phi one of, ABD, and phi two of BCD. And we
+
+89
+00:10:04,035 --> 00:10:10,080
+see that there's an edge. Indeed between
+A. And B., B. And D. And A and D, and
+
+90
+00:10:10,080 --> 00:10:18,051
+conversely between B. And C., B. And D.,
+and C. And D. So, the answer here is yes.
+
+91
+00:10:18,051 --> 00:10:26,041
+This distribution would induce, this, this
+set of factors would induce this graph.
+
+92
+00:10:26,072 --> 00:10:36,054
+Okay, what about, the next one.
+this, and ask yourself the same
+
+93
+00:10:36,054 --> 00:10:44,013
+question. Well, if I wanted AB, would
+induce this edge  BC, yup. CD, yup,
+
+94
+00:10:44,013 --> 00:10:51,050
+AD, and BD. Well, huh, here's another
+distribution with a different set of
+
+95
+00:10:51,050 --> 00:10:59,078
+factors that induces the exact same graph.
+The third one, is the same
+
+96
+00:10:59,078 --> 00:11:06,071
+principle, we have, the edges ABD. ADB, and
+AB, and, then we have, BC and CD. So, here
+
+97
+00:11:06,071 --> 00:11:15,083
+is another distribution, that induces
+the exact same graph. What that tells us
+
+98
+00:11:15,083 --> 00:11:28,056
+is that we cannot, and this is important,
+cannot read. The factorization. From a
+
+99
+00:11:28,056 --> 00:11:38,024
+graph. That is we have different
+factorizations that are quite different
+
+100
+00:11:38,024 --> 00:11:42,079
+than their expressive power. All of which
+induce the exact same graph. And we've
+
+101
+00:11:42,079 --> 00:11:47,034
+already seen an example of that when we
+had the fully connected pairwise markov network
+
+102
+00:11:47,034 --> 00:11:52,012
+We had one parameterization that
+had all N squared D squared parameters. We
+
+103
+00:11:52,012 --> 00:11:56,079
+had another parameterization that had a
+fully, full factor over all n variables.
+
+104
+00:11:56,079 --> 00:12:00,060
+So it had d to the n parameters. And
+these are two very different
+
+105
+00:12:00,060 --> 00:12:04,080
+representations, with very different
+expressive power that never the less
+
+106
+00:12:04,080 --> 00:12:10,032
+induce the exact same graph. Which brings
+us to the question of why then is the
+
+107
+00:12:10,032 --> 00:12:15,018
+graph the same. What does the graph really
+tell us, given that given that it's not
+
+108
+00:12:15,018 --> 00:12:19,080
+telling us the structure of the
+factorization? So, here is the, here is
+
+109
+00:12:19,080 --> 00:12:24,043
+this going back to the example on the
+previous slide. We have these two
+
+110
+00:12:24,043 --> 00:12:29,054
+factorization, one of them used triplets
+factors and the second one uses pairwise
+
+111
+00:12:29,054 --> 00:12:36,016
+factors. And let's think about, what is
+the flow of influence in these factors? So
+
+112
+00:12:36,016 --> 00:12:42,070
+when can one variable influence another?
+And we can see, when we think about this
+
+113
+00:12:42,070 --> 00:12:49,040
+intuitively, when can B influence D? Is
+this, is this different in the two graphs,
+
+114
+00:12:49,040 --> 00:12:55,086
+in the two distributions? And the answer
+is, well not really. I mean, once we have
+
+115
+00:12:55,086 --> 00:13:02,024
+a factor. Here in this case it's phi<u>1. In this case it's phi<u>5. that ties B and D directly</u></u>
+
+116
+00:13:02,024 --> 00:13:09,049
+Then the fact is that B can influence D. What about, can, B, can
+
+117
+00:13:09,049 --> 00:13:17,025
+A influence C? Well, so let's, so can A
+influence C? A can influence C via D, by
+
+118
+00:13:17,025 --> 00:13:24,019
+going through, in this case, the A, B, D
+factor. And then, subsequenly, u-,
+
+119
+00:13:24,019 --> 00:13:32,045
+utilizing the dependencies within the BCD
+factor. And in this case, it can use the
+
+120
+00:13:32,045 --> 00:13:37,080
+AB factor. And then the CD factor. And so
+the point is, although the
+
+121
+00:13:37,080 --> 00:13:43,059
+parameterization of the two distributions
+are different, the path in the graph, the
+
+122
+00:13:43,059 --> 00:13:48,095
+trails in the graph through which
+influence can flow, is the same regardless
+
+123
+00:13:48,095 --> 00:13:54,045
+of this finer grain structure of the
+factorization. Which is why the graphs in
+
+124
+00:13:54,045 --> 00:14:00,079
+those two cases, are the same. So, let's
+formalize this, definition, we're going to
+
+125
+00:14:00,079 --> 00:14:06,039
+define a notion, of an active trail, in,
+in a markov network, and, this is
+
+126
+00:14:06,039 --> 00:14:11,093
+actually a very simple definition, it
+much simpler than the analysis definition
+
+127
+00:14:11,093 --> 00:14:16,050
+in the context in Bayesian network, we have
+given a trail, going from
+
+128
+00:14:16,050 --> 00:14:21,093
+X1 up to Xn, is active,
+given. A a set of observed variables
+
+129
+00:14:21,093 --> 00:14:27,064
+Z, if basically, no Xi along the
+trail is in Z, because an active
+
+130
+00:14:27,064 --> 00:14:33,035
+trail, has to only flow through variables
+that are unobserved. Once we observe a
+
+131
+00:14:33,035 --> 00:14:38,098
+variable along the trail, influence kind
+of stops, because that variable is now
+
+132
+00:14:38,098 --> 00:14:44,018
+set, so, you can't really influence it, and if you can't influence
+
+133
+00:14:44,018 --> 00:14:49,082
+it, you can't influence anything,
+subsequently along that along that path.
+
+134
+00:14:49,082 --> 00:15:02,080
+For example, the trail from B to D is
+active. So this is active. But not. If A
+
+135
+00:15:02,080 --> 00:15:10,063
+is observed. So once I observe A., I can
+no longer influence, B. Can no longer
+
+136
+00:15:10,063 --> 00:15:17,060
+influence D., by A. So, to summarize we
+define the notion of  Gibbs distribution
+
+137
+00:15:17,082 --> 00:15:23,092
+which represents the distribution P as a
+normalized product factors. We connected
+
+138
+00:15:23,092 --> 00:15:29,074
+that to a graph structure which is the
+induced markov network, which connects
+
+139
+00:15:29,074 --> 00:15:35,070
+every pair of nodes. That are in the same
+factor. And the motivation, and although
+
+140
+00:15:35,070 --> 00:15:41,064
+we noted that the Markov network structure
+doesn't fully specify the factorization of
+
+141
+00:15:41,064 --> 00:15:47,016
+P. The justfication for why the graphs for
+different factorizations are the same.
+
+142
+00:15:47,016 --> 00:15:52,013
+Because the active trails in a graph
+depend only on the graph structure.

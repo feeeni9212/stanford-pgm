@@ -1,0 +1,569 @@
+
+1
+00:00:00,000 --> 00:00:04,572
+We previously defined '''em or expectation
+axionization algorithm, which as it
+
+2
+00:00:04,572 --> 00:00:09,505
+happens is one of the algorithms that's
+most commonly used in practice, because of
+
+3
+00:00:09,505 --> 00:00:13,596
+its simplicity, and because its so
+effective in dealing with missing
+
+4
+00:00:13,596 --> 00:00:18,108
+variables, missing values. But we didn't
+give much justification for why the
+
+5
+00:00:18,108 --> 00:00:23,041
+algorithm works. So what we are going to
+do now is were are going to give at least
+
+6
+00:00:23,041 --> 00:00:27,974
+a little bit of theoretical intuition as
+to how the formulas that we are using in
+
+7
+00:00:27,974 --> 00:00:34,393
+the ML algorithm are arrived at. So let?s
+start with providing a little more of a
+
+8
+00:00:34,393 --> 00:00:40,913
+formal intuition. So in some sense, '''em
+is also like gradient assent, a local
+
+9
+00:00:40,913 --> 00:00:47,956
+gradient procedure. But unlike gradient
+ascent it uses a less local approximation
+
+10
+00:00:47,956 --> 00:00:53,955
+to the likelihood function. So
+specifically, if this is our likelihood
+
+11
+00:00:53,955 --> 00:01:01,235
+function, as we had before, or rather the
+log likelihood really in practice. What we
+
+12
+00:01:01,235 --> 00:01:06,792
+are going do is we are going to
+approximate the, we are going to take the
+
+13
+00:01:06,792 --> 00:01:12,569
+current point that we are at because
+remember this is a local iterative search.
+
+14
+00:01:12,569 --> 00:01:18,785
+We are going to take that point and we are
+going to approximate the function at that
+
+15
+00:01:18,785 --> 00:01:26,555
+point using this blue line Over here. Now
+gradient descent approximated the function
+
+16
+00:01:26,555 --> 00:01:32,563
+at this point using straight-line
+approximation. '''em of approximation at
+
+17
+00:01:32,563 --> 00:01:39,238
+this point using this nice curvy function,
+as it turns out is, as we'll see, a log
+
+18
+00:01:39,238 --> 00:01:48,260
+likelihood itself. Is in fact the log
+likelihood with complete data. And having
+
+19
+00:01:48,260 --> 00:01:56,037
+constructed this approximation, it now
+jumps. To the maximum of this function.
+
+20
+00:01:56,037 --> 00:02:02,101
+Which because this is a log like with the
+complete data, can be maximized in closed
+
+21
+00:02:02,101 --> 00:02:08,092
+form using maximum likely destination. So
+this is the intuition behind the M. Let's
+
+22
+00:02:08,092 --> 00:02:13,760
+see, if we can formalize that a little
+bit. For some notation, B is the observed
+
+23
+00:02:13,760 --> 00:02:18,522
+data, in a given instance, and we are
+gonna do one instance for the moment. H is
+
+24
+00:02:18,522 --> 00:02:23,223
+the hidden variable in that instance, and
+we are going to assume for some how
+
+25
+00:02:23,223 --> 00:02:28,106
+somewhere we have a distribution over the
+values of the hidden variables, within
+
+26
+00:02:28,106 --> 00:02:33,051
+that instance. So there's no distribution
+over the values, I mean we are not gonna
+
+27
+00:02:33,051 --> 00:02:38,057
+impose distribution over DV is observed,
+but for the hidden variables we have some
+
+28
+00:02:38,057 --> 00:02:43,459
+distribution over the values that they
+might take. So now let's remind ourselves
+
+29
+00:02:43,459 --> 00:02:49,567
+what the log likelihood function looks
+like when we have complete data. So the
+
+30
+00:02:49,567 --> 00:02:56,223
+log likelihood function for the parameters
+theta give a now paired v comma h. Where h
+
+31
+00:02:56,223 --> 00:03:03,997
+is an assignment to big H. The hidden
+variables. Is simply by, by the definition
+
+32
+00:03:03,997 --> 00:03:11,702
+of the log likelihood, and, the
+decomposition of the likelihood, over the
+
+33
+00:03:11,702 --> 00:03:19,696
+chain rule for Bayesian networks. It is a
+sum over the variables in the network. The
+
+34
+00:03:19,696 --> 00:03:27,980
+sum over all possible, assignments to node
+and its parents of an indicator function.
+
+35
+00:03:27,980 --> 00:03:39,434
+That says in this particular A pair, D, H.
+Does, do the variables XI and EY take on
+
+36
+00:03:39,434 --> 00:03:46,796
+this particular values little XI and
+little EY. And if so, we're going to
+
+37
+00:03:46,796 --> 00:03:54,022
+multiply in the log of the parameter.
+Corresponding to that entry in the CPD.
+
+38
+00:03:54,022 --> 00:03:59,745
+Now this is a really complicated way you
+might think to write what is effectively
+
+39
+00:03:59,745 --> 00:04:05,120
+the sum of the log of theta of a node
+given its parents in these [inaudible].
+
+40
+00:04:05,120 --> 00:04:10,285
+But there is a reason we are going to
+write it this way, and we, which will
+
+41
+00:04:10,285 --> 00:04:15,300
+become clear in a moment. So, now, let's
+imagine that what we have is the
+
+42
+00:04:15,300 --> 00:04:20,988
+distribution over q, there's [inaudible] q
+over h. And, now, we're going to look at
+
+43
+00:04:20,988 --> 00:04:26,605
+the expectation of this [inaudible]
+function relative to the distribution over
+
+44
+00:04:26,605 --> 00:04:32,364
+h. So now, rather than h being given we
+have a distribution over h and we're going
+
+45
+00:04:32,364 --> 00:04:38,336
+to look at the average or expectation of
+the [inaudible] likelihood relative to the
+
+46
+00:04:38,336 --> 00:04:43,943
+distribution, q sub h. Now, importantly,
+because of the linearity of expectation,
+
+47
+00:04:43,943 --> 00:04:49,966
+that expectation is going to push its way
+past the first summation, the sum over I.
+
+48
+00:04:49,966 --> 00:04:55,916
+Past the second summation, which is the
+sum over assignments little xy and little
+
+49
+00:04:55,916 --> 00:05:01,352
+ey. And we're gonna end up with the
+following equation, which, meas, which is
+
+50
+00:05:01,352 --> 00:05:06,927
+the expectation relative to q of this
+indicator function. What we had on the
+
+51
+00:05:06,927 --> 00:05:12,027
+previous line. And notice that we can also
+take log of theta x I've given you, I, out
+
+52
+00:05:12,027 --> 00:05:17,127
+of the expectation because that's fixed
+relative, relative to h, which is exactly
+
+53
+00:05:17,127 --> 00:06:17,196
+why we wrote the formula in this
+complicated form. [sound] So the one final
+
+54
+00:06:17,196 --> 00:06:22,630
+step of this derivation is now to simplify
+this expectation over here. The
+
+55
+00:06:22,630 --> 00:06:27,709
+expectation relative to Q. And this
+expectation when you are taking an
+
+56
+00:06:27,709 --> 00:06:33,329
+expectation of an indicator function,
+which is simply an event. In this case, it
+
+57
+00:06:33,329 --> 00:06:39,165
+is the indicator function of the event Xi
+equals xi, and UI equals little UI. That
+
+58
+00:06:39,165 --> 00:06:45,000
+expectation of an indicator function is
+simply the probability. So this turns out,
+
+59
+00:06:45,000 --> 00:06:50,620
+this entire expectation turns out to be
+equal to the probability of little xi,
+
+60
+00:06:50,620 --> 00:06:55,942
+little UI under the distribution queue.
+And so we have now converted, this
+
+61
+00:06:55,942 --> 00:07:01,633
+expected log likely hood into this
+summation that utilizes, our probabilities
+
+62
+00:07:01,633 --> 00:07:08,602
+relative to the distribution queue. So,
+working forward from this formula, now
+
+63
+00:07:08,602 --> 00:07:16,113
+lets consider the case where have multiple
+data instances. So, now we have a set of
+
+64
+00:07:16,113 --> 00:07:21,158
+distributions one for each data instance
+and, that also depends on the current
+
+65
+00:07:21,158 --> 00:07:25,859
+parameter setting Theda T. So, now, we're
+in the midst of an '''em iteration. And,
+
+66
+00:07:25,859 --> 00:07:30,977
+we're going to use the current parameter
+setting Theda T to define the probability
+
+67
+00:07:30,977 --> 00:07:35,559
+distribution over the hidden variables.
+And, that's going to be defined as the
+
+68
+00:07:35,559 --> 00:07:40,260
+probability of the hidden variables given
+the observed variables, and given the
+
+69
+00:07:40,260 --> 00:07:45,983
+current setting of the parameters, Theda
+T. We now look at the sum of these
+
+70
+00:07:45,983 --> 00:07:53,200
+expected log likelihoods, so the sum of,
+over all data instances, little M equals
+
+71
+00:07:53,200 --> 00:08:00,782
+one to big M, of the expectation of the
+hidden variables relative to, relative to
+
+72
+00:08:00,782 --> 00:08:10,383
+this distribution that we just defined, Q
+T sub M, of this log likelihood. We can
+
+73
+00:08:10,383 --> 00:08:19,194
+now plug in the equation that we have up
+here, but substituting for P the def,
+
+74
+00:08:19,194 --> 00:08:27,176
+definition of Q for, for what we see here
+the P of H given. P of H given D and
+
+75
+00:08:27,176 --> 00:08:33,440
+theta, and that gives us this equation
+over here, the sum over I, sum over little
+
+76
+00:08:33,440 --> 00:08:39,070
+xi comma little UI, all possible
+assignments to the family, sum over the
+
+77
+00:08:39,070 --> 00:08:45,335
+data instances. The probability of xi
+comma UI given the data instances, and the
+
+78
+00:08:45,335 --> 00:08:51,834
+current parameters, times the log of the
+current parameter value. Taking this one
+
+79
+00:08:51,834 --> 00:08:59,580
+step further specifically looking at this
+summation over M as a separate entity you
+
+80
+00:08:59,580 --> 00:09:08,540
+can see that this is really the expected
+sufficient statistic That we define in the
+
+81
+00:09:08,540 --> 00:09:15,768
+context of the [inaudible] algorithm. So
+we now have that are log, that this
+
+82
+00:09:15,768 --> 00:09:23,863
+expected log likelihood function is the
+sum over I, the sum over little xi UI, the
+
+83
+00:09:23,863 --> 00:09:31,284
+expected decision statistics for xi, UI,
+times the log parameter value. And the
+
+84
+00:09:31,284 --> 00:09:39,744
+important point here is that this is just
+like a log likelihood function. For
+
+85
+00:09:39,744 --> 00:09:50,015
+complete data. Using the expected
+physician statistics. So the function that
+
+86
+00:09:50,015 --> 00:09:55,485
+we're optimizing is the suspected log
+likelihood and just a simple mathematical
+
+87
+00:09:55,485 --> 00:10:00,749
+derivation tells us that is the same as
+optimizing a log likelihood function,
+
+88
+00:10:00,749 --> 00:10:05,740
+using these expected sufficient
+statistics. And we know exactly what that
+
+89
+00:10:05,740 --> 00:10:11,483
+optimum looks like because it's the same
+as the standard maximum likely destination
+
+90
+00:10:11,483 --> 00:10:17,695
+problem. And so, going back to the diagram
+that we started out with, the functions,
+
+91
+00:10:17,695 --> 00:10:24,946
+blue function that we're using here is an
+approximation is this expected. Long
+
+92
+00:10:24,946 --> 00:10:34,651
+likelihood. And this optimization that
+we're doing here basically uses the
+
+93
+00:10:34,651 --> 00:10:39,857
+expected sufficient statistics to do
+maximum accurate estimation, which is
+
+94
+00:10:39,857 --> 00:10:45,133
+exactly the M step. So the E step
+constructs this function by computing the
+
+95
+00:10:45,133 --> 00:10:50,709
+expected sufficient statistics, and the M
+step. Gives us this maximum for which we
+
+96
+00:10:50,709 --> 00:10:56,190
+now proceed to the next iteration. Using
+this kind of, intuition we can actually
+
+97
+00:10:56,190 --> 00:11:01,671
+prove two very important results regarding
+the expectation maximization algorithm.
+
+98
+00:11:01,671 --> 00:11:07,018
+The first is that the log, is that the
+likelihood function, or the log likelihood
+
+99
+00:11:07,018 --> 00:11:12,365
+function, improves at every iteration.
+That is, the log likelihood at, iteration,
+
+100
+00:11:12,365 --> 00:11:18,046
+say theta T + one is greater than or equal
+to the log likelihood at iteration theta T
+
+101
+00:11:18,046 --> 00:11:23,644
+or commensurately for the likelihood. The
+second result that we can prove is that at
+
+102
+00:11:23,644 --> 00:11:28,631
+convergence, that is at the point where
+70+1 is not change relative to data T,
+
+103
+00:11:28,631 --> 00:11:33,817
+then we can be guaranteed that data T is a
+stationary point of the likelihood
+
+104
+00:11:33,817 --> 00:11:39,269
+function. What does the stationary point
+means? It means a point where the gradient
+
+105
+00:11:39,269 --> 00:11:47,494
+point is zero. Which in principle. Can be
+either. A local minimum, a local maximum
+
+106
+00:11:47,494 --> 00:11:52,473
+or saddle point. But it's very difficult
+when you're doing hill climbing to
+
+107
+00:11:52,473 --> 00:11:57,983
+actually land exactly at a local minimum
+because that's the only time that we will
+
+108
+00:11:58,182 --> 00:12:03,467
+that we will be converged to local minimum
+is if we step up '''em So here's the
+
+109
+00:12:03,467 --> 00:12:08,310
+function. It's very difficult to imagine
+having an '''em step that lands us exactly
+
+110
+00:12:08,310 --> 00:12:13,213
+at this local minimum because that's the
+only point at which we won't continue to
+
+111
+00:12:13,213 --> 00:12:18,176
+make progress. And so the fact though when
+we're doing this kind of climbing and we
+
+112
+00:12:18,176 --> 00:12:22,839
+achieve convergence it means we have
+achieved a local maximum of a likelihood
+
+113
+00:12:22,839 --> 00:12:27,563
+function. Which is the same guarantee on
+satisfying as it might be, that we have
+
+114
+00:12:27,563 --> 00:12:28,580
+gradient descent.

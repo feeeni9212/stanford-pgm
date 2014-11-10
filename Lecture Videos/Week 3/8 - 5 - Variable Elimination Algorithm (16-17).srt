@@ -1,0 +1,758 @@
+
+1
+00:00:00,000 --> 00:00:04,034
+We've already said that there is many
+different algorithms for inferencing
+
+2
+00:00:04,034 --> 00:00:09,004
+graphical models. But the simplest and
+most fundamental is an algorithm typically
+
+3
+00:00:09,004 --> 00:00:13,010
+known as variable elimination. Let's
+consider the variable elimination
+
+4
+00:00:13,010 --> 00:00:17,085
+algorithm in the context of the simple
+example of a graphical model structured as
+
+5
+00:00:17,085 --> 00:00:22,060
+a chain. Here we have we're interested,
+maybe, in computing the distribution over
+
+6
+00:00:22,060 --> 00:00:26,078
+variable E. So we're interested in P of E.
+And as we've already said, that
+
+7
+00:00:26,078 --> 00:00:31,012
+probability is proportional to the
+unnormalized measure, P tilde over
+
+8
+00:00:31,012 --> 00:00:36,021
+A, B, C, D, and E, summing up. All of the
+variables except for E. So now let's see
+
+9
+00:00:36,021 --> 00:00:42,000
+how we can do this more efficiently than
+simply constructing the joint distribution
+
+10
+00:00:42,000 --> 00:00:47,004
+and then summing things out. So, the first
+thing we do is we write up this
+
+11
+00:00:47,046 --> 00:00:52,098
+unnormalized measure as a product of the
+constituent factors. And for the moment,
+
+12
+00:00:52,098 --> 00:00:59,005
+we're going to assume that we only have
+pairwise factors for the edges in this graph. So,
+
+13
+00:00:59,005 --> 00:01:04,050
+we have a factor for AB, a factor for BC,
+CD, and DE. So those are the factors phi 1
+
+14
+00:01:04,050 --> 00:01:09,069
+up to phi 4. Now what is the first
+observation that we have when we see the
+
+15
+00:01:09,069 --> 00:01:15,032
+summation over A, B, C, and D of a product
+of factors? Well, we've already done this
+
+16
+00:01:15,032 --> 00:01:20,075
+exercise previously, when we were doing
+some proofs related to graphical models.
+
+17
+00:01:20,075 --> 00:01:26,011
+That, if you have a factor that doesn't
+mention a particular variable in it's
+
+18
+00:01:26,011 --> 00:01:31,041
+scope, we can move it out of the scope of
+the summation. So specifically, phi 2
+
+19
+00:01:31,041 --> 00:01:36,098
+of BC can be moved out of the summation
+over A, as can phi 3 of CD, and phi 4
+
+20
+00:01:36,098 --> 00:01:42,030
+of DE. Which leaves us only with the
+summation over A, of phi 1 AB. So that
+
+21
+00:01:42,030 --> 00:01:49,040
+gives us the expression over here. Now
+this is. Now this is a summation over a
+
+22
+00:01:49,040 --> 00:01:55,089
+pair wise factor, and the result of this
+is a factor over a single variable B,
+
+23
+00:01:55,089 --> 00:02:03,064
+which we're going to call tau 1 of B. So we end
+up with an expression that looks like this.
+
+24
+00:02:03,095 --> 00:02:09,006
+So now let's continue this expression,
+developing this expression further.
+
+25
+00:02:09,027 --> 00:02:14,071
+Knowing that we now have an expression
+that doesn't involve A only the variables
+
+26
+00:02:14,071 --> 00:02:19,096
+B, C, D and E so that effectively we have
+eliminated E from the graph A we have
+
+27
+00:02:19,096 --> 00:02:26,008
+eliminated A from the graphical model. So
+let's go back to this expression. We now
+
+28
+00:02:26,008 --> 00:02:33,014
+have this product of four factors and once
+again we can look at what factors involve
+
+29
+00:02:33,014 --> 00:02:39,078
+the variable B and which ones don't. And
+the ones that don't can be moved out of
+
+30
+00:02:39,078 --> 00:02:46,042
+the summation, just as before, giving us
+this. For now we have an expression which
+
+31
+00:02:46,042 --> 00:02:53,015
+is a product of these two factors, summed
+out over B. And this is going to give us
+
+32
+00:02:53,015 --> 00:02:58,096
+an expression tau 2 whose scope is C. And so
+we now have an expression that does not
+
+33
+00:02:58,096 --> 00:03:04,014
+involve the variable B, and so now we've
+eliminated B from this graphical model.
+
+34
+00:03:04,014 --> 00:03:09,071
+And we can similarly continue to eliminate
+C and D so that ultimately we end up with
+
+35
+00:03:09,071 --> 00:03:14,076
+an expression that involves only the
+variable E. And that expression is going
+
+36
+00:03:14,076 --> 00:03:20,068
+to be proportional to the probably of the,
+to the marginal probability of E. Now is
+
+37
+00:03:20,068 --> 00:03:25,045
+through this algorithm in the context of
+some of more complicated example which is,
+
+38
+00:03:25,045 --> 00:03:30,011
+our enhanced student network that we played
+around with before. So lets imagine that
+
+39
+00:03:30,011 --> 00:03:34,083
+our goal is to compute the probability of
+the variable J, this one. And in order to
+
+40
+00:03:34,083 --> 00:03:39,055
+do that we are going to have to eliminate from
+the joint distribution all of the other
+
+41
+00:03:39,055 --> 00:03:44,079
+variable except for J. So this is our, our
+expression. And note that we have this
+
+42
+00:03:44,079 --> 00:03:50,008
+product of factors I've taken already in
+this expression the factors that we're,
+
+43
+00:03:50,008 --> 00:03:55,038
+the CPDs and turned them into factors so
+that we can have a consistent notation.
+
+44
+00:03:55,038 --> 00:04:00,094
+And now we need to eliminate every one of
+the variables except for J. So we're going
+
+45
+00:04:00,094 --> 00:04:08,015
+to start with eliminating the variable C
+first. And, and so once again we're going
+
+46
+00:04:08,015 --> 00:04:15,054
+to take the summation over C and we're
+going to push it in, leaving in the
+
+47
+00:04:15,054 --> 00:04:23,076
+summation only the factors that involve
+C. And those are phi D and phi C. Multiplying
+
+48
+00:04:23,076 --> 00:04:31,010
+them together and eliminating C is going
+to give us a factor which we are going to
+
+49
+00:04:31,010 --> 00:04:38,037
+call tau 1 whose scope is D. Mm-hm. And by
+putting tau 1 into this expression and
+
+50
+00:04:38,037 --> 00:04:43,082
+removing the ones that we've just
+multiplied together, we end up with this
+
+51
+00:04:43,082 --> 00:04:56,053
+expression. Over here. Having eliminated
+C, we now go ahead and eliminate D. So,
+
+52
+00:04:56,053 --> 00:05:02,077
+here we have the variable D, and which
+factor is involved D, well, tau 1 of D
+
+53
+00:05:02,077 --> 00:05:08,094
+and phi G of G, I, and D. And, so, everything
+else is taken out of the summation and we
+
+54
+00:05:08,094 --> 00:05:16,016
+just have this expression over here. And,
+that's going to give us, tau 2 whose
+
+55
+00:05:16,016 --> 00:05:24,083
+scope is G and I, after having eliminated
+the variable D from this product, whose
+
+56
+00:05:24,083 --> 00:05:32,091
+scope is G, I and D. And tau 2 gets put
+back into the bucket. Together, with
+
+57
+00:05:35,090 --> 00:05:38,089
+everything else, [sound]. Moving forward
+we're now interested in eliminating I
+
+58
+00:05:38,089 --> 00:05:48,047
+[sound]. And so the factors that involve I
+are tau 2 of G and I, and phi S
+
+59
+00:05:48,047 --> 00:05:59,033
+of S and I, and phi I of I. And so we go
+ahead and multiply them together. To give us
+
+60
+00:05:59,033 --> 00:06:07,066
+a factor, whose scope is G, I, S and
+eliminating I gives us a factor, tau 3
+
+61
+00:06:07,066 --> 00:06:17,032
+whose scope is S and G. And so the
+process continues. And let's just finish
+
+62
+00:06:17,032 --> 00:06:24,082
+it, all the way to the end. Now, our goal
+is to eliminate H. Well, H is a little bit
+
+63
+00:06:24,082 --> 00:06:31,080
+of an interesting case. The only factor
+that mentions H is this factor, phi of H. And,
+
+64
+00:06:31,080 --> 00:06:38,015
+if we think about what phi of H is, phi H, as it
+happens. Is P of H given G and J. And so
+
+65
+00:06:38,015 --> 00:06:43,065
+for summing that up over H, we're actually
+summing up what is, in fact the
+
+66
+00:06:43,065 --> 00:06:49,068
+conditional distribution. And since we
+know that a conditional distribution, when
+
+67
+00:06:49,068 --> 00:06:55,093
+you sum up on the, the values on the left
+hand side, the summation is necessarily is
+
+68
+00:06:55,093 --> 00:07:01,076
+equal to one. So in principal, we could
+have taken this entire expression. Erased
+
+69
+00:07:01,076 --> 00:07:06,029
+it, and written one instead. And that
+would have given us something that is a
+
+70
+00:07:06,029 --> 00:07:10,064
+factor that doesn't depend on anything
+would have just been, would have just
+
+71
+00:07:10,064 --> 00:07:15,006
+disappeared. But for purposes of
+demonstration, we're not actually going to
+
+72
+00:07:15,006 --> 00:07:19,065
+do that because in fact, not every
+algorithm is clever enough to notice these
+
+73
+00:07:19,065 --> 00:07:23,095
+kinds of coincidences. It depends on
+whether they were designed to look for
+
+74
+00:07:23,095 --> 00:07:28,076
+that. And so we're going to do this in the
+same way, in the same sort of naive way
+
+75
+00:07:28,076 --> 00:07:33,072
+that we've done before, which is just.
+[inaudible]. Turn this in to a factor
+
+76
+00:07:33,095 --> 00:07:45,044
+which is going to be Tau-4 of G comma J. So,
+so now we have that factor, which really
+
+77
+00:07:45,044 --> 00:07:51,022
+is one, but we're not going to pay
+attention to that particular aspect for
+
+78
+00:07:51,022 --> 00:07:56,084
+the purposes of demonstrating how the
+algorithm would work. Okay? Next is
+
+79
+00:07:56,084 --> 00:08:02,030
+eliminating G, and we have this
+expression, which we inherited from the
+
+80
+00:08:02,030 --> 00:08:11,053
+previous slide. And G is one of the big ones,
+because it appears in, phi L,
+
+81
+00:08:11,053 --> 00:08:18,082
+tau 3 and tau 4. So when we
+think about the variables here in this
+
+82
+00:08:18,082 --> 00:08:25,094
+scope, we see that this one actually has
+this product over here, actually has a
+
+83
+00:08:25,094 --> 00:08:32,087
+scope of L, G, S, J which is the largest
+factor, the one with the largest scope
+
+84
+00:08:32,087 --> 00:08:40,062
+that we've encountered so far. Summing out
+G, we end up with a factor whose scope is
+
+85
+00:08:40,062 --> 00:08:53,016
+L, S, and J, so we're missing an S. And,
+and now we put that into. This expression,
+
+86
+00:08:53,016 --> 00:09:00,096
+and out comes a now, product of two
+factors. And, really, at this point, we
+
+87
+00:09:00,096 --> 00:09:11,016
+might as well just multiply them and end
+up with a factor over J and. Hold on. So
+
+88
+00:09:11,016 --> 00:09:16,086
+that gives us variable elimination in
+its, naive form. What about variable
+
+89
+00:09:16,086 --> 00:09:22,072
+elimination with evidence? Well, we've
+already basically established how to deal
+
+90
+00:09:22,072 --> 00:09:28,057
+with evidence. If we're interested in,
+[inaudible] in, for example, solving the
+
+91
+00:09:28,057 --> 00:09:34,037
+query probability of J, I= little i.
+Comma H equals little h, the way in which
+
+92
+00:09:34,037 --> 00:09:39,076
+we do that is by, is by computing the
+probability of the joint event J, I
+
+93
+00:09:39,076 --> 00:09:45,064
+equals little I, H equals little h and the
+way in which we do that is by reducing the
+
+94
+00:09:45,064 --> 00:09:51,079
+factors to correspond to this scope. And
+so if these were, if, so we take each of
+
+95
+00:09:51,079 --> 00:09:57,037
+the factors that involves I, and we
+basically instantiated to take the
+
+96
+00:09:57,037 --> 00:10:03,050
+particular value for that I, the value
+little I, and similarly for H. And so we
+
+97
+00:10:03,050 --> 00:10:09,063
+see here, for example, that, where as phi I
+initially depended on I, now it doesn't
+
+98
+00:10:09,063 --> 00:10:16,001
+depend on anything. Because this is simply
+the value phi I of little I, which is a
+
+99
+00:10:16,001 --> 00:10:22,071
+constant. And, whereas, for example, G
+depended on D and I, as we can see in the
+
+100
+00:10:22,071 --> 00:10:29,029
+original example diagram. Here, phi G in
+the reduced factor doesn't depend on I,
+
+101
+00:10:29,029 --> 00:10:35,070
+and is really probability of G, given
+little I and D. And the same reduction
+
+102
+00:10:35,070 --> 00:10:42,054
+occurs for H=h, and so we end up with the
+following set of reduced factors. And now,
+
+103
+00:10:42,054 --> 00:10:49,037
+once we have that set of reduced factors,
+we do elimination as, exactly as before.
+
+104
+00:10:50,024 --> 00:10:56,026
+No changes whatsoever to the algorithm.
+The only aspect that's a little bit
+
+105
+00:10:56,026 --> 00:11:02,009
+different is notice that we don't
+eliminate. No H and no I because there's
+
+106
+00:11:02,009 --> 00:11:07,020
+no point in eliminating vat, a variable
+that has a single value. There's no need
+
+107
+00:11:07,020 --> 00:11:11,099
+to sum up over it when it only has a
+single value. So, with, this gives us a
+
+108
+00:11:11,099 --> 00:11:17,042
+unified framework for dealing with, with
+queries whether they involve evidence or
+
+109
+00:11:17,042 --> 00:11:23,015
+not. And then how do we get the
+probability of J, given the evidence?
+
+110
+00:11:23,015 --> 00:11:30,085
+Well, this is straight forward, we simply
+re-normalize. Because we, because we can
+
+111
+00:11:30,085 --> 00:11:37,062
+take this. And simply divide by what it
+turns out to be, the probability, the
+
+112
+00:11:37,062 --> 00:11:57,060
+normalizing constant. Is. [sound] So,
+let's see whether the same idea applies to
+
+113
+00:11:57,060 --> 00:12:02,053
+Markov networks. So here's our simple
+Markov networks, n, network with four
+
+114
+00:12:02,053 --> 00:12:08,000
+variables. Let's imagine that our goal is
+to compute P of D. And so in order to do
+
+115
+00:12:08,000 --> 00:12:13,086
+that we need to eliminate A, B, and C from
+the unnormalized measures. So we have this
+
+116
+00:12:13,086 --> 00:12:19,072
+being the unnormalized measure, and we're
+summing up over A, B, and C. And the
+
+117
+00:12:19,072 --> 00:12:26,005
+process works in exactly the same way. So,
+if we want to sum out A first, then here
+
+118
+00:12:26,005 --> 00:12:32,067
+is the factors that involve A, phi 1 of AB, this one. And phi 4 of A D,
+
+119
+00:12:32,067 --> 00:12:39,021
+multiply them together, we've got a f,
+factor whose scope is A B D, and then we
+
+120
+00:12:39,021 --> 00:12:47,054
+sum out A to get a factor whose scope is B
+D. That gives us a new set of factors
+
+121
+00:12:47,054 --> 00:12:53,086
+where A has been effectively been
+eliminated from the graphical model. And
+
+122
+00:12:53,086 --> 00:13:00,098
+at the end of the process, we get a factor
+over the single remaining variable D. So
+
+123
+00:13:00,098 --> 00:13:08,035
+tau 3 of D and that factor is not the
+probability of D. It's proportional to the
+
+124
+00:13:08,035 --> 00:13:15,038
+probability of D. It's actually equal to
+P tilde of D, which is the unnormalized
+
+125
+00:13:15,038 --> 00:13:24,074
+measure. And so in order to get P of D, we
+renormalize. So to summarize this, the
+
+126
+00:13:24,074 --> 00:13:30,037
+main routine in this algorithm, is
+something, is a routine which we call
+
+127
+00:13:30,037 --> 00:13:36,070
+eliminate variable Z from a set of factors
+Phi. And what it does is the following. We
+
+128
+00:13:36,070 --> 00:13:42,056
+first look within Phi, and we define the
+set of factors, Phi prime, which are all
+
+129
+00:13:42,056 --> 00:13:52,006
+factors that involve Z. And that's what
+this mathematical expression says. The
+
+130
+00:13:52,006 --> 00:13:57,075
+factors Phi I such that Zs in their
+scope. We take all those factors and we
+
+131
+00:13:57,075 --> 00:14:15,077
+multiply them. And then we sum out the
+variable Z which is the one that we want
+
+132
+00:14:15,077 --> 00:14:20,076
+to eliminate. Now, and here is the
+important point: we've already used up
+
+133
+00:14:20,076 --> 00:14:27,092
+these factors, these ones over here have
+now been used. We don't want to reuse
+
+134
+00:14:27,092 --> 00:14:34,058
+them. And so we take them out of the set
+of factors and instead we introduce the
+
+135
+00:14:34,058 --> 00:14:40,037
+one that we just created by multiplying
+those factors and summing them up. This
+
+136
+00:14:40,037 --> 00:14:47,027
+basic operation is what we use in the
+context of, the algorithm as a whole. We
+
+137
+00:14:47,027 --> 00:14:53,051
+begin by reducing all factors by the
+evidence. In, which is just eliminating
+
+138
+00:14:53,051 --> 00:15:00,000
+the rows that don't, that are not
+consistent with the observations. And that
+
+139
+00:15:00,000 --> 00:15:06,087
+is what gets us our set of factors Phi. Now
+for each non-query variable we need
+
+140
+00:15:06,087 --> 00:15:12,072
+to eliminate it. And so we have run one at a 
+time something that eliminates the
+
+141
+00:15:12,072 --> 00:15:19,012
+variable Z from the set of factors Phi.
+Each such step changes my set of factors.
+
+142
+00:15:19,012 --> 00:15:26,035
+It adds factors and removes, so actually
+it starts by removing factors. Which we have
+
+143
+00:15:26,035 --> 00:15:32,039
+Phi prime from the previous one, from the
+previous line, and it adds, and you factor
+
+144
+00:15:32,039 --> 00:15:38,039
+tau. And then finally at the very end
+when all variables have been eliminated,
+
+145
+00:15:38,039 --> 00:15:42,088
+there may be one or more factors
+remaining. So that point we multiply all
+
+146
+00:15:42,088 --> 00:15:47,095
+of the remaining factors and then we
+normalize to get a distribution. So to
+
+147
+00:15:47,095 --> 00:15:52,087
+summarize, this is a very simple
+algorithm. It works equally well for
+
+148
+00:15:52,087 --> 00:15:58,065
+Bayes nets and Markov nets. And it
+uses, and, a factor product and factor
+
+149
+00:15:58,065 --> 00:16:04,008
+summation steps. And it does that by
+ensuring that when you mult-, that when
+
+150
+00:16:04,008 --> 00:16:09,065
+you sum out a factor, when you do the
+summation step over variable Z, then all
+
+151
+00:16:09,065 --> 00:16:15,036
+factors involving Z have been multiplied
+in, which is the critical piece of the
+
+152
+00:16:15,036 --> 00:16:17,053
+correctness of this algorithm.

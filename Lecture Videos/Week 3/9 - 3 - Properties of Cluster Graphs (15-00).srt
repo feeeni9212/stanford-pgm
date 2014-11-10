@@ -1,0 +1,715 @@
+
+1
+00:00:00,000 --> 00:00:05,034
+We describe to believe propagation
+algorithm as passing message over cluster
+
+2
+00:00:05,034 --> 00:00:10,075
+graph. But we left unspecified how that
+cluster graph would be constructed, and
+
+3
+00:00:10,075 --> 00:00:16,009
+what properties it needs to satisfy to
+support reasonable message passing. So,
+
+4
+00:00:16,009 --> 00:00:21,057
+let's remind ourselves what cluster graphs
+are. A cluster graph is an undirected
+
+5
+00:00:21,057 --> 00:00:26,078
+graph whose nodes are clusters that
+involves subset of variables and edges
+
+6
+00:00:26,078 --> 00:00:33,095
+involve a sepset Sij. Which is a
+subset of the, two clusters on the two end
+
+7
+00:00:33,095 --> 00:00:41,035
+points. What are some properties that the
+cluster graph has to satisfy? The first
+
+8
+00:00:41,035 --> 00:00:47,059
+property is one called family
+preservation, an obvious value. Where,
+
+9
+00:00:47,059 --> 00:00:54,061
+remember that we need, given the set of
+factors Phi, we need to be able to assign
+
+10
+00:00:54,061 --> 00:01:01,055
+each phi k to some cluster. C alpha k such
+that the fact such as the cluster can
+
+11
+00:01:01,055 --> 00:01:08,081
+accommodate. The scope so it can
+accommodate Phi K, oops, accommodate.
+
+12
+00:01:12,056 --> 00:01:18,066
+Well, in order for the cluster graph to
+allow this to be done, we need to have an
+
+13
+00:01:18,066 --> 00:01:24,053
+appropriate cluster in the cluster graph.
+So this imposes a constraint on the
+
+14
+00:01:24,053 --> 00:01:30,071
+cluster graph that says that for every
+factor phi k in my set of factors Phi, there
+
+15
+00:01:30,071 --> 00:01:39,010
+exists some cluster, Ci, that, such that
+Ci accommodates phi k, which means that
+
+16
+00:01:39,010 --> 00:01:45,023
+you can put phi k inside this cluster.
+That's the family preservation property.
+
+17
+00:01:45,059 --> 00:01:50,048
+The second property's a little bit
+trickier to understand, it's called the
+
+18
+00:01:50,048 --> 00:01:56,040
+running intersection property. The running
+intersection property, let's first read
+
+19
+00:01:56,040 --> 00:02:01,099
+the definition and then understand what it
+says. It says that, let's assume that we
+
+20
+00:02:01,099 --> 00:02:07,045
+have a pair of clusters, Ci and Cj, and a
+variable X that belongs to both of them.
+
+21
+00:02:07,045 --> 00:02:12,037
+So, for example, we might have the
+variable X sitting here in C 7 and
+
+22
+00:02:12,037 --> 00:02:18,006
+the variable X sitting here in C 5.
+This property says that there exists a,
+
+23
+00:02:18,006 --> 00:02:24,033
+exists a unique path between Ci and Cj,
+for which all clusters and steps that's
+
+24
+00:02:24,033 --> 00:02:30,068
+along the path contain X. What does that
+mean? It means that for example, should I
+
+25
+00:02:30,068 --> 00:02:38,019
+choose this to be my unique path. It means
+that X needs to sit here, here and here.
+
+26
+00:02:38,019 --> 00:02:44,011
+So there is a connecting path that
+involves X, and that path is along the
+
+27
+00:02:44,011 --> 00:02:49,049
+entire route, and it involves, and that
+path is unique. So let's try and
+
+28
+00:02:49,049 --> 00:02:54,040
+understand the intuition between both
+sides of this definition, the existence
+
+29
+00:02:54,040 --> 00:02:59,099
+and the uniqueness. Imagine that I let's
+do the existence first, and imagine that
+
+30
+00:02:59,099 --> 00:03:05,079
+for whatever reason I decide that there is
+not going to be a path over here. So there
+
+31
+00:03:05,079 --> 00:03:11,028
+is no way for C7 to communicate to C3
+about the variable X. Well that means that
+
+32
+00:03:11,028 --> 00:03:16,028
+we now have these two separate isolated
+communities each of which have some
+
+33
+00:03:16,028 --> 00:03:21,084
+information about X and they can never
+talk to each other about X so they're never
+
+34
+00:03:21,084 --> 00:03:27,033
+going to get agree about X there's never
+going to be any information transfer of
+
+35
+00:03:27,033 --> 00:03:32,081
+these two, pieces of information. Well
+so that's not very good which is why we need
+
+36
+00:03:32,081 --> 00:03:39,024
+that path to exist. This left the exist
+part. What about the unique part? The
+
+37
+00:03:39,024 --> 00:03:45,063
+unique part is a little bit trickier to
+understand but let's but let's try and,
+
+38
+00:03:45,086 --> 00:03:52,081
+and, provide some intuition for it. Let's
+imagine that I have two paths. That
+
+39
+00:03:52,081 --> 00:03:59,063
+involve X. Well, so now we have to think
+about this message passing algorithm. So
+
+40
+00:03:59,063 --> 00:04:06,026
+C3 can send a message to C5,
+with information about X. For example, I
+
+41
+00:04:06,026 --> 00:04:12,078
+think X is taking the value one. I have a,
+I have a factor that suggests that X takes
+
+42
+00:04:12,078 --> 00:04:18,037
+the value one. Well, C5, you know,
+integrates that with its own information,
+
+43
+00:04:18,037 --> 00:04:24,041
+and sends it on to C2. Which sends it back
+to C3. And now C3 hears from C2 that,
+
+44
+00:04:24,041 --> 00:04:29,073
+ew, X needs to take the value one. Huh,
+that reinforces it's beliefs that X needs
+
+45
+00:04:29,073 --> 00:04:34,071
+to take the value one and so the
+probability goes up. It now goes back and
+
+46
+00:04:34,071 --> 00:04:40,003
+sends that information on to C5 which
+sends it on to C2 which sends it back to
+
+47
+00:04:40,003 --> 00:04:45,062
+C3 and then once probability in X taking
+the value one goes up. And so we have this
+
+48
+00:04:45,062 --> 00:04:50,068
+sort of self reinforcing loop that's going
+to give rise to very extreme and very skewed
+
+49
+00:04:50,068 --> 00:04:57,057
+probabilities in many examples. And so, a
+way of avoiding that, is to, or at least
+
+50
+00:04:57,057 --> 00:05:05,000
+reducing that risk, is to, is to prevent
+These kinds of feedback loops. Now it's
+
+51
+00:05:05,000 --> 00:05:11,023
+important to realize that by preventing
+these loops that only reduces as opposed
+
+52
+00:05:11,023 --> 00:05:16,099
+to eliminates the problem. And
+specifically this is kind of a little bit
+
+53
+00:05:16,099 --> 00:05:23,022
+of a digression but it's important to know,
+is that imagine, for example, we have X
+
+54
+00:05:23,022 --> 00:05:37,056
+and Y that are very strongly correlated.
+So here we have, for example, X and Y. And
+
+55
+00:05:37,056 --> 00:05:51,029
+here we have a path. That involves Y. Mm.
+So now, what's going to happen is that C3
+
+56
+00:05:51,029 --> 00:05:57,044
+sends information to C5 about X. C5
+translates that to information about Y. Y
+
+57
+00:05:57,044 --> 00:06:03,019
+should take the value one. That
+information about Y goes back to C3 and
+
+58
+00:06:03,019 --> 00:06:09,082
+increases the probability of X taking the
+value one. Now, this is a little bit of a
+
+59
+00:06:09,082 --> 00:06:15,073
+forward looking hint about some of the
+issues that we'll see with belief
+
+60
+00:06:15,073 --> 00:06:23,037
+propagation later on. Which is that belief
+propagation does very poorly when we have
+
+61
+00:06:23,037 --> 00:06:37,046
+strong correlations. And that's because of
+these feedback loops. So, the more
+
+62
+00:06:37,046 --> 00:06:43,026
+skewed the probabilities in your graphical
+model, the harder time belief propagation
+
+63
+00:06:43,026 --> 00:06:49,076
+has, in terms of the results that it gets.
+So with that digression, aside, let's go
+
+64
+00:06:49,076 --> 00:06:54,067
+back to the running intersection property.
+And let's provide an alternative
+
+65
+00:06:54,067 --> 00:06:59,064
+definition of the running intersection
+property, just to give ourselves some
+
+66
+00:06:59,064 --> 00:07:04,036
+additional intuition. The running
+intersection property is equivalent to
+
+67
+00:07:04,036 --> 00:07:11,013
+saying that, for any X. The set of
+clusters and sepsets that contain X form a
+
+68
+00:07:11,013 --> 00:07:18,024
+tree. So for example if we have X here,
+here, here, here, here, and here We can
+
+69
+00:07:18,024 --> 00:07:23,088
+see, that the set of a cluster is a subset
+that contain X form a tree. It has to be
+
+70
+00:07:23,088 --> 00:07:29,087
+connected because of the existence of the
+path and it can't be a, a nontree because,
+
+71
+00:07:29,087 --> 00:07:35,051
+because that will give us two different
+paths. So that's a different view of this.
+
+72
+00:07:35,051 --> 00:07:41,008
+As you can think of each, variable
+inducing it's own little tree across which
+
+73
+00:07:41,008 --> 00:07:47,092
+information about that variable flows in
+the graph. So now let's go back with that
+
+74
+00:07:47,092 --> 00:07:53,023
+definition and consider some cluster
+graphs that we might adopt for this
+
+75
+00:07:53,023 --> 00:07:59,012
+example that we've seen before. So here we
+have our five clusters, and let's check
+
+76
+00:07:59,012 --> 00:08:04,051
+whether it satisfies the running
+intersection property. We've already done
+
+77
+00:08:04,051 --> 00:08:10,048
+family preservation for a particular set
+of factors, so let's consider for example
+
+78
+00:08:10,048 --> 00:08:15,089
+the variable B. And we can see that we
+have B here, here, here. Here. Here.
+
+79
+00:08:15,089 --> 00:08:26,069
+Here. And Here. And we can see that that's
+a tree. Here's my tree. Note very
+
+80
+00:08:26,069 --> 00:08:32,098
+carefully that B isn't here. If B were
+here, that wouldn't satisfy the running
+
+81
+00:08:32,098 --> 00:08:39,036
+intersection property. That would be an
+illegal cluster graph. [inaudible] on a
+
+82
+00:08:39,036 --> 00:08:45,065
+subsequent slide. Here is an illegal
+cluster graph. It violates the running
+
+83
+00:08:45,065 --> 00:08:54,000
+intersection property. Why? Because here
+is B, and here is a bunch of other B's.
+
+84
+00:08:56,075 --> 00:09:02,022
+And there's no way to connect cluster two
+to any of the others so this one violates
+
+85
+00:09:02,022 --> 00:09:13,024
+the existence. This one which we just
+talked about violates the uniqueness.
+
+86
+00:09:18,025 --> 00:09:28,075
+Because, here we have. The, all of the
+clusters and sepsets that involve B, and
+
+87
+00:09:28,075 --> 00:09:34,014
+there's this nice little loop over here,
+that has, two paths between say, cluster
+
+88
+00:09:34,014 --> 00:09:41,022
+one and cluster four. If we wanted to take
+the cluster graph, and still allow
+
+89
+00:09:41,022 --> 00:09:46,042
+communication between B and C. So we want
+to have, for example, we want cluster one
+
+90
+00:09:46,042 --> 00:09:52,013
+and cluster two to be able to, transmit to
+each other, information about how B and C
+
+91
+00:09:52,013 --> 00:09:58,067
+are correlated with each other, which they
+can't do, in this graph over here. So, one
+
+92
+00:09:58,067 --> 00:10:05,076
+way to do that, is to, have, we have
+eliminated in this case, this edge that we
+
+93
+00:10:05,076 --> 00:10:13,063
+had over here that involved B, and now
+once again we have B. Seeing a tree in the
+
+94
+00:10:13,063 --> 00:10:18,060
+graph. Now focused on B here but it's not
+difficult to convince yourselves that
+
+95
+00:10:18,060 --> 00:10:23,063
+other that other nodes also satisfy, that
+we satisfy the running intersection
+
+96
+00:10:23,063 --> 00:10:28,040
+property also with respect to other
+variables. So just as an example, here is
+
+97
+00:10:28,040 --> 00:10:33,049
+the set of clusters and sepsets involved
+in D, and that too is a tree and, here is
+
+98
+00:10:33,049 --> 00:10:38,008
+the one's involving E, and that too is a
+tree and so on. So and running
+
+99
+00:10:38,008 --> 00:10:43,033
+intersection property needs to hold for
+every, for every one of the variables. How
+
+100
+00:10:43,033 --> 00:10:49,022
+do we construct a cluster graph that has,
+has a desired properties? One very simple,
+
+101
+00:10:49,042 --> 00:10:54,071
+And, in some ways, degenerate. But still,
+because of its simplicity, very often
+
+102
+00:10:54,071 --> 00:10:59,094
+used, is a cluster graph called the bethe
+cluster graph. And that's a term from
+
+103
+00:10:59,094 --> 00:11:05,065
+statistical physics, where people use this
+kind of approximation to energy functions,
+
+104
+00:11:05,065 --> 00:11:11,028
+in, in some, in some calculations, in, in
+statistical physics. So, here we have, in
+
+105
+00:11:11,028 --> 00:11:16,058
+the bethe cluster graph, we have two types
+of clusters. We have big clusters and
+
+106
+00:11:16,058 --> 00:11:22,072
+little clusters. The big clusters, these
+are the big clusters. Correspond to
+
+107
+00:11:22,072 --> 00:11:37,095
+factors. In Phi. So for each phi k we have
+a cluster factor cluster whose scope is
+
+108
+00:11:37,095 --> 00:11:46,017
+exactly the scope of phi k. That's the big
+clusters. The little clusters correspond
+
+109
+00:11:46,017 --> 00:11:52,088
+to individual variables. So for each Xi we
+have a cluster who's scope is just the
+
+110
+00:11:52,088 --> 00:12:03,027
+single variable Xi itself. Now, we're
+going to connect Ck to Xi, exactly when Xi
+
+111
+00:12:03,027 --> 00:12:12,075
+is a subset of Ck, is a member of Ck. So
+if we consider the set of factors that we
+
+112
+00:12:12,075 --> 00:12:18,001
+had before, we can now produce a different
+cluster graph than the one that we had
+
+113
+00:12:18,001 --> 00:12:23,014
+previously, this is a bethe cluster graph.
+Notice that we have these big clusters
+
+114
+00:12:23,014 --> 00:12:29,069
+this are these four, sorry these five. And
+we have these little clusters
+
+115
+00:12:29,069 --> 00:12:35,077
+corresponding to A, B, C, D, E and F. And
+we can see that we have an edge for
+
+116
+00:12:35,077 --> 00:12:41,089
+example between the ABC cluster and the A
+cluster, the B cluster and the C cluster.
+
+117
+00:12:41,089 --> 00:12:47,007
+And that's how messages are passed and you
+can see that this graph is degenerate in
+
+118
+00:12:47,007 --> 00:12:51,094
+the sense that it only allows information
+about singletons to be passed and it
+
+119
+00:12:51,094 --> 00:12:56,099
+loses, in every message passing step, any
+information about the correlation between
+
+120
+00:12:56,099 --> 00:13:01,061
+variables. But nevertheless, it's simple
+to construct and it's guaranteed to
+
+121
+00:13:01,061 --> 00:13:06,029
+satisfy the running intersection property.
+Why is that? So let's consider for
+
+122
+00:13:06,029 --> 00:13:11,034
+example, all of the factors that involve
+the variable D. So here is, what are the
+
+123
+00:13:11,034 --> 00:13:16,044
+clusters that involve the variable D?
+Well, there's this one. And then there's
+
+124
+00:13:16,044 --> 00:13:23,035
+this that, that, those are where we have
+the sepsets, which I didn't mark and then
+
+125
+00:13:23,035 --> 00:13:30,069
+these ones. And notice that it's a tree by
+definition because D doesn't appear on any
+
+126
+00:13:30,069 --> 00:13:37,033
+other sepsets except these ones. And so,
+the tree is a start. It's the variable
+
+127
+00:13:37,033 --> 00:13:44,024
+cluster plus the big factors that contain
+the variable. So v is, in this case, the
+
+128
+00:13:44,024 --> 00:13:50,069
+three clusters that contain it. So to
+summarize. We have, we kno-, we, looked at
+
+129
+00:13:50,069 --> 00:13:55,022
+the properties of the cluster graph, and
+we see that's there's two of them that it
+
+130
+00:13:55,022 --> 00:13:59,032
+needs to satisfy. The first is family
+preservation, which allows the set of
+
+131
+00:13:59,032 --> 00:14:03,075
+factors to be encoded. And the second is
+the running intersection property, which
+
+132
+00:14:03,075 --> 00:14:08,001
+serves two purposes. The first is to
+connect all information about any single
+
+133
+00:14:08,001 --> 00:14:12,005
+variable, so that it can all be
+transmitted through the graph. But without
+
+134
+00:14:12,005 --> 00:14:15,092
+creating tight feedback loops that are
+going to give rise to the self
+
+135
+00:14:15,092 --> 00:14:20,017
+reinforcement and highly inaccurate
+answers. Is the bethe cluster graph is
+
+136
+00:14:20,017 --> 00:14:24,074
+often the first default that people use
+because it's easy. So the final is
+
+137
+00:14:24,074 --> 00:14:29,093
+guaranteed to be correct. But richer
+cluster graph structures of the type that
+
+138
+00:14:29,093 --> 00:14:35,006
+we talked about can offer very different
+and sometimes significantly better trade
+
+139
+00:14:35,006 --> 00:14:40,019
+offs with respect to on the one hand the
+computational cost, and on the other hand
+
+140
+00:14:40,037 --> 00:14:45,057
+which of course is you start is increasing
+the amount of the sizes of the messages
+
+141
+00:14:45,057 --> 00:14:50,045
+that are passed that can grow more
+expensive but at the same time, allow us
+
+142
+00:14:50,045 --> 00:14:55,029
+to improve. The preservation of the
+dependencies as messages are passed in the
+
+143
+00:14:55,029 --> 00:15:00,033
+graph so that more information is actually
+kept and not lost in this message passing

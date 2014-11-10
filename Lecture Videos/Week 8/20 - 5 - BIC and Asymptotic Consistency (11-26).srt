@@ -1,0 +1,589 @@
+
+1
+00:00:00,000 --> 00:00:04,318
+We talked about Bayes net structure
+learning as the task of optimizing a score
+
+2
+00:00:04,318 --> 00:00:08,964
+over a space of network structures. And,
+one of the big design choices that we have
+
+3
+00:00:08,964 --> 00:00:13,501
+to make in this context is which scoring
+function to use. Our first attempt at that
+
+4
+00:00:13,501 --> 00:00:17,819
+was to use the likelihood score. But as
+we've already seen, the likelihood score
+
+5
+00:00:17,819 --> 00:00:22,302
+is very susceptible to over fitting, and
+will invariably learn the most complicated
+
+6
+00:00:22,302 --> 00:00:26,511
+network that it can, given the constraints
+that we impose on our space. We now
+
+7
+00:00:26,511 --> 00:00:30,665
+consider a different approach in which,
+rather than constraining the space, or
+
+8
+00:00:30,665 --> 00:00:34,934
+maybe in addition to constraining the
+space, we're also going. And to impose a
+
+9
+00:00:34,934 --> 00:00:39,549
+penalty on the complexity of the
+structure that we learned so as to force
+
+10
+00:00:39,549 --> 00:00:44,456
+the model to trade [inaudible] force the
+learning algorithm to trade off model
+
+11
+00:00:44,456 --> 00:00:48,981
+complexity with the fit to the data. And
+specifically the model the, the,
+
+12
+00:00:49,189 --> 00:00:55,278
+specifically the score that we're going to
+look at right now is something called the
+
+13
+00:00:55,278 --> 00:01:01,798
+BIC score. So, let's look at one way of
+penalizing complexity which is the one
+
+14
+00:01:01,798 --> 00:01:09,482
+that the B-I-C score uses. The B-I-C score
+has two terms in it, the first is just the
+
+15
+00:01:09,482 --> 00:01:15,738
+likelihood of the Graph and its maximum
+likelihood parameters, relative to the
+
+16
+00:01:15,738 --> 00:01:22,147
+data. This is a familiar term, this is the
+term that represents the, the same thing
+
+17
+00:01:22,147 --> 00:01:28,328
+as the likelihood score. So this term is
+just score L, of G relative to D. And were
+
+18
+00:01:28,328 --> 00:01:34,585
+we to use this in isolation we would get
+the same over fitting behavior. But we add
+
+19
+00:01:34,585 --> 00:01:41,071
+to this a penalty term, this is the second
+term here on the right. And that term is,
+
+20
+00:01:41,071 --> 00:01:47,880
+is. Subtract log of M over two, times the
+dimension of G. So, let's understand what
+
+21
+00:01:47,880 --> 00:01:55,266
+these different pieces are. M is the
+number of training instances. And the
+
+22
+00:01:55,266 --> 00:02:01,984
+dimension of G is the number of
+independent parameters. In the network. So
+
+23
+00:02:01,984 --> 00:02:07,673
+we talked about the concept of independent
+parameters in the context of multinomial
+
+24
+00:02:07,673 --> 00:02:13,026
+networks and as a reminder, a multinomial
+distribution has one fewer independent
+
+25
+00:02:13,026 --> 00:02:18,246
+parameters than the number of entries in
+the multinomial. And from that, we can
+
+26
+00:02:18,246 --> 00:02:23,533
+compute the number of independent
+parameters for any multinomial network. So
+
+27
+00:02:23,533 --> 00:02:28,954
+this basically counts the number of, of
+degrees of freedom that we have in the
+
+28
+00:02:28,954 --> 00:02:34,452
+network in terms of estimating independent
+parameters in it. And so these two terms
+
+29
+00:02:34,452 --> 00:02:39,351
+balance each other out. We've already seen
+that the term on the left, the log
+
+30
+00:02:39,351 --> 00:02:44,765
+likelihood, tries to push towards a better
+fit to the training data. Whereas the term
+
+31
+00:02:44,765 --> 00:02:49,986
+on the right, the law, the, the penalty
+term is going to try and keep the number
+
+32
+00:02:49,986 --> 00:02:55,122
+of independent parameters. And therefore,
+the network complexity down. And, so, this
+
+33
+00:02:55,122 --> 00:02:59,828
+score provides us with some kind of
+tradeoff between fit to data and model
+
+34
+00:02:59,828 --> 00:03:04,721
+complexity. Now this is one choice in
+terms of this tradeoff. And in fact there
+
+35
+00:03:04,721 --> 00:03:09,741
+are other scores that use a different
+tradeoff between those two terms, but this
+
+36
+00:03:09,741 --> 00:03:14,446
+one is one that is very commonly used in
+practice and has several distinct
+
+37
+00:03:14,634 --> 00:03:19,465
+motivations, some, one, some of which
+we'll talk about and others and others
+
+38
+00:03:19,465 --> 00:03:24,171
+not. One comment that's worth making,
+though, is the negation of this, of this
+
+39
+00:03:24,171 --> 00:03:30,441
+course, is we negate this entire term.
+That is often called. The MDL criterion
+
+40
+00:03:30,880 --> 00:03:42,136
+where MDL stands for minimum. Description.
+[sound], length. And so in fact this
+
+41
+00:03:42,136 --> 00:03:48,510
+notion of minimum description length is an
+information theoretic justification for
+
+42
+00:03:48,510 --> 00:03:55,039
+this and the other justification for this
+is one that's derived from a more Bayesian
+
+43
+00:03:55,039 --> 00:04:08,372
+criterion which is why BIC actually stands
+for Bayesian. Information criterion. Let's
+
+44
+00:04:08,372 --> 00:04:13,801
+look at the asymptotic behavior of this
+penalized score. We've already seen that
+
+45
+00:04:13,801 --> 00:04:19,165
+in the context of the likelihood score, it
+really doesn't matter how much training
+
+46
+00:04:19,165 --> 00:04:24,399
+data we have, we will almost always pick
+the most densely connected network that
+
+47
+00:04:24,399 --> 00:04:29,162
+our assumptions allow. But. This is no
+longer the case when we have this
+
+48
+00:04:29,162 --> 00:04:34,811
+penalized score. So let's, to understand
+that, let's break down the first of these
+
+49
+00:04:34,811 --> 00:04:40,392
+two terms, which is the likelihood score,
+and remind ourselves that at least in the
+
+50
+00:04:40,392 --> 00:04:46,893
+context of multinomial networks, the
+likelihood score Can be, re-written as in
+
+51
+00:04:46,893 --> 00:04:53,125
+the following way, so this is the
+breakdown of the likelihood score and it
+
+52
+00:04:53,125 --> 00:04:59,766
+has, these two terms. The first is, the
+number of data instances M, times the sum
+
+53
+00:04:59,766 --> 00:05:06,080
+over the variables X-I, of the mutual
+information between X-I and its parents,
+
+54
+00:05:06,080 --> 00:05:11,687
+in, the network. And that mutual
+information is relative to the empirical
+
+55
+00:05:11,687 --> 00:05:17,678
+distribution, P hat. The second term in
+the likelihood score is a term, which is
+
+56
+00:05:17,678 --> 00:05:24,130
+also M times the sum over the variables of
+the entropy of the variable, again, in the
+
+57
+00:05:24,130 --> 00:05:29,814
+empirical distribution. And as we've
+already discussed before, this term is
+
+58
+00:05:29,814 --> 00:05:36,986
+independent of G. And so, doesn't affect
+the choice of which structure is selected
+
+59
+00:05:36,986 --> 00:05:42,005
+because it's the same for all structures.
+And so, we have these two terms that are
+
+60
+00:05:42,005 --> 00:05:47,144
+playing off against each other. We have,
+the term over here. The, the true, which
+
+61
+00:05:47,144 --> 00:05:52,914
+is m times the sum of a mutual
+information. And we have the second term,
+
+62
+00:05:52,914 --> 00:05:59,253
+the blue term which is the log of M over
+two times the number of independent
+
+63
+00:05:59,253 --> 00:06:05,186
+parameters in G. Now, if we consider these
+two terms, we see that, the mutual
+
+64
+00:06:05,186 --> 00:06:11,200
+information term grows linearly with m,
+whereas the complexity term grows
+
+65
+00:06:11,200 --> 00:06:17,059
+logarithmically with m. And so as we get
+more and more data instances, we put more
+
+66
+00:06:17,059 --> 00:06:22,081
+emphasis, on the fit to data and less
+emphasis on the model complexity, so
+
+67
+00:06:22,081 --> 00:06:27,859
+intuitively we would infer that we would,
+as we have more data instances, we would
+
+68
+00:06:27,859 --> 00:06:33,921
+be more amenable to learning more
+complicated structures So that property
+
+69
+00:06:33,921 --> 00:06:40,649
+gives rise to a very important result that
+we can state regarding the BIC score and
+
+70
+00:06:40,649 --> 00:06:46,736
+that is the result called consistency.
+Consistency tells us what behavior we
+
+71
+00:06:46,736 --> 00:06:53,310
+would get, what network we would learn as
+the number of samples grows to infinity.
+
+72
+00:06:53,310 --> 00:06:58,817
+And so here we're going to assume that the
+data is actually generated from a
+
+73
+00:06:58,817 --> 00:07:04,683
+particular true structure G star, so there
+is a G star because otherwise result
+
+74
+00:07:04,683 --> 00:07:10,405
+doesn't really make can't really be
+stated. And what the consistency property
+
+75
+00:07:10,405 --> 00:07:15,987
+says is that as M grows to infinity, the
+true structure G star  is going to be
+
+76
+00:07:15,987 --> 00:07:21,353
+the one that maximizes the score. Now that
+by itself is not quite right as, as we can
+
+77
+00:07:21,353 --> 00:07:26,435
+see because the true structure g star
+might have several other structures that
+
+78
+00:07:26,435 --> 00:07:32,160
+are I-equivalent to it and we have already
+seen that the likelihood score and, and in
+
+79
+00:07:32,160 --> 00:07:37,193
+fact it also turns out to be case that
+the, The penalty term are the same for I
+
+80
+00:07:37,193 --> 00:07:41,570
+equivalent networks. And so, it's not just
+the true structure alone that will
+
+81
+00:07:41,570 --> 00:07:45,890
+maximize the score. It's the true
+structure or any other structure which is
+
+82
+00:07:45,890 --> 00:07:50,209
+I equivalent to it. But as far as we're
+concerned that's fine because we've
+
+83
+00:07:50,209 --> 00:07:54,011
+effectively learned the correct
+representation of the probability
+
+84
+00:07:54,011 --> 00:07:59,037
+distribution. So to understand why this
+result is true, we're going to give just a
+
+85
+00:07:59,037 --> 00:08:04,195
+very high level intuitive argument. We're
+not going to prove theorem, it's a little
+
+86
+00:08:04,195 --> 00:08:09,605
+bit tricky to prove completely formally.
+So let's first consider the case of why
+
+87
+00:08:09,605 --> 00:08:14,701
+this is not going to over fit. That is why
+we're not going to have spurious edges
+
+88
+00:08:14,701 --> 00:08:20,552
+learned in maximizing the score as the
+number of instances grows to infinity. So
+
+89
+00:08:20,552 --> 00:08:27,356
+here we go, we go back to un, we go back
+and look at this formula over here and we
+
+90
+00:08:27,356 --> 00:08:34,412
+see that as M grows into infinity P hat is
+going to approach P star, where P star is
+
+91
+00:08:34,412 --> 00:08:41,300
+my true underlying distribution. And so
+what were going to have in this first term
+
+92
+00:08:41,300 --> 00:08:47,936
+over here is effectively the mutual
+information relative to P star between X-I
+
+93
+00:08:47,936 --> 00:08:59,231
+and its parents. And in that P star, the
+mutual information between Xi and its
+
+94
+00:08:59,231 --> 00:09:05,509
+parents is you don't get any benefit from
+adding additional parents, spurious
+
+95
+00:09:05,509 --> 00:09:11,786
+parents. That is the mutual information in
+P star for a spurious parent is not
+
+96
+00:09:11,786 --> 00:09:17,610
+going to grow because in the true
+underlying distribution P star the, their,
+
+97
+00:09:17,610 --> 00:09:26,032
+the There is no Additional independence.
+There's no additional correlation that we
+
+98
+00:09:26,032 --> 00:09:32,535
+have. And so at that point we're going to
+have that, the more complicated structure
+
+99
+00:09:32,535 --> 00:09:38,721
+is about the same as G in terms of this
+first term, but the spurious edges are
+
+100
+00:09:38,721 --> 00:09:43,749
+going to cost us. In terms of the number
+of parameters in the blue term. And so,
+
+101
+00:09:43,749 --> 00:09:48,576
+these spurious edges will not contribute
+to the late, to the data likelihood term,
+
+102
+00:09:48,576 --> 00:09:53,221
+but will be penalized more, and so we will
+choose the sparser network that
+
+103
+00:09:53,221 --> 00:09:58,455
+corresponds with G star. Conversely,
+why do we not under fit, that is, why do
+
+104
+00:09:58,455 --> 00:10:04,561
+we eventually learn all correct edges? And
+that is because the data likelihood term,
+
+105
+00:10:04,782 --> 00:10:10,668
+tells us the edges that are required. That
+is, edges, that, are in G<i>, for example,</i>
+
+106
+00:10:10,668 --> 00:10:16,260
+or in the I equivalent network. Will, if
+we don't have them there, this mutual
+
+107
+00:10:16,260 --> 00:10:21,925
+information term will be lower than it
+could be. And so we will have a higher
+
+108
+00:10:21,925 --> 00:10:28,032
+score by including those, terms in the
+model. And because this mutual information
+
+109
+00:10:28,032 --> 00:10:34,808
+term. Grows with m linearly versus the
+penalty term which grows logarithmically.
+
+110
+00:10:34,808 --> 00:10:41,476
+Then eventually the first term will
+dominate and we'll have a and it will
+
+111
+00:10:41,476 --> 00:10:47,220
+beneficial for the learning algorithm to
+add that edge. The, the required
+
+112
+00:10:47,220 --> 00:10:52,008
+edge in G star. So this is a high-level,
+very hand-wavy argument, but at least it
+
+113
+00:10:52,008 --> 00:10:57,677
+gives an intuition as to why consistency
+holds. So to summarize, the BIC score is a
+
+114
+00:10:57,677 --> 00:11:04,606
+very simple score that trades off, model
+complexity with, the fit to data. And
+
+115
+00:11:04,606 --> 00:11:11,282
+therefore, has the important property of
+asymptotic consistency. Which means that
+
+116
+00:11:11,282 --> 00:11:17,873
+if the data were actually generated by a
+network G<i>, for, which is a perfect map</i>
+
+117
+00:11:17,873 --> 00:11:24,548
+for the distribution. Then either G or
+networks I equivalent will have the high
+
+118
+00:11:24,548 --> 00:11:26,915
+score as M goes to infinity.

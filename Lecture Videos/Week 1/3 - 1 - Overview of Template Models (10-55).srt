@@ -1,0 +1,553 @@
+
+1
+00:00:00,000 --> 00:00:04,072
+So, today's topic is an important
+extention on the language of graphical
+
+2
+00:00:04,072 --> 00:00:10,010
+models. And it's intended to deal with the
+very, large class of cases, where what
+
+3
+00:00:10,010 --> 00:00:15,062
+we'd like to do is not just write down one
+kind of graphical model for a particular
+
+4
+00:00:15,062 --> 00:00:20,035
+application. But rather, come up with
+something that is a general purpose,
+
+5
+00:00:20,054 --> 00:00:25,067
+representation that allows us to solve
+multiple problems using the same exact
+
+6
+00:00:25,067 --> 00:00:31,018
+model. So, to understand what that means
+in a somewhat more concrete setting, let's
+
+7
+00:00:31,023 --> 00:00:36,092
+go back. Now for genetic inheratince that
+we have discussed previously it's arguably
+
+8
+00:00:36,092 --> 00:00:42,020
+the earliest example of Bayesian network
+reasoning before Bayesian networks were
+
+9
+00:00:42,020 --> 00:00:48,013
+invented and here we have as input a
+pedigree. Which is a family tree. And
+
+10
+00:00:48,013 --> 00:00:52,052
+we're interested in reasoning about a
+particular trait. And for each pedigree
+
+11
+00:00:52,052 --> 00:00:57,019
+and each trait we can construct a Bayesian
+network and the Bayesian network might
+
+12
+00:00:57,019 --> 00:01:01,041
+look like this. But clearly if you had a
+somewhat different family tree, so
+
+13
+00:01:01,041 --> 00:01:06,020
+suddenly you had another three cousins and
+a great grandfather join the family tree,
+
+14
+00:01:06,020 --> 00:01:10,030
+or if you had a different family
+altogether, you would still want to use
+
+15
+00:01:10,030 --> 00:01:14,080
+the same sort of ideas, the same pieces of
+what we used in the first network to
+
+16
+00:01:14,080 --> 00:01:19,053
+construct this other network because there
+is clearly a lot of commonality between
+
+17
+00:01:19,053 --> 00:01:27,093
+them. So we have, what you might call,
+sharing. Between models. But in addition
+
+18
+00:01:27,093 --> 00:01:37,011
+to that. You also have in this example as
+a fairly obvious sharing within the model
+
+19
+00:01:37,011 --> 00:01:44,092
+so for example, this CPD that tells us how
+Selma's genotype affects Selma's blood
+
+20
+00:01:44,092 --> 00:01:51,082
+type presumably is the same process by
+which Marge's genotype affects Marge's
+
+21
+00:01:51,082 --> 00:01:58,084
+blood type and the same for Maggie and
+Lisa and Bart and Homer and everybody. So,
+
+22
+00:01:59,006 --> 00:02:04,044
+so we have this tremendous amount of
+sharing of both dependency models and
+
+23
+00:02:04,044 --> 00:02:10,011
+parameters. Similarly, you might argue,
+you might, looking at this realize that
+
+24
+00:02:10,011 --> 00:02:15,056
+the genetic inheritance model by which
+Bart's genotype is determined by the
+
+25
+00:02:15,056 --> 00:02:21,043
+genotype of his two parents as the same
+inheritance model that applies to Lisa. To
+
+26
+00:02:21,043 --> 00:02:26,058
+Maggie, to Marge, to Selma, and so on. So
+once again we have a lot of parameters
+
+27
+00:02:26,058 --> 00:02:31,092
+that are shared not just between but also
+within the model. So we'd like to have
+
+28
+00:02:31,092 --> 00:02:37,054
+some way of constructing models that have
+this, large amounts of shared structure
+
+29
+00:02:37,054 --> 00:02:42,075
+that allows us to both construct large
+models from sparse parametrization and
+
+30
+00:02:42,075 --> 00:02:48,034
+also to construct entire family of models
+from a single concise representation. This
+
+31
+00:02:48,034 --> 00:02:53,070
+is not the only such application. This is
+probably the most commonly used type of
+
+32
+00:02:53,070 --> 00:02:58,055
+graphical models are those that have
+shared structure and shared parameters.
+
+33
+00:02:58,055 --> 00:03:03,046
+So, here is another example that we've
+seen previously, this is for natural
+
+34
+00:03:03,046 --> 00:03:09,026
+language processing, a sequence model, for
+in this case trying to identify named
+
+35
+00:03:09,026 --> 00:03:16,034
+entity recognition, a very common task
+for which graphical models have been used.
+
+36
+00:03:16,034 --> 00:03:22,033
+And here, also, we have a sequence model,
+and we have, again, shared, shared pieces,
+
+37
+00:03:22,033 --> 00:03:27,096
+for example. The parameters that relate
+the latent variable, in this case, what
+
+38
+00:03:28,001 --> 00:03:34,022
+type of, what type of variable, what type of entity it is.
+
+39
+00:03:34,027 --> 00:03:40,013
+Is it a person, is it a location, and so
+on. There is a set of parameters here, and
+
+40
+00:03:40,013 --> 00:03:45,089
+they're going to be independent of the
+place and the sequence. In which we find
+
+41
+00:03:45,089 --> 00:03:50,024
+the word because not because it's
+necessarily an exactly correct model I
+
+42
+00:03:50,024 --> 00:03:55,018
+mean one could clearly imagine cases where
+the position in the sequence might make
+
+43
+00:03:55,018 --> 00:03:59,064
+the difference but because it's often a
+very useful simplifying assumption,
+
+44
+00:03:59,064 --> 00:04:04,058
+specifically because it allows us to A use
+parameters, reuse parameters and B allow
+
+45
+00:04:04,058 --> 00:04:09,046
+us to apply the same model to sequences of
+varying length without having to worry
+
+46
+00:04:09,046 --> 00:04:14,057
+about what is my fifteen word model versus
+what's my eighth word model and so this is
+
+47
+00:04:14,057 --> 00:04:22,092
+a, another case where you have We have a
+tremendous amount of reuse of
+
+48
+00:04:22,092 --> 00:04:30,023
+parameters. We've already seen similarly
+the examples in this segmentation clearly
+
+49
+00:04:30,023 --> 00:04:36,020
+we don't want to have a separate model for
+every super pixel in the image there's
+
+50
+00:04:36,030 --> 00:04:45,051
+hundreds of super pixels so we have
+sharing across superpixels
+
+51
+00:04:45,061 --> 00:04:53,020
+So for example, the model here
+that, that relates the class label of the
+
+52
+00:04:53,020 --> 00:05:00,071
+superpixel to the image features of that
+superpixel is generally one to be shared
+
+53
+00:05:00,071 --> 00:05:07,012
+as are the parameters that involve
+adjacent superpixels. So these edge
+
+54
+00:05:07,012 --> 00:05:14,018
+potentials are also going to shared across
+in this case, pairs of superpixels.
+
+55
+00:05:15,068 --> 00:05:24,090
+And once again we
+have sharing across models as well because
+
+56
+00:05:24,090 --> 00:05:31,003
+we are going to have one such model for
+image A and obviously we don't want to
+
+57
+00:05:31,003 --> 00:05:37,063
+construct a separate model for every image
+so once again we have sharing between and within
+
+58
+00:05:39,001 --> 00:05:48,091
+a model. So let's look at one
+example a little bit more concretely
+
+59
+00:05:48,091 --> 00:05:53,096
+because it's an example that we're gonna
+use in some of the later analysis. So now,
+
+60
+00:05:53,096 --> 00:05:58,094
+let's return to our university example
+where we have a student who takes a class
+
+61
+00:05:58,094 --> 00:06:03,068
+and gets a grade and that the grade
+depends on the student's difficulty oh I
+
+62
+00:06:03,068 --> 00:06:08,048
+am sorry difficulty of the course not
+intelligence of the student. Now this is
+
+63
+00:06:08,048 --> 00:06:13,070
+all fine if we're interested in using just
+about an individual student, but now let's
+
+64
+00:06:13,070 --> 00:06:18,025
+imagine that we want to think about an
+entire university. So now we have a
+
+65
+00:06:18,025 --> 00:06:25,069
+difficulty variable. So these are all.
+Difficulty variables. For different
+
+66
+00:06:25,069 --> 00:06:31,025
+courses in this case C<u>1 up to C<u>N are
+different courses that exist in our</u></u>
+
+67
+00:06:31,025 --> 00:06:37,042
+university and conversely on the other
+side we have multiple students and this is
+
+68
+00:06:37,042 --> 00:06:44,000
+a set of intelligence variables that are
+indexed by different students so we have
+
+69
+00:06:44,000 --> 00:06:48,076
+the intelligence of student one up to the
+intelligence of student m. Now note that
+
+70
+00:06:48,076 --> 00:06:53,040
+these are different random variables they
+can and generally will take different
+
+71
+00:06:53,040 --> 00:06:58,039
+values from each other but they all share
+a probabilistic model and that's sort of
+
+72
+00:06:58,039 --> 00:07:03,074
+the kind of sharing that we have in mind.
+And what we see here, is that the grade of
+
+73
+00:07:03,074 --> 00:07:09,013
+a student within a course, which are these
+variables down here, depend on the
+
+74
+00:07:09,013 --> 00:07:14,094
+difficulty of the relevant course and the
+intelligence of the relevant student. So
+
+75
+00:07:14,094 --> 00:07:20,061
+for example, the grade of student one in
+course one, depends on the difficulty of
+
+76
+00:07:20,061 --> 00:07:26,038
+course one and on the intelligence. Of
+student one and once again we have sharing
+
+77
+00:07:26,038 --> 00:07:31,026
+of the both the structure and the
+parameters across these different grade
+
+78
+00:07:31,026 --> 00:07:36,066
+variables so that they all have the same
+kind of dependency structure in the same
+
+79
+00:07:36,066 --> 00:07:44,078
+CPD. Another example is that of robot
+localization and this is another example
+
+80
+00:07:44,078 --> 00:07:52,086
+of, in this case, the time series where
+the robot moves through time from one
+
+81
+00:07:52,086 --> 00:08:02,083
+position to the other. And although the
+position at time T is different.
+
+82
+00:08:04,087 --> 00:08:21,057
+Changes over time. We expect that the
+dynamics of the robot. Are fixed. We'll
+
+83
+00:08:21,057 --> 00:08:27,047
+talk more about that later. So that gives
+us a graphical model that again, looks a
+
+84
+00:08:27,047 --> 00:08:33,022
+little bit, this is one example of such a
+graphical model where we see that the
+
+85
+00:08:33,022 --> 00:08:38,082
+position to the robot pose, over here,
+these X variables depend on for example
+
+86
+00:08:38,082 --> 00:08:44,087
+the previous pose and on whatever control
+action the robot took. And we're assuming
+
+87
+00:08:48,095 --> 00:08:53,003
+that once again we have sharing. Of these
+parameters for each instantiation of this
+
+88
+00:08:53,003 --> 00:08:59,063
+variable. So what that gives rise to is a
+class of models that are represented in
+
+89
+00:08:59,063 --> 00:09:04,085
+terms of template variables. Where a
+template variable is something that we end
+
+90
+00:09:04,085 --> 00:09:09,080
+replicating, in many cases, again and
+again, within a single model as well as
+
+91
+00:09:09,080 --> 00:09:14,082
+across models. And so the replication is
+indexed by the, by the fact that the
+
+92
+00:09:14,082 --> 00:09:19,058
+variable. You can think of it as a
+function that takes arguments. And the
+
+93
+00:09:19,058 --> 00:09:24,053
+arguments, for example, might be time
+points, as in this example over here. So
+
+94
+00:09:24,063 --> 00:09:29,081
+here we have a location variable that's
+indexed by time point or sonar reading
+
+95
+00:09:29,086 --> 00:09:35,008
+indexed by time point. We have, in this
+case, a genotype variable and a phenotype
+
+96
+00:09:35,008 --> 00:09:40,035
+variable that's indexed by a particular
+person. A class label that's indexed by
+
+97
+00:09:40,035 --> 00:09:45,069
+pixel. And similarly the difficultly of
+the intelligence and the grades that are
+
+98
+00:09:45,069 --> 00:09:50,063
+indexed, in this case, by different
+combinations of indexees, course student
+
+99
+00:09:50,063 --> 00:09:56,097
+or course student pairs. And a template
+model is a language that tells us how
+
+100
+00:09:56,097 --> 00:10:03,024
+template variables can be the dependency
+models for template variables and how
+
+101
+00:10:03,024 --> 00:10:10,025
+concrete instantiations of variables what
+are called ground variables. Like the ones
+
+102
+00:10:10,029 --> 00:10:14,057
+that are actually indexed by a particular
+timepoint or person how they inherit the
+
+103
+00:10:14,062 --> 00:10:18,054
+dependency molecule [inaudible]. And
+their's a whole range of such languages
+
+104
+00:10:18,054 --> 00:10:22,071
+that have been developed in a special
+purpose way for different applications. So
+
+105
+00:10:22,071 --> 00:10:26,073
+dynamic Bayesian networks are intended for
+dealing with temporal processes for
+
+106
+00:10:26,083 --> 00:10:32,044
+example. Where we have replication over
+time we have a whole range of [inaudible]
+
+107
+00:10:32,049 --> 00:10:38,008
+for object relational models both directed
+models and undirected models where you
+
+108
+00:10:38,008 --> 00:10:43,094
+have multiple objects such as people or
+students and courses or pixels so people.
+
+109
+00:10:43,094 --> 00:10:49,009
+courses, pixels, and lots of other things
+which can be related to each other in
+
+110
+00:10:49,009 --> 00:10:54,059
+different ways and how you represent the
+dependency model over that ensemble in a
+
+111
+00:10:54,059 --> 00:10:55,046
+coherent way.

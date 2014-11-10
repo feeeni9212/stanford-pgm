@@ -1,0 +1,439 @@
+
+1
+00:00:00,000 --> 00:00:05,017
+So far we focused solely on the global
+structure of the distribution. The fact
+
+2
+00:00:05,017 --> 00:00:10,054
+that you can take it and factorize it as a
+product of factors that correspond to
+
+3
+00:00:10,074 --> 00:00:16,014
+subset of variables. But it turns out that
+you also have other types of structures
+
+4
+00:00:16,014 --> 00:00:21,009
+that you might want to encode. And that is
+actually really important for real world
+
+5
+00:00:21,009 --> 00:00:25,067
+applications. So, to motivate that, let's
+look at the tabular representation of
+
+6
+00:00:25,067 --> 00:00:30,015
+conditional probability distributions,
+which is what we've used universally,
+
+7
+00:00:30,032 --> 00:00:34,085
+until now, in the examples that we've
+given. So the tabular representation is
+
+8
+00:00:34,085 --> 00:00:39,056
+one of these examples where we have, you
+know, a row for each assignment. So this,
+
+9
+00:00:39,056 --> 00:00:44,079
+just a reminder, this is G with parents I
+and V. And here we have a row for each
+
+10
+00:00:44,079 --> 00:00:51,010
+assignment of the parents that gives us
+exclusively enumerating all of the entries
+
+11
+00:00:51,010 --> 00:00:56,024
+that correspond to the probabilities of
+the variable'g'. So this is great,
+
+12
+00:00:56,024 --> 00:01:00,039
+because. You say well, what's the problem?
+I mean it sounds like a very reasonable
+
+13
+00:01:00,039 --> 00:01:04,055
+and very understandable representation.
+Well, that's great. But now let's consider
+
+14
+00:01:04,055 --> 00:01:08,086
+a more realistic example. For instance in
+a medical application where we might have
+
+15
+00:01:08,086 --> 00:01:13,076
+a variable corresponding to cough. Oh,
+there is lots and lots of things that
+
+16
+00:01:13,076 --> 00:01:19,056
+might make you cough. You might have
+pneumonia or the flu or tuberculosis or
+
+17
+00:01:19,056 --> 00:01:25,009
+bronchitis. Or just a common cold. And by
+the time you finish enumerating all of the
+
+18
+00:01:25,009 --> 00:01:30,043
+many things that might make you cough, you
+realize that the variable usually might
+
+19
+00:01:30,043 --> 00:01:35,043
+have as many as ten or fifteen or even
+twenty parents for a variable such as
+
+20
+00:01:35,043 --> 00:01:40,045
+fever. So that's, so when you think about
+what the implications of that are,
+
+21
+00:01:40,045 --> 00:01:45,044
+relative to a tabular CPD, you realize
+that if we have, K parents. And let's
+
+22
+00:01:45,044 --> 00:01:50,016
+assume, for the moment, that they're all
+binary, just for simplicity. And the
+
+23
+00:01:50,016 --> 00:01:55,025
+number of entries in the CPT grows
+as 2^K, or O(2^K),
+
+24
+00:01:55,025 --> 00:01:59,078
+depending on the number of variable,
+values of the child. So, essentially,
+
+25
+00:01:59,078 --> 00:02:05,019
+these situations are more common than not.
+And that means the tabular representations
+
+26
+00:02:05,019 --> 00:02:10,035
+are really not suitable for a lot of real
+world applications. So we have to think
+
+27
+00:02:10,035 --> 00:02:15,095
+beyond that. So fortunately, there's
+nothing in the definition of a Bayesian
+
+28
+00:02:15,095 --> 00:02:22,017
+network that imposes on us a fully
+specified table as the only representation
+
+29
+00:02:22,017 --> 00:02:28,055
+of a conditional probability distribution.
+The only thing we need is that the CPD
+
+30
+00:02:28,055 --> 00:02:34,044
+P(X) given y from 1 up to to y<u>k needs to
+specify distribution over a x for each</u>
+
+31
+00:02:34,044 --> 00:02:39,083
+assignment Y1 to YK, and it can do that
+completely implicitly. It can do that as
+
+32
+00:02:39,083 --> 00:02:44,068
+a little piece of C code that looks at Y1
+up to YK and, and prints out a
+
+33
+00:02:44,068 --> 00:02:50,077
+distribution over X. Now, fortunately, we
+don't usually have, two, or, sorry. Or in
+
+34
+00:02:50,077 --> 00:02:56,066
+fact, we can use any function, in,
+parametrized or as a C routine or anything
+
+35
+00:02:56,066 --> 00:03:02,086
+to specify a factor over the scope, XY1 up
+to YK. Such that, well, it has to be a
+
+36
+00:03:02,086 --> 00:03:08,084
+probability of distribution over X. So it
+has to sum, so when you sum up all the
+
+37
+00:03:08,084 --> 00:03:14,020
+values of X. If we're given assignment Y.
+One. To Y. K. It has to sum to one.
+
+38
+00:03:14,020 --> 00:03:19,050
+Anything that satifies these criteria,
+these constraints is a legitimate
+
+39
+00:03:19,050 --> 00:03:25,095
+representation of the CPD. So, like I said,
+fortunately, we don't usually have to
+
+40
+00:03:25,095 --> 00:03:31,037
+resort to C-code to specify CPDs. The
+theory that the framework of statistics
+
+41
+00:03:31,037 --> 00:03:36,071
+has defined for us a multitude of
+different representations of a conditional
+
+42
+00:03:36,071 --> 00:03:42,005
+probability distribution given a set of,
+of conditioning variables. So some
+
+43
+00:03:42,005 --> 00:03:48,027
+examples include deterministic CPD's
+where x is a, deterministic function of
+
+44
+00:03:48,027 --> 00:03:54,018
+y<u>1 up to y<u>k. We have already seen a
+couple of examples of that. You can think</u></u>
+
+45
+00:03:54,018 --> 00:03:59,081
+we can define and we will define CPD's
+that have the from of what's called a
+
+46
+00:03:59,081 --> 00:04:04,041
+decision tree or regression tree.
+A framework that some of you
+
+47
+00:04:04,041 --> 00:04:08,080
+have seen before. You can think of CPDs
+that are logistic functions or more
+
+48
+00:04:08,080 --> 00:04:13,024
+generally log linear models. We're going
+to talk about things that are noisy OR /
+
+49
+00:04:13,024 --> 00:04:17,052
+noisy AND which are noisy version of the
+deterministic CPDs. And then, in the
+
+50
+00:04:17,052 --> 00:04:22,035
+continuous case, we also have, frameworks
+that allow us to represent the probability
+
+51
+00:04:22,035 --> 00:04:27,013
+distribution of a continuous variable on a
+set of continuous or discrete parents. And
+
+52
+00:04:27,013 --> 00:04:31,019
+that is really critical, because,
+obviously, when you have a variable that
+
+53
+00:04:31,019 --> 00:04:35,068
+takes on a continuum of values, you can't
+possibly write down a table that lists
+
+54
+00:04:39,036 --> 00:04:43,003
+every single one of them. Now one of the
+things that are intertwined with the
+
+55
+00:04:43,003 --> 00:04:48,056
+notion of structure within a CPD is a
+useful notion called context specific
+
+56
+00:04:48,056 --> 00:04:53,036
+independence. And it turns out that this
+notion arises in some of the,
+
+57
+00:04:53,057 --> 00:04:58,058
+representations of CPDs that we're going
+to talk about. Context specific
+
+58
+00:04:58,058 --> 00:05:03,080
+independence is a type of independence
+where we have a set of
+
+59
+00:05:03,080 --> 00:05:08,094
+variables, X, and a set of variables, Y,
+and a set of variables, Z. And then we
+
+60
+00:05:08,094 --> 00:05:14,044
+have a particular assignment, C, which is
+an assignment to some set of variables,
+
+61
+00:05:14,044 --> 00:05:21,042
+big C. So this is conditioning, this is an
+independence statement that only hold a
+
+62
+00:05:21,042 --> 00:05:28,031
+particular values of the conditioning
+variable C as opposed to all values of
+
+63
+00:05:28,031 --> 00:05:34,051
+the conditioning variable C. Now the
+definition of this is exactly as we have
+
+64
+00:05:34,051 --> 00:05:40,005
+seen before. So, except that if you
+remember before we had z stays, when we
+
+65
+00:05:40,005 --> 00:05:45,094
+were doing conditional independance given z
+we had the z stays on the right hand side
+
+66
+00:05:45,094 --> 00:05:51,078
+of the conditioning bar everywhere, well
+now z and c. Stay on the right hand side
+
+67
+00:05:51,078 --> 00:05:57,088
+of the conditioning bar in all of these
+forms of the independent statement. So
+
+68
+00:05:57,088 --> 00:06:03,060
+let's look at why contact specific
+independence might arise, when we have
+
+69
+00:06:03,060 --> 00:06:09,023
+particular internal structure within a
+CPD. So let's imagine, let's, let's
+
+70
+00:06:09,023 --> 00:06:14,056
+consider the case that X is a
+deterministic or of Y1 and Y2. And the
+
+71
+00:06:14,056 --> 00:06:24,016
+question is. What form of context specific
+independence holds when we have, X being a
+
+72
+00:06:24,016 --> 00:06:32,022
+deterministic, X being this deterministic
+OR? So let's look at these
+
+73
+00:06:32,022 --> 00:06:41,041
+statements one at a time, and here we have
+that Y2 is false. What happens
+
+74
+00:06:41,041 --> 00:06:46,067
+when Y<u>2 is false? Well when Y<u>2 is
+false, X is the same as Y<u>1, in which</u></u></u>
+
+75
+00:06:46,067 --> 00:06:52,006
+case obviously they're not going to be
+independent. On the other hand what if Y<u>2</u>
+
+76
+00:06:52,006 --> 00:06:57,019
+is true? Then I don't care
+about Y<u>2 anymore because Y<u>two</u></u>
+
+77
+00:06:57,019 --> 00:07:01,074
+is true because x is true and so here we
+have a notion of specific independence.
+
+78
+00:07:02,069 --> 00:07:10,041
+What about this one? I'm now asking about
+Y1 being independent of Y2, given two
+
+79
+00:07:10,041 --> 00:07:18,043
+possible values of X. What happens when X
+is false? What do I know about Y1 and Y2?
+
+80
+00:07:18,043 --> 00:07:22,070
+They're both false. Well if they're both
+false, then they're independent of each
+
+81
+00:07:22,070 --> 00:07:27,003
+other, because if you tell me that one of
+them is false, I already know the other
+
+82
+00:07:27,003 --> 00:07:31,019
+one is false, so they're independent. And
+so this is another context
+
+83
+00:07:31,019 --> 00:07:36,013
+specific independence, that hold here.
+Does it hold if I tell you that X is true?
+
+84
+00:07:36,013 --> 00:07:41,045
+No, because I don't know which of Y1 and
+Y2 made X true. And so this last one
+
+85
+00:07:41,045 --> 00:07:47,018
+doesn't hold. And so, here are two context
+specific independencies that hold in the
+
+86
+00:07:47,018 --> 00:07:52,078
+context of deterministic CPD that wouldn't
+hold, neither of these would hold for
+
+87
+00:07:52,078 --> 00:07:58,044
+general purpose CPD. Wouldn't necessarily
+hold for general purpose CPD, where X,
+
+88
+00:07:58,044 --> 00:08:00,033
+depending on Y1 and Y2.

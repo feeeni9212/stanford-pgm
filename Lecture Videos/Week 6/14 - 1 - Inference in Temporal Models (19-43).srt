@@ -1,0 +1,1070 @@
+
+1
+00:00:00,000 --> 00:00:04,003
+So over the course of the last few
+lectures we've talked about a number about
+
+2
+00:00:04,003 --> 00:00:09,000
+different inference strategies and how
+they might be applied to a range of different
+
+3
+00:00:09,000 --> 00:00:13,009
+graphical models. One question that comes
+up is whether the same strategies can be
+
+4
+00:00:13,009 --> 00:00:18,004
+used for the kinds of template based
+models that we defined earlier in the
+
+5
+00:00:18,004 --> 00:00:23,002
+course. Models that are defined by a, say,
+dynamic Bayesian networks, or via plate
+
+6
+00:00:23,002 --> 00:00:26,009
+models, or one of the other
+representations that uses repeated
+
+7
+00:00:26,009 --> 00:00:31,007
+structure. So as we'll see, the answer to
+that is both yes and no. That is, the same
+
+8
+00:00:31,007 --> 00:00:36,003
+strategies can be applied, but they're
+also some interestingly new challenges
+
+9
+00:00:36,003 --> 00:00:41,009
+that arise from this. So, first let's
+remind ourselves of how for example a
+
+10
+00:00:41,009 --> 00:00:47,004
+dynamic Bayes net is specified, so
+as a reminder, dynamic Bayes net is
+
+11
+00:00:47,004 --> 00:00:52,008
+specified using a, initial time. Zero
+distribution, which is usually a Bayesian
+
+12
+00:00:52,008 --> 00:00:58,000
+network, as well as the 2TBN that tells us
+the transition model. And it's certainly
+
+13
+00:00:58,000 --> 00:01:02,006
+the case that one can take those two
+pieces, and construct an unrolled or
+
+14
+00:01:02,006 --> 00:01:07,007
+ground Bayesian network. And once we've
+done that, that ground Bayesian network is
+
+15
+00:01:07,007 --> 00:01:12,007
+a Bayesian network, just like any other.
+And so whatever inference techniques we
+
+16
+00:01:12,007 --> 00:01:17,009
+have developed for answering queries for
+any Bayesian network, can be used in this
+
+17
+00:01:17,009 --> 00:01:22,008
+context as well. So specifically, once we
+unroll the DBN for a given trajectory
+
+18
+00:01:22,008 --> 00:01:27,004
+length, we can run your favorite
+inference algorithm over the ground
+
+19
+00:01:27,004 --> 00:01:32,004
+network to answer questions such as what
+is the location of the car at time two
+
+20
+00:01:32,004 --> 00:01:37,000
+given whatever evidence we might be
+willing to give it. So. Observations, up
+
+21
+00:01:37,000 --> 00:01:41,007
+to time two or observations for the entire
+duration of the sequence. The same thing
+
+22
+00:01:41,007 --> 00:01:46,004
+happens when we look at plate models. If
+this is the simple plate model that we
+
+23
+00:01:46,004 --> 00:01:50,007
+have done for our university example,
+where we have students and courses and
+
+24
+00:01:50,009 --> 00:01:55,009
+grades, then we can unroll that network to
+produce a ground network over a subset of
+
+25
+00:01:55,009 --> 00:02:00,002
+students, in this case, this very simple
+example, two courses and two
+
+26
+00:02:00,002 --> 00:02:04,007
+students. And that unrolled network is
+once again a Bayesian networks just like
+
+27
+00:02:04,007 --> 00:02:09,000
+any other, and so we can run inference
+over that network to answer questions
+
+28
+00:02:09,000 --> 00:02:13,004
+about what is our predicted distribution
+over the intelligence of the given
+
+29
+00:02:13,004 --> 00:02:18,007
+student. >> Given some information about
+grades for example. >> Mm-hm. What are
+
+30
+00:02:18,007 --> 00:02:25,006
+some of the challenges though. So, part of
+the, Difficulty or new dimensions that are
+
+31
+00:02:25,006 --> 00:02:30,004
+offered by some of these models, is the
+fact that they establish new problems,
+
+32
+00:02:30,004 --> 00:02:35,004
+which is particularly true in the context
+of temporal models, where we might often
+
+33
+00:02:35,004 --> 00:02:40,000
+be interested in what you might call
+belief state tracking. That is, keeping
+
+34
+00:02:40,000 --> 00:02:45,000
+track over the state of the system as it
+evolves. Now, in some ways, this is just a
+
+35
+00:02:45,000 --> 00:02:50,000
+traditional probabilistic inference task,
+because it corresponds to asking, what is
+
+36
+00:02:50,000 --> 00:02:55,000
+our probability distribution over the
+state of time T, given. The observations
+
+37
+00:02:55,000 --> 00:03:01,007
+that the agent has had access to, up. To
+time t. So this is, over here, what we see
+
+38
+00:03:01,007 --> 00:03:09,005
+is 01: t is just a shorthand for 01.
+Comma, O two up to O T. And so this is an
+
+39
+00:03:09,005 --> 00:03:14,006
+inference task that can be answered using
+standard, probabilistic inference
+
+40
+00:03:14,006 --> 00:03:20,001
+techniques over the unrolled network.
+But there is a challenge that needs to be
+
+41
+00:03:20,001 --> 00:03:25,005
+addressed, if we want to keep track of this
+probability distribution over the course
+
+42
+00:03:25,005 --> 00:03:30,009
+of a long trajectory, without having a
+potentially unboundedly large network that
+
+43
+00:03:30,009 --> 00:03:36,004
+we have to keep running inference over. So
+it turns out, fortunately, that one can do
+
+44
+00:03:36,004 --> 00:03:41,006
+this in a dynamic way, without. Keeping
+track of the huge unrolled network at
+
+45
+00:03:41,006 --> 00:03:46,004
+all points in time. And this comes
+directly out of the consequence of the
+
+46
+00:03:46,004 --> 00:03:51,008
+Markov properties of the graphical model.
+So specifically we're going to do this as
+
+47
+00:03:51,008 --> 00:03:57,003
+a two stage process, where the first thing
+we're going to compute is this Sigma dot
+
+48
+00:03:57,003 --> 00:04:02,005
+T+1 and the position of the dot indicates
+that, although it's a distribution over
+
+49
+00:04:02,005 --> 00:04:07,002
+the state at T+1, it's a distribution that
+doesn't take into account the T+1
+
+50
+00:04:07,002 --> 00:04:12,006
+observation. And so this is defined to be,
+as written here, the probability of this
+
+51
+00:04:12,006 --> 00:04:17,007
+state at time T+1, given the observations up
+to time T. And so now we can do fairly
+
+52
+00:04:17,007 --> 00:04:22,007
+straightforward manipulations of this
+probabilistic expression. So the first
+
+53
+00:04:22,007 --> 00:04:28,003
+thing is, we inject S of T into the right
+hand side of the conditioning bar, and sum
+
+54
+00:04:28,003 --> 00:04:33,006
+out over it. So this is now a probability
+of ST+1, given ST and observations up to
+
+55
+00:04:33,006 --> 00:04:39,001
+time T times the probability of ST, given
+the observations up to time T. And now we
+
+56
+00:04:39,001 --> 00:04:45,001
+can apply independencies that arise
+from the structure of the graphical model
+
+57
+00:04:45,001 --> 00:04:50,004
+and specifically the fact that the state
+at time T plus one. Is independent of
+
+58
+00:04:50,004 --> 00:04:56,000
+everything that occurred before, given the
+state at time T, which is going to allow us
+
+59
+00:04:56,000 --> 00:05:01,001
+to use conditional independence to
+basically simplify the expression as
+
+60
+00:05:01,001 --> 00:05:05,009
+follows, just the probability of ST plus
+one, given SFT which is just our
+
+61
+00:05:05,009 --> 00:05:12,007
+transition model. [sound]. And
+ahe second term which is probability of s
+
+62
+00:05:12,007 --> 00:05:17,007
+of t given o one to t. This is just a
+previously computed belief state as
+
+63
+00:05:17,007 --> 00:05:22,004
+it's called, the sigma t that we are
+trying to keep track of. And so this
+
+64
+00:05:22,004 --> 00:05:27,006
+allows us to keep sigma t and produce
+sigma dot t plus one. The second step is
+
+65
+00:05:27,006 --> 00:05:33,002
+now to account for the observation model, at
+time t+1. So lets look at what that
+
+66
+00:05:33,002 --> 00:05:39,008
+would involve. So now we have sigma dot of
+T+1 which we defined on the previous slide
+
+67
+00:05:39,008 --> 00:05:45,007
+and so now we want to condition that on
+the new piece of observation or the
+
+68
+00:05:45,007 --> 00:05:51,009
+observation of time t+1 and this is defined so
+just and from that to derive the belief
+
+69
+00:05:51,009 --> 00:05:58,001
+state sigma T+1 and so here we are just
+going to take that definition probability
+
+70
+00:05:58,001 --> 00:06:04,003
+of S(t+1) give it all of the observation the
+ones the one with T and the new one. And
+
+71
+00:06:04,003 --> 00:06:10,008
+we're going to apply Bayes' rule to define
+this and to, to reformulate this and that
+
+72
+00:06:10,008 --> 00:06:16,007
+gives us probability of OT+1 given ST+1
+and the previous observations times the
+
+73
+00:06:16,007 --> 00:06:22,006
+probability of ST+1 given zero of one
+through T divided by the probability of
+
+74
+00:06:22,006 --> 00:06:28,005
+OT+1 given OT. This is a straightforward
+application of, of Bayes' rule and, once
+
+75
+00:06:28,005 --> 00:06:34,005
+again, we can now examine each of the
+terms in this expression and see what it
+
+76
+00:06:34,005 --> 00:06:40,001
+corresponds to and looking first at this.
+The first term on, in the, in the
+
+77
+00:06:40,001 --> 00:06:45,002
+numerator, we can see that this is the
+probability of the observation at time t
+
+78
+00:06:45,002 --> 00:06:50,006
+given the state at time t and a bunch of
+things that happened in the past. And once
+
+79
+00:06:50,006 --> 00:06:55,009
+again conditional independence tells us
+that the stuff that happened in the past
+
+80
+00:06:55,009 --> 00:07:00,003
+is not aff-, is, is irrelevant and can be
+removed because of condition
+
+81
+00:07:00,003 --> 00:07:06,001
+independencies. The second term. Which is
+this one is the we just computed. Its
+
+82
+00:07:06,001 --> 00:07:12,008
+[inaudible]. And that gives us this
+expression over here which is they're easy
+
+83
+00:07:12,008 --> 00:07:19,005
+to, to deal with because each term in
+numerators either something that is part
+
+84
+00:07:19,005 --> 00:07:25,000
+of our model, the observation model. In
+this case or. Something that we've
+
+85
+00:07:25,000 --> 00:07:29,009
+computed here, sigma dot equals one. Now
+you might wonder about how we get this
+
+86
+00:07:29,009 --> 00:07:34,009
+somewhat scary looking denominator. But
+the important thing to remember is, as in
+
+87
+00:07:34,009 --> 00:07:39,006
+previous examples that we've seen, this
+denominator is simply a normalizing
+
+88
+00:07:39,006 --> 00:07:49,004
+constant. [sound]. [sound] Which can be
+derived by computing the numerator. And
+
+89
+00:07:49,004 --> 00:07:57,004
+then normalizing. And so it's not really
+scary at all. So going back to an example
+
+90
+00:07:57,004 --> 00:08:02,007
+that we've seen before, let's look at the
+example of robot localization. This is a
+
+91
+00:08:02,007 --> 00:08:08,000
+model that we've already discussed, so
+we're not going to talk about it anymore.
+
+92
+00:08:08,000 --> 00:08:13,007
+But now let's see how we might, how this
+might manifest in the context of an actual
+
+93
+00:08:13,007 --> 00:08:18,009
+belief state tracking problem. So here is a
+situation where this model might be
+
+94
+00:08:18,009 --> 00:08:24,001
+applied. So let's first, explain what
+we're seeing before we see a demo. What
+
+95
+00:08:24,001 --> 00:08:29,006
+you see is the green circle is the robot
+true position which is not known. To the
+
+96
+00:08:29,006 --> 00:08:35,006
+robot because, the robot's trying to
+localize itself. These blue lines are the
+
+97
+00:08:35,006 --> 00:08:41,005
+observed. Sonar readings but the robot.
+Gets at each point in the, in the process.
+
+98
+00:08:41,005 --> 00:08:46,007
+So, you can see that the returned length
+of the sonar readings correspond roughly
+
+99
+00:08:46,007 --> 00:08:51,004
+to the distance of the robot from the
+wall, that there is some noise here. So
+
+100
+00:08:51,004 --> 00:08:56,007
+for example, sometimes for whatever reason
+the sonar appears to go through the wall,
+
+101
+00:08:56,007 --> 00:09:01,007
+even though it should have been giving,
+giving us a reading that is considerably
+
+102
+00:09:01,007 --> 00:09:06,003
+closer because it should have been
+reflected from the surface. So this is,
+
+103
+00:09:06,003 --> 00:09:10,008
+sonars are quite noisy and the
+visualization that we see reflects that.
+
+104
+00:09:10,008 --> 00:09:16,002
+The red dots that you see is a
+visualization of the robots beliefs over
+
+105
+00:09:16,002 --> 00:09:22,006
+where it is and the initial stage this is
+a uniformed probability distribution and,
+
+106
+00:09:22,008 --> 00:09:27,001
+and because the robot doesn't know where
+it is. And, as we'll see, this gets
+
+107
+00:09:27,001 --> 00:09:31,005
+clumpier and clumpier over time as the
+robot's belief state over where it's
+
+108
+00:09:31,005 --> 00:09:36,002
+likely to be becomes more and more
+definitive. So let's look at. This and
+
+109
+00:09:36,002 --> 00:09:43,006
+what this looks like overtime. So what we
+are gonna see is the Robot Lewis as it
+
+110
+00:09:43,006 --> 00:09:49,004
+gets more modulations. We can see, that
+the distribution becomes clumpier and
+
+111
+00:09:49,004 --> 00:09:55,000
+clumpier, and pretty sure the robot's sure
+that it?s in the hallway, but because of
+
+112
+00:09:55,000 --> 00:10:00,004
+symmetries its not sure which side of the
+hallway it is, so we have these two
+
+113
+00:10:00,004 --> 00:10:05,000
+clumps. Representing these two modes of
+the distribution. But now the robot's
+
+114
+00:10:05,000 --> 00:10:10,001
+going to walk into this room and notice
+that this room over here is different from
+
+115
+00:10:10,001 --> 00:10:15,001
+the room at the bottom. So right now the
+robot has localized itself with certainty
+
+116
+00:10:15,001 --> 00:10:20,005
+or close to certainty because only one
+position is consistent with it?s with the
+
+117
+00:10:20,005 --> 00:10:25,004
+observations that it's received over the
+course of its trajectory. The second
+
+118
+00:10:25,004 --> 00:10:32,005
+challenge associated with these complete
+base models are computational issues. Sure
+
+119
+00:10:32,005 --> 00:10:37,009
+we can produce and unroll Bayesian network
+and compute a posterior over any subset of
+
+120
+00:10:37,009 --> 00:10:43,000
+the variables using standard inference
+techniques. But one of the consequence of
+
+121
+00:10:43,000 --> 00:10:48,000
+being able to produce these very large
+probabilistic graphical models from a
+
+122
+00:10:48,000 --> 00:10:52,009
+fairly small template is that we can
+produce very large probabilistic graphical
+
+123
+00:10:52,009 --> 00:10:57,008
+models from a very small template. And
+probabil-, large probabilistic graphical
+
+124
+00:10:57,008 --> 00:11:02,008
+models can pose new inference challenges
+in terms of the s-, the ability to scale
+
+125
+00:11:02,008 --> 00:11:08,002
+inference to models of that size. So
+specifically if we look at the unrolled
+
+126
+00:11:08,002 --> 00:11:15,001
+model that arises from an unrolled DBN and
+thinking back to some of the analysis that
+
+127
+00:11:15,001 --> 00:11:21,002
+we did regarding the complexity of
+probabilistic inference for a particular
+
+128
+00:11:21,002 --> 00:11:26,009
+probabilistic graphical model. We
+remember, for example, that if we want to
+
+129
+00:11:26,009 --> 00:11:32,006
+run inference, say the exact inference,
+say a click tree, over this unrolled
+
+130
+00:11:32,006 --> 00:11:38,005
+network, then For example if we want to
+s-, to have a clique tree where say the
+
+131
+00:11:38,005 --> 00:11:44,004
+time zero variables are in one part of the
+model and the time t variables for some
+
+132
+00:11:44,004 --> 00:11:50,005
+future t are on some other in some other
+clique in the model so they're not all together in
+
+133
+00:11:50,005 --> 00:11:56,000
+one big clique, then the minimal subset
+needs to separate these variables over
+
+134
+00:11:56,000 --> 00:12:01,003
+here, let's say the blue variables, the
+time zero variables from. The green
+
+135
+00:12:01,003 --> 00:12:06,005
+variable. So the subset must separate
+them. And if you think about what
+
+136
+00:12:06,005 --> 00:12:12,006
+separation imposes on us in this setting
+we can see that the only way to separate.
+
+137
+00:12:12,006 --> 00:12:19,006
+The For example these variables, the blue
+variables over here from the green
+
+138
+00:12:19,006 --> 00:12:25,002
+variables over here, is to put in the
+subset at least the persistent variables.
+
+139
+00:12:25,002 --> 00:12:31,002
+That is, the ones where. There is an edge
+from the variable of time T to its
+
+140
+00:12:31,002 --> 00:12:36,006
+incarnation of time T plus one. And so the
+minimum subset in this context, the
+
+141
+00:12:36,006 --> 00:12:42,001
+smallest subset that we can construct that
+would allow us to have different cleats
+
+142
+00:12:42,001 --> 00:12:46,009
+for say, time zero and time two, is
+something that involves all of these
+
+143
+00:12:46,009 --> 00:12:52,002
+variables in the middle. And so. That can
+potentially involve a significant
+
+144
+00:12:52,002 --> 00:12:58,004
+computational cost for exact inference,
+especially when we have a large number of
+
+145
+00:12:58,004 --> 00:13:04,007
+persistent variables. A different way of
+understanding this is via the concept of
+
+146
+00:13:04,007 --> 00:13:10,008
+entanglement if we're thinking of belief
+state tracking. So [sound] if our goal is
+
+147
+00:13:10,008 --> 00:13:16,008
+to maintain a belief state over say the
+variables time three and we are trying to
+
+148
+00:13:16,008 --> 00:13:22,007
+think about how can we maintain this
+probability distribution the sigma of time
+
+149
+00:13:22,007 --> 00:13:28,001
+three in a way that doesn't involve of
+maintaining a full explicit joint
+
+150
+00:13:28,001 --> 00:13:33,008
+distribution over the variables time
+three, we quickly realize that really we
+
+151
+00:13:33,008 --> 00:13:42,001
+have no choice because there are no
+conditional dependencies within time
+
+152
+00:13:42,001 --> 00:13:48,000
+three. Now you might say, how's that, this
+is a nicely structured model, why wouldn't
+
+153
+00:13:48,000 --> 00:13:53,009
+there be conditional independencies. Well
+look at what's going on here, can we say
+
+154
+00:13:53,009 --> 00:13:59,002
+that weather is a times three
+conditionally independent of failure times
+
+155
+00:13:59,002 --> 00:14:04,005
+three. Well, in locally, they're not
+connected to each other within the time
+
+156
+00:14:04,005 --> 00:14:10,002
+slice, but there's certainly an active
+trail between them, that goes for example,
+
+157
+00:14:10,002 --> 00:14:17,002
+like this From weather time three, weather
+time two, weather time one, failure time
+
+158
+00:14:17,002 --> 00:14:22,003
+two, to failure time three. And so this is
+an active trail between these two
+
+159
+00:14:22,003 --> 00:14:27,002
+variables, which means that they are, when
+you consider only the variables at times
+
+160
+00:14:27,002 --> 00:14:31,008
+three, not conditionally independent of
+each other, given any of the other
+
+161
+00:14:31,008 --> 00:14:36,005
+variables at times three. And so this
+entanglement process occurs very rapidly
+
+162
+00:14:36,005 --> 00:14:41,003
+over the course of, tracking a belief
+state in a dynamic daisy network, which
+
+163
+00:14:41,003 --> 00:14:46,002
+eventually means that the belief state, if
+you want to maintain the exact belief
+
+164
+00:14:46,002 --> 00:14:54,006
+state is just. [sound]. Fully correlated,
+in most cases. And so this is a
+
+165
+00:14:54,006 --> 00:15:02,008
+computational consequence of the fact that
+we have a very large Bayesian network. And
+
+166
+00:15:02,008 --> 00:15:10,003
+if you wanna think about just how large it
+can get, we can go back to the real,
+
+167
+00:15:10,006 --> 00:15:16,001
+Vehicle tracking example that we talked
+about in a previous lecture and note that
+
+168
+00:15:16,001 --> 00:15:21,000
+all of these variables over here. All
+persistent variables and so [inaudible]
+
+169
+00:15:21,000 --> 00:15:25,008
+say tracking will have to maintain if we
+were to be done exactly. If full joint
+
+170
+00:15:25,008 --> 00:15:30,001
+distribution over all these variables
+which is why could be intractable.
+
+171
+00:15:30,001 --> 00:15:34,005
+Certainly if you want real time
+performance and problem not even [sound]
+
+172
+00:15:34,005 --> 00:15:39,005
+without that constraint. And so, there has
+been a lot of work on approximate method
+
+173
+00:15:39,005 --> 00:15:44,001
+in the context of a temporal models
+because of the computational issues that
+
+174
+00:15:44,001 --> 00:15:50,008
+they raise. Computational issues like that
+also occur in plate models so here is the
+
+175
+00:15:50,008 --> 00:15:57,007
+plate model unrolled for our student
+example with the difficulty over here. And
+
+176
+00:15:57,007 --> 00:16:04,001
+the intelligence. Alright and the grades
+in the middle are all observed, have not
+
+177
+00:16:04,001 --> 00:16:10,007
+put in the actual variables to, because of
+which [inaudible] things up. And we have
+
+178
+00:16:10,007 --> 00:16:19,000
+talked about computational complexity of
+this bipartite. Mrf, which is what we
+
+179
+00:16:19,000 --> 00:16:24,000
+really have here where you have the
+variables on the left are connected to the
+
+180
+00:16:24,000 --> 00:16:29,001
+variables on the right. And, in general,
+seeming that the grades are fairly dense,
+
+181
+00:16:29,001 --> 00:16:33,006
+we mentioned before that the. For exact
+inference the lowest, cost that we can
+
+182
+00:16:33,006 --> 00:16:38,001
+expect is, if you have M variables on the
+left and N variables on the right, its the
+
+183
+00:16:38,001 --> 00:16:42,005
+minimum, of M and N. So the minimum of the
+number of courses and the number of
+
+184
+00:16:42,005 --> 00:16:47,000
+students, and again this is you, you could
+come up, cases where this is going to be
+
+185
+00:16:47,000 --> 00:16:51,003
+lower than that, but in general, for a
+bipartite MRF like this that?s what you're
+
+186
+00:16:51,004 --> 00:16:55,006
+what?s, that?s what you're going to get
+and assuming that the University has a
+
+187
+00:16:55,006 --> 00:16:59,008
+reasonably high number of courses and
+presumably even more students, this can
+
+188
+00:16:59,008 --> 00:17:04,005
+become intractable very quickly, giving
+rise to the need for approximate inference
+
+189
+00:17:04,005 --> 00:17:10,004
+methods. That said, approximate inference
+methods can be very successful. So, let's
+
+190
+00:17:10,004 --> 00:17:16,005
+just conclude this with one more example.
+So, here is an example from, in this case,
+
+191
+00:17:16,005 --> 00:17:22,005
+an undirected, template model, where we
+have repeated structure. So here the task
+
+192
+00:17:22,005 --> 00:17:28,003
+is to classify web pages into categories
+where you want to categorize web pages.
+
+193
+00:17:28,003 --> 00:17:36,004
+This is a project called, web KB, That was
+[sound] constructed by Tom Mitchell and
+
+194
+00:17:36,004 --> 00:17:42,006
+his group at Carnegie Mellon University.
+And what we see hers is that you like to
+
+195
+00:17:42,006 --> 00:17:48,007
+categorize web pages as corresponding to
+students faculty courses and so on. And
+
+196
+00:17:48,007 --> 00:17:54,000
+while one can use standard machine
+learning techniques to categorize web
+
+197
+00:17:54,000 --> 00:17:59,008
+pages individually, say by the words that
+they contain, it turns out one can get
+
+198
+00:17:59,008 --> 00:18:08,000
+significant improvement in performance by.
+Considering the connections between the
+
+199
+00:18:08,000 --> 00:18:17,000
+web pages, so specifically by considering
+edges. Between in this case, undirected
+
+200
+00:18:17,000 --> 00:18:21,009
+edges between the category of pages that
+are linked to each other. So for example,
+
+201
+00:18:21,009 --> 00:18:27,003
+we see and this is a model that was
+learned from data that students are quite
+
+202
+00:18:27,003 --> 00:18:33,004
+likely to point to faculty and faculty are
+somewhat less likely to point to students.
+
+203
+00:18:33,004 --> 00:18:39,000
+And faculty are even less likely to point
+to other faculty. And so that gives us
+
+204
+00:18:39,000 --> 00:18:44,005
+some information about the correlations
+between labels of web pages that are
+
+205
+00:18:44,005 --> 00:18:50,007
+linked to each other and gives rise to.
+Improvement in performance that one gets
+
+206
+00:18:50,007 --> 00:18:57,009
+better actually quite, quite considerable.
+So for example a reduction in error from
+
+207
+00:18:57,009 --> 00:19:05,006
+eighteen percent to a little bit over
+twelve%. To summarize. Our inference in
+
+208
+00:19:05,006 --> 00:19:11,000
+template of, on template models. Can be
+done in principal [inaudible] by using
+
+209
+00:19:11,000 --> 00:19:16,002
+standard inference methods. However,
+template models specifically weighs new
+
+210
+00:19:16,002 --> 00:19:22,000
+inference tasks. Such as real [inaudible]
+tracking which requires certain adaptation
+
+211
+00:19:22,000 --> 00:19:27,002
+in our methods. And. Furthermore, a second
+source of complexity here is that the
+
+212
+00:19:27,002 --> 00:19:32,004
+[inaudible] that we get by unrolling these
+models is often very large and sometimes
+
+213
+00:19:32,004 --> 00:19:37,005
+quite densely connected, requiring careful
+design of algorithmic methods and use of
+
+214
+00:19:37,005 --> 00:19:42,006
+approximate methods that can allow us to
+deal with the increase in [inaudible]

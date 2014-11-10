@@ -1,0 +1,910 @@
+
+1
+00:00:00,000 --> 00:00:04,039
+So now we're getting into Bayesian
+land. And we're finally going to start
+
+2
+00:00:04,039 --> 00:00:09,020
+talking about the actual representations
+that are going to be the bread and butter
+
+3
+00:00:09,020 --> 00:00:13,066
+of what we're going to describe in this
+class. And so, we're going to start by
+
+4
+00:00:13,066 --> 00:00:18,063
+defining the basic semantics of a Bayesian
+network, and how it's constructed
+
+5
+00:00:18,063 --> 00:00:23,015
+from a set of factors. So let's
+start by looking at a running example
+
+6
+00:00:23,015 --> 00:00:27,087
+that will see us throughout a large part
+of, at least, the first part of this course
+
+7
+00:00:27,087 --> 00:00:32,020
+and this is what we call the student
+example. So in the student example we have
+
+8
+00:00:32,020 --> 00:00:37,006
+a student who's taking the class for a
+grade and we're going to use the first
+
+9
+00:00:37,006 --> 00:00:43,016
+letter of, of the word to denote the name
+of the random variable, just like we did in
+
+10
+00:00:43,016 --> 00:00:48,042
+previous examples. So here, the random
+variable is going to be G. Now the grade
+
+11
+00:00:48,042 --> 00:00:52,082
+of the student obviously depends on how
+difficult the course that he or she is
+
+12
+00:00:52,082 --> 00:00:58,066
+taking and the intelligence of the
+student. So that gives us, in addition to
+
+13
+00:00:58,066 --> 00:01:03,043
+G. We also have D and I, and we're going
+to add just a couple of extra random
+
+14
+00:01:03,043 --> 00:01:08,066
+variables just to make things a little bit
+more interesting. So we're going to assume
+
+15
+00:01:08,066 --> 00:01:13,077
+that the student has taken the SAT. So he
+may, may or may not have scored well on
+
+16
+00:01:13,077 --> 00:01:18,063
+the SAT's. So that's another random
+variable S. And then finally we have this
+
+17
+00:01:18,063 --> 00:01:23,074
+case of the disappearing line. We also
+have the recommendation letter L that the
+
+18
+00:01:23,074 --> 00:01:28,043
+student gets from the instructor of the
+class. Okay? And we're going to grossly
+
+19
+00:01:28,043 --> 00:01:33,016
+oversimplify this problem by, basically,
+binarizing everything except for grades.
+
+20
+00:01:33,016 --> 00:01:37,088
+So, everything has only two values except
+for grades that has three. And then,
+
+21
+00:01:37,088 --> 00:01:42,061
+only so that I can write things
+compactly. This is not a limitation of the
+
+22
+00:01:42,061 --> 00:01:46,080
+framework, it's just so the
+probability distribution won't become
+
+23
+00:01:46,080 --> 00:01:50,087
+unmanageable. Okay, so now let's think
+about how we can construct the
+
+24
+00:01:50,087 --> 00:01:57,088
+dependencies of this in this
+probability distribution. Okay, so let's
+
+25
+00:01:57,088 --> 00:02:06,046
+start with the random variable grade. I am
+gonna put it in the middle and ask ourselves
+
+26
+00:02:06,046 --> 00:02:12,043
+what the grade of the student depends on
+and it seems just, you know, from a completely
+
+27
+00:02:12,043 --> 00:02:17,070
+intuitive perspective it seems
+clear that the grade of the student
+
+28
+00:02:17,070 --> 00:02:23,011
+depends on the difficulty of the course and on the intelligence of the students.
+
+29
+00:02:23,011 --> 00:02:28,025
+So, we already have a little baby Bayesian
+network with three random variables, let's
+
+30
+00:02:28,025 --> 00:02:33,064
+now take the other random variables and
+introduce them into the mix, so for example
+
+31
+00:02:33,064 --> 00:02:38,090
+the SAT score of the student doesn't seem
+to depend on the difficulty of the course
+
+32
+00:02:38,090 --> 00:02:43,054
+or on the grade the student gets in the
+course, the only thing it's likely to
+
+33
+00:02:43,054 --> 00:02:49,014
+depend on, in the context of this model, is
+the intelligence of the student. And
+
+34
+00:02:49,014 --> 00:02:54,010
+finally, caricaturing the way in which
+instructors write recommendation letters,
+
+35
+00:02:54,010 --> 00:02:59,012
+we're going to assume that the quality of
+a letter depends only on the student's
+
+36
+00:02:59,012 --> 00:03:04,014
+grades. The professor's teaching, you
+know, 600 students or maybe 100,000 online
+
+37
+00:03:04,014 --> 00:03:09,028
+students. And so, the only thing that one
+can say about the student is by looking
+
+38
+00:03:09,028 --> 00:03:14,036
+as their actual grade record. And so, regardless of anything else, the quality of the letter depends only on the grade.
+
+39
+00:03:18,096 --> 00:03:24,046
+So, this a model for the dependencies. It's only one model that one
+can construct for these dependencies. So,
+
+40
+00:03:24,046 --> 00:03:30,002
+for example, I could easily imagine other
+models. For instance, ones that have the
+
+41
+00:03:30,002 --> 00:03:35,018
+students who are brighter taking harder
+courses. In which case, there might be
+
+42
+00:03:35,018 --> 00:03:40,054
+potentially an edge between I and D but
+we're not going to use that model (so let's
+
+43
+00:03:40,054 --> 00:03:45,089
+erase that), because we are going to stick
+with the simpler model for the time being.
+
+44
+00:03:45,089 --> 00:03:51,011
+But this is only to highlight the fact
+that a model is not set in stone. It's a
+
+45
+00:03:51,011 --> 00:03:56,046
+representation of how we believe the world
+works. So here is a model drawn out a
+
+46
+00:03:56,046 --> 00:04:01,056
+little bit more nicely than in the
+picture before. And now, lets think about
+
+47
+00:04:01,056 --> 00:04:06,034
+what we need to do in order to turn this
+into our representation of probability
+
+48
+00:04:06,034 --> 00:04:11,038
+distribution, because right now all it is,
+is a bunch of you know, of nodes stuck
+
+49
+00:04:11,038 --> 00:04:16,029
+together with edges, so how do we actually
+get this to represent the probability
+
+50
+00:04:16,029 --> 00:04:20,090
+distribution? And the way in which we're
+going to do that, is we're going to
+
+51
+00:04:20,090 --> 00:04:25,057
+annotate each of the nodes in the network
+with what's called, with CPDs. So we
+
+52
+00:04:25,057 --> 00:04:32,012
+previously defined CPDs. CPDs - just as a
+reminder - is a Conditional Probability
+
+53
+00:04:32,012 --> 00:04:38,092
+Distribution, I'm using the abreviation
+here. And each of these is a CPD, so we
+
+54
+00:04:38,092 --> 00:04:45,006
+have five nodes, we have five CPDs. Now if
+you look at some of these CPDs, they're
+
+55
+00:04:45,006 --> 00:04:50,054
+kind of degenerate. So, for example, the
+difficulty CPD isn't actually conditioned
+
+56
+00:04:50,054 --> 00:04:55,087
+on anything. It's just an unconditional
+probability distribution that tell us, for
+
+57
+00:04:55,087 --> 00:05:00,083
+example, that courses are only 40% likely
+to be difficult and 60 % likely to be
+
+58
+00:05:00,083 --> 00:05:05,070
+easy. Here is a similar unconditional
+probability distribution for intelligence.
+
+59
+00:05:05,070 --> 00:05:10,063
+Now this gets more interesting when you
+look at the actual conditional probability
+
+60
+00:05:10,063 --> 00:05:15,027
+distributions. So here, for example, is a
+CPD that we've seen before. This is the
+
+61
+00:05:15,027 --> 00:05:19,072
+CPD of the grades A, B, and C. So, here is
+the conditional probability
+
+62
+00:05:19,072 --> 00:05:24,041
+distribution that we've already seen
+before for the probability of grade given
+
+63
+00:05:24,041 --> 00:05:29,011
+intelligence and difficulty. And we've
+already discussed how each of these rows
+
+64
+00:05:29,011 --> 00:05:33,080
+necessarily sums to one because of the
+probability distribution over the variable
+
+65
+00:05:33,080 --> 00:05:39,073
+grade. And we have two other CPDs here in
+this case the probability of SAT scores given
+
+66
+00:05:39,073 --> 00:05:44,088
+intelligence and the probability of a recommendation
+letter given a grade. So, just to write
+
+67
+00:05:44,088 --> 00:05:52,030
+this out completely, we have P(D) . P(I)
+I, P(G given I,D), P (L given G) and P (S given I)
+
+68
+00:05:52,030 --> 00:05:58,061
+And that now, is a
+fully parameterized Bayesian network and
+
+69
+00:05:58,061 --> 00:06:03,010
+what we'll show next is how this
+Bayesian network produces a
+
+70
+00:06:03,010 --> 00:06:08,085
+joint-probability distribution over these
+five variables. So here are my CPD's and
+
+71
+00:06:08,085 --> 00:06:14,038
+what we are going to define now is the
+chain rule for Bayesian networks, and
+
+72
+00:06:14,038 --> 00:06:19,092
+that chain rule basically takes these
+CPDS, all these little CPDS, and basically
+
+73
+00:06:19,092 --> 00:06:25,085
+multiplies them together, like that. Now,
+before we think of what that means, let us
+
+74
+00:06:25,085 --> 00:06:32,004
+first note that this is actually a factor
+product in exactly the same way that we
+
+75
+00:06:32,004 --> 00:06:37,070
+just defined. So here, we have five
+factors, they have overlapping scopes. And
+
+76
+00:06:37,070 --> 00:06:43,006
+what we end up with is a factor product
+that gives us a big, big factor,
+
+77
+00:06:43,006 --> 00:06:49,025
+whose scope is five variables. What
+does that translate into when we apply the
+
+78
+00:06:49,025 --> 00:06:55,027
+chain rule for Bayesian network in the
+context of this particular example? So, let's
+
+79
+00:06:55,027 --> 00:07:01,021
+look us at this particular assignment and, remember,
+there's going to be a bunch of these
+
+80
+00:07:01,021 --> 00:07:07,022
+different assignments, and I'm just going
+to compute this other probability of this
+
+81
+00:07:07,022 --> 00:07:12,087
+one. So the probability of d0, i1, g3, s1
+and l1. Well, so the first thing you need
+
+82
+00:07:12,087 --> 00:07:19,091
+is the probability of d0, and the
+probability of d0 is 0.6. The next thing,
+
+83
+00:07:19,091 --> 00:07:29,064
+from the next factor, is the probability of
+i1, which is 0.3. What about the next one?
+
+84
+00:07:29,064 --> 00:07:36,072
+The next now is a conditional factor
+and for that, we need the probability of g3,
+
+85
+00:07:36,072 --> 00:07:43,064
+because we have g3 here. So we want from
+this column over here, and which row do we
+
+86
+00:07:43,064 --> 00:07:49,096
+want? We want to pick the row
+that corresponds to d0 and i1, which is this
+
+87
+00:07:49,096 --> 00:07:58,047
+row, so 0.02. Continuing on, we know now
+that wenow have g3. So we want from
+
+88
+00:07:58,047 --> 00:08:06,041
+this row. And we want the probability of
+l1, so we want this entry. 0.01... And
+
+89
+00:08:06,041 --> 00:08:15,008
+finally, here we have probability of s1
+given, given i1. So, that would be this one
+
+90
+00:08:15,008 --> 00:08:22,024
+over here, 0.8. And in this exact
+same fashion, we're going to end up
+
+91
+00:08:22,024 --> 00:08:29,021
+defining all of the entries in this joint
+probability distribution. Great, so, what
+
+92
+00:08:29,021 --> 00:08:37,046
+does that give us as a definition? A Bayesian network is a directed, acyclic graph.
+
+93
+00:08:38,034 --> 00:08:43,066
+Acyclic means it has no cycles, that is you can't traverse the edges and
+
+94
+00:08:43,066 --> 00:08:48,085
+get back to where you started. This is
+typically abbreviated as a DAG, and we're
+
+95
+00:08:48,085 --> 00:08:54,005
+going to use the letter G to denote directed acyclic graphs. And the
+
+96
+00:08:54,005 --> 00:08:59,050
+nodes of this directed acyclic graph
+represent the random variables that we're
+
+97
+00:08:59,050 --> 00:09:05,039
+interested in reasoning about, X1 up to
+Xn. And for each node in the graph,
+
+98
+00:09:05,039 --> 00:09:11,099
+Xi, we have a CPD that denotes the
+dependence of Xi on its parent in the
+
+99
+00:09:11,099 --> 00:09:18,031
+graph G. Okay? So, this is a set of
+variables. So, this would be like the
+
+100
+00:09:18,031 --> 00:09:25,026
+probability of G -grade- given I -intelligence- and D -difficulty-. So, this
+would be G, the Xi would be G and the
+
+101
+00:09:25,026 --> 00:09:31,037
+parents of G, ofXi, would be I and D. And
+the BN, the Bayesian network, represents a
+
+102
+00:09:31,037 --> 00:09:36,056
+joint probability distribution, via the
+chain rule for Bayesian networks, which is
+
+103
+00:09:36,056 --> 00:09:42,000
+the rule that's written over here and this
+is just a generalization of the rule that
+
+104
+00:09:42,000 --> 00:09:47,025
+we wrote on the previous slide, where we
+multiplied one CPD for each variable, here
+
+105
+00:09:47,025 --> 00:09:52,031
+we have again, we're
+multiplying over all the variables I and
+
+106
+00:09:52,031 --> 00:09:57,050
+multiplying the CPD for each of the Xis
+and this is once again, a factor product.
+
+107
+00:09:57,082 --> 00:10:02,001
+So, that's great and I just defined the
+joint probability distribution. Now, whose
+
+108
+00:10:02,001 --> 00:10:05,089
+to say that, that joint probability
+distribution is even a joint probability distribution?
+
+109
+00:10:05,089 --> 00:10:10,003
+So, what you have to show in
+order to demonstrate that something's a
+
+110
+00:10:10,003 --> 00:10:14,002
+joint probability distribution? The first
+thing you have to show is that it is
+
+111
+00:10:14,002 --> 00:10:17,085
+greater or equal to zero, because
+probability distributions are always non-negative.
+
+112
+00:10:17,085 --> 00:10:22,020
+As so, in order to do that,
+we need to show that, for this distribution P
+
+113
+00:10:22,020 --> 00:10:26,044
+and the way in, and this, as it happens,
+is quite trivial, because P is a product of factors
+
+114
+00:10:26,044 --> 00:10:36,062
+Actually, the products of CPDs
+and CPDs are non-negative, and if you
+
+115
+00:10:36,062 --> 00:10:41,005
+multiply a bunch of non-negative factors,
+you get a non-negative factor.
+
+116
+00:10:41,005 --> 00:10:45,087
+That's fairly straightforward. Next one's
+a little bit trickier. The other thing we
+
+117
+00:10:45,087 --> 00:10:50,030
+have to show or to demonstrate so that,
+something's a legal distribution, is to
+
+118
+00:10:50,030 --> 00:10:54,090
+prove that it sums to one. So how
+do we prove that something's sums
+
+119
+00:10:54,090 --> 00:10:59,006
+to one, that this probability distribution
+sums up to one? So, lets, actually
+
+120
+00:10:59,006 --> 00:11:03,048
+work through this, and one of the reasons
+for working through this is not just to
+
+121
+00:11:03,048 --> 00:11:07,079
+convince you that I'm not lying to you.
+But more importantly, the techniques that
+
+122
+00:11:07,079 --> 00:11:11,060
+we're going to use for this simple
+argument are going to accompany us
+
+123
+00:11:11,060 --> 00:11:16,013
+throughout much of the first part of the
+course. And so, it's worth going through
+
+124
+00:11:16,013 --> 00:11:20,049
+this in a little bit of detail, but I'm
+going to show that in the context of the
+
+125
+00:11:20,049 --> 00:11:24,075
+example of the distribution that we just
+showed, we just end up cluttered with
+
+126
+00:11:24,075 --> 00:11:29,054
+notation, but the, but the idea is still
+exactly the same. So, to sum up, over
+
+127
+00:11:29,054 --> 00:11:35,066
+all possible assigments, D, I, G, S, L of
+this, hopefully,
+
+128
+00:11:35,066 --> 00:11:41,070
+probability distribution that I just
+defined. The P of D, I, G, S, and L, okay? So
+
+129
+00:11:41,070 --> 00:11:50,002
+we're gonna break this up using the chain
+rule for Bayesian networks.
+
+130
+00:11:50,002 --> 00:11:56,060
+Because that's how we define this distribution P.
+Okay, now here is the magic trick that we
+
+131
+00:11:56,060 --> 00:12:02,078
+use whenever we deal with distributions
+like that. It's to notice that when we
+
+132
+00:12:02,078 --> 00:12:08,072
+have the summation over several random
+variables here, and here, inside the
+
+133
+00:12:08,072 --> 00:12:15,042
+summation we have a bunch of functions
+inside here. Only some of the...
+
+134
+00:12:15,042 --> 00:12:21,084
+... each factor only involves a small
+subset of the variables. And, when you
+
+135
+00:12:21,084 --> 00:12:28,000
+do, when you have a situation like that,
+you can push in the summations. So,
+
+136
+00:12:28,000 --> 00:12:34,049
+specifically, we're going to start out by
+pushing in the summation over L. And,
+
+137
+00:12:34,049 --> 00:12:41,051
+which factors involve L? Only the last
+one, so we can move in the summation over
+
+138
+00:12:41,051 --> 00:12:47,071
+L to this position, ending up with the
+following expression, so notice there's now
+
+139
+00:12:47,071 --> 00:12:53,041
+the summation over here, that's the first
+trick.
+
+140
+00:12:53,041 --> 00:12:59,062
+A second trick is using definition of CPDs and we observe here
+that the summation over L is summing up
+
+141
+00:12:59,062 --> 00:13:05,060
+over all possible mutually exclusive and
+exhaustive values of the variable L in
+
+142
+00:13:05,060 --> 00:13:11,076
+its conditional probability distribution
+P of L given G, and that means, basically,
+
+143
+00:13:11,076 --> 00:13:18,033
+we're summing up over a row of the CPD, and
+that means that the sum has to be one. And
+
+144
+00:13:18,033 --> 00:13:24,043
+so this term effectively cancels out,
+which gives us this. And now, we do exactly
+
+145
+00:13:24,043 --> 00:13:31,045
+the same thing. We can take S, and move it
+over here, and that gives us that. And
+
+146
+00:13:31,045 --> 00:13:39,025
+this too, is a sum over a row of a CPD.
+So, this too, is canceled and can be written
+
+147
+00:13:39,025 --> 00:13:45,088
+as 1. And we can do the same with G, and
+again. This has to be equal to one so we
+
+148
+00:13:45,088 --> 00:13:50,076
+can cancel this and so on, and so forth,
+and so, by the end of this, you're going to
+
+149
+00:13:50,076 --> 00:13:55,077
+have have canceled all of
+the variables in this summation, and what
+
+150
+00:13:55,077 --> 00:14:01,014
+remains is 1. Now, this is a very simple
+proof, but these tools of pushing
+
+151
+00:14:01,014 --> 00:14:07,036
+information and removing variables that
+are not relevant are going to turn out to
+
+152
+00:14:07,036 --> 00:14:13,049
+be very important. Okay, so now thi is just
+the final little bit of terminology that
+
+153
+00:14:13,049 --> 00:14:19,055
+will again accompany us later on, we are
+going to say that the distribution P
+
+154
+00:14:19,055 --> 00:14:25,084
+factorizes over G means that we can represent
+it over the graph G, if we can and call it
+
+155
+00:14:25,084 --> 00:14:31,060
+using the chain rule for Bayesian
+networks. So, a distribution factorizes
+
+156
+00:14:31,060 --> 00:14:36,094
+over a graph G, if I can represent
+it in this way, as a product of these
+
+157
+00:14:36,094 --> 00:14:44,000
+conditional probabilities. Well, let me
+just conclude this with a little
+
+158
+00:14:44,000 --> 00:14:49,017
+example, which is, arguably, the very
+first example of a Bayesian network ever.
+
+159
+00:14:49,037 --> 00:14:54,060
+It was an example of Bayesian networks
+before anybody even called them Bayesian
+
+160
+00:14:54,060 --> 00:15:00,029
+networks. And it was defined, actually, by
+statistical geneticists who were trying to
+
+161
+00:15:00,029 --> 00:15:06,015
+mull the notion of genetic inheritance 
+in a population. And so, here is an
+
+162
+00:15:06,015 --> 00:15:12,008
+example of genetic inheritance of blood
+type. So, let me just give a little bit of a
+
+163
+00:15:12,008 --> 00:15:18,018
+background on the genetics of this. So, in
+this very simple, oversimplified example,
+
+164
+00:15:18,018 --> 00:15:23,082
+a person's genotype is defined by two
+values, because we have two copies
+
+165
+00:15:24,003 --> 00:15:28,088
+of each of those
+chromosomes in this case. And so,
+
+166
+00:15:28,088 --> 00:15:34,073
+for each chromosome, we have three possible
+values, so we have, either the A value,
+
+167
+00:15:34,073 --> 00:15:40,022
+the B value, or the O value. These are
+familiar to many of you from blood types,
+
+168
+00:15:40,022 --> 00:15:46,013
+which is what we're modeling here. And so
+the total number of genotypes that we have
+
+169
+00:15:46,013 --> 00:15:51,069
+is listed over here. We have the AA
+genotype. AB, AO, BO, BB, and OO. So, we have
+
+170
+00:15:51,069 --> 00:15:58,030
+a total of six distinct genotypes.
+However, we have fewer phenotypes, because
+
+171
+00:15:58,030 --> 00:16:05,000
+it turns out that AA and AO manifest
+exactly the same way as a blood type A.
+
+172
+00:16:05,067 --> 00:16:13,057
+And BO and BB manifests as blood type B,
+and so we have only four phenotypes. So,
+
+173
+00:16:13,057 --> 00:16:21,007
+how do we model genetic inheritance in a
+Bayesian network? Here is a little
+
+174
+00:16:21,007 --> 00:16:28,087
+Bayesian network for genetic inheritance.
+We can see that for each individual, say
+
+175
+00:16:28,087 --> 00:16:35,004
+Marge, we have a genotype variable which
+takes on six values, and one of the six
+
+176
+00:16:35,004 --> 00:16:40,064
+values, which we saw before, and the
+phenotype, in this case, the blood type,
+
+177
+00:16:40,064 --> 00:16:48,032
+depends only on the person's genotype. We
+also see that a person's genotype depends
+
+178
+00:16:48,032 --> 00:16:53,072
+on the genotype of her parents. Because,
+after all, she inherits one chromosome
+
+179
+00:16:53,072 --> 00:16:59,054
+from her mother, and one chromosome from
+her father. And so, a person's
+
+180
+00:16:59,054 --> 00:17:05,022
+individual genotype just depends on those
+two variables. And so, this is very nice
+
+181
+00:17:05,022 --> 00:17:10,048
+and very compelling Bayesian network,
+because everything just fits in
+
+182
+00:17:10,048 --> 00:17:16,044
+beautifully in terms of, things really do
+depend  only on the variables
+
+183
+00:17:16,044 --> 00:17:20,058
+that we stipulate, and the models
+they depend on.

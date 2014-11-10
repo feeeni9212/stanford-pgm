@@ -1,0 +1,550 @@
+
+1
+00:00:00,000 --> 00:00:04,057
+So we previously presented the variable
+elimination algorithm, now let's think
+
+2
+00:00:04,057 --> 00:00:09,050
+about what is the computational complexity
+of this algorithm. So let's first look at
+
+3
+00:00:09,050 --> 00:00:14,061
+the basic operations that are used when we
+when we do an elimination step and there
+
+4
+00:00:14,061 --> 00:00:21,043
+are these two basic operations. There is a
+factor product. And the actual
+
+5
+00:00:21,043 --> 00:00:26,042
+marginalization. And so what we're going
+to do now, is we're going to count the
+
+6
+00:00:26,042 --> 00:00:32,015
+operations used by each of them. So let's
+start with a factor of product. And first
+
+7
+00:00:32,015 --> 00:00:38,003
+let's remind ourselves that what factor of
+product is doing. So factor of product is
+
+8
+00:00:38,003 --> 00:00:43,077
+taking in this case, for example a factor
+who's scope is ab. And one's who scope is
+
+9
+00:00:43,077 --> 00:00:49,067
+bc and producing a factor who's scope is
+abc. Now, let's think about how each of
+
+10
+00:00:49,067 --> 00:00:55,064
+the numbers in this result is produced. So
+each of these is a product, in this case
+
+11
+00:00:55,064 --> 00:01:01,068
+it's two numbers, one that comes from this
+table and one that comes from that table.
+
+12
+00:01:01,068 --> 00:01:08,037
+>> So we've to produce every one of the
+rows in this new table, this new factor.
+
+13
+00:01:08,037 --> 00:01:15,065
+So let's call Nk the number of the rows in
+this new table. And how many operations
+
+14
+00:01:15,065 --> 00:01:22,041
+are there that we need to produce each
+such row. Well, if we need to multiply in,
+
+15
+00:01:22,041 --> 00:01:32,051
+in this case mk, different factors so for
+each row. We have mk minus 1 products.
+
+16
+00:01:36,074 --> 00:01:39,072
+And so total we get mk -1 times Nk
+multiplications. Now let's look at the
+
+17
+00:01:39,072 --> 00:01:46,044
+factor marginalization. So here we have a
+factor whose scope was Xk, we summed out
+
+18
+00:01:46,044 --> 00:01:52,074
+Z, and we end up with a factor whose scope
+is one less. So again, let's remind
+
+19
+00:01:52,074 --> 00:02:00,020
+ourselves this is a marginalization in
+this case over B. So marginalize B. And we
+
+20
+00:02:00,020 --> 00:02:07,082
+see that each of the rows in our output is
+produced in this case by a summation, of
+
+21
+00:02:07,082 --> 00:02:15,027
+two of the rows in the original, in the
+original factor. But if we turn this on
+
+22
+00:02:15,027 --> 00:02:24,010
+it's head we also see that each row Though
+each number in this factor, is used
+
+23
+00:02:24,010 --> 00:02:34,016
+exactly once. Each one gets added to only
+one of the rows in the new factor. And so
+
+24
+00:02:34,016 --> 00:02:41,063
+a simple upper bound on the amount of
+additions that we need to do is simply the
+
+25
+00:02:41,063 --> 00:02:48,081
+size of this factor N k. So now let's
+total up the computational complexity of
+
+26
+00:02:48,081 --> 00:02:54,021
+variable elimination. So let's assume that
+we start with m factors. For Bayesian
+
+27
+00:02:54,021 --> 00:03:00,051
+networks, m is really effectively N
+because we have one factor. For every
+
+28
+00:03:00,051 --> 00:03:07,093
+variable. Which is the CPD. And the reason
+I wrote less than or equal is because of
+
+29
+00:03:07,093 --> 00:03:12,075
+the reduction by evidence. Now for Markov
+networks it's gonna actually be larger. So
+
+30
+00:03:12,075 --> 00:03:17,068
+if you think of a grid Markov network or a
+fully connected Markov network, the number
+
+31
+00:03:17,068 --> 00:03:22,056
+of factors might be so fully connected
+pairwise Markov network number of factors
+
+32
+00:03:22,056 --> 00:03:26,086
+can actually be larger than number of
+variables. So that's why we have the
+
+33
+00:03:26,086 --> 00:03:32,048
+complexity in terms of m as opposed to in
+terms of n. Now, so that's the set of
+
+34
+00:03:32,048 --> 00:03:38,086
+factors that we start out with and then
+what happens as we do an elimination step.
+
+35
+00:03:38,086 --> 00:03:45,016
+An elimination step takes some of those
+factors, and generates another factor. But
+
+36
+00:03:45,016 --> 00:03:52,081
+each elimination step generates exactly
+one factor. How many elimination steps do
+
+37
+00:03:52,081 --> 00:03:58,023
+we have? Well, each elimination step
+corresponds to elimination of one
+
+38
+00:03:58,023 --> 00:04:05,033
+variable, so we have at most n elimination
+steps. So the total number of factors that
+
+39
+00:04:05,033 --> 00:04:11,099
+we ever produce is which we're gonna call
+M star is going to be equal to at most m
+
+40
+00:04:11,099 --> 00:04:18,073
+which is the set of initial factors plus
+the newly generated factors which is at
+
+41
+00:04:18,073 --> 00:04:26,028
+most n and so all together M star is less
+than or equal to m plus n. So now that we
+
+42
+00:04:26,028 --> 00:04:32,006
+figured that out let's look at what
+the complexity of the algorithm is in
+
+43
+00:04:32,006 --> 00:04:37,083
+terms of various key quantities. So N is
+the size of the largest factor that I ever
+
+44
+00:04:37,083 --> 00:04:43,020
+create which is the max of these
+different Nk's that I have. So
+
+45
+00:04:43,020 --> 00:04:48,064
+now how many product operations do we
+have. Well, remember that we had the sum
+
+46
+00:04:48,064 --> 00:04:54,036
+over the different elimination steps so
+sum over k and this was the number of
+
+47
+00:04:54,036 --> 00:04:59,080
+product operations that we have. But now
+here's the critical observation. Each
+
+48
+00:04:59,080 --> 00:05:11,005
+factor. Is multiplied in at most once.
+Because as soon as we multiply it in. As
+
+49
+00:05:11,005 --> 00:05:20,006
+soon as we multiply it in, it goes away.
+Which means that the sum over K, mk -1, is,
+
+50
+00:05:20,042 --> 00:05:29,041
+is at most the total number of factors. And so said otherwise we can write that this is less than or equal to
+
+51
+00:05:29,041 --> 00:05:36,039
+N times the sum over k, mk - 1.
+
+52
+00:05:36,039 --> 00:05:43,092
+This is less than or equal to m star. Because this is at most the total number of factors in my universe of factors.
+
+53
+00:05:43,092 --> 00:05:50,088
+What about the number of
+summation operations? Well here, this is
+
+54
+00:05:50,088 --> 00:05:58,032
+less than or equal to, the sum over k,  Nk which when you, which is n times less
+
+55
+00:05:58,032 --> 00:06:09,010
+than or equal to N times the number of
+elimination stats. Which is simply less than or
+
+56
+00:06:09,010 --> 00:06:16,039
+equal to N times n. But altogether between
+these two steps, over here we have N times
+
+57
+00:06:16,039 --> 00:06:22,089
+m star over here we have N times n which
+tells us that the total work that we have
+
+58
+00:06:22,089 --> 00:06:30,002
+is linear in N and in m star.
+Great, linear time, aren't we lucky. Well
+
+59
+00:06:30,002 --> 00:06:39,008
+not quite. Because the Nk which is
+the contribution to this quantity N is the
+
+60
+00:06:39,008 --> 00:06:48,037
+total number of values in a factor. And so
+if we were, if we say for example just for
+
+61
+00:06:48,037 --> 00:07:00,037
+simplicity, all variable have d values in their scope. So that, for example all
+
+62
+00:07:00,037 --> 00:07:07,059
+variables are binary, that would be equal
+to two, for example. Then the number of
+
+63
+00:07:07,059 --> 00:07:14,091
+values in the factor is exponential. Where
+the base of the exponent is d and the
+
+64
+00:07:14,091 --> 00:07:22,014
+exponent is the cardinality of the scope
+of the kth factor. That is the number of
+
+65
+00:07:22,014 --> 00:07:33,092
+variables. In the kth factor. And so this
+is, over here, our big source of
+
+66
+00:07:33,092 --> 00:07:45,057
+exponential blow up. So, let's understand
+how this complexity manifests to the
+
+67
+00:07:45,057 --> 00:07:51,073
+context of a real example. So, this is the
+run of variable elimination that we did
+
+68
+00:07:51,096 --> 00:07:58,040
+that we did before. I've just written it
+out all in one in one slide. And so now
+
+69
+00:07:58,040 --> 00:08:04,076
+let's see what the complexity of this is.
+When we see that we have produced several
+
+70
+00:08:04,076 --> 00:08:10,075
+factors here and let's write down how many
+variables are in the scope of each of
+
+71
+00:08:10,075 --> 00:08:16,054
+these factors, this one has two. This one
+has three, G, I, and D. This one has,
+
+72
+00:08:16,079 --> 00:08:22,087
+three, S, G, and I. This one has three, H,
+G, and J. This one has four, L, G, S, and
+
+73
+00:08:22,087 --> 00:08:29,020
+J. And this one has three, J, L, and S.
+And so the size of the largest factor is,
+
+74
+00:08:29,020 --> 00:08:36,003
+it is, this one, that has four variables
+in it. And that is, what's going to, in
+
+75
+00:08:36,003 --> 00:08:42,070
+general, drive the complexity of the
+algorithm. Not in an example as simple as
+
+76
+00:08:42,070 --> 00:08:48,050
+this, but in more realistic examples. So,
+now let's understand how elimination
+
+77
+00:08:48,050 --> 00:08:53,066
+ordering plays into this. We've previously
+said that variables can be eliminated in
+
+78
+00:08:53,066 --> 00:08:58,095
+any order, so long as we're, careful about
+multiplying things in at the appropriate
+
+79
+00:08:58,095 --> 00:09:03,068
+time. But now, let's see how elimination
+order might affect the complexity. So
+
+80
+00:09:03,068 --> 00:09:08,065
+assume that in this example, I'm going to
+make a not very judicious decision. And
+
+81
+00:09:08,065 --> 00:09:15,077
+I'm going to start by eliminating G. So
+which factors do I need to multiply in
+
+82
+00:09:15,077 --> 00:09:24,090
+order to eliminate G. Well phi L of L and G,
+phi G of G, I and D and phi H of H, G and J. And
+
+83
+00:09:24,090 --> 00:09:30,093
+so if I multiply all these together, it
+turns out that I now end up with a vari-,
+
+84
+00:09:30,093 --> 00:09:37,032
+with a factor, whose scope is let's see,
+L. G, I, D, H and J. So total of six variables
+
+85
+00:09:37,032 --> 00:09:44,036
+whereas before the largest factor that we
+ever generated had four variables. So
+
+86
+00:09:44,036 --> 00:09:50,095
+that's maybe, you might say, six versus
+four, not a big deal. I mean, how much
+
+87
+00:09:50,095 --> 00:09:58,008
+does, how much difference does it make? So
+let's convince ourselves that in other
+
+88
+00:09:58,008 --> 00:10:04,050
+graphs it might make a bigger difference.
+So here's a graph that has it's simple
+
+89
+00:10:04,050 --> 00:10:10,037
+pairwise mark of network with A and C and
+then bunch of variables in the middle B1
+
+90
+00:10:10,037 --> 00:10:16,025
+up to Bk and imagine that I start by
+eliminating A first. What are the factors
+
+91
+00:10:16,025 --> 00:10:24,042
+that involve A? [sound] Well we have a
+factor AB1, AB2, AB3, up to ABk and the
+
+92
+00:10:24,042 --> 00:10:34,087
+total scope of the factors are is of this
+factor that we generate is going to be A,
+
+93
+00:10:34,087 --> 00:10:42,085
+B1 up to Bk, So it's going to be
+exponential in k, so the size of the
+
+94
+00:10:42,085 --> 00:10:55,053
+factor. Is exponential. In k. Maybe this
+is inevitable. Well no! So let's imagine
+
+95
+00:10:55,053 --> 00:11:03,042
+that instead we're going to eliminate the
+Bi's first, so let's think for example
+
+96
+00:11:03,042 --> 00:11:11,061
+that we're going to start by eliminating
+B1, well B1 is in a factor with A and in a
+
+97
+00:11:11,061 --> 00:11:19,050
+factor with C, so we're going to end up
+with a product of say phi1, phiA1 of A, B1
+
+98
+00:11:19,050 --> 00:11:29,073
+times phi C1 of C, B1 and that's going to
+give me a factor whose scope is A, B1 and C
+
+99
+00:11:29,073 --> 00:11:37,029
+And the result of summing out B1 is
+going to be a factor tau 1 of A and
+
+100
+00:11:37,029 --> 00:11:43,095
+C. We're going to get the exact same
+behavior when we now eliminate B2 and
+
+101
+00:11:43,095 --> 00:11:50,051
+that's going to give me a factor
+tau 2 of A and C and so on and so
+
+102
+00:11:50,051 --> 00:11:57,089
+forth until at the very end I'm going to
+have a bunch of factors tau i, of A and C
+
+103
+00:11:57,089 --> 00:12:04,054
+that are all multiplied together. And I've
+done this without ever generating a factor
+
+104
+00:12:04,054 --> 00:12:11,039
+whose size is bigger than three. So to
+summarize, the complexity of variable
+
+105
+00:12:11,039 --> 00:12:17,078
+elimination is linear in the size of the
+model, the number of factors and number of
+
+106
+00:12:17,078 --> 00:12:23,059
+variables. And, more importantly, in the
+size of the largest factor generated
+
+107
+00:12:23,059 --> 00:12:29,052
+during the course of variable elimination.
+And unfortunately that size is exponential
+
+108
+00:12:29,052 --> 00:12:34,076
+in it's scope. And that is the thing that
+drives the complexity of variable
+
+109
+00:12:34,076 --> 00:12:40,060
+elimination. And we've also seen that
+this, the size of this factor is something
+
+110
+00:12:40,060 --> 00:12:45,034
+that depends heavily on the elimination
+ordering. Which means the choosing of
+
+111
+00:12:45,034 --> 00:12:48,005
+judicious elimination ordering is
+important.

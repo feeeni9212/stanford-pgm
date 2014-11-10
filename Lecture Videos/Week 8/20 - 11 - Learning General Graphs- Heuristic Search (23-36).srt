@@ -1,0 +1,1305 @@
+
+1
+00:00:00,000 --> 00:00:03,870
+We previously described the problem of
+bayes net structure learning as an
+
+2
+00:00:03,870 --> 00:00:07,794
+optimization problem, where we separated
+the problem into two pieces. One is
+
+3
+00:00:07,794 --> 00:00:12,135
+defining a scoring function, and the, the
+second is coming up with an algorithm that
+
+4
+00:00:12,135 --> 00:00:16,530
+optimizes that scoring function. We talked
+about how the optimization problem can be
+
+5
+00:00:16,530 --> 00:00:20,767
+solved in the case where we're trying to
+learn a network structured as a tree, or
+
+6
+00:00:20,767 --> 00:00:24,847
+rather, a forest. Where each variable has
+its most [inaudible] parent. But what
+
+7
+00:00:24,847 --> 00:00:29,084
+about the more general case, where we are
+trying to learn an unrestricted network,
+
+8
+00:00:29,084 --> 00:00:33,144
+or perhaps one that has weaker
+restrictions than simply a tree. So how do
+
+9
+00:00:33,144 --> 00:00:40,993
+we address that problem? So first as a
+reminder our input is a training set. A
+
+10
+00:00:40,993 --> 00:00:46,336
+scoring function, and some set of possible
+network structures. And, the output, the
+
+11
+00:00:46,336 --> 00:00:51,745
+desired output, is some kind of network
+structure that maximizes the score within
+
+12
+00:00:51,745 --> 00:00:57,519
+the set of families that, structures that
+we're willing to consider. So what happens
+
+13
+00:00:57,519 --> 00:01:02,394
+if we try to solve this optimization
+problem in the case where the network,
+
+14
+00:01:02,394 --> 00:01:07,463
+restricted network structure is not the
+class of trees? Well, in the context of
+
+15
+00:01:07,463 --> 00:01:12,532
+trees we could apply a simple greedy
+algorithm for finding the maximum weight
+
+16
+00:01:12,532 --> 00:01:17,666
+spanning tree. But when we have a more
+general network, even ones where we allow
+
+17
+00:01:17,666 --> 00:01:23,060
+at most two parents per node, this greedy
+algorithm that builds up a tree no longer
+
+18
+00:01:23,060 --> 00:01:28,255
+works. It's no longer guaranteed to find
+the optimal scoring network. Now, in fact,
+
+19
+00:01:28,255 --> 00:01:33,427
+it turns out to be not surprising that
+this, that this simple algorithm's not
+
+20
+00:01:33,427 --> 00:01:38,276
+going to work, because of the following
+theorem. The theorem states that the
+
+21
+00:01:38,276 --> 00:01:43,383
+problem of finding the best network, the
+one that has the highest score with, at
+
+22
+00:01:43,383 --> 00:01:48,232
+most, K parents, is an empty hard problem
+for any K bigger than one. So for K=to
+
+23
+00:01:48,232 --> 00:01:53,339
+one, we're back in the context of trees
+are forests, and we have the [inaudible]
+
+24
+00:01:53,339 --> 00:01:58,365
+time algorithm. But even for K=2, the
+problem turns out to be empty hard. And so
+
+25
+00:01:58,365 --> 00:02:04,123
+no efficient algorithm is found for this
+problem. So what do we do? It turns out
+
+26
+00:02:04,123 --> 00:02:09,234
+that the standard solution is some kind of
+heuristic hill climbing search. So we have
+
+27
+00:02:09,234 --> 00:02:13,984
+a current network, which is the one that
+we're trying to improve. And we'll talk
+
+28
+00:02:13,984 --> 00:02:18,914
+later about where we start this process.
+And now we look at different changes that
+
+29
+00:02:18,914 --> 00:02:23,363
+we could make to this network. So we can
+consider, for example, making local
+
+30
+00:02:23,363 --> 00:02:28,293
+perturbations that may or may not improve
+the quality of the network, relative the
+
+31
+00:02:28,293 --> 00:02:32,866
+score, what we see here. This bar
+represents the score. So for example, this
+
+32
+00:02:32,866 --> 00:02:38,414
+transition adds an edge from B to D. And
+we can see that here that turned out to
+
+33
+00:02:38,414 --> 00:02:43,684
+improve the score because this bar as we
+see is larger than this bar. We can
+
+34
+00:02:43,684 --> 00:02:49,231
+consider other changes. For example, this
+transition removes the edge from B to C
+
+35
+00:02:49,231 --> 00:02:54,363
+and also gives rise to a slight
+improvement in the score, but not as large
+
+36
+00:02:54,363 --> 00:02:59,841
+as the one where we added the edge from B
+to D. On the other hand, reversing the
+
+37
+00:02:59,841 --> 00:03:04,488
+edge from B to C. Which is this
+transition, gives rise to a decrease in
+
+38
+00:03:04,488 --> 00:03:09,462
+the score. And so we can look around us,
+and see which changes to the network
+
+39
+00:03:09,462 --> 00:03:14,370
+improve the score and which ones don't.
+And then, probably try and go in the
+
+40
+00:03:14,370 --> 00:03:19,625
+direction that generally improves the
+score. There are two main design choices
+
+41
+00:03:19,625 --> 00:03:25,493
+that one needs to decide on when doing a
+heuristic search algorithm. The first is
+
+42
+00:03:25,493 --> 00:03:31,151
+the set of operators. That is, the set of
+steps that we can take in perturbing one
+
+43
+00:03:31,151 --> 00:03:36,600
+network to the other. So, for example, in
+the, in the example that we just saw, we
+
+44
+00:03:36,600 --> 00:03:42,118
+were taking local steps. We were adding
+edges, deleting edges, or reversing edges.
+
+45
+00:03:42,118 --> 00:03:47,522
+And these are fairly small perturbations,
+[inaudible] network. There's also out
+
+46
+00:03:47,522 --> 00:03:52,628
+rhythms that use much global steps. Where
+we've taken entire node. Out of the
+
+47
+00:03:52,628 --> 00:03:57,935
+network and stick in it somewhere else.
+And that's the larger step that is more
+
+48
+00:03:57,935 --> 00:04:03,512
+costly. But also takes larger moves in the
+space of networks. So this is one step of
+
+49
+00:04:03,512 --> 00:04:08,337
+design choices. The second set of design
+choices is with search technique, we end
+
+50
+00:04:08,337 --> 00:04:12,858
+up using. So, do we do what's called
+[inaudible] climbing? Where we just try to
+
+51
+00:04:12,858 --> 00:04:17,028
+climb up as quickly as we can. Or do we
+adopt a different type of local
+
+52
+00:04:17,028 --> 00:04:21,432
+communitorial search arrhythmia where
+there are many different kinds. Some of
+
+53
+00:04:21,432 --> 00:04:26,247
+which are listed here. And there are many
+others, and we're not going to talk about
+
+54
+00:04:26,247 --> 00:04:31,235
+those. Very much. So let's start by
+talking about greedy hill climbing, which
+
+55
+00:04:31,235 --> 00:04:36,676
+is the basis for most of the bayes net
+learning algorithms that are in use today.
+
+56
+00:04:36,676 --> 00:04:41,916
+So, how does greedy hill climbing work? We
+start with a given network initially.
+
+57
+00:04:42,117 --> 00:04:47,492
+Often, this is just the empty network. And
+the reason for starting with the empty
+
+58
+00:04:47,492 --> 00:04:53,067
+network is that it induces sparsity. We
+don't have too complicated a network, and
+
+59
+00:04:53,067 --> 00:04:57,743
+one's likely to over fit. We could also
+start with the best tree, which we get
+
+60
+00:04:57,743 --> 00:05:02,255
+from one of the efficient tree learning
+algorithms that we talked about. We could
+
+61
+00:05:02,255 --> 00:05:06,599
+also start with a random network. This is
+a way of, exploring the space more
+
+62
+00:05:06,599 --> 00:05:11,055
+broadly, instead of starting out from a
+fixed starting point; we can start from a
+
+63
+00:05:11,055 --> 00:05:15,288
+multiple random starting point. Or, in
+cases where we have an expert that has
+
+64
+00:05:15,288 --> 00:05:19,744
+some knowledge of domain, we might use
+prior knowledge in order to initialize the
+
+65
+00:05:19,744 --> 00:05:24,125
+process. Having initialized, we now
+iteratively try and improve the network.
+
+66
+00:05:24,125 --> 00:05:29,253
+So we consider the different stuffs that
+we can take base on the operators that we
+
+67
+00:05:29,431 --> 00:05:34,380
+define as being legitimate and then, for
+each of them we consider the score that we
+
+68
+00:05:34,380 --> 00:05:39,449
+obtain from all possible changes. And then
+we apply the change that most improves the
+
+69
+00:05:39,449 --> 00:05:44,159
+scores. So this is the greedy component.
+That is we look at all possible changes
+
+70
+00:05:44,159 --> 00:05:49,240
+and we greedily pick the one that improve
+the score. That gives us a new network,
+
+71
+00:05:49,240 --> 00:05:54,757
+which we can now again update by, again,
+considering possible next step changes
+
+72
+00:05:54,757 --> 00:06:00,415
+that we could apply to this new network.
+And this process continues until we get
+
+73
+00:06:00,415 --> 00:06:05,790
+stuck, that is, when none of the m,
+modifications that we have at our disposal
+
+74
+00:06:05,790 --> 00:06:11,520
+improves the score. And when that happens,
+we are at what's called a local maximum.
+
+75
+00:06:12,000 --> 00:06:17,780
+That is a place in the space of network
+where no change gives rise to an
+
+76
+00:06:17,780 --> 00:06:24,527
+improvement in this work. What are some of
+the pitfalls of this greedy hill climbing
+
+77
+00:06:24,527 --> 00:06:29,536
+process? Well, the first is that this
+local maximum is potentially a local
+
+78
+00:06:29,536 --> 00:06:34,818
+maximum. That is, one that is not the
+global maximum. So if we pictorially draw
+
+79
+00:06:34,818 --> 00:06:40,513
+the space of, of possible networks, see
+we're going to draw it as continuous even
+
+80
+00:06:40,513 --> 00:06:46,281
+though it's discreet, what we have is sort
+of a space that looks like this. And if we
+
+81
+00:06:46,281 --> 00:06:51,741
+start out from a point over here and we
+just take small hill climbing steps, we
+
+82
+00:06:51,741 --> 00:06:57,547
+might end up at a position that is a very
+poor local maximum compared to the global
+
+83
+00:06:57,547 --> 00:07:02,920
+maximum. Which could be considerably
+better. And this is quite common in the
+
+84
+00:07:02,920 --> 00:07:08,928
+kind of communitorial search that we use
+in this, in this type of situation. A
+
+85
+00:07:08,928 --> 00:07:15,565
+second problem is what's called a plateau.
+The plateau if we go back to this kind of
+
+86
+00:07:15,565 --> 00:07:21,846
+visualization that we have here, is a case
+where looking around us. There's a whole
+
+87
+00:07:21,846 --> 00:07:27,178
+bunch of networks that are all effectively
+the same score. And while some of the
+
+88
+00:07:27,178 --> 00:07:32,710
+directions might give rise to, eventually,
+after a certain number of steps to a hill,
+
+89
+00:07:32,710 --> 00:07:37,842
+others might not. And the problem is that
+we don't know which direction to go.
+
+90
+00:07:37,842 --> 00:07:43,175
+Because they all look exactly the same in
+terms of the score. This happens quite
+
+91
+00:07:43,175 --> 00:07:48,373
+often in the case of Bayesian network
+structure learning, because whenever you
+
+92
+00:07:48,373 --> 00:07:54,251
+have a network, for example, like this.
+Other networks that are equivalent to
+
+93
+00:07:54,251 --> 00:08:00,028
+them. For example the one where we just
+reversed, this edge and we have a, a
+
+94
+00:08:00,028 --> 00:08:06,332
+parent that has two children as a opposed
+to a chain. This network is equivalent. To
+
+95
+00:08:06,332 --> 00:08:10,515
+this one, I equivalent. And therefore,
+it's going to have the same score. And in
+
+96
+00:08:10,515 --> 00:08:14,861
+general, you are going to have a lot of
+neighbors when you have more complicated
+
+97
+00:08:14,861 --> 00:08:18,827
+graphs. A lot of networks that are
+equivalent, and therefore, have the same
+
+98
+00:08:18,827 --> 00:08:23,119
+score. And moving around between them,
+it's not clear which of those is going to
+
+99
+00:08:23,119 --> 00:08:27,682
+eventually give rise to a move that breaks
+us out of the plateau, into a net-, into a
+
+100
+00:08:27,682 --> 00:08:33,124
+network that actually has a higher score.
+So these are significant issues in terms
+
+101
+00:08:33,124 --> 00:08:42,489
+of using [inaudible] search for optimizing
+the score. [sound] The issue of, of local
+
+102
+00:08:42,489 --> 00:08:48,534
+maximum plateau also relates to the
+question of search operators that we use.
+
+103
+00:08:48,534 --> 00:08:54,125
+And we talked about edge addition, edge
+deletion and edge reversal. And the
+
+104
+00:08:54,125 --> 00:09:00,169
+question that one might ask is why on
+Earth would we need edge reversal, because
+
+105
+00:09:00,169 --> 00:09:06,213
+after all edge reversal can be sub-tuned
+by an edge deletion and then an edge
+
+106
+00:09:06,213 --> 00:09:12,635
+addition. So why do we need to add a whole
+new set of operators into the pool that we
+
+107
+00:09:12,635 --> 00:09:18,125
+have to evaluate. So this, it turns out,
+has to do with the greedy nature of our
+
+108
+00:09:18,125 --> 00:09:23,751
+search. So to understand that, let's look
+at. This example. Let's assume that this
+
+109
+00:09:23,751 --> 00:09:29,141
+is our graph, G star, that generated the
+data. And, now let's assume that we're
+
+110
+00:09:29,141 --> 00:09:34,804
+going to try and learn a network from this
+dist, from the distribution derived from
+
+111
+00:09:34,804 --> 00:09:39,352
+this graph. And, so, here we have.
+Initially our empty network which we're
+
+112
+00:09:39,352 --> 00:09:44,218
+going to start out with and we have two
+strong correlations in this network, the
+
+113
+00:09:44,218 --> 00:09:48,780
+one from between a and c and the one
+between b and c. And let's say that we
+
+114
+00:09:48,780 --> 00:09:53,646
+pick the one between b and c as being
+stronger and therefore we're going to add
+
+115
+00:09:53,646 --> 00:09:58,208
+it first, but now there is complete
+symmetry between the edge that might go
+
+116
+00:09:58,208 --> 00:10:02,757
+from c to b, and the edge that might go
+from b to c. These two networks are
+
+117
+00:10:02,757 --> 00:10:07,099
+equivalent. And they're going to have the
+same score. And so we can arbitrarily
+
+118
+00:10:07,099 --> 00:10:11,624
+choose the edge that goes from c to b
+because it's as good as the other one. Now
+
+119
+00:10:11,624 --> 00:10:17,514
+that, that edges in, we might go ahead add
+another one. Say, we're going to add the
+
+120
+00:10:17,514 --> 00:10:23,551
+edge from a to z, and the question is, now
+what? The entrance c to d is wrong, and we
+
+121
+00:10:23,551 --> 00:10:29,735
+really like to reverse it. But if we don't
+have a reversal operation, the only way to
+
+122
+00:10:29,735 --> 00:10:34,887
+do that would be to remove that edge. And
+then add in the edge in the other
+
+123
+00:10:34,887 --> 00:10:39,806
+direction. But removing that edge is going
+to cost us a lot in terms of score,
+
+124
+00:10:39,806 --> 00:10:44,854
+because this was a really good edge. In
+fact it was the first one that we added.
+
+125
+00:10:44,854 --> 00:10:50,220
+So removing it is going to cause a hit in
+terms of the score, and it's going to be a
+
+126
+00:10:50,220 --> 00:10:55,139
+suboptimal move. It's not going to be a
+green move. And so if we don't have an
+
+127
+00:10:55,139 --> 00:11:00,442
+edge reversal operation, this red network,
+the one that has the edge from A to C and
+
+128
+00:11:00,442 --> 00:11:08,280
+the edge from C to B is now going to be a
+local maximum. And we're not going to be
+
+129
+00:11:08,280 --> 00:11:14,153
+able to break out of it by looking just
+greedily within one step unless we have an
+
+130
+00:11:14,153 --> 00:11:19,673
+end reversal step. So as reversal is a way
+of avoiding these very common local
+
+131
+00:11:19,673 --> 00:11:27,649
+maximum. But it doesn't address all local
+maxima. Specifically, not the bigger ones
+
+132
+00:11:27,649 --> 00:11:34,689
+that, that we've also discussed. So, what
+is the algorithm people typically use for
+
+133
+00:11:34,940 --> 00:11:40,807
+addressing the, this problem without
+falling into this local maxima
+
+134
+00:11:40,807 --> 00:11:46,904
+[inaudible], that frequency? So it turns
+out that a pretty good simple algorithm is
+
+135
+00:11:46,904 --> 00:11:51,925
+the following: we do use greedy
+hill-climbing, but we augment it with two
+
+136
+00:11:51,925 --> 00:11:57,921
+strategies that are attempts at avoiding
+local maximum plateau. The first is what's
+
+137
+00:11:57,921 --> 00:12:03,708
+called random restarts, which is if you're
+climbing up and you get stuck; you take a
+
+138
+00:12:03,708 --> 00:12:08,918
+certain number of random steps. And then
+starts climbing again. And the hope is
+
+139
+00:12:08,918 --> 00:12:14,107
+that if we're at a local maximum that's
+fairly shallow then the small number of
+
+140
+00:12:14,107 --> 00:12:19,101
+random steps will move us into the
+attraction are of a better maximum and we
+
+141
+00:12:19,101 --> 00:12:24,636
+will continue to climb to a better
+optimum. A second strategy which is useful
+
+142
+00:12:24,636 --> 00:12:30,938
+for both local maxima and cleptos, is
+what's called the Tubules. A tubules is a
+
+143
+00:12:30,938 --> 00:12:37,159
+way of avoiding the same round over and
+over again. So here we have a sets of
+
+144
+00:12:37,159 --> 00:12:43,563
+stats that we have taken, for example
+adding an edge from a to b. Or deleting an
+
+145
+00:12:43,563 --> 00:12:50,305
+edge from c to d. And these are the steps
+that we recently taken. We keep a list of
+
+146
+00:12:50,305 --> 00:12:56,801
+the k stuffs that we recently taken, and
+we constrain our search that it cannot
+
+147
+00:12:56,801 --> 00:13:02,310
+reverse any of this stuffs. So
+specifically, if add a to b is on our
+
+148
+00:13:02,310 --> 00:13:07,912
+list, then on our tubules we have that
+delete. The edge from A to B is not
+
+149
+00:13:07,912 --> 00:13:13,483
+something that we can do while the add
+step is still in the list of the k most
+
+150
+00:13:13,483 --> 00:13:18,850
+recent steps. And that forces us to make
+forward progress rather than doing the
+
+151
+00:13:18,850 --> 00:13:23,673
+same step, reversing it, trying a
+different version of it, reversing that
+
+152
+00:13:23,673 --> 00:13:29,244
+and that turns out to be helpful both in
+avoiding local maximum as well as making
+
+153
+00:13:29,244 --> 00:13:35,174
+some progress in the context of plateaus.
+So how does [inaudible], how well does
+
+154
+00:13:35,174 --> 00:13:42,375
+this work in practice? Let's first look at
+a synthetic example. This is the icu alarm
+
+155
+00:13:42,375 --> 00:13:48,996
+network that we've seen before in the
+context of basnet parameter estimation.
+
+156
+00:13:48,996 --> 00:13:55,782
+And what we see here are two learning
+scenarios. One in the blue line down here
+
+157
+00:13:55,782 --> 00:14:07,355
+is learning parameters only. With the true
+structure given and the green line. Is
+
+158
+00:14:07,355 --> 00:14:13,794
+where we're trying to do both parameters
+and structure at the same time, so trying
+
+159
+00:14:13,794 --> 00:14:20,311
+to learn both. [sound]. And we can see on
+the x axis the number of theta instances m
+
+160
+00:14:20,311 --> 00:14:26,906
+and on the y axis the distance between,
+the distance measured as kl divergents or
+
+161
+00:14:26,906 --> 00:14:36,590
+relative entropy between the learned
+network. And the true network. And what we
+
+162
+00:14:36,590 --> 00:14:41,994
+can see here is that, it's certainly the
+case that when we're trying to learn only
+
+163
+00:14:41,994 --> 00:14:46,739
+parameters, we do better, at least
+initially. That is, for small numbers of
+
+164
+00:14:46,739 --> 00:14:51,747
+samples, the case where we have the true
+network performs better in terms of
+
+165
+00:14:51,747 --> 00:14:57,480
+learning and, distribution that's close to
+the right one. But as we get more and more
+
+166
+00:14:57,480 --> 00:15:02,362
+data. Even with as few as around 2000
+samples, we're actually pretty close in
+
+167
+00:15:02,362 --> 00:15:06,915
+performance. Now, this is very promising,
+because it says that the structure
+
+168
+00:15:06,915 --> 00:15:12,206
+learning problem is not intrinsically that
+much more difficult than that of parameter
+
+169
+00:15:12,206 --> 00:15:19,528
+estimate-, that of parameter estimation
+alone. Now. This result however should be
+
+170
+00:15:19,528 --> 00:15:25,293
+taken with a grain of salt because the
+problem of learning from synthetic data,
+
+171
+00:15:25,293 --> 00:15:30,952
+which is what we have here. This is data
+that is generated from. The network is
+
+172
+00:15:30,952 --> 00:15:36,196
+actually easier than the problem of
+learning from a real data set, because
+
+173
+00:15:36,196 --> 00:15:41,794
+synthetic data has a much clearer and
+stronger signal about the correlation
+
+174
+00:15:41,794 --> 00:15:47,818
+structure than real data, and so the dis,
+so the, the performance here is probably a
+
+175
+00:15:47,818 --> 00:15:53,274
+little bit misleading in terms of our
+ability to learn the network structure
+
+176
+00:15:53,274 --> 00:15:59,249
+correctly when the when we don't have.
+When the data is not quite as nice as
+
+177
+00:15:59,249 --> 00:16:04,868
+synthetically generated data. However,
+there is a lot of applications where even
+
+178
+00:16:04,868 --> 00:16:10,317
+with real data [inaudible] structure
+learning has given significant advantages.
+
+179
+00:16:10,317 --> 00:16:16,042
+One of those is this application from
+Microsoft research which aims to learn, to
+
+180
+00:16:16,042 --> 00:16:21,836
+recog-, to predict where traffic jams are
+going to take place as well as where we
+
+181
+00:16:21,836 --> 00:16:27,630
+might have surprises in terms of having
+less traffic or more traffic than normal.
+
+182
+00:16:27,630 --> 00:16:32,804
+So here the idea is that we have some
+number of sensors on certain major
+
+183
+00:16:32,804 --> 00:16:38,971
+freeways, and we know for example that
+certain areas of the freeway have a lot of
+
+184
+00:16:38,971 --> 00:16:44,288
+traffic, other areas have less traffic,
+and we're trying to use that data to
+
+185
+00:16:44,288 --> 00:16:49,958
+predict parts of the road system that
+don't have these sensors observed in them,
+
+186
+00:16:49,958 --> 00:16:55,266
+as well as to predict how the traffic
+would look in 30 or 60 minutes. So, in
+
+187
+00:16:55,266 --> 00:17:00,958
+particular, we'd like to predict, for
+example, parts of the road where, there's
+
+188
+00:17:00,958 --> 00:17:06,789
+going to be, more traffic than we expect.
+So predicting a surprise, as well as, a
+
+189
+00:17:06,789 --> 00:17:12,185
+good surprise, such as less traffic than
+we expect. So this is a used scenario
+
+190
+00:17:12,185 --> 00:17:17,532
+where there is some amount of prior
+knowledge but it turns out that expert
+
+191
+00:17:17,532 --> 00:17:22,950
+knowledge is not really adequate for
+understanding how different sources of
+
+192
+00:17:22,950 --> 00:17:28,939
+information, different pieces of the road
+system are intertwined with each other and
+
+193
+00:17:28,939 --> 00:17:34,786
+much better performance was derived by
+learning a Bayesian network structure from
+
+194
+00:17:34,786 --> 00:17:40,704
+data that shows how these different,
+different accident reports, different the
+
+195
+00:17:40,704 --> 00:17:45,771
+hour of the day and. Different areas in
+the freeway system are related to each
+
+196
+00:17:45,771 --> 00:17:52,619
+other. And we can see that some of the
+correlations that were learned may not be
+
+197
+00:17:52,619 --> 00:17:59,698
+quite as obvious as a human might have
+inferred. So for example the influences on
+
+198
+00:17:59,698 --> 00:18:05,115
+this. Traffic in location fifteen. The
+most significant factors are the ones
+
+199
+00:18:05,115 --> 00:18:10,317
+marked here in four, eleven and seventeen.
+And you might not have necessarily
+
+200
+00:18:10,317 --> 00:18:15,792
+predicted that something that's all the
+way across the bridge in Seattle is the
+
+201
+00:18:15,792 --> 00:18:21,472
+most indicative factor on this particular
+prediction problem. And so much better
+
+202
+00:18:21,472 --> 00:18:28,214
+performance was derived by applying
+learning techniques to this problem. A
+
+203
+00:18:28,214 --> 00:18:33,240
+very different application of structure
+learning is in the context of this
+
+204
+00:18:33,240 --> 00:18:38,668
+application, which aims to do scientific
+discovery. In this context, a data set was
+
+205
+00:18:38,668 --> 00:18:43,694
+acquired that measures for different
+proteins in a cell, the level of those
+
+206
+00:18:43,694 --> 00:18:48,922
+proteins. And this was done at the level
+of single cells, so there were tens of
+
+207
+00:18:48,922 --> 00:18:54,216
+thousands of measurements, each one
+corresponding to a protein profile in, in
+
+208
+00:18:54,216 --> 00:18:59,646
+an individual cell. Now the goal from this
+experiment was to discover the control
+
+209
+00:18:59,646 --> 00:19:05,210
+mechanism of how the level of one protein
+can influence the level of another. So to
+
+210
+00:19:05,210 --> 00:19:10,506
+learn, for example, that a change in the
+protein level of some, of a protein such
+
+211
+00:19:10,506 --> 00:19:15,466
+as PKC can influence the level of a
+protein called PKA, and the level of a
+
+212
+00:19:15,466 --> 00:19:20,128
+protein called RAF, as part of the
+regulatory network of a cell. So the
+
+213
+00:19:20,128 --> 00:19:25,074
+dataset was acquired and basic network
+learning was applied to this problem in
+
+214
+00:19:25,074 --> 00:19:29,771
+order to try and understand this
+regulatory network within a cell. And what
+
+215
+00:19:29,771 --> 00:19:35,281
+we see here are the edges that we learn by
+the by the basic network algorithm. And we
+
+216
+00:19:35,281 --> 00:19:39,914
+can see that many of the edges
+specifically all the once that are mark in
+
+217
+00:19:39,914 --> 00:19:44,923
+blue, where once that where known in
+literature before. Now, well that may seem
+
+218
+00:19:44,923 --> 00:19:49,995
+perhaps less interesting to be discover
+something that was already known, this is
+
+219
+00:19:49,995 --> 00:19:54,865
+an important validation for the basic
+network algorithm be. 'Cause it shows us
+
+220
+00:19:54,865 --> 00:20:00,024
+that the network is learning something
+valuable and correct. And furthermore, it
+
+221
+00:20:00,024 --> 00:20:04,922
+shows that, in a single experiment,
+Bayesian network learning applied to the
+
+222
+00:20:04,922 --> 00:20:09,820
+right kind of data can reconstruct a
+cellular network that took biologists
+
+223
+00:20:09,820 --> 00:20:14,802
+many, many years to put together. Now, not
+all of this is right. So for example this
+
+224
+00:20:14,979 --> 00:20:19,465
+pink edge over here is an edge that was
+learned in one direction and really
+
+225
+00:20:19,465 --> 00:20:24,187
+should've been learned in the other
+direction. That is, it's reversed relative
+
+226
+00:20:24,187 --> 00:20:28,791
+to our current biological understanding.
+And some other edges, specifically the
+
+227
+00:20:28,791 --> 00:20:33,396
+ones that are these dashed lines, for
+example this one, or that one or that one,
+
+228
+00:20:33,396 --> 00:20:38,118
+were omitted from the network, that is,
+they should've been there but were not
+
+229
+00:20:38,118 --> 00:20:42,604
+correctly learned. So this is definitely
+not perfect, but nevertheless it's a
+
+230
+00:20:42,604 --> 00:20:47,766
+surprisingly impressive success story in
+the context. So taking just a single data
+
+231
+00:20:47,766 --> 00:20:53,430
+set and reconstructing many years of a
+learned biology. What's also important is
+
+232
+00:20:53,430 --> 00:20:59,213
+that some of these edges that were learned
+and these two red ones. We're one
+
+233
+00:20:59,213 --> 00:21:04,280
+[inaudible] that had very weak support
+from the literature that is they were
+
+234
+00:21:04,280 --> 00:21:09,474
+known to exist in a different cell type
+then the B cells in which these data were
+
+235
+00:21:09,474 --> 00:21:14,351
+acquired that [inaudible] were not known
+to exist in B cell, and one of these,
+
+236
+00:21:14,351 --> 00:21:19,418
+specifically this one was subsequently
+tested in a wet lab and found to be true
+
+237
+00:21:19,418 --> 00:21:24,422
+in B cell as well, so the network reveal
+to biologist a connection that had not
+
+238
+00:21:24,422 --> 00:21:29,679
+previously been establish in the context
+of B cell, and turn out to be of important
+
+239
+00:21:29,679 --> 00:21:34,465
+because it [inaudible] to what?s called.
+Talk or communication between two
+
+240
+00:21:34,465 --> 00:21:39,395
+different biological pathways. And so this
+is a very nice example of how Bayesian
+
+241
+00:21:39,400 --> 00:21:44,709
+network structured learning can be used in
+this different paradigm. Where not only do
+
+242
+00:21:44,709 --> 00:21:49,892
+we not necessarily have expert knowledge
+and we want to improve performance, but
+
+243
+00:21:49,892 --> 00:21:54,956
+rather discovering the network structure
+is a goal in and of itself. To summarize,
+
+244
+00:21:55,144 --> 00:21:59,792
+the [inaudible] network structured
+learning is a useful tool for building
+
+245
+00:21:59,792 --> 00:22:04,126
+better predictive models. When the
+[inaudible] experts don't know the
+
+246
+00:22:04,126 --> 00:22:09,026
+structure and that can be useful both for
+making predictions about new, new
+
+247
+00:22:09,026 --> 00:22:14,302
+instances but also as we saw in this most
+recent example for knowledge discovery as
+
+248
+00:22:14,302 --> 00:22:19,307
+well. So, for these very two different
+purposes. We've shown that in general
+
+249
+00:22:19,307 --> 00:22:24,745
+finding the highest scoring network
+structure outside the context of forest or
+
+250
+00:22:24,745 --> 00:22:30,567
+trees is a empty heart problem. And that,
+that is typically used, solved using
+
+251
+00:22:30,567 --> 00:22:36,632
+simple heuristics search. And most
+commonly, this is done using local steps
+
+252
+00:22:36,632 --> 00:22:42,287
+that modify the network using small local
+perturbations, such as edge
+
+253
+00:22:42,287 --> 00:22:49,171
+addition/deletion, or reversal. And in
+order to avoid, the local, optima that one
+
+254
+00:22:49,171 --> 00:22:55,353
+would get from this, we, typically use.
+Not just simple hill climbing but modify
+
+255
+00:22:55,353 --> 00:23:00,829
+that using both taboo lists that avoid
+sort of undoing recent changes as well as
+
+256
+00:23:00,829 --> 00:23:06,019
+random restarts so as to explore different
+parts of the space. While this is a
+
+257
+00:23:06,019 --> 00:23:11,651
+surprisingly successful strategy, it turns
+out that there are actually much better
+
+258
+00:23:11,651 --> 00:23:17,490
+algorithms out there that make much larger
+changes in the space simultaneously. These
+
+259
+00:23:17,490 --> 00:23:22,985
+are computationally more expensive are
+harder to implement, but can make much
+
+260
+00:23:22,985 --> 00:23:28,343
+larger moves in the space and therefore,
+especially for large spaces where the
+
+261
+00:23:28,343 --> 00:23:33,839
+signal isn't immediately clear, can find
+better structures than a simple reading

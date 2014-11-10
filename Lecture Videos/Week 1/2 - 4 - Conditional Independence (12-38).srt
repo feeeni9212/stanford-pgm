@@ -1,0 +1,653 @@
+
+1
+00:00:00,000 --> 00:00:04,008
+So far, we've designed graphical models
+primarily as a data structure for encoding
+
+2
+00:00:04,008 --> 00:00:09,002
+probability distribution. So, we talked
+about how you can take a probability
+
+3
+00:00:09,002 --> 00:00:13,008
+distribution and, using a set of parameters
+that are somehow tied to the graph's structure
+
+4
+00:00:13,008 --> 00:00:18,005
+one can go ahead and represent
+a probability distribution over a high
+
+5
+00:00:18,005 --> 00:00:23,001
+dimensional space in a factored form. It
+turns out that one can view the graph
+
+6
+00:00:23,001 --> 00:00:28,000
+structure in a graphical model using a
+completely complementary viewpoint, which
+
+7
+00:00:28,000 --> 00:00:32,003
+is as a representation of the set of
+independencies that the probability
+
+8
+00:00:32,003 --> 00:00:36,003
+distribution must satisfy. 
+That view turns out to be really
+
+9
+00:00:36,003 --> 00:00:41,001
+enlightening and thought provoking and so
+let's talk about that, and we're going to
+
+10
+00:00:41,001 --> 00:00:46,000
+begin by just defining the notion of independencies that we're going to utilize
+
+11
+00:00:46,000 --> 00:00:51,002
+in subsequent presentations. So let's start
+by just defining the very basic notion of
+
+12
+00:00:51,002 --> 00:00:55,006
+independence within a probability
+distribution. And initially we're just
+
+13
+00:00:55,006 --> 00:01:00,002
+going to talk about the probability in the
+sorry the independence of events
+
+14
+00:01:00,002 --> 00:01:04,009
+alpha and beta within a probability
+distribution. And let me just go ahead and
+
+15
+00:01:04,009 --> 00:01:09,004
+introduce this notation, this says P, this
+symbol is the logical symbol for
+
+16
+00:01:09,004 --> 00:01:17,004
+"satisfies". And this perpendicular symbol
+is a standard notation for independence.
+
+17
+00:01:17,004 --> 00:01:24,004
+So this says: "P satisfies 'alpha is
+independent of beta.'" That's how one should
+
+18
+00:01:24,004 --> 00:01:30,004
+read that statement. And there's actually
+three entirely equivalent
+
+19
+00:01:30,009 --> 00:01:35,008
+definitions of the concept of
+independence. The first one says that the
+
+20
+00:01:35,008 --> 00:01:41,001
+probability of the conjunction of the two
+events -- there's several
+
+21
+00:01:41,001 --> 00:01:46,000
+different ways to denote
+conjunction, some people denote it as
+
+22
+00:01:46,000 --> 00:01:51,008
+intersection, we typically denote it using
+a comma. So here is: the probability of
+
+23
+00:01:51,008 --> 00:01:57,008
+alpha and beta holding both is simply the
+probability of alpha times the probability
+
+24
+00:01:57,008 --> 00:02:03,001
+of beta, that's the first definition. The
+second definition is a definition about
+
+25
+00:02:03,001 --> 00:02:07,008
+flow of influence. And this says: If you tell
+me beta, it doesn't effect my probability
+
+26
+00:02:07,008 --> 00:02:12,002
+in alpha. So the probability of alpha
+given the information about beta is the
+
+27
+00:02:12,002 --> 00:02:16,005
+same as the probability of alpha if you
+don't give me that information. And
+
+28
+00:02:16,005 --> 00:02:20,005
+because probabilistic influence is
+symmetrical, we also have the exact
+
+29
+00:02:20,005 --> 00:02:24,009
+converse of that. That is, the probability
+of beta given alpha is the same of the
+
+30
+00:02:24,009 --> 00:02:30,000
+probability of beta. This is 
+independence of events. You can take that
+
+31
+00:02:30,000 --> 00:02:36,001
+exact same definition and generalize it to independence 
+of random variables. Here we are going to
+
+32
+00:02:36,001 --> 00:02:41,007
+read this the same way. This says: 
+"P satisfies 'X is independent of Y'" for two
+
+33
+00:02:41,007 --> 00:02:47,008
+random variables X and Y. Once again we
+have the exact same set of definitions. So
+
+34
+00:02:47,008 --> 00:02:54,000
+the first one says that P of X comma Y is equal
+to P of X times P of Y. The second says P of
+
+35
+00:02:54,000 --> 00:03:00,000
+X given Y is equal to P of X and P of Y
+given X is equal to P of Y. You can make
+
+36
+00:03:00,000 --> 00:03:06,005
+these three statements in two different
+but equivalent forms: The first is
+
+37
+00:03:06,005 --> 00:03:14,009
+a universal statement. So for example you
+could read the first statement as saying:
+
+38
+00:03:14,009 --> 00:03:21,003
+For every assignment x and y
+to the variables X and Y we have the P of
+
+39
+00:03:21,003 --> 00:03:27,003
+the event X comma Y is equal to P of X
+times P of Y. So you can think of it as a
+
+40
+00:03:27,003 --> 00:03:32,007
+conjunction of lots and lots of
+independent statements of the form over
+
+41
+00:03:32,007 --> 00:03:38,008
+here. That's the first interpretation. The
+second interpretation is as an expression
+
+42
+00:03:38,008 --> 00:03:44,004
+over factors. That is, this one tells me
+that the factor over here, which is the
+
+43
+00:03:44,004 --> 00:03:49,002
+joint distribution over X and Y, is
+actually a product of two
+
+44
+00:03:49,002 --> 00:03:55,003
+lower-dimensional factors, one of which is a factor
+whose scope is X and one is a factor
+
+45
+00:03:55,003 --> 00:03:59,009
+whose scope is Y. These are all equivalent
+definitions, but each of them has a
+
+46
+00:03:59,009 --> 00:04:06,002
+slightly different intuition, so it's useful to
+recognize all of them. So let's look at an
+
+47
+00:04:06,002 --> 00:04:11,009
+example of independence. Here is a
+fragment of our students network. It has
+
+48
+00:04:12,001 --> 00:04:16,009
+three random variables: intelligence, 
+difficulty and course grade. And this is a
+
+49
+00:04:16,009 --> 00:04:22,001
+probability distribution that
+has a scope over three variables, and we can
+
+50
+00:04:22,001 --> 00:04:27,003
+go ahead and marginalize that to get a
+probability distribution over the scope,
+
+51
+00:04:27,003 --> 00:04:32,007
+which is a factor over the scope ID. As it
+happens, this is a marginal distribution
+
+52
+00:04:32,007 --> 00:04:38,001
+which you can confirm for yourselves by
+just adding up the appropriate entries so,
+
+53
+00:04:38,001 --> 00:04:44,002
+just as a reminder, to get i zero and d zero,
+we're going to add up this one, this one and that one.
+
+54
+00:04:44,002 --> 00:04:51,004
+And that's going to give us this factor.
+And it's not difficult to test that if we then
+
+55
+00:04:51,004 --> 00:04:58,009
+go ahead and marginalize P of I comma D to
+get P of I and P of D that P of I comma D
+
+56
+00:04:58,009 --> 00:05:04,008
+is the product of these two factors. Here
+is an example of a distribution that
+
+57
+00:05:04,008 --> 00:05:11,000
+satisifies an independence property. And
+here's the graphical model, and when you
+
+58
+00:05:11,000 --> 00:05:17,002
+look at it, you can see that there's no
+direct connections between I and D, and
+
+59
+00:05:17,002 --> 00:05:23,007
+we'll talk later about how that tells us
+that there is no -- that the two are actually
+
+60
+00:05:23,007 --> 00:05:28,009
+independent in this distribution. Now,
+independence by itself is not a
+
+61
+00:05:28,009 --> 00:05:33,007
+particularly powerful notion, because it
+happens only very rarely. That is, only in
+
+62
+00:05:33,007 --> 00:05:38,000
+very few cases are you going to have
+random variables that are truly
+
+63
+00:05:38,000 --> 00:05:42,002
+independent of each other. At least
+few interesting cases, you can always
+
+64
+00:05:42,002 --> 00:05:46,008
+construct examples. So now we're going to
+define a much broader notion of much
+
+65
+00:05:46,008 --> 00:05:51,004
+greater usefulness, which is the notion of
+conditional independence. Conditional
+
+66
+00:05:51,004 --> 00:05:56,000
+independence, which applies equally well
+to random variables or to a set of random
+
+67
+00:05:56,000 --> 00:06:00,000
+variable that is written like this. So
+here we have once again that P
+
+68
+00:06:00,000 --> 00:06:06,002
+satisfies -- here we have again the
+independent sign, and here we have a
+
+69
+00:06:06,002 --> 00:06:16,009
+conditioning sign. And this is read as:
+"P satisfies 'X is independent of Y given Z'".
+
+70
+00:06:16,009 --> 00:06:22,007
+And once again we have three
+identical -- not identical, sorry, three
+
+71
+00:06:22,007 --> 00:06:29,003
+equivalent definitions of this, of this
+property. The first says that "probability
+
+72
+00:06:29,003 --> 00:06:35,002
+of X comma Y given Z is equal to the products
+of P of X given Z, times the probability
+
+73
+00:06:35,002 --> 00:06:41,000
+of Y given Z". Once again, you can view
+this as a universally quantified statement
+
+74
+00:06:41,000 --> 00:06:47,007
+over all possible values of X, Y, and Z;
+or as a product of factors. Definition
+
+75
+00:06:47,007 --> 00:06:53,008
+number two is a definition of information
+flow: "Given Z, Y gives me no additional
+
+76
+00:06:53,008 --> 00:07:00,001
+information that changes my probability
+of X" or "Given Z, X gives me no additional
+
+77
+00:07:00,001 --> 00:07:06,007
+information that changes my probability in
+Y". Once again you can
+
+78
+00:07:06,007 --> 00:07:12,002
+view this as an expression involving
+factors. Notice that this is very
+
+79
+00:07:12,004 --> 00:07:17,007
+analogous to the definitions that we
+have for just plain old independence. Z
+
+80
+00:07:17,007 --> 00:07:22,006
+effectively never moves, it always sits
+there on the right hand side of the
+
+81
+00:07:22,006 --> 00:07:27,007
+conditioning bar and never moves, and so
+if you find yourself having a hard time
+
+82
+00:07:27,007 --> 00:07:32,004
+remembering conditional independence, just
+remember that the thing you're
+
+83
+00:07:32,004 --> 00:07:37,005
+conditioning on, just sits there on the
+right hand side of the conditioning bar
+
+84
+00:07:37,005 --> 00:07:45,006
+all the time. Let me introduce one final
+definition, which is going to serve us
+
+85
+00:07:45,009 --> 00:07:52,009
+quite well in an interesting
+derivation. It's very similar to the first
+
+86
+00:07:52,009 --> 00:07:58,008
+definition, but it says that the
+probability of X comma Y comma Z -- the joined
+
+87
+00:07:58,008 --> 00:08:05,008
+distribution -- is proportional, to... So
+we're going to forget the potential need
+
+88
+00:08:05,008 --> 00:08:12,006
+to add normalizing constants. It's
+proportional to a product of two factors.
+
+89
+00:08:12,006 --> 00:08:22,002
+Oops. One factor over X and Z and one
+factor over Y and Z. This turns out
+
+90
+00:08:22,002 --> 00:08:29,001
+to be yet again another definition of
+conditional independence. Let's look at an
+
+91
+00:08:29,001 --> 00:08:35,000
+example of conditional independence. Imagine
+that you have, that I give you two coins,
+
+92
+00:08:35,000 --> 00:08:40,004
+and I'm telling you that one of those
+coins is fair, and the other one is biased,
+
+93
+00:08:40,004 --> 00:08:44,009
+since it's going to come up heads 90
+percent of the time, but they look the
+
+94
+00:08:44,009 --> 00:08:50,004
+same. So now you have a process by which
+you first pick a coin out of my hand, and
+
+95
+00:08:50,004 --> 00:08:57,001
+then you toss it twice. So this is which
+coin you pick. And this is the two tosses.
+
+96
+00:08:59,000 --> 00:09:06,005
+Now let's think about dependence and
+independence in this example. If I don't--
+
+97
+00:09:06,005 --> 00:09:11,005
+if you don't know which coin you picked,
+and you toss the coin, and it comes out
+
+98
+00:09:11,005 --> 00:09:18,001
+heads: what happens to the probability of
+heads in the second toss? It'll be higher, right?
+
+99
+00:09:18,001 --> 00:09:23,000
+Because, if it came up heads the first time,
+that is more likely to happen. I mean, it
+
+100
+00:09:23,000 --> 00:09:27,006
+happens 50/50 with a fair coin,
+but it happens with greater
+
+101
+00:09:27,006 --> 00:09:32,006
+probability with a biased coin, and so the
+probability of having heads in the second
+
+102
+00:09:32,006 --> 00:09:37,005
+toss is going to be higher now. On the
+other hand, if I now tell you, "No, no,
+
+103
+00:09:37,005 --> 00:09:42,003
+you've picked the fair coin",
+you don't really care what the
+
+104
+00:09:42,003 --> 00:09:47,003
+outcome of the first toss is. It doesn't
+tell you anything about the probability of
+
+105
+00:09:47,003 --> 00:09:51,009
+the second toss. Similarly, if I tell you
+that it's the biased coin, it also
+
+106
+00:09:51,009 --> 00:09:56,009
+doesn't tell you anything at that point.
+The first toss and the second toss are no
+
+107
+00:09:56,009 --> 00:10:03,009
+longer correlated. And so what we have is
+that X1 and X2 are not independent, so P
+
+108
+00:10:03,009 --> 00:10:13,007
+does not satisfy "X1 is independent of X2",
+but we have that P does satisfy "X1 is
+
+109
+00:10:13,007 --> 00:10:21,004
+independent of X2 given C". So here's a
+very simple and intuitive example of
+
+110
+00:10:21,004 --> 00:10:28,004
+conditional independence. Let's go back to
+another example of conditional
+
+111
+00:10:28,004 --> 00:10:34,004
+independence. One in the distribution that
+we've seen before. This is actually a very
+
+112
+00:10:34,004 --> 00:10:40,000
+analagous model. Because it also has, in
+this case, one common cause, which, in
+
+113
+00:10:40,000 --> 00:10:45,005
+this case, is the student's intelligence.
+This is in the students example that
+
+114
+00:10:45,005 --> 00:10:51,004
+we've seen before. We had two things that
+emanate from that. The student's grade in
+
+115
+00:10:51,004 --> 00:10:57,003
+the course, and their SAT scores. And
+once again, it's, you can generate the
+
+116
+00:10:57,005 --> 00:11:06,000
+joint distribution of I, S, G which is this,
+and now you can look at the probability of
+
+117
+00:11:06,000 --> 00:11:14,003
+S and G given for example, i zero, and ask
+yourselves: "How does that
+
+118
+00:11:14,003 --> 00:11:23,003
+decompose, and is that independent given--
+when we look at the probability of S given
+
+119
+00:11:23,003 --> 00:11:31,007
+i zero and the probability of G given
+i zero?" And convince yourselves that in
+
+120
+00:11:31,007 --> 00:11:37,006
+this case conditional independence applies.
+Now one somewhat counterintuitive
+
+121
+00:11:37,006 --> 00:11:43,006
+property of independence that you kind of
+don't think about when you hear about
+
+122
+00:11:43,006 --> 00:11:49,009
+conditional independencies the first time,
+is that conditioning on something doesn't
+
+123
+00:11:49,009 --> 00:11:56,000
+just gain you independency as it did in
+the case of the coin or the case of the
+
+124
+00:11:56,000 --> 00:12:02,001
+intelligence. But rather conditioning can
+also lose independency. So this is the
+
+125
+00:12:02,001 --> 00:12:08,000
+other fragment of our students network,
+where we had the intelligence and the
+
+126
+00:12:08,000 --> 00:12:14,001
+difficulty both influencing the grade. And
+we have already seen that although I and D
+
+127
+00:12:14,001 --> 00:12:19,005
+are independent in the original
+distribution, they're not independent when
+
+128
+00:12:19,005 --> 00:12:25,003
+we condition on grade. So this is a
+case where you can just convince
+
+129
+00:12:25,003 --> 00:12:31,001
+yourselves of this by examining this
+distribution over here that I and D are
+
+130
+00:12:31,001 --> 00:12:36,007
+not independent in this conditional
+distribution, even though they were in the
+
+131
+00:12:36,007 --> 00:12:38,003
+marginal distribution.

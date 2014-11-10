@@ -1,0 +1,769 @@
+
+1
+00:00:01,020 --> 00:00:06,469
+Continuing in our discussion of parameter
+estimation, previously, we talked about
+
+2
+00:00:06,469 --> 00:00:11,984
+maximum likelihood estimation, which tries to
+optimize the likelihood of the data, given
+
+3
+00:00:11,984 --> 00:00:16,383
+the parameters. And an alternative
+approach that offers some better
+
+4
+00:00:16,383 --> 00:00:21,702
+properties is the approach of Bayesian
+estimation, which is what we're gonna talk
+
+5
+00:00:21,702 --> 00:00:27,079
+about today. So, first, let's understand
+why maximum likelihood estimation isn't
+
+6
+00:00:27,079 --> 00:00:32,542
+perfect. So, consider two scenarios, in
+the first one the team, yeah, two teams
+
+7
+00:00:32,542 --> 00:00:38,218
+that play ten times and the first team
+wins seven out of the ten matches. So if
+
+8
+00:00:38,218 --> 00:00:42,879
+we're going to use maximum likelihood
+estimation, the probability of the first
+
+9
+00:00:42,879 --> 00:00:47,599
+team winning is 0.7, which seems like a
+not unreasonable guess going forward. On
+
+10
+00:00:47,599 --> 00:00:52,379
+the other hand, we take a dime out of our
+pocket and we toss it ten times and it
+
+11
+00:00:52,379 --> 00:00:56,920
+comes up heads seven out of the ten
+tosses. Maximum likelihood estimation is
+
+12
+00:00:56,920 --> 00:01:01,820
+going to come out with exactly the same
+estimate, which is that the probability of
+
+13
+00:01:01,820 --> 00:01:06,839
+the next coin coming up heads is also 0.7.
+In this case, that doesn't seem like quite
+
+14
+00:01:06,839 --> 00:01:11,620
+as reasonable an inference to make based
+on the results of the, these ten tosses.
+
+15
+00:01:12,040 --> 00:01:16,968
+To elaborate the scenario still further
+let's imagine that we take that same dime
+
+16
+00:01:16,968 --> 00:01:21,716
+and now we patiently sit and toss it
+10,000 times. And sure enough it comes out
+
+17
+00:01:21,716 --> 00:01:26,727
+heads 7,000 out of the 10,000 tosses. Now
+the probability of heads is still 0.7, but
+
+18
+00:01:26,727 --> 00:01:31,816
+now it might be a more plausible inference
+for us to make, than in the previous case,
+
+19
+00:01:31,816 --> 00:01:36,986
+where we only had ten tosses to draw on.
+And so, maximum likelihood estimation has
+
+20
+00:01:36,986 --> 00:01:42,152
+absolutely no ability to distinguish
+between these three scenarios. Between the
+
+21
+00:01:42,152 --> 00:01:47,448
+case of a familiar setting, such as a coin
+versus an unfamiliar event, such as the
+
+22
+00:01:47,448 --> 00:01:52,679
+two teams playing, on the one hand. And
+between the case where we toss a coin ten
+
+23
+00:01:52,679 --> 00:01:58,041
+times versus tossing a coin 10,000 times.
+Neither of these distinctions is apparent
+
+24
+00:01:58,041 --> 00:02:03,264
+in the maximum likelihood estimate. To
+provide an alternative formalism, we're
+
+25
+00:02:03,264 --> 00:02:08,994
+going to go back to our view of parameter
+estimation as a probabilistic graphical
+
+26
+00:02:08,994 --> 00:02:14,374
+model. Where we have the parameter theta
+over here and we have the data being
+
+27
+00:02:14,374 --> 00:02:20,038
+dependent on the parameter theta. But
+unlike in the previous case where we were
+
+28
+00:02:20,038 --> 00:02:25,346
+just trying to figure out the most likely
+value of theta, now we're going to take a
+
+29
+00:02:25,346 --> 00:02:30,590
+radically different approach and we're
+going to assume that theta is in fact a random
+
+30
+00:02:30,590 --> 00:02:35,899
+variable by itself. A continuous valued
+random variable which in this, as in the
+
+31
+00:02:35,899 --> 00:02:41,209
+case of the coin toss takes on the value,
+in this case 01. But in either case it is
+
+32
+00:02:41,209 --> 00:02:46,457
+a random variable and therefore something
+over which will maintain a probability
+
+33
+00:02:46,457 --> 00:02:51,317
+distribution. Now this is in fact at
+the heart of Bayesian formalism.
+
+34
+00:02:51,317 --> 00:02:56,435
+Anything about which we are uncertain we
+should view as a random variable over
+
+35
+00:02:56,435 --> 00:03:01,360
+which we have a distribution that is
+updated over time as data is acquired.
+
+36
+00:03:01,360 --> 00:03:08,487
+Well to understand the difference between
+this view, and the maximum likelihood estimation
+
+37
+00:03:08,487 --> 00:03:15,190
+view. So, certainly we have, as before, that
+given theta the tosses are independent.
+
+38
+00:03:15,190 --> 00:03:20,836
+But now that we're explicitly viewing
+theta as a random variable we have that if
+
+39
+00:03:20,836 --> 00:03:26,347
+theta is unknown then the tosses are not
+marginally independent. So for example if we observe
+
+40
+00:03:26,347 --> 00:03:31,725
+that x1 is equal to heads, that's going to
+tell us something about the parameter.
+
+41
+00:03:31,725 --> 00:03:37,236
+It's going to increase the probability
+that the parameter favors heads over tails
+
+42
+00:03:37,236 --> 00:03:42,412
+and therefore is going to change our
+probability in other coin tosses. So the
+
+43
+00:03:42,412 --> 00:03:49,990
+coin tosses are dependent. Marginally. Not
+given Theta but without being given Theta,
+
+44
+00:03:49,990 --> 00:03:57,358
+they're marginally dependent. So, that
+really gives us a joint probabilistic model,
+
+45
+00:03:57,358 --> 00:04:04,679
+over all of the coin tosses and the
+parameter together. So, if we break down
+
+46
+00:04:04,679 --> 00:04:10,653
+that probability distribution using this
+PGM that we have over here, it breaks down
+
+47
+00:04:10,653 --> 00:04:16,267
+using the chain rule for that Bayesian
+network that we have drawn there. So we
+
+48
+00:04:16,267 --> 00:04:21,953
+have p of theta, which is the parameter
+for the [inaudible] of this network, and
+
+49
+00:04:21,953 --> 00:04:27,568
+then the probability of the x's given
+theta, which because of the structure of
+
+50
+00:04:27,568 --> 00:04:33,038
+the network, we have that they are
+conditionally independent given theta, and
+
+51
+00:04:33,038 --> 00:04:39,764
+so we have. That we, we can decompose this
+as a prior over theta times the product
+
+52
+00:04:39,764 --> 00:04:47,099
+of the probabilities of the individual
+data Which this over here is just our good
+
+53
+00:04:47,099 --> 00:04:55,247
+friend from before, the likelihood
+function. Which is just the probability of
+
+54
+00:04:55,247 --> 00:05:00,397
+the data, given the parameters. And we've
+already, specified, computed what that is
+
+55
+00:05:00,397 --> 00:05:05,051
+in the context of this coin tossing
+example. And that is, theta to the power
+
+56
+00:05:05,051 --> 00:05:10,077
+of the number of heads times 1- theta to
+the power of the number of tails. But now
+
+57
+00:05:10,077 --> 00:05:14,980
+we have an additional term which is the
+probability of theta, which we obtained
+
+58
+00:05:14,980 --> 00:05:21,373
+from the prior that we have over theta.
+And now you can, by virtue having a prior,
+
+59
+00:05:21,373 --> 00:05:27,067
+in fact joint distribution. We can now go
+ahead and compute a posterior over my
+
+60
+00:05:27,067 --> 00:05:32,907
+parameter theta, given my data-set D. So
+this is after having observed the values
+
+61
+00:05:32,907 --> 00:05:38,382
+of m coin tosses, I have a probability
+distribution over, a new probability
+
+62
+00:05:38,382 --> 00:05:44,222
+distribution over the parameter and by
+simple application of Bayes rule that is
+
+63
+00:05:44,222 --> 00:05:50,427
+going to break into the probability of the
+data given theta, which is again
+
+64
+00:05:50,427 --> 00:05:59,515
+my likelihood function. Times the
+prior. Divided by the probability of the
+
+65
+00:05:59,515 --> 00:06:05,858
+data which, importantly, just as in
+other applications of Bayes rule, is a
+
+66
+00:06:05,858 --> 00:06:15,273
+normalizing constant. And constant here
+means relative to theta. Which means that
+
+67
+00:06:15,273 --> 00:06:20,481
+if I know how to compute the numerator I
+can derive the denominator by simply, in
+
+68
+00:06:20,481 --> 00:06:25,688
+this case integrating out over the value
+of theta to derive the normalizing
+
+69
+00:06:25,688 --> 00:06:31,640
+constant required to make this a legal
+density function. For the most common
+
+70
+00:06:31,640 --> 00:06:37,118
+parameter distribution to use when we have
+a parameter to describe the multinomial
+
+71
+00:06:37,118 --> 00:06:42,465
+distribution over k different values
+such a this parameter theta is a what, is
+
+72
+00:06:42,465 --> 00:06:47,855
+what called the Dirichlet distribution
+Now, the Dirichlet distribution is
+
+73
+00:06:47,855 --> 00:06:53,383
+characterized by a set, alpha one up to the
+alpha K, of what are called hyper
+
+74
+00:06:53,383 --> 00:07:01,990
+parameters. That is to distinguish them
+from the actual parameters theta. So the,
+
+75
+00:07:01,990 --> 00:07:07,824
+probability distribution that is defined
+using these hyper-parameters is a density
+
+76
+00:07:07,824 --> 00:07:12,981
+over Theta, P of Theta, which has the
+following form. Let's first look at this
+
+77
+00:07:12,981 --> 00:07:18,409
+first part over here which is, which is
+the part that actually depends on the
+
+78
+00:07:18,409 --> 00:07:23,769
+parameters Theta and what we see here is
+that we have for each of my para-, for
+
+79
+00:07:23,769 --> 00:07:28,857
+each of the entries Theta I in the
+multinomial, we have an expression of the
+
+80
+00:07:28,857 --> 00:07:34,421
+form Theta I to the power of Alpha I minus
+one or Alpha I is the associated
+
+81
+00:07:34,421 --> 00:07:39,660
+hyperparameter. In order to make this a legal
+density we have, in addition, a
+
+82
+00:07:39,660 --> 00:07:45,148
+normalizing constant, a partition
+function which in this case and, this is
+
+83
+00:07:45,148 --> 00:07:50,706
+something we will come back to, has the
+following form that we're not going to
+
+84
+00:07:50,706 --> 00:07:56,530
+dwell on right now. It's a ratio of these
+things called gamma functions. Where a
+
+85
+00:07:56,530 --> 00:08:02,032
+gamma function is defined by the following
+integral. And for the moment, we don't
+
+86
+00:08:02,032 --> 00:08:07,535
+really need to worry about this, because
+the only thing we really care about for
+
+87
+00:08:07,535 --> 00:08:12,831
+the moment is the form of this internal
+expression over here. Knowing that it
+
+88
+00:08:12,831 --> 00:08:17,783
+needed to be normalized in order to
+produce density. Now, intuitively, and
+
+89
+00:08:17,783 --> 00:08:23,080
+we'll see this in a couple different ways.
+These hyper parameters, these alphas.
+
+90
+00:08:23,080 --> 00:08:28,399
+Correspond intuitively to the number of
+samples that we've seen so far. So let's
+
+91
+00:08:28,399 --> 00:08:33,984
+understand why that intuition holds. But
+before we do that, let's look at a couple
+
+92
+00:08:33,984 --> 00:08:39,037
+of examples of Dirichlet distributions.
+And this is a special case of the
+
+93
+00:08:39,037 --> 00:08:44,556
+Dirichlet distribution, where we have just
+two, values for the random variable. So
+
+94
+00:08:44,556 --> 00:08:49,609
+it's really a distribution for a Bernoulli
+random variable. And in this case,
+
+95
+00:08:49,609 --> 00:08:54,596
+Dirichlet's actually known often as a Beta
+distribution. But a Beta is just a
+
+96
+00:08:54,596 --> 00:09:04,456
+Dirichlet with two. Hyper parameter. So
+here we have several examples of a
+
+97
+00:09:04,456 --> 00:09:11,747
+Dirichlet or Beta distribution. This
+one. Is the Dirichlet or Beta 1,1 and
+
+98
+00:09:11,747 --> 00:09:20,451
+notice that, that corresponds to a the
+uniform distribution. As we increase the
+
+99
+00:09:20,451 --> 00:09:28,224
+number of as we increase the hyper
+parameters, for example we go to this
+
+100
+00:09:28,224 --> 00:09:36,514
+green line which is Dirichlet 22. We
+notice that we get a peak in, in the
+
+101
+00:09:36,514 --> 00:09:43,075
+middle. So there's. So there's an increase
+around 0.5, and that corresponds to a
+
+102
+00:09:43,075 --> 00:09:48,460
+stronger belief that the parameter is
+centered around the middle. That.
+
+103
+00:09:48,460 --> 00:09:53,618
+Probability increases yet further when we
+go to the Dirichlet five, five or beta
+
+104
+00:09:53,618 --> 00:09:58,261
+five, five, where now we have an even
+bigger peak around the value in the
+
+105
+00:09:58,261 --> 00:10:03,032
+middle. And as we shift the amount of data
+that we get and it's mixed, this
+
+106
+00:10:03,032 --> 00:10:07,933
+distribution is going to get, to move to
+the left and to the, or to the right
+
+107
+00:10:07,933 --> 00:10:13,091
+depending on the mix between heads or
+tails in this case. And as we get more and
+
+108
+00:10:13,091 --> 00:10:18,185
+more data, the distribution becomes more
+and more peaked. So, so roughly speaking
+
+109
+00:10:18,185 --> 00:10:27,340
+we have that the mix. Between alpha heads
+and alpha tails. The balance determines.
+
+110
+00:10:28,060 --> 00:10:49,333
+From the position of the peak. And the
+total alpha. determines. How sharp it is. So
+
+111
+00:10:49,333 --> 00:10:54,567
+now that we know a little bit about what
+the Dirichlet distribution looks like,
+
+112
+00:10:54,567 --> 00:10:59,671
+let's see how it's updated as we obtain
+data. So let's consider a case where we
+
+113
+00:10:59,671 --> 00:11:04,840
+have a prior, which we are going to assume
+is Dirichlet. We have a likelihood.
+
+114
+00:11:06,060 --> 00:11:14,720
+Which is, for data set D, derived from a
+multinomial, a multinomial theta and now
+
+115
+00:11:14,720 --> 00:11:24,070
+we'd like to figure out the posterior. P
+of theta given D, after having seen the
+
+116
+00:11:24,070 --> 00:11:32,154
+data D. So, the likelihood we've already
+seen before, this is, the probability of
+
+117
+00:11:32,154 --> 00:11:41,527
+the data set that has, in this case, MI
+being the number of instances. With value
+
+118
+00:11:41,527 --> 00:11:46,678
+little xi, and so this is just a
+likelihood function. And the prior
+
+119
+00:11:46,678 --> 00:11:52,535
+has the form of the Dirichlet [inaudible]
+with the associated hyper parameters. And
+
+120
+00:11:52,535 --> 00:11:58,260
+what's important to see looking at this is
+that the theta I term in the likelihood
+
+121
+00:11:58,260 --> 00:12:03,295
+and the theta I term in the prior have
+exactly the same form. So when you
+
+122
+00:12:03,295 --> 00:12:08,743
+multiply the likelihood with the prior,
+you can bring together like terms, those
+
+123
+00:12:08,743 --> 00:12:13,916
+with theta I at the base of the exponent,
+and you're going to end up with a
+
+124
+00:12:13,916 --> 00:12:19,088
+posterior that looks exactly like a
+Dirichlet distribution as well because
+
+125
+00:12:19,088 --> 00:12:30,010
+it's going to have the form. Theta I. The
+power of Mi plus alpha I minus one. So, if
+
+126
+00:12:30,010 --> 00:12:38,551
+our prior was Dirichlet alpha one up to
+alpha k and the data counts are M1 up to
+
+127
+00:12:38,551 --> 00:12:46,519
+Mk. Then the posterior is simply a
+Dirichlet with. Hyper parameters alpha
+
+128
+00:12:46,519 --> 00:12:54,964
+one plus M1 up to alpha K plus MK. And
+that again s, suggests that the hyper
+
+129
+00:12:54,964 --> 00:13:01,534
+parameters of a distribution represent
+counts that we've seen. If a priori our
+
+130
+00:13:01,534 --> 00:13:08,323
+counts for x I were alpha I, and now we
+saw an additional m I counts for alpha I,
+
+131
+00:13:08,323 --> 00:13:15,537
+then now in the posterior we have m alpha
+I plus m I counts that we've seen for that
+
+132
+00:13:15,537 --> 00:13:24,236
+particular event. >> Now, from a formal
+perspective this is a useful term to know.
+
+133
+00:13:24,531 --> 00:13:34,600
+This situation where the prior and the
+posterior have the same form. Is called
+
+134
+00:13:34,600 --> 00:13:41,730
+the conjugate prior. So in this case the
+Dirichlet distribution is a conjugative
+
+135
+00:13:41,730 --> 00:13:46,804
+prior for the multinomial because if we
+have a Dirichlet prior and a multinomial
+
+136
+00:13:46,804 --> 00:13:51,083
+likelihood, we have a Dirichlet
+posterior. And it turns out that many
+
+137
+00:13:51,083 --> 00:13:55,240
+parametric families have a nice
+conjugate prior that allows us to
+
+138
+00:13:55,240 --> 00:14:00,253
+maintain a probability distribution over
+the parameters in closed form because the
+
+139
+00:14:00,253 --> 00:14:04,960
+parameter, because the distribution over
+that parameter just keeps staying in
+
+140
+00:14:04,960 --> 00:14:13,406
+exactly the same representational family,
+in this case the Dirichlet. So to
+
+141
+00:14:13,406 --> 00:14:18,225
+summarize, we've presented the framework
+of Bayesian learning. Bayesian learning
+
+142
+00:14:18,225 --> 00:14:23,045
+treats parameters as random variables,
+continuous variable random variables but
+
+143
+00:14:23,045 --> 00:14:27,682
+still old random variables, which then
+allows us to reformulate the learning
+
+144
+00:14:27,682 --> 00:14:32,319
+problem simply as an inference problem
+because what we're doing is taking a
+
+145
+00:14:32,319 --> 00:14:37,444
+distribution over the random variables and
+updating it using evidence which in this
+
+146
+00:14:37,444 --> 00:14:43,422
+case is the observed training data. Now,
+specifically in the context of discrete
+
+147
+00:14:43,422 --> 00:14:49,429
+random variables over which we have a
+multinomial distribution on the likelihood
+
+148
+00:14:49,429 --> 00:14:55,658
+and a Dirichlet distribution as the prior,
+we have this very elegant situation where
+
+149
+00:14:55,658 --> 00:15:01,220
+the prior, the Dirichlet distribution
+prior is conjugate to the multinomial
+
+150
+00:15:01,220 --> 00:15:07,375
+distribution, which, as we just discussed,
+means that the posterior has the same form
+
+151
+00:15:07,375 --> 00:15:13,599
+as the prior. And that in turn allows us
+to keep a closed-form distribution on. The
+
+152
+00:15:13,599 --> 00:15:18,436
+parameters which has the same form all
+along as we keep updating it and that
+
+153
+00:15:18,436 --> 00:15:23,838
+update uses the sufficient statistics from
+the data for the update process usually in
+
+154
+00:15:23,838 --> 00:15:25,220
+a very efficient form.

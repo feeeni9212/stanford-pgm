@@ -1,0 +1,653 @@
+
+1
+00:00:00,000 --> 00:00:05,013
+We previously defined the notion of
+Bayesian estimation in which we have a
+
+2
+00:00:05,013 --> 00:00:10,627
+prior over the parameters and we continue
+to maintain a posterior over the parameters
+
+3
+00:00:10,627 --> 00:00:16,108
+as we accumulate the data. What we haven't
+discussed though, is how one might use a
+
+4
+00:00:16,108 --> 00:00:21,322
+model in which we have a distribution over
+the parameters. That is, how do we take
+
+5
+00:00:21,322 --> 00:00:27,240
+such a model and use it to make
+predictions about new instances? [sound]
+
+6
+00:00:31,160 --> 00:00:36,994
+So, now let's think about how we use a Dirichlet distribution, once we have it.
+
+7
+00:00:36,994 --> 00:00:42,367
+So assume that we have a param-, a, a
+model, where our parameter Theta is
+
+8
+00:00:42,367 --> 00:00:49,589
+distributed Dirichlet with some set of
+hyper-parameters. Now, if we're trying to
+
+9
+00:00:49,589 --> 00:00:55,330
+make a prediction over the value of the
+variable x that depends on the parameter
+
+10
+00:00:55,330 --> 00:01:00,999
+theta, well, we're just, this is just
+now a probabilistic inference problem, and
+
+11
+00:01:00,999 --> 00:01:08,144
+so the probability of x. Is simply the
+probability of x given theta, marginaliz-
+
+12
+00:01:08,144 --> 00:01:15,125
+times the prior over theta marginalizing in
+this case corresponding to an
+
+13
+00:01:15,125 --> 00:01:23,619
+integration Over the value of the theta.
+And then give this integral over here. So
+
+14
+00:01:23,619 --> 00:01:28,803
+if we plug through the integral, what
+we're going to get is the following form.
+
+15
+00:01:28,803 --> 00:01:33,855
+And I'm not going to go through the
+integration by parts that's required to
+
+16
+00:01:33,855 --> 00:01:38,640
+actually show this. But it's really a
+straightforward consequence of the
+
+17
+00:01:38,640 --> 00:01:44,224
+properties of integrals of polynomials. In
+this case, we have that the probability
+
+18
+00:01:44,224 --> 00:01:51,608
+that X takes a particular value XI, Is
+one, is one over Z times the integral over
+
+19
+00:01:51,608 --> 00:02:00,678
+all the parameters theta of theta I
+which is the, the probability given the
+
+20
+00:02:00,678 --> 00:02:09,208
+parameterization theta that X takes the
+value of little xi times this thing over here
+
+21
+00:02:09,208 --> 00:02:15,979
+which is the prior. And we multiply the
+two together, integrate out over the
+
+22
+00:02:15,979 --> 00:02:22,806
+parameter vector theta, which in
+this case K dimensional parameter vector,
+
+23
+00:02:22,806 --> 00:02:29,379
+and it turns out that you end up with
+alpha I over the sum of all J's. Alpha J,
+
+24
+00:02:29,379 --> 00:02:35,953
+a quantity typically known as little
+alpha. And so we end up with a case where,
+
+25
+00:02:36,206 --> 00:02:45,553
+the prediction over the next instance
+represents the fraction of the instances
+
+26
+00:02:45,553 --> 00:02:55,500
+that we've seen as represented in the
+hyper parameters of the Dirichlet. Where.
+
+27
+00:02:55,760 --> 00:03:02,791
+We have X, little XI. But if alpha I
+represents the number of instances that
+
+28
+00:03:02,791 --> 00:03:08,404
+we've seen where X, where the variable has
+the value little xi. The prediction
+
+29
+00:03:08,404 --> 00:03:13,532
+very naturally represents, is, is, is
+simply the fractions of instances with
+
+30
+00:03:13,532 --> 00:03:19,145
+that property. And so once again we see
+that there is a natural intuition for the
+
+31
+00:03:19,145 --> 00:03:27,699
+hyper parameter as representing a notion
+of counts. Now let's put these two results
+
+32
+00:03:27,699 --> 00:03:32,209
+together and think about Bayesian
+prediction as a function of, as the number
+
+33
+00:03:32,209 --> 00:03:36,422
+of data instances that we have
+[inaudible]. So here we have a parameter
+
+34
+00:03:36,422 --> 00:03:41,110
+theta, which initially was distributed as
+a Dirichlet, as some sort of a hyper
+
+35
+00:03:41,110 --> 00:03:45,738
+parameter, and lets imagine that we've
+seen data instances X1 up to XM. And now
+
+36
+00:03:45,738 --> 00:03:50,307
+we have the M plus first data
+instance and we want to make a prediction
+
+37
+00:03:50,307 --> 00:03:57,165
+about that. So, the problem that we're
+trying to solve is now the probability of
+
+38
+00:03:57,165 --> 00:04:04,056
+the m plus first data instance given the m
+first, the m instances that we've seen
+
+39
+00:04:04,056 --> 00:04:10,863
+previously. And so we can once again plug
+that into a probabilistic inference
+
+40
+00:04:10,863 --> 00:04:17,073
+equation. So this is going to be the
+probability of the m plus first data
+
+41
+00:04:17,073 --> 00:04:22,968
+instance, given. Everything including
+theta. Times the probability of theta given
+
+42
+00:04:22,968 --> 00:04:28,551
+x one up to x m. So we've introduced the
+variable theta into this probability. And
+
+43
+00:04:28,551 --> 00:04:35,850
+we're marginalizing out over the variable
+theta. Well one thing that immediately
+
+44
+00:04:35,850 --> 00:04:41,827
+follows is because of the structure of the
+probabilistic graphical model here, we have
+
+45
+00:04:41,827 --> 00:04:47,031
+that x m + one is conditionally
+independent of all of these previous x's
+
+46
+00:04:47,031 --> 00:04:52,587
+given theta. So we can cancel
+these from the right hand side of the
+
+47
+00:04:52,587 --> 00:04:57,720
+conditioning bar, which gives us over here
+probability of x, M + one given
+
+48
+00:04:57,720 --> 00:05:03,891
+theta and here we have the
+probability of theta Given X one
+
+49
+00:05:03,891 --> 00:05:12,665
+up to X M. And so now let's think about the
+blue equation, the blue expression over
+
+50
+00:05:12,665 --> 00:05:23,726
+here, which is just the posterior. Over
+theta, given D. Which are X1 up to XM. And we
+
+51
+00:05:23,726 --> 00:05:29,297
+already seen what that looks like. That as
+we show just on the previous slide
+
+52
+00:05:29,297 --> 00:05:34,940
+is simply a Dirichlet whose hyper parameter are
+alpha one plus M1 up to alpha K plus MK.
+
+53
+00:05:35,780 --> 00:05:41,630
+And so now we're making a prediction of a
+single random variable from a Dirichlet
+
+54
+00:05:41,632 --> 00:05:46,545
+that has a certain set of hyper
+parameters. And that was the thing we
+
+55
+00:05:46,545 --> 00:05:52,180
+showed on the slide just before that,
+which is simply the fraction of the alp-,
+
+56
+00:05:52,180 --> 00:05:57,383
+the fraction of the hyper parameter
+corresponding to the outcome xi as a
+
+57
+00:05:57,383 --> 00:06:02,729
+fraction of all of, the sum of all the
+hyper parameters, where again just to
+
+58
+00:06:02,729 --> 00:06:08,798
+introduce notation, alpha is equal to the
+sum of the alpha I and m to the sum of the
+
+59
+00:06:08,798 --> 00:06:17,937
+M-Is. Now notice what happens here. This
+parameter alpha that we just defined,
+
+60
+00:06:17,937 --> 00:06:24,756
+which is the sum over all of the alpha I's
+that I have . It?s a parameter known as
+
+61
+00:06:24,756 --> 00:06:30,986
+the equivalent sample size. And this
+represents the number of, if you will
+
+62
+00:06:30,986 --> 00:06:37,890
+imaginary samples that I would have seen
+prior to receiving the new data, X1 to Xn.
+
+63
+00:06:37,890 --> 00:06:44,728
+Now look what happens if we multiply alpha
+by a constant. So say we double all of our
+
+64
+00:06:44,728 --> 00:06:51,648
+alpha I's, then we have we're going to let
+the m I's affect our estimate a lot less
+
+65
+00:06:51,648 --> 00:06:58,085
+than for smaller values of alpha. So the
+larger the alpha, the more confidence we
+
+66
+00:06:58,085 --> 00:07:06,421
+have in our prior and the less we let our
+data move us away from that prior. Let's
+
+67
+00:07:06,421 --> 00:07:12,085
+look at an example of the influence that
+this might have. So let's go back to
+
+68
+00:07:12,085 --> 00:07:17,454
+binomial data or a Bernoulli random
+variable and let's take the simplest
+
+69
+00:07:17,454 --> 00:07:23,412
+example where a prior is uniform for theta
+in zero, one and we've previously seen
+
+70
+00:07:23,412 --> 00:07:31,628
+that corresponds to a Dirichlet with
+hyper parameters one, one. So this is our,
+
+71
+00:07:31,628 --> 00:07:38,083
+so this is a general-purpose Dirichlet
+distribution. In this case the hyper
+
+72
+00:07:38,083 --> 00:07:45,409
+parameters are one, one and let's imagine
+that we get a five data instances of which
+
+73
+00:07:45,409 --> 00:07:54,123
+we have four ones. And one zero. And if
+you actually. Think about the differences
+
+74
+00:07:54,123 --> 00:07:59,612
+between what the Bayesian estimate
+gives you for the sixth. Next coin toss.
+
+75
+00:07:59,612 --> 00:08:05,988
+Relative in, in when doing maximum likelihood
+estimation versus the Bayesian estimation.
+
+76
+00:08:05,988 --> 00:08:12,217
+For maximum likelihood estimation we have four
+heads, four tails maximum likelihood estimate
+
+77
+00:08:12,217 --> 00:08:17,703
+is 4/5ths. So that's going to be the
+prediction for the sixth instance. The
+
+78
+00:08:17,703 --> 00:08:23,042
+Bayesian prediction, on the other hand,
+remember is going to do the hyper
+
+79
+00:08:23,042 --> 00:08:28,974
+parameter alpha one plus M1 divided by
+alpha plus M which in this case is going
+
+80
+00:08:28,974 --> 00:08:34,987
+to be one plus four divided by two plus.
+Find a high enough score to give us five
+
+81
+00:08:34,987 --> 00:08:43,479
+over seven. So let's look more
+qualitatively at the effects of these
+
+82
+00:08:43,479 --> 00:08:49,572
+predictions on a next instance after
+seeing certain amounts of data. And for
+
+83
+00:08:49,572 --> 00:08:55,820
+the moment we're going to assume that the
+ratio between the number of 1s and the
+
+84
+00:08:55,820 --> 00:09:02,299
+number of 0s is fixed so that we have one.
+One for every four zero's and that's the
+
+85
+00:09:02,299 --> 00:09:08,556
+data that we are getting. And now let's see
+what happens as the function of the sample
+
+86
+00:09:08,556 --> 00:09:14,298
+size. So as we get more and more data all
+of which satisfies this, a particular
+
+87
+00:09:14,298 --> 00:09:21,775
+ratio. So here we are playing around with
+a different strength, or equivalent sample
+
+88
+00:09:21,775 --> 00:09:28,810
+size. But we're fixing the ratio of alpha
+one to alpha zero to represent, in this
+
+89
+00:09:28,810 --> 00:09:34,878
+case, the 50 percent level. So our prior
+is a uniform prior but of greater and
+
+90
+00:09:34,878 --> 00:09:41,737
+greater or changing strength. And so this
+little green line down at the bottom
+
+91
+00:09:41,737 --> 00:09:49,096
+represents a low alpha. Because we can see
+that the data gets pulled, our, posterior,
+
+92
+00:09:49,096 --> 00:09:55,442
+so sorry. The line is drawing the
+posterior over the parameter or rather
+
+93
+00:09:55,442 --> 00:10:01,865
+equivalency, the prediction of the next
+data instance, over time. And you can see
+
+94
+00:10:01,865 --> 00:10:08,524
+here that alpha is low and that means that
+for even for fairly small amounts of data,
+
+95
+00:10:08,759 --> 00:10:14,869
+, say twenty data points, we're already
+very close to the data estimates. On the
+
+96
+00:10:14,869 --> 00:10:23,108
+other hand, this bluish line over here, We
+can see that the alpha is high. And that
+
+97
+00:10:23,108 --> 00:10:29,662
+means it takes more time for the data to
+pull us, to the empirical, fraction, of
+
+98
+00:10:29,662 --> 00:10:36,050
+heads versus tails Now lets look at
+varying the other parameter, we're going
+
+99
+00:10:36,050 --> 00:10:42,089
+to now fix the equivalent sample size. And
+we are just going to start out with priors
+
+100
+00:10:42,089 --> 00:10:47,703
+and we can see that now we get pulled down
+to the 0.2 value that we see in the
+
+101
+00:10:47,703 --> 00:10:53,245
+empirical data, and , the further away
+from it we start though it takes us a
+
+102
+00:10:53,245 --> 00:10:59,143
+little bit longer to actually get pulled
+out the data estimate. But in all cases we
+
+103
+00:10:59,143 --> 00:11:06,782
+eventually get convergence to the value in
+the actual data set. And from a pragmatic
+
+104
+00:11:06,782 --> 00:11:14,839
+perspective it turns out that. Bayesian
+estimates provide us with a smoothness,
+
+105
+00:11:14,839 --> 00:11:22,695
+where the random fluctuations in the data
+don't, Don't cause quite as much random
+
+106
+00:11:22,695 --> 00:11:29,070
+jumping around as they do, for example,
+in maximum likelihood estimates. So, if what we have
+
+107
+00:11:29,070 --> 00:11:35,246
+here is the actual value of the coin toss.
+At different points in the process you can
+
+108
+00:11:35,246 --> 00:11:39,976
+see the blue line, this light blue line,
+that corresponds to maximize data
+
+109
+00:11:39,976 --> 00:11:44,900
+estimation, basically bops around the
+[inaudible], especially in the low data
+
+110
+00:11:44,900 --> 00:11:50,278
+regime. Where as the, where as the ones
+that use a prior, the estimates that use a
+
+111
+00:11:50,278 --> 00:11:55,317
+prior, are considerably smoother, and less
+subject to random noise. In summary,
+
+112
+00:11:55,317 --> 00:12:01,035
+Bayesian prediction combines, two types
+of, you might call them sufficient
+
+113
+00:12:01,035 --> 00:12:06,746
+statistics. There's the sufficient
+statistics from the real data. But there's
+
+114
+00:12:06,746 --> 00:12:12,948
+also sufficient statistics from the
+imaginary samples that contribute to the
+
+115
+00:12:12,948 --> 00:12:18,850
+Dirichlet distribution, these alpha hyper
+parameters. And the Bayesian prediction
+
+116
+00:12:18,850 --> 00:12:25,201
+effectively makes the prediction about the
+new data instance by combining both of
+
+117
+00:12:25,201 --> 00:12:30,223
+these. Now, as the amount of data
+increases that is at the asymptotic limit of
+
+118
+00:12:30,223 --> 00:12:35,128
+many data instances, the term that
+corresponds to the real data samples is
+
+119
+00:12:35,128 --> 00:12:40,365
+going to dominate. And, therefore, the
+prior is going to become vanishingly small
+
+120
+00:12:40,365 --> 00:12:45,138
+in terms of the contribution that it
+makes. So at the limit, the Bayesian
+
+121
+00:12:45,138 --> 00:12:51,634
+prediction is the same as maximum
+likelihood estimation. But. Initially in
+
+122
+00:12:51,634 --> 00:12:57,382
+the early stages of estimation before we
+have a lot of data that the priors
+
+123
+00:12:57,382 --> 00:13:02,340
+actually make a fairly significant
+difference. And we've seen that
+
+124
+00:13:02,340 --> 00:13:07,317
+Dirichlet hyper parameters basically
+determine both. Our prior beliefs
+
+125
+00:13:07,317 --> 00:13:12,256
+initially before we have a lot of data as
+well as the strengths of these beliefs
+
+126
+00:13:12,256 --> 00:13:17,194
+that is how long it takes for the data to
+outweigh the prior and move us towards
+
+127
+00:13:17,194 --> 00:13:22,316
+what we see in the empirical distribution.
+But importantly even as we've see here in
+
+128
+00:13:22,316 --> 00:13:27,315
+the very simple example [inaudible] see
+what's wrong when you talk about learning
+
+129
+00:13:27,315 --> 00:13:31,644
+[inaudible] networks it turns out that
+this Bayesian learning paradigm is
+
+130
+00:13:31,644 --> 00:13:35,851
+considerably more robust in the sparse
+data regime in terms of its
+
+131
+00:13:36,217 --> 00:13:37,620
+generalization ability.

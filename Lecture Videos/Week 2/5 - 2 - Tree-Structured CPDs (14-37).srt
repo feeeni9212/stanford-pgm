@@ -1,0 +1,729 @@
+
+1
+00:00:02,039 --> 00:00:07,047
+We've argued that table CPDs are
+problematic because of their exponential
+
+2
+00:00:07,047 --> 00:00:12,081
+growth in the number of parents. One of
+the classes of structured CPDs that is
+
+3
+00:00:12,081 --> 00:00:18,044
+most useful are classes, is the class of
+CPDs that encodes a dependence of a child
+
+4
+00:00:18,044 --> 00:00:23,078
+on the parent. But a dependence that is
+only happening in certain contexts. One
+
+5
+00:00:23,078 --> 00:00:29,006
+method for encoding that is using the
+class of what's called tree-structured
+
+6
+00:00:29,006 --> 00:00:33,058
+CPDs. So to understand what
+tree-structured CPDs are let's look at
+
+7
+00:00:33,058 --> 00:00:39,009
+this simple example. Imagine that we have
+a student, and the student is applying for
+
+8
+00:00:39,009 --> 00:00:44,042
+a job. And the job, that the prospects of
+the student to get the job depend on three
+
+9
+00:00:44,042 --> 00:00:49,069
+variables. Depend on the quality of the
+recommendation letter that they get from a
+
+10
+00:00:49,069 --> 00:00:54,083
+faculty member, of their SAT scores, and
+whether the student chooses to apply for
+
+11
+00:00:54,083 --> 00:01:01,035
+the job in the first place. So let's think
+about one possible CPD for this, for this
+
+12
+00:01:01,035 --> 00:01:08,028
+model. So here we have a tree structure.
+And you can think about it as a set of, as
+
+13
+00:01:08,028 --> 00:01:15,029
+a branching process where the distribution
+over a job looks at some variables and
+
+14
+00:01:15,029 --> 00:01:22,014
+then decides what the distribution might
+look like. So for example, initially the,
+
+15
+00:01:22,014 --> 00:01:27,031
+The dependence is on whether the student
+chooses to apply for the job or not. What
+
+16
+00:01:27,031 --> 00:01:31,061
+happens if the student doesn't apply for
+the job? Well, you might say in that case
+
+17
+00:01:31,061 --> 00:01:35,060
+the student doesn't get the job, but it
+turns out to be not the case. In the
+
+18
+00:01:35,060 --> 00:01:39,069
+heydays of Silicon Valley, for example, we
+have the different Internet bubbles.
+
+19
+00:01:39,069 --> 00:01:43,094
+Students were getting job offers without
+ever applying for jobs. And so it might
+
+20
+00:01:43,094 --> 00:01:47,098
+actually happen that the student's
+probability of getting a job is not zero
+
+21
+00:01:47,098 --> 00:01:52,007
+even in this case. And notice that the
+student not having applied for the job
+
+22
+00:01:52,007 --> 00:01:56,042
+didn't submit either recommendation letter
+or the SAT scores which means that the
+
+23
+00:01:56,042 --> 00:02:00,051
+student's job prospects don't depend in
+this scenario on either of these two
+
+24
+00:02:00,051 --> 00:02:05,054
+variables. And so, in all possible
+configurations of the s and l variable,
+
+25
+00:02:05,054 --> 00:02:11,037
+the s and l variables, the probability of
+the student getting a job is 0.2. What if
+
+26
+00:02:11,037 --> 00:02:15,099
+the student did choose to apply for the
+job? Well, in this case we can imagine a
+
+27
+00:02:15,099 --> 00:02:20,078
+recruiter whose primary interest is in the
+student's SAT scores. They don't really
+
+28
+00:02:20,078 --> 00:02:24,099
+believe recommendation letters all that
+much. And so the next, and so the
+
+29
+00:02:24,099 --> 00:02:29,096
+recruiter first looks at the student's SAT
+score. And if the student got a good score
+
+30
+00:02:29,096 --> 00:02:34,057
+on the SAT, s1, then regardless of the
+recommendation letter, which the recruiter
+
+31
+00:02:34,057 --> 00:02:39,007
+doesn't even choose to look at, the
+student's probability of getting a job is
+
+32
+00:02:39,007 --> 00:02:44,036
+0.9. Only in the case where the student's
+SAT scores are not as strong does the
+
+33
+00:02:44,036 --> 00:02:49,034
+recruiter go back and look at the letter,
+in which case there is a certain
+
+34
+00:02:49,034 --> 00:02:54,066
+probability, say 60%, of getting a job if
+the letter is strong. And ten percent if
+
+35
+00:02:54,066 --> 00:03:01,030
+the letter is weak. So we can see that we
+have a CPD that in this case depends on
+
+36
+00:03:01,030 --> 00:03:06,053
+three binary variables and so really we
+would need to represent in principle eight
+
+37
+00:03:06,053 --> 00:03:11,075
+different probability distributions over
+the j variable. But we've only represented
+
+38
+00:03:11,075 --> 00:03:17,059
+four because in certain contexts some of
+the variables don't matter. So in fact
+
+39
+00:03:17,059 --> 00:03:24,023
+this notion of a variable not mattering is
+related to the notion of context-specific
+
+40
+00:03:24,023 --> 00:03:29,093
+independence, which we've defined
+previously. So one can formalize this in
+
+41
+00:03:29,093 --> 00:03:36,041
+fact as a context-specific independence.
+So let's look at this tree and think about
+
+42
+00:03:36,041 --> 00:03:41,064
+which context-specific independencies
+arise in the context of this
+
+43
+00:03:41,064 --> 00:03:48,073
+tree-structured CPD. So, let's Looking at
+the first one, does j, the variable that
+
+44
+00:03:48,073 --> 00:04:00,021
+we care about, depend on l? In the context
+A1. S1 Well, we can see that in the
+
+45
+00:04:00,021 --> 00:04:06,032
+context A1S1, the recruiter never looks at
+the letter. So in fact, j is independent
+
+46
+00:04:06,032 --> 00:04:13,041
+of l in this context. So the answer to
+this one is yes. Okay, what about the next
+
+47
+00:04:13,041 --> 00:04:21,040
+one. J is independent of l given A1 alone.
+Well, in this case, we have, we're going
+
+48
+00:04:21,040 --> 00:04:29,040
+down here and now there's two scenarios.
+One in which S = S1 and the other, S = S0
+
+49
+00:04:29,040 --> 00:04:37,070
+and in this case, the recruiter does look
+at the letter and so this one in fact is
+
+50
+00:04:37,070 --> 00:04:46,018
+not true. What about the next one? J is
+independent of l and s given A0. So let's
+
+51
+00:04:46,018 --> 00:04:52,051
+look at the A0 case. And sure enough, in
+the A0 case there's no dependence on
+
+52
+00:04:52,051 --> 00:04:59,014
+either l or s, so this one is also true.
+The last one is a little bit interesting,
+
+53
+00:04:59,014 --> 00:05:04,046
+because it's a mix of context-specific and
+non-context-specific independence. So
+
+54
+00:05:04,046 --> 00:05:12,005
+we're asking whether j is independent of l
+in the context S1. For both values of the
+
+55
+00:05:12,005 --> 00:05:17,053
+variable a. And so now let's, and so to
+answer this question we actually need to
+
+56
+00:05:17,053 --> 00:05:23,027
+do a case analysis because this reduces to
+two different independent statements. J is
+
+57
+00:05:23,027 --> 00:05:32,019
+independent of l given S1 and A1 and j is
+independent of l given S1 and A0. So let's
+
+58
+00:05:32,019 --> 00:05:40,089
+evaluate each of these two separately. J
+is independent of l given S1A1 is exactly
+
+59
+00:05:40,089 --> 00:05:51,006
+this assertion, so this one's true. J is
+independent of l given S1 and A0 is
+
+60
+00:05:51,006 --> 00:06:03,084
+represents this. Which, in fact, is a
+special case of this scenario. And so both
+
+61
+00:06:03,084 --> 00:06:09,039
+of these in fact are true independent
+statements, and so since both cases hold
+
+62
+00:06:09,039 --> 00:06:14,094
+we have another conditional independent
+statement that holds here. Let's look at
+
+63
+00:06:14,094 --> 00:06:19,034
+another example that turns out to be
+representative of a large class of
+
+64
+00:06:19,034 --> 00:06:24,005
+examples in this context. So here the
+student, when applying for the job, needs
+
+65
+00:06:24,005 --> 00:06:29,024
+to submit a recommendation letter but has
+a choice between the two letters that they
+
+66
+00:06:29,024 --> 00:06:34,001
+might, that they might elect to provide.
+One from one course and another from a
+
+67
+00:06:34,001 --> 00:06:38,059
+second course. So letter one and letter
+two. Now the student's job prospects
+
+68
+00:06:38,059 --> 00:06:43,066
+depend on the quality of the letter that's
+actually provided because, of course, the
+
+69
+00:06:43,066 --> 00:06:48,026
+recruiter doesn't have access to the
+letter that was not provided. So if we
+
+70
+00:06:48,026 --> 00:06:52,086
+look at this in the context of the
+[inaudible], they don't even like this.
+
+71
+00:06:52,086 --> 00:06:58,022
+The first variable at the top corresponds
+the student choice and it has two branches
+
+72
+00:06:58,022 --> 00:07:03,020
+c1 and c2, and in the c1 case, there is
+dependence only on the quality of letter
+
+73
+00:07:03,020 --> 00:07:07,092
+one and then the c2 case, there is
+dependence only on the quality of letter
+
+74
+00:07:07,092 --> 00:07:17,048
+two So this is an example of what
+[inaudible] Related to something called a
+
+75
+00:07:17,048 --> 00:07:23,050
+multiplexer CPD, because effectively the
+choice variable determines the dependence
+
+76
+00:07:23,050 --> 00:07:29,057
+on one set of circumstances or another set
+of circumstances. Now it turns out that
+
+77
+00:07:29,057 --> 00:07:35,031
+this example has some interesting
+ramifications. Because not only do we have
+
+78
+00:07:35,031 --> 00:07:41,042
+[inaudible] specific independence's that
+arise because of this restructure, it
+
+79
+00:07:41,042 --> 00:07:47,054
+turns out that this, also implies non
+[inaudible] specific independence's that
+
+80
+00:07:47,054 --> 00:07:53,050
+are quite useful as we'll see later on in
+the course. Specifically we have that
+
+81
+00:07:53,050 --> 00:08:00,007
+letter one is independent of letter two
+given J and C Now, if you think about this
+
+82
+00:08:00,007 --> 00:08:07,039
+from purely the proc-, the perspective of
+the, the separation structure, the flow of
+
+83
+00:08:07,039 --> 00:08:14,042
+influence in this graph, we can see that
+the job actually activates the V
+
+84
+00:08:14,042 --> 00:08:20,011
+structure, between letter one and letter
+two. So you wouldn't actually expect
+
+85
+00:08:20,011 --> 00:08:25,027
+letter one and letter two to be
+conditionally independent. That is, we
+
+86
+00:08:25,027 --> 00:08:30,073
+have a flow of influence because of
+inter-causal reasoning. But now let's
+
+87
+00:08:30,073 --> 00:08:36,083
+think about this in more detail. And let's
+do a case analysis just like we did
+
+88
+00:08:36,083 --> 00:08:42,094
+before. So we're now going to ask if
+letter one is independent of letter two,
+
+89
+00:08:42,094 --> 00:08:49,014
+given j and C1. But what happens in the
+context C=C1? Well in this case, there's
+
+90
+00:08:49,014 --> 00:08:54,095
+no longer a dependence between job and
+letter two, because the recruiter is never
+
+91
+00:08:54,095 --> 00:09:00,048
+given the second letter. And so, in the
+context C1, the graph really looks like
+
+92
+00:09:00,048 --> 00:09:06,041
+this, where there's no edge from l to the
+j. Conversely, looking at the other case
+
+93
+00:09:06,041 --> 00:09:12,034
+analysis where C=C2, in this case this
+other edge is going to disappear and once
+
+94
+00:09:12,034 --> 00:09:18,034
+again there's no V structure and so
+there's no active trail between these two
+
+95
+00:09:18,034 --> 00:09:24,011
+variables L1 and L2. So effectively, in
+both of these cases, the active trail
+
+96
+00:09:24,011 --> 00:09:31,067
+disappears and so that implies the
+independence assumption. That I mention
+
+97
+00:09:31,067 --> 00:09:39,052
+this example is related to more general
+class of models called the multiplexer
+
+98
+00:09:39,052 --> 00:09:47,018
+CPD. The multiplexer CPD in this case
+actually has the following structure. We
+
+99
+00:09:47,018 --> 00:09:55,043
+have a set of random variables, zero on up
+to ZK all of which take on some value in
+
+100
+00:09:55,043 --> 00:10:06,007
+some particular space. And the variable Y
+is a copy of one of the ZIs. The variable
+
+101
+00:10:06,007 --> 00:10:12,087
+A, over here, is the multiplexer, the
+selector variable. And the selector
+
+102
+00:10:12,087 --> 00:10:19,064
+variable takes on values in the space one
+to K and it selects which of the ZIs the Y
+
+103
+00:10:19,064 --> 00:10:25,077
+copies. And notice that the Y here is
+deterministic, as we can see by the fact
+
+104
+00:10:25,077 --> 00:10:31,074
+that we have these two lines surrounding
+it, which is our way of indicating
+
+105
+00:10:31,074 --> 00:10:37,095
+deterministic dependencies. And so what is
+the CPD of the variable Y, given the
+
+106
+00:10:37,095 --> 00:10:46,048
+selector A and the parent Z1 up to ZK? We
+can think about this as, remember we need
+
+107
+00:10:46,048 --> 00:10:55,005
+to specify a probability distribution so
+this probability distribution is one, if Y
+
+108
+00:10:55,005 --> 00:11:02,090
+is equal to Z sub A. So what does that
+mean? It means that, and zero otherwise.
+
+109
+00:11:02,090 --> 00:11:09,092
+So what does that mean? It means that if
+A, say, is equal to little A, then
+
+110
+00:11:09,092 --> 00:11:17,004
+deterministically Y is equal to sub little
+A, with probability one. That's just a
+
+111
+00:11:17,004 --> 00:11:24,016
+formal way of saying that. So A tells us
+which of the variable Z Y needs to copy.
+
+112
+00:11:24,016 --> 00:11:30,076
+This turns out to be an extremely useful
+concept in a variety of applications. So
+
+113
+00:11:30,076 --> 00:11:37,019
+for example when we have perceptual
+uncertainty, when you have noisy sensors
+
+114
+00:11:37,043 --> 00:11:42,075
+where we observe say What we have, say, a
+sensor observation of one of several
+
+115
+00:11:42,075 --> 00:11:47,020
+airplanes, but we don't know which
+airplane it is that we're observing. And
+
+116
+00:11:47,020 --> 00:11:52,012
+so the position of the observation is the,
+represents the position of the airplane
+
+117
+00:11:52,012 --> 00:11:56,069
+that we're observing but the variable A
+here is the one that tells us which
+
+118
+00:11:56,069 --> 00:12:01,056
+airplane it is, which we might also be
+uncertain about. And this gives rise to a
+
+119
+00:12:01,056 --> 00:12:06,010
+whole set of problems known as
+registration, or correspondence, or data
+
+120
+00:12:06,010 --> 00:12:12,062
+association problems which are very common
+in many applications. Different type of
+
+121
+00:12:12,062 --> 00:12:17,093
+application for this, type of structured
+CPD, comes up in physical hardware
+
+122
+00:12:17,093 --> 00:12:23,059
+configuration settings. So this is an
+actual example from a trouble-shooter, for
+
+123
+00:12:23,059 --> 00:12:29,025
+printers used at Microsoft. And it turns
+out that all of the trouble-shooters that
+
+124
+00:12:29,025 --> 00:12:35,063
+are part of the Microsoft operating system
+are, built on top of [inaudible] network
+
+125
+00:12:35,063 --> 00:12:42,028
+technology. So here the task is to try and
+figure out why a printer isn't printing.
+
+126
+00:12:42,028 --> 00:12:49,001
+So we have a variable here that tells us
+whether a printer is producing output. And
+
+127
+00:12:49,001 --> 00:12:55,067
+that depends on a variety of factors, but
+one of the factors that it depends on is
+
+128
+00:12:55,067 --> 00:13:02,033
+where the printer input is coming from. Is
+it coming from a local transport? We're
+
+129
+00:13:02,033 --> 00:13:08,007
+not [inaudible] And depending on which of
+those it's coming from, there's a
+
+130
+00:13:08,007 --> 00:13:13,048
+different set of failures that might
+occur. So, the variable here that serves
+
+131
+00:13:13,048 --> 00:13:19,026
+the goal of the selector variable, is this
+variable Print Data Out. And that's the
+
+132
+00:13:19,026 --> 00:13:24,067
+root of the tree that's used here. And,
+and depending on whether the print
+
+133
+00:13:24,067 --> 00:13:30,023
+location is local or not, then you depend
+either on properties of the local
+
+134
+00:13:30,023 --> 00:13:36,077
+transport or on properties of the network
+transport. And it turns out that even in
+
+135
+00:13:36,077 --> 00:13:42,029
+this very, very simple network the use of
+tree CPDs reduces the number of parameters
+
+136
+00:13:42,029 --> 00:13:47,004
+from 145 to about 55 and make the
+elicitation process much easier. So to
+
+137
+00:13:47,004 --> 00:13:52,019
+summarize [inaudible] provide us with a
+compact representation that captures
+
+138
+00:13:52,019 --> 00:13:57,061
+effectively this motion of dependence in a
+[inaudible] specific way. And as we've
+
+139
+00:13:57,061 --> 00:14:03,002
+mentioned as relevant in a broad range of
+applications of which we're only given
+
+140
+00:14:03,002 --> 00:14:08,038
+some examples, hardware configuration,
+medical settings, we're depending on the
+
+141
+00:14:08,038 --> 00:14:14,013
+kind of situation that your in you might
+depend on one set of predisposing factors
+
+142
+00:14:14,013 --> 00:14:19,086
+say or another Dependence on an agent
+action, as we've seen for example in the
+
+143
+00:14:19,086 --> 00:14:25,075
+student's decision on whether to apply for
+a job or not or which letter to submit.
+
+144
+00:14:25,075 --> 00:14:30,071
+And we've also discussed perceptual
+ambiguity where the value of the
+
+145
+00:14:30,071 --> 00:14:36,060
+particular sensed observation depends on
+which real world object that observation
+
+146
+00:14:36,060 --> 00:14:37,039
+comes from.

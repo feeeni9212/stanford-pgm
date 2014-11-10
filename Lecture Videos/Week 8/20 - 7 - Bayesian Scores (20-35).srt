@@ -1,0 +1,1035 @@
+
+1
+00:00:00,000 --> 00:00:04,495
+We talked about Bayes net structure
+learning as the problem of optimizing a
+
+2
+00:00:04,495 --> 00:00:09,405
+scoring function over the space of network
+structures. And we also talked about how
+
+3
+00:00:09,405 --> 00:00:13,664
+the likelihood score, which is the
+simplest score that one could come up
+
+4
+00:00:13,664 --> 00:00:18,455
+with, has significant issues relative to
+over fitting. We're now going to look at a
+
+5
+00:00:18,455 --> 00:00:22,892
+different score that's derived from
+Bayesian principles. And we're going to
+
+6
+00:00:22,892 --> 00:00:27,446
+see how that score, although it has some
+surface similarity to the likelihood
+
+7
+00:00:27,446 --> 00:00:32,619
+score, is a considerably better score in
+terms of, it, avoiding of over fitting. So
+
+8
+00:00:32,619 --> 00:00:37,470
+the Bayesian score is derived from the
+Bayesian paradigm, that says that anything
+
+9
+00:00:37,470 --> 00:00:42,381
+that we have uncertainty over, needs to
+have a probability distribution over it.
+
+10
+00:00:42,381 --> 00:00:47,352
+And so if we have uncertainty over graphs,
+then we need to have a prior over graphs.
+
+11
+00:00:47,352 --> 00:00:51,664
+And if you have uncertainty over
+parameters, we need to have uncertainty
+
+12
+00:00:51,664 --> 00:00:57,315
+over parameters, a probability
+distribution. And so if we now define our
+
+13
+00:00:57,315 --> 00:01:06,432
+optimization problem as that of finding
+the graph g that maximizes the probability
+
+14
+00:01:06,432 --> 00:01:12,901
+of g given d. Now if we rewrite the
+probability of G given D using Bayes rule,
+
+15
+00:01:13,127 --> 00:01:19,674
+we end up with the following expression, P
+of D given G times P of G divided by P of
+
+16
+00:01:19,674 --> 00:01:25,619
+D. So let's look at each of those terms
+separately. The first of these is a term
+
+17
+00:01:25,619 --> 00:01:31,413
+called the marginal likelihood, P of D
+given G is the probability of the data
+
+18
+00:01:31,413 --> 00:01:36,982
+given, the graph. The second of these
+terms, P of G, is a prior over graph
+
+19
+00:01:36,982 --> 00:01:42,960
+structures. And the final term, p of D,
+the denominator, is the margi, is called
+
+20
+00:01:42,960 --> 00:01:49,458
+the marginal probability of the data. Now,
+importantly, this marginal probability of
+
+21
+00:01:49,458 --> 00:01:55,578
+the data is independent of G. And so it's
+not going to affect the choice of which
+
+22
+00:01:55,578 --> 00:02:00,981
+graph we select. And therefore, we can
+ignore it in the context of a model
+
+23
+00:02:00,981 --> 00:02:06,976
+selection problem that is defining, the
+single graph, or a graph that maximizes
+
+24
+00:02:06,976 --> 00:02:12,453
+the score. And so we're going to define
+the Bayesian score, score B of G of
+
+25
+00:02:12,453 --> 00:02:18,449
+relative to data set D, as the log of the
+numerator of this expression. So the log
+
+26
+00:02:18,449 --> 00:02:24,635
+of the marginal likelihood plus the log of
+the prior over graphs. Now we might think,
+
+27
+00:02:24,635 --> 00:02:30,715
+that this score is going to avoid over
+fitting because of its use of the prior
+
+28
+00:02:30,715 --> 00:02:36,288
+over graphs. And although that
+prior can play a role, actually is turns
+
+29
+00:02:36,288 --> 00:02:42,223
+out to be a significantly less important
+role than the first of these terms which
+
+30
+00:02:42,223 --> 00:02:48,303
+is the marginal likelihood. So let's look
+at the marginal likelihood in a little bit
+
+31
+00:02:48,303 --> 00:02:53,883
+more depth. So, the marginal likelihood, P
+of D given G, is not as it happens. The
+
+32
+00:02:53,883 --> 00:02:58,402
+same as the log likelihood. Because
+that marginal likelihood is something that
+
+33
+00:02:58,402 --> 00:03:03,033
+integrates over all possible settings of
+the parameters. And so from a mathematical
+
+34
+00:03:03,033 --> 00:03:07,274
+perspective, what we're going to do is,
+we're going to introduce a variable,
+
+35
+00:03:07,274 --> 00:03:11,737
+theta G, into the probability expression.
+And then we're going to integrate it out.
+
+36
+00:03:11,737 --> 00:03:16,368
+Which is the same as summing it out only
+it's a continuous space so we're going to
+
+37
+00:03:16,368 --> 00:03:22,114
+use integrals. So P of D given G, is the
+integral over all possible model
+
+38
+00:03:22,114 --> 00:03:28,020
+parameterizations, Theta-G, of the
+probability of D given G and Theta-G,
+
+39
+00:03:28,020 --> 00:03:35,380
+times the probability of Theta-G given G.
+Now, the first of these two terms is the
+
+40
+00:03:35,380 --> 00:03:42,396
+likelihood. Which is exactly the, the
+component that we used in the log
+
+41
+00:03:42,396 --> 00:03:50,178
+likelihood score. But, importantly, unlike
+the likelihood score, we're not computing
+
+42
+00:03:50,178 --> 00:03:55,937
+P of D, given G. And theta G, just for the
+maximum likelihood parameters, theta hat
+
+43
+00:03:55,937 --> 00:04:00,787
+G. Rather, we're computing this
+probability averaged out over all possible
+
+44
+00:04:00,787 --> 00:04:06,035
+parameter settings. Which gives us a
+considerably less optimistic assessment of
+
+45
+00:04:06,035 --> 00:04:11,083
+the probability of the data, given a
+particular structure. Because we have to
+
+46
+00:04:11,083 --> 00:04:16,331
+take into consideration, not just a single
+parameter setting that is geared
+
+47
+00:04:16,331 --> 00:04:21,446
+exactly to our data set, which is this
+theta hat set of parameters. But rather,
+
+48
+00:04:21,446 --> 00:04:27,746
+averaging out over all possible parameter
+settings Theta G using the prior over
+
+49
+00:04:27,746 --> 00:04:34,082
+parameters. So that less optimistic
+assessment is sort of one intuition as to
+
+50
+00:04:34,082 --> 00:04:40,728
+why this might not over fit as much. But
+it turns out there is another perhaps even
+
+51
+00:04:40,728 --> 00:04:47,142
+more intuitive explanation as to why this
+score reduces over fitting. So let's look
+
+52
+00:04:47,142 --> 00:04:53,240
+at the, this marginal likelihood term, P
+of D given G. And just, wri-, rewrite
+
+53
+00:04:53,240 --> 00:04:59,002
+it as the probability of all of the
+instances X1 up to XM given G. And what
+
+54
+00:04:59,002 --> 00:05:04,655
+we're going to do is we're going to now
+break up this joint distribution using the
+
+55
+00:05:04,655 --> 00:05:09,830
+chain rule for probabilities. Not the
+chain rule for Bayesian networks, just the
+
+56
+00:05:09,830 --> 00:05:15,414
+chain rule for probabilities. And we can
+write that as the probability of X1 given
+
+57
+00:05:15,414 --> 00:05:20,794
+G, times the probability of X2 given X1
+and G, times the probability of X3 given
+
+58
+00:05:20,794 --> 00:05:25,765
+X1 and X2, times blah, blah, blah, up to
+the probability of XM, given all the
+
+59
+00:05:25,765 --> 00:05:31,907
+previous ones, X1 up to XM minus one, and
+G. And if we look at each of these terms,
+
+60
+00:05:31,907 --> 00:05:38,385
+each of these is effectively making a
+prediction over an unseen instance, say XM
+
+61
+00:05:38,385 --> 00:05:45,026
+given X1 up to XM minus one. So you can
+think of it as a almost doing some kind of
+
+62
+00:05:45,026 --> 00:05:51,180
+cross validation or generalization or
+estimate of generalization ability,
+
+63
+00:05:51,180 --> 00:05:57,416
+because we're estimating the ability to
+predict an unseen instance given the
+
+64
+00:05:57,416 --> 00:06:05,209
+previous ones. And so the probability of d
+in some sense incorporates into it some
+
+65
+00:06:05,209 --> 00:06:11,708
+kind of analysis of generalization
+ability. Now, you might say, well, surely
+
+66
+00:06:11,708 --> 00:06:17,504
+the likelihood does, the, the standard
+likelihood score does exactly the same
+
+67
+00:06:17,504 --> 00:06:23,758
+thing. But a little bit more thought
+reveals that if we want to do this kind of
+
+68
+00:06:23,758 --> 00:06:30,241
+analysis for the maximum likelihood set of
+parameters, that maximum likelihood set of
+
+69
+00:06:30,241 --> 00:06:37,774
+parameters, theta hat g, depends on all.
+Of D, all of the instances D. In D. And
+
+70
+00:06:37,774 --> 00:06:43,848
+so we can't break it down in this way
+because if we had, theta hat G on
+
+71
+00:06:43,848 --> 00:06:49,477
+the right hand side, it's already
+incorporating into it all of the instances
+
+72
+00:06:49,477 --> 00:06:55,699
+including the unseen ones, which is yet
+another intuition as to why that, like the
+
+73
+00:06:55,699 --> 00:07:03,335
+maximum likelihood score tends to over
+fit. Now. The maximum, now, the Bayesian
+
+74
+00:07:03,335 --> 00:07:08,936
+score might look a little bit scary,
+because it has all this integral in it.
+
+75
+00:07:08,936 --> 00:07:14,387
+And, and who knows how we would ever
+compute it. It turns out that, for the
+
+76
+00:07:14,387 --> 00:07:20,809
+case of multinomial Bayesian networks the,
+the likelihood, the, the Bayesian score
+
+77
+00:07:20,809 --> 00:07:26,485
+can actually be written in closed form,
+using a function called the gamma
+
+78
+00:07:26,485 --> 00:07:31,631
+function. The gamma function is. As
+written over here, it's also an integral
+
+79
+00:07:31,631 --> 00:07:36,679
+but, it turns out that the gamma function
+is really just a continuous extension of
+
+80
+00:07:36,679 --> 00:07:41,727
+the factorial function, because gamma X
+satisfies the equality gamma X is equal to
+
+81
+00:07:41,727 --> 00:07:46,344
+X times gamma X minus one. And most
+computers have an implementation of the
+
+82
+00:07:46,344 --> 00:07:51,869
+gamma function in them. So, with the gamma
+function we can actually rewrite the
+
+83
+00:07:51,869 --> 00:07:58,145
+probability of the given G as a product
+that looks as follows. The first is first
+
+84
+00:07:58,145 --> 00:08:06,870
+we have a product over all variables I.
+And then we have a, two different products
+
+85
+00:08:06,870 --> 00:08:16,065
+included in this big, this big outer
+product. The first is a product over. The
+
+86
+00:08:16,065 --> 00:08:25,462
+parent set UI, of, multiplying over all
+possible values of the parent set. And
+
+87
+00:08:25,462 --> 00:08:35,453
+here we have an expression involving gamma
+functions, where this expression involves
+
+88
+00:08:35,453 --> 00:08:43,254
+both dirichlet prior parameters. The
+alpha, as well as the sufficient
+
+89
+00:08:43,254 --> 00:08:50,057
+statistics. So the first product,
+enumerates over all possible assignments
+
+90
+00:08:50,057 --> 00:08:56,335
+to the parents. And then we have an inner
+product, yet another inner product, which
+
+91
+00:08:56,335 --> 00:09:03,155
+enumerates over all possible values of the
+variable itself. So, the variable of all
+
+92
+00:09:03,155 --> 00:09:09,510
+possible values, XIJ of the variable XI.
+And once again, we have, gamma terms that
+
+93
+00:09:09,510 --> 00:09:16,475
+involve both the prior as well as the
+sufficient statistics. And the, while this
+
+94
+00:09:16,475 --> 00:09:23,333
+expression might look still a little bit
+scary, it it's something that one can just
+
+95
+00:09:23,333 --> 00:09:31,696
+plug in to the computer and, and compute
+quite easily. Another valuable property of
+
+96
+00:09:31,696 --> 00:09:38,357
+this marginal likelihood, if we look at it
+a little bit more and that we also take
+
+97
+00:09:38,357 --> 00:09:43,877
+its algorithm is we see that this.
+Expression is, which was originally a
+
+98
+00:09:43,877 --> 00:09:49,393
+product over variables I of some
+complicated expression relating to XI, is
+
+99
+00:09:49,393 --> 00:09:55,357
+actually something that, if we take the
+log, it turns into a sum over I of the
+
+100
+00:09:55,357 --> 00:10:02,140
+family score. Something that can be viewed
+as the family score, for, the variable XI
+
+101
+00:10:02,140 --> 00:10:08,938
+and its parent set. Together. And so just
+like other scores that we've seen before,
+
+102
+00:10:08,938 --> 00:10:14,273
+this, this scoring function can de,
+decomposes as a sum over I of terms
+
+103
+00:10:14,273 --> 00:10:20,445
+involving only X I and its parents and
+that we'll see that this property can be
+
+104
+00:10:20,445 --> 00:10:28,471
+quite important from a computational
+perspective. How do we, so now, building
+
+105
+00:10:28,471 --> 00:10:34,707
+up. From the marginal likelihood. The
+second term in this expression is log of P
+
+106
+00:10:34,707 --> 00:10:40,918
+of G. And so, in order to accommodate for
+that, we need to have a prior over P of G.
+
+107
+00:10:40,918 --> 00:10:47,589
+And, there's a variety of different priors
+that people have used. It turns out that a
+
+108
+00:10:47,589 --> 00:10:53,559
+quite common choice is to simply make P of
+G constant, and that. Although that
+
+109
+00:10:53,559 --> 00:10:58,854
+doesn't impose explicitly any penalty on
+complexity it turns out that it works
+
+110
+00:10:59,055 --> 00:11:04,820
+quite well because of the penalty imposed
+on complexity by the marginal likelihood.
+
+111
+00:11:04,820 --> 00:11:09,785
+But if I want to build in additional
+penalties on complexity, we can make the
+
+112
+00:11:09,785 --> 00:11:14,106
+prior, some, be something that
+exponentially penalizes the number of
+
+113
+00:11:14,106 --> 00:11:18,749
+edges, or penalizes the number of
+parameters, and that induces additional
+
+114
+00:11:18,749 --> 00:11:24,216
+sparsity. Now. Importantly, we don't
+actually want to define a prior
+
+115
+00:11:24,216 --> 00:11:29,035
+probability over graph structures, and
+make sure that it correctly normalizes
+
+116
+00:11:29,035 --> 00:11:34,230
+over all possible structures and even more
+so, over all possible acyclic structures.
+
+117
+00:11:34,230 --> 00:11:38,861
+But fortunately, we don't have to, because
+the normalizing constant in this
+
+118
+00:11:38,861 --> 00:11:43,743
+distribution, T of G, is this constant
+across different networks and, and can
+
+119
+00:11:43,743 --> 00:11:48,624
+therefore be ignored completely, and we
+only need to consider the term that
+
+120
+00:11:48,624 --> 00:11:53,130
+changes with the graph structure, and
+ignore the normalizing constant or
+
+121
+00:11:53,130 --> 00:11:58,793
+partition function. That's the structure
+prior. What about the parameter prior. The
+
+122
+00:11:58,793 --> 00:12:03,972
+parameter prior that we use in the context
+of the Bayesian score, the one that's most
+
+123
+00:12:03,972 --> 00:12:09,091
+commonly used is something called the BDE
+prior. And the BDE prior is something that
+
+124
+00:12:09,091 --> 00:12:13,904
+we've actually seen before, when we were
+talking about parameter estimation for
+
+125
+00:12:13,904 --> 00:12:18,718
+Bayesian networks. And as a reminder, the
+BDE prior is defined by two components.
+
+126
+00:12:18,718 --> 00:12:23,471
+One is an equivalent sample size alpha,
+which is the total number of instances
+
+127
+00:12:23,471 --> 00:12:28,528
+that we might have seen in some imaginary
+universe. And the second is a probability
+
+128
+00:12:28,528 --> 00:12:33,654
+distribution, P zero, typically encoded by
+a prior Bayesian network. Zero which in
+
+129
+00:12:33,654 --> 00:12:40,809
+culture of our prior beliefs about, about
+the universe. And the and so we define now
+
+130
+00:12:40,809 --> 00:12:47,457
+the imaginary counts that we might have
+seen for a particular combination of
+
+131
+00:12:47,706 --> 00:12:54,437
+values for little Xi and a particular
+s?ance for its parents to be alpha. Which
+
+132
+00:12:54,437 --> 00:13:00,752
+is the total number of counts that we've
+seen times the probability of that
+
+133
+00:13:00,752 --> 00:13:07,650
+particular event Xi comma PAi of G in the
+network, in a prior network would be zero.
+
+134
+00:13:07,650 --> 00:13:14,881
+Now, an important note is that the parents
+of. The variable x I in the graph G is not
+
+135
+00:13:14,881 --> 00:13:20,884
+the same as the parents of x I in the
+prior network B zero. In fact, in many
+
+136
+00:13:20,884 --> 00:13:26,657
+cases we choose the network in, the
+network B zero to be one that has no
+
+137
+00:13:26,657 --> 00:13:31,582
+edges, where all variables are
+independent. But we compute the
+
+138
+00:13:31,582 --> 00:13:37,355
+probability distribution in B zero and
+then use that to compute the, the
+
+139
+00:13:37,355 --> 00:13:43,815
+hyperparameters alpha that are used in the
+context of the of the, of the learning
+
+140
+00:13:43,815 --> 00:13:49,955
+problem for, for given graph G. And the
+important thing is now that the single
+
+141
+00:13:49,955 --> 00:13:55,548
+network BO. Provides us with priors for
+all of the candidate networks. So we don't
+
+142
+00:13:55,548 --> 00:14:00,664
+need to elicit priors for exponentially
+many networks. We have a single network be
+
+143
+00:14:00,664 --> 00:14:05,344
+zero in a single equivalent sample size
+and we can use that to compute the
+
+144
+00:14:05,344 --> 00:14:09,900
+parameter prior, P of theta given G, over
+all possible networks that we're
+
+145
+00:14:09,900 --> 00:14:15,744
+interested in evaluating. Now other than
+its convenience why this prior is opposed
+
+146
+00:14:15,744 --> 00:14:22,199
+to others, it turns out that one can show
+that this prior is unique. Prior. Over
+
+147
+00:14:22,397 --> 00:14:27,609
+multinomial Bayesian networks with the
+important property that if two networks
+
+148
+00:14:27,609 --> 00:14:32,623
+are equivalent then they have the same
+Bayesian score. That is if we use the
+
+149
+00:14:32,623 --> 00:14:38,165
+different set of [inaudible] priors other
+than one that fits this mould, we would
+
+150
+00:14:38,165 --> 00:14:42,814
+have a situation where we might have two.
+Networks G and G prime that were
+
+151
+00:14:42,814 --> 00:14:46,880
+equivalent that have different Bayesian
+scores and there's really no
+
+152
+00:14:46,880 --> 00:14:51,417
+justifications for that in terms of
+incorporating that into the parameter
+
+153
+00:14:51,417 --> 00:14:56,072
+priors because these networks are
+completely equivalent in their ability to
+
+154
+00:14:56,072 --> 00:15:00,963
+represent the probability distribution or
+the same set of probability distribution
+
+155
+00:15:00,963 --> 00:15:05,560
+so why would we have one of them have
+different Bayesian score than others or.
+
+156
+00:15:05,560 --> 00:15:10,511
+Rather if we do have some prior knowledge
+that one of these graphs is, is more
+
+157
+00:15:10,511 --> 00:15:15,217
+suitable then the other, we should put
+that into our structure prior, not into
+
+158
+00:15:15,217 --> 00:15:21,083
+our parameter prior. One interesting
+property of the BDE score has to do with
+
+159
+00:15:21,083 --> 00:15:26,709
+its [inaudible] behavior. So, let's
+consider what happens to the BDE score as,
+
+160
+00:15:26,709 --> 00:15:32,699
+or, in fact, a Bayesian score, in general,
+and M goes to infinity. And it turns out
+
+161
+00:15:32,699 --> 00:15:38,324
+that as M goes to infinity, and network G
+[inaudible] priors, satisfies the
+
+162
+00:15:38,324 --> 00:15:43,803
+following in terms of the marginal
+likelihood. That the log of the marginal
+
+163
+00:15:43,803 --> 00:15:49,923
+likelihood is equal to the sum of these
+three terms. The first of these. Is just
+
+164
+00:15:49,923 --> 00:16:03,955
+the log likelihood. Of the data. Given the
+maximum likelihood of parameters. Theta
+
+165
+00:16:03,955 --> 00:16:14,109
+half G. So this is just the likelihood
+score. Which we've already seen, has some
+
+166
+00:16:14,109 --> 00:16:20,849
+good properties, in terms of trying to fit
+the data. But on the other hand, is also
+
+167
+00:16:20,849 --> 00:16:27,090
+liable to over fit. The second terms,
+however, is log of M over two, where M is
+
+168
+00:16:27,090 --> 00:16:33,664
+the number of instances, times [inaudible]
+G, which is the number of independent
+
+169
+00:16:33,664 --> 00:16:42,716
+parameters. Which as we've seen in the
+context of a multinomial distribution, is
+
+170
+00:16:42,716 --> 00:16:47,733
+the number of entries in distribution m
+minus one. And this term has a negative
+
+171
+00:16:47,733 --> 00:16:52,612
+sign, which means that, we are going, this
+log, the, the, log, of the marginal
+
+172
+00:16:52,612 --> 00:16:57,803
+likelihood, is going to be decreased as we
+increase the number of parameters. And so
+
+173
+00:16:57,803 --> 00:17:02,556
+there is a tension between those two
+terms. The first of these, tries to have
+
+174
+00:17:02,556 --> 00:17:07,559
+more complicated networks, in order to
+maximize the fit to data, as we've already
+
+175
+00:17:07,559 --> 00:17:12,688
+scene, and the second, tries to reduce the
+complexity of the model by increasing, by
+
+176
+00:17:12,688 --> 00:17:18,908
+decreasing the number of parameters. The
+third term, is this term O of one, which
+
+177
+00:17:18,908 --> 00:17:25,923
+indicates in a formal notation that this
+third term is effectively constant
+
+178
+00:17:25,923 --> 00:17:33,932
+relative to M, which means it doesn't
+grow. With M. With the number of
+
+179
+00:17:33,932 --> 00:17:39,615
+instances, which means that as the number
+of instances grows, only these first two
+
+180
+00:17:39,615 --> 00:17:45,788
+terms are going to play a role in terms of
+evaluating which structure is going to be
+
+181
+00:17:45,788 --> 00:17:52,210
+selected. Now these first two terms, as it
+happens, have a name. And that, name is
+
+182
+00:17:52,210 --> 00:17:57,847
+something called the BIC score, which
+really looks just at the likelihood
+
+183
+00:17:57,847 --> 00:18:04,255
+component and the penalty term. And as,
+and in a different part of this course, we
+
+184
+00:18:04,255 --> 00:18:10,509
+talk about the BIC score and some of the
+properties that it has, specifically, for
+
+185
+00:18:10,509 --> 00:18:19,263
+example, the fact that as M rose to
+infinity, the score is consistent. Which
+
+186
+00:18:19,263 --> 00:18:24,378
+means that the graph or one of its I, is
+the correct graph for one of its I
+
+187
+00:18:24,378 --> 00:18:29,429
+equivalent graphs is going to have the
+highest score among all possible graphs
+
+188
+00:18:29,429 --> 00:18:35,343
+that we're considering. So, this is yet
+another demonstration that the Bayesian
+
+189
+00:18:35,343 --> 00:18:41,491
+score is a way of avoiding over fitting
+because at the large sample limit we will
+
+190
+00:18:41,491 --> 00:18:46,965
+learn a correct graph. Either the correct
+graph for one of its equivalent
+
+191
+00:18:46,965 --> 00:18:51,795
+structures. To summarize, the Bayesian
+score uses Bayesian principles,
+
+192
+00:18:51,795 --> 00:18:57,557
+specifically averaging out over parameters
+that we have uncertainty over, to avoid
+
+193
+00:18:57,557 --> 00:19:03,530
+over fitting. The Bayesian score is most
+often instantiated as a particular variant
+
+194
+00:19:03,530 --> 00:19:09,432
+called BDE, which requires that we assess
+a prior network in order to compute, the
+
+195
+00:19:09,432 --> 00:19:14,984
+prior [inaudible] parameters. But that
+also allows us to nat, a natural place to
+
+196
+00:19:14,984 --> 00:19:20,696
+incorporate prior knowledge, into the
+learning algorithm. And the BDE prior has
+
+197
+00:19:20,696 --> 00:19:28,571
+the important property that I-equivalent
+networks have the same score. The Bayesian
+
+198
+00:19:28,573 --> 00:19:38,487
+score is at the large sample limit.
+Equivalent to a different score called
+
+199
+00:19:38,487 --> 00:19:44,195
+BIC, which we analyze separately in this
+course, and as a consequence of this
+
+200
+00:19:44,195 --> 00:19:50,206
+equivalence one can show that it's
+ascetically consistent in that it learns
+
+201
+00:19:50,206 --> 00:20:01,823
+the correct Network as M goes to infinity.
+Now while this asymptotic behavior is an
+
+202
+00:20:01,823 --> 00:20:07,800
+important one, it's also important to
+realize that we don't often have a, a
+
+203
+00:20:07,800 --> 00:20:13,105
+very, very large number of samples or at
+least not an, a large number of
+
+204
+00:20:13,105 --> 00:20:18,783
+applications, and so it's important to
+consider also the behavior for a more
+
+205
+00:20:18,783 --> 00:20:24,984
+reasonable number of samples and, and in
+this case it's it can be shown that the
+
+206
+00:20:24,984 --> 00:20:31,389
+BIC score tends to under fit the Number of
+tends to under fit the model structure in
+
+207
+00:20:31,389 --> 00:20:35,320
+the sense that it'll learn models that are
+to sparse.

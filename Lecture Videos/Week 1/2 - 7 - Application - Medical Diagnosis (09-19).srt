@@ -1,0 +1,523 @@
+
+1
+00:00:00,000 --> 00:00:05,043
+One of the most, common applications of,
+Bayesian networks, or rather, one of
+
+2
+00:00:05,043 --> 00:00:10,053
+the earliest ones that are still very much
+in use today, is for the purpose of
+
+3
+00:00:10,053 --> 00:00:15,077
+diagnosis. And by diagnosis, I mean both
+medical as well as fault diagnosis.
+
+4
+00:00:15,077 --> 00:00:21,021
+Now, this dates back into the early'90s,
+in, the PHD thesis of Heckermann, et al., won the
+
+5
+00:00:21,021 --> 00:00:26,031
+ACM dissertation award. And a system
+called Pathfinder, which looked at, a
+
+6
+00:00:26,031 --> 00:00:31,087
+range of different pieces of evidence in
+order to help a doctor diagnose, a set of
+
+7
+00:00:31,092 --> 00:00:37,025
+diseases. And specifically, it was focused
+initially on lymph node pathologies, so 60
+
+8
+00:00:37,025 --> 00:00:42,057
+different diseases, all sorts of different
+symptoms, and they tried out a bunch of
+
+9
+00:00:42,057 --> 00:00:47,095
+different rules, methods for solving these
+problems. So the first one they actually
+
+10
+00:00:47,095 --> 00:00:53,033
+tried, this way back in the early days of
+artificial intelligence, and they tried a
+
+11
+00:00:53,033 --> 00:00:58,058
+rule based system. And, it didn't work
+really well. The second version of
+
+12
+00:00:58,058 --> 00:01:04,024
+Pathfinder used the naive Bayes model,
+which assumes that all of the symptoms are
+
+13
+00:01:04,024 --> 00:01:09,083
+independent given the disease. And even
+that really simple model got superior
+
+14
+00:01:09,083 --> 00:01:16,045
+performance to the rule based system that
+they initially tried. Pathfinder three
+
+15
+00:01:16,045 --> 00:01:21,039
+still used Naïve Bayes but it used Naïve
+Bayes with better knowledge engineering.
+
+16
+00:01:21,039 --> 00:01:26,063
+That is they actually, they actually
+understood some of the issues behind what
+
+17
+00:01:26,063 --> 00:01:31,012
+makes a system like this work well and
+what. Made and they've fixed it. So
+
+18
+00:01:31,012 --> 00:01:35,088
+specifically one of the things that turns
+out to be really fundamental for the
+
+19
+00:01:35,088 --> 00:01:41,000
+performance of any probabilistic modeling
+system is not to put in zero probabilities
+
+20
+00:01:41,000 --> 00:01:45,051
+ever except for things that are
+definitions because once you put in a zero
+
+21
+00:01:45,051 --> 00:01:50,009
+no matter how much evidence on the
+contrary you have you will never ever be
+
+22
+00:01:50,009 --> 00:01:54,085
+able to get rid of it. Because anything
+times zero is still zero. And so here in
+
+23
+00:01:54,085 --> 00:01:59,054
+the initial pathfinder tool they put in
+some incorrect zero probabilities for
+
+24
+00:01:59,054 --> 00:02:04,018
+things that were very unlikely but not
+impossible and it turns out that, that
+
+25
+00:02:04,018 --> 00:02:08,077
+gave rise about ten percent of
+incorrect diagnosis in the system. And also
+
+26
+00:02:08,077 --> 00:02:12,074
+did better calibration of conditional
+probability which turns out to be
+
+27
+00:02:12,074 --> 00:02:17,025
+important for knowledge engineering of the
+Bayesian network. So for example it turns
+
+28
+00:02:17,025 --> 00:02:21,088
+out that it's a lot easier to compare for
+a physician, to compare the probability of
+
+29
+00:02:21,088 --> 00:02:26,051
+a finding, a piece of evidence between two
+diseases as opposed to the probability of
+
+30
+00:02:26,051 --> 00:02:30,075
+two different findings within a single
+disease. It's much, it's much easier to
+
+31
+00:02:30,075 --> 00:02:35,021
+say "oh this is much more likely in this
+context than in that context" and it turns
+
+32
+00:02:35,021 --> 00:02:39,062
+out that when they ask the physician to
+calibrate this way, they got much better
+
+33
+00:02:39,062 --> 00:02:43,084
+estimate of the probabilities. Remind you
+this was way before they had learning so
+
+34
+00:02:43,084 --> 00:02:51,006
+it was all hands constructed. And then,
+finally Pathfinder four was the full
+
+35
+00:02:51,006 --> 00:02:56,041
+Bayesian network in all of its full
+glory. It no longer made incorrect
+
+36
+00:02:56,041 --> 00:03:01,057
+assumptions about independencies between
+different, say, symptoms. I'll give them a
+
+37
+00:03:01,057 --> 00:03:06,073
+disease. And that gave us an, both allowed
+them to make the model more correct and
+
+38
+00:03:06,073 --> 00:03:11,076
+also it turns out as an unexpected side
+effect by allowing, say, a symptom
+
+39
+00:03:11,076 --> 00:03:17,004
+variable to have more parents than just
+the single disease variable it actually
+
+40
+00:03:17,004 --> 00:03:22,013
+gave rise to considerably more accurate
+estimation of the probabilities because
+
+41
+00:03:22,013 --> 00:03:26,072
+the doctor could kind of think about
+different cases and didn't have to average
+
+42
+00:03:26,072 --> 00:03:33,002
+them all out in his head. And this is one
+of the, I think, really compelling aspects
+
+43
+00:03:33,002 --> 00:03:39,025
+of Bayesian network models which is that the
+Bayesian network model actually turned out
+
+44
+00:03:39,025 --> 00:03:45,012
+to agree with the experts in an expert
+panel of physicians in 50 out of the 53
+
+45
+00:03:45,012 --> 00:03:50,068
+cases. And these were hard cases. These
+were ones that you really needed the
+
+46
+00:03:50,068 --> 00:03:56,055
+expert opinions on. It wasn't one that
+just an average doctor could necessarily
+
+47
+00:03:56,055 --> 00:04:01,097
+diagnose correctly. And this is as
+compared to 47 out of 53 for the naive
+
+48
+00:04:01,097 --> 00:04:07,018
+Bayes model. Also and significantly less
+than that for the rule-based system. Mind
+
+49
+00:04:07,018 --> 00:04:11,073
+you, and this is an interesting and
+important. Aspect is that the Bayesian
+
+50
+00:04:11,073 --> 00:04:16,055
+network actually outperformed the
+physicians who designed the model. And I
+
+51
+00:04:16,055 --> 00:04:21,056
+mean it didn't outperform the expert panel
+but it outperformed the  physician who designed it
+
+52
+00:04:21,061 --> 00:04:26,076
+Because it was better at putting together all
+these different numbers in a way that a
+
+53
+00:04:26,076 --> 00:04:31,053
+doctor just can't fit all of these
+different findings into his or her brain
+
+54
+00:04:31,053 --> 00:04:40,097
+at the same time. So we talked about, the
+CPCS network. It's, one of my, favorite
+
+55
+00:04:40,097 --> 00:04:47,049
+networks, because it's kinda big and hairy,
+and sorta kinda scary to look at. But
+
+56
+00:04:47,049 --> 00:04:54,035
+anyway, the actual number of variables in
+this network is about 500. And each of
+
+57
+00:04:54,035 --> 00:04:59,079
+them has, on average, about four values.
+So the total number of parameters, if you
+
+58
+00:04:59,079 --> 00:05:04,010
+were to specify a full joint distribution,
+is about 400-500, so that's about, it's
+
+59
+00:05:04,010 --> 00:05:08,068
+about four to the 500, or two to the power
+of 1000, which is more than the number of
+
+60
+00:05:08,068 --> 00:05:13,016
+atoms in the universe. So obviously,
+one couldn't specify this as a complete
+
+61
+00:05:13,016 --> 00:05:17,058
+joint distribution. Not to mention that
+the probability of each and every one of
+
+62
+00:05:17,058 --> 00:05:22,006
+these is about, is as close to zero as makes no
+difference. Because it's the probability
+
+63
+00:05:22,006 --> 00:05:25,075
+of, you know, 500 different, I mean
+events involving 500
+
+64
+00:05:25,075 --> 00:05:32,075
+variables. If you were to if you were to
+actually construct a CPD for each of these
+
+65
+00:05:33,000 --> 00:05:39,069
+for each of these variables the number of parameters would be about 133 million.
+
+66
+00:05:40,060 --> 00:05:47,044
+Which is fairly better than two to the
+1000 still much too large. And so it turns
+
+67
+00:05:47,044 --> 00:05:54,053
+out that they made additional simplifying
+assumptions that we'll talk later on that
+
+68
+00:05:54,053 --> 00:06:01,063
+allowed them to avoid a complete table
+representation of the CPD's and rather do
+
+69
+00:06:01,063 --> 00:06:08,090
+a more compact one and that gave rise to
+about a thousand parameters. Which is
+
+70
+00:06:08,090 --> 00:06:16,049
+still a lot but not but actually is
+tractable to deal with. So we already
+
+71
+00:06:16,049 --> 00:06:21,083
+talked about the fact that these medical
+diagnosis systems have emerged from
+
+72
+00:06:21,083 --> 00:06:27,018
+research and Microsoft built a medical
+diagnosis system. Various other people
+
+73
+00:06:27,018 --> 00:06:31,089
+have built one as well. This has been a
+little bit slow on the uptake in the
+
+74
+00:06:31,089 --> 00:06:36,050
+medical field because it doesn't fit
+naturally into a physicians, pipeline.
+
+75
+00:06:36,068 --> 00:06:41,046
+Maybe now, with the advent of medical, of
+electronic health records, there will be
+
+76
+00:06:41,046 --> 00:06:46,025
+more data entered into the computer so,
+these systems will be more common use.
+
+77
+00:06:46,025 --> 00:06:51,028
+But, until very recently most doctors just
+wrote stuff down on paper and so there, it
+
+78
+00:06:51,028 --> 00:06:55,065
+was very difficult to put this into the
+standard production pipeline for
+
+79
+00:06:55,065 --> 00:07:00,038
+diagnoses. And then finally fault
+diagnosis has been a much, more direct
+
+80
+00:07:00,038 --> 00:07:06,009
+application of these, of these systems,
+because here we don't have an issue, of,
+
+81
+00:07:06,030 --> 00:07:11,037
+of how doctors typically do their
+diagnostic pipeline. So within the
+
+82
+00:07:11,037 --> 00:07:16,094
+Window's operating system, there are
+thousands of these little troubleshooters
+
+83
+00:07:16,094 --> 00:07:22,058
+that help you diagnose problems with your
+printer, with, with Excel, with your
+
+84
+00:07:22,058 --> 00:07:27,087
+email, and each of these has a little
+Bayesian network inside that answers
+
+85
+00:07:27,087 --> 00:07:33,084
+probability questions, given observations
+about what, What the system, the, the,
+
+86
+00:07:33,084 --> 00:07:39,069
+about the, about the model involving, in
+this case, for example, the printer. And
+
+87
+00:07:39,069 --> 00:07:46,037
+there's also a big website out there that
+does, car repair. And, you put in the make
+
+88
+00:07:46,037 --> 00:07:51,099
+and model of, and year of the car. And
+what are the main problems within it.
+
+89
+00:07:52,022 --> 00:07:58,037
+Figures it out and tells you what to look
+at, and what the most likely complaints
+
+90
+00:07:58,037 --> 00:08:03,078
+is. And the reason behind the benefits of
+this, people don't use Bayesian networks
+
+91
+00:08:03,078 --> 00:08:09,009
+are cool even though they are, they use
+this because it provides a very flexible
+
+92
+00:08:09,009 --> 00:08:14,015
+user interface for the user. You
+instantiate the evidence of the Bayesian
+
+93
+00:08:14,015 --> 00:08:19,014
+network out comes the probability, you
+don't want to answer the question right
+
+94
+00:08:19,014 --> 00:08:24,033
+now, that's okay, you can answer it later.
+It's just means that it's an observation
+
+95
+00:08:24,033 --> 00:08:29,081
+that you didn't get the condition on. And,
+and then for the designer this type of
+
+96
+00:08:29,081 --> 00:08:35,010
+system is really easy to design and
+maintain. Because if for example something
+
+97
+00:08:35,010 --> 00:08:39,091
+changes a little bit in your printer
+structure. If you were to design a
+
+98
+00:08:39,091 --> 00:08:45,068
+standard menu-base system you'd have to go
+and rebuild the entire tree that asks you
+
+99
+00:08:45,068 --> 00:08:51,017
+know wh, what is the besides what is the
+first question to ask, what is the second
+
+100
+00:08:51,017 --> 00:08:56,061
+question to ask. What is the most likely
+diagnosis. Here in the Bayesian network, you change
+
+101
+00:08:56,061 --> 00:09:01,032
+one probability, maybe add an edge, and
+everything just emerges from that in a
+
+102
+00:09:01,032 --> 00:09:06,015
+very straight-forward way so it's much
+more modular and more maintainable than,
+
+103
+00:09:06,034 --> 00:09:10,099
+than a hardwired menu-based system. And
+that's what the people who use these
+
+104
+00:09:10,099 --> 00:09:16,049
+systems will you tell is that, why, that's
+why they chose this path as opposed to As
+
+105
+00:09:16,049 --> 00:09:19,053
+opposed to the hard-wired methodology.

@@ -1,0 +1,604 @@
+
+1
+00:00:00,800 --> 00:00:07,086
+Having defined a set of structure scoring
+criteria, we now turn to the problem of
+
+2
+00:00:07,086 --> 00:00:12,752
+trying to optimize that structure score
+over a set of possible candidate
+
+3
+00:00:12,752 --> 00:00:18,541
+structures. And we're first going to
+consider the specific case of trees. So
+
+4
+00:00:18,541 --> 00:00:23,507
+just as a reminder, we define a scoring
+function that evaluates how well a
+
+5
+00:00:23,507 --> 00:00:29,009
+structure matches the data. So here is a
+set of different structures and here is a
+
+6
+00:00:29,009 --> 00:00:34,377
+graphical depiction of our score and we
+would like to search for structure that
+
+7
+00:00:34,377 --> 00:00:39,475
+maximizes the score. Now this is an
+optimization problem, and where the input
+
+8
+00:00:39,475 --> 00:00:44,707
+is a tray, is a training set, a scoring
+function and is possible structures and
+
+9
+00:00:44,707 --> 00:00:50,206
+the output is a network. Then it turns out
+that absolutely the key property, for, of
+
+10
+00:00:50,206 --> 00:00:55,035
+computational efficiency is, the
+composability of the score, which is, the
+
+11
+00:00:55,035 --> 00:01:00,200
+decomposition of the score as a sum of
+family scores, which we've seen before.
+
+12
+00:01:03,120 --> 00:01:09,655
+So, the first problem that we're going to
+focus on is that of learning, either a
+
+13
+00:01:09,655 --> 00:01:16,269
+tree or a forest. So what is, what is a
+forest. A forest is at most one parent per
+
+14
+00:01:16,269 --> 00:01:22,213
+variable. So here for example, is.
+One-fourth, and notice that a fourth
+
+15
+00:01:22,213 --> 00:01:28,304
+doesn't have to be connected. That is, it
+can be separate disconnected components. A
+
+16
+00:01:28,304 --> 00:01:34,023
+tree, on the other hand, would require
+that the graph be connected, so we might
+
+17
+00:01:34,023 --> 00:01:39,668
+have this edge, for example, as well. And
+notice that it's, a still [inaudible]
+
+18
+00:01:39,668 --> 00:01:45,547
+tree. So why should we care about learning
+trees given trees are degenerate, so a,
+
+19
+00:01:45,547 --> 00:01:50,601
+you know, they're so restricted in their
+expressive power. Well there are reasons,
+
+20
+00:01:50,601 --> 00:01:55,656
+there are different types of reasons why
+we like trees. First of all it tunes out
+
+21
+00:01:55,656 --> 00:02:00,773
+that the math is very elegant. Now that
+might not be a convincing reason, but that
+
+22
+00:02:00,773 --> 00:02:05,953
+elegant math give rise to what turns out
+to be a very efficient optimization over
+
+23
+00:02:05,953 --> 00:02:11,007
+the set of trees, that allows me to solve
+it extremely effectively, even for very
+
+24
+00:02:11,007 --> 00:02:16,898
+high dimensional, problems. The, and then
+finally, the third reason is that trees
+
+25
+00:02:16,898 --> 00:02:22,948
+are limited expressive power but that also
+implies that their parameterization is
+
+26
+00:02:22,948 --> 00:02:27,818
+very sparse. And because their
+parameterization is sparse, it means
+
+27
+00:02:27,818 --> 00:02:34,936
+they're less susceptible to over fitting.
+And therefore, at least in cases where M
+
+28
+00:02:34,936 --> 00:02:44,148
+is small relative to the network
+complexity. [inaudible] To M. Then it
+
+29
+00:02:44,148 --> 00:02:49,637
+turns out that it can provide better
+generalization, even though it doesn't
+
+30
+00:02:49,637 --> 00:02:56,411
+capture the full expressive power that we
+would hope to have in our network. So,
+
+31
+00:02:56,411 --> 00:03:01,988
+let's not talk about the problem of
+learning forth and we're going to define a
+
+32
+00:03:01,988 --> 00:03:07,424
+little bit of notation. We're going to
+define P of I for variable I to be the
+
+33
+00:03:07,424 --> 00:03:13,072
+parent of xi or zero in case xi has no
+parent. So note that each variable has at
+
+34
+00:03:13,072 --> 00:03:18,136
+most one parent so this works. So, let's
+look at our decompo-, composable score,
+
+35
+00:03:18,136 --> 00:03:23,260
+and again, this can be any of the three
+scores that we talked about because, they
+
+36
+00:03:23,260 --> 00:03:28,512
+all have this property. So, the score is
+the sum of score of individual families XI
+
+37
+00:03:28,512 --> 00:03:33,636
+and their parents. And, now, the parents
+are very simple because we have only most
+
+38
+00:03:33,828 --> 00:03:38,888
+one parent per variable. So, we're going
+to divide this into two cases. The first
+
+39
+00:03:38,888 --> 00:03:46,624
+case is nodes that have a parent and the
+second one is nodes that don't. And so for
+
+40
+00:03:46,624 --> 00:03:51,278
+the nodes that have a parent, what we have
+is the score of XI given its one parent,
+
+41
+00:03:51,278 --> 00:03:55,980
+and for the nodes that don't have parent,
+it?s just the score of XI as a stand-alone
+
+42
+00:03:55,989 --> 00:04:02,883
+variable. And now we're gonna shuffle
+things around a little bit, and we're
+
+43
+00:04:02,883 --> 00:04:09,874
+going to do the following. We're going to
+introduce into this expression a score of
+
+44
+00:04:09,874 --> 00:04:16,332
+x I and then we're going to add it back
+in. Over here. So now we have a sum of all
+
+45
+00:04:16,332 --> 00:04:22,492
+variables, so noted this is I equals one
+to N, of a score of XI in isolation. But
+
+46
+00:04:22,492 --> 00:04:27,949
+for the XI's that have a parent I've
+subtracted that off in the first
+
+47
+00:04:27,949 --> 00:04:35,485
+summation, and so I've compensated for
+them both sides. The important property of
+
+48
+00:04:35,485 --> 00:04:47,402
+this expression is that this is the same
+for all trees. And so it doesn't affect
+
+49
+00:04:47,402 --> 00:04:52,985
+the comparison between one tree and the
+other, and so the only the only expression
+
+50
+00:04:52,985 --> 00:04:58,108
+that I need to consider when comparing,
+two trees, is this expression over here,
+
+51
+00:04:58,108 --> 00:05:03,363
+which is the sum over I, of the score of
+X-I with its parents minus the score of
+
+52
+00:05:03,363 --> 00:05:09,420
+X-I without its parents. So you can think
+of this as the score of the empty network
+
+53
+00:05:09,420 --> 00:05:14,138
+and this the first, and the first
+expression the first tonation is the
+
+54
+00:05:14,138 --> 00:05:21,916
+improvement that a tree gives me over the
+empty network. And so the square now
+
+55
+00:05:21,916 --> 00:05:30,740
+turned into a sum of S square where each
+of these is a square of an edge from PI
+
+56
+00:05:31,060 --> 00:05:37,059
+Why. Plus a constant that doesn't affect
+the selection of the net words. And that
+
+57
+00:05:37,059 --> 00:05:43,691
+turns out to be the critical piece for
+doing the optimization efficiently. So,
+
+58
+00:05:43,691 --> 00:05:51,641
+let's see how this all works out. So first
+of all we can define the weight of an edge
+
+59
+00:05:51,641 --> 00:05:58,959
+from I to j to be the score of xj with
+it's parent xi minus the score of xj. This
+
+60
+00:05:58,959 --> 00:06:06,006
+is exactly the term that we saw on the
+previous slide in the first of the two
+
+61
+00:06:06,006 --> 00:06:14,900
+summations. Now, for the likelihood score,
+if we go back and plug in the likelihood
+
+62
+00:06:14,900 --> 00:06:22,514
+score, we can see that this weight turns
+out to be M times the neutral information
+
+63
+00:06:22,514 --> 00:06:30,489
+between I and J. The extent to which they
+are correlated with each other. And
+
+64
+00:06:30,489 --> 00:06:35,708
+because mutual information is always
+non-negative, it means that all edge
+
+65
+00:06:35,708 --> 00:06:41,713
+weights are always non-negative. And that
+means that the optimal structure is always
+
+66
+00:06:41,713 --> 00:06:47,075
+a tree. That is there is always benefit,
+or at least there is no penalty, for
+
+67
+00:06:47,075 --> 00:06:54,309
+including additional edges. For BIC or
+BDE, we know that there is a penalty
+
+68
+00:06:54,309 --> 00:06:59,770
+score. So even if introducing an edge from
+XJ to XI, increases the likelihood we
+
+69
+00:06:59,770 --> 00:07:04,954
+might end paying for it more in the
+penalty score than what we gain. And so
+
+70
+00:07:04,954 --> 00:07:10,139
+the weight, this weight, can actually be
+negative. At which point, the optimal
+
+71
+00:07:10,139 --> 00:07:15,946
+structure might actually be a forest. That
+is, it might be detrimental to our overall
+
+72
+00:07:15,946 --> 00:07:21,200
+score, to make the graph full connected.
+[inaudible] mostly [inaudible] graph
+
+73
+00:07:21,200 --> 00:07:30,675
+connected. That is, a tree rather than a
+forest. Okay. Now, a second observation. A
+
+74
+00:07:30,675 --> 00:07:37,359
+score? Remember satisfied score equivalent
+is the property that define, we define
+
+75
+00:07:37,359 --> 00:07:43,498
+before if I could structure have the same
+score. And all the score that we talk
+
+76
+00:07:43,498 --> 00:07:49,716
+about are score equivalent. And turns out
+that, for score equivalent score we can
+
+77
+00:07:49,716 --> 00:07:55,933
+show that the weight from I to j is equal
+to the weight from j to i. That is, you
+
+78
+00:07:55,933 --> 00:08:04,910
+should compute this expression over here.
+For j to I or for I to j we're gonna get
+
+79
+00:08:04,910 --> 00:08:09,991
+the exact same value. And you can see that
+in the likelihood score directly, because
+
+80
+00:08:09,991 --> 00:08:15,012
+mutual information doesn't have any kind
+of directionality associated with it. The
+
+81
+00:08:15,012 --> 00:08:19,971
+mutual information of x I to x j is the
+same as mutual information from x j to x
+
+82
+00:08:19,971 --> 00:08:24,869
+i. So for likelihood score you could just
+see that. And it turns out that for the
+
+83
+00:08:24,869 --> 00:08:29,847
+other cases, it's also it also follows.
+And so that means that we can define an
+
+84
+00:08:29,847 --> 00:08:34,967
+undirected graph where it doesn't really
+matter whether I go from I to J or from J
+
+85
+00:08:34,967 --> 00:08:40,291
+to I, and because the weight is the same
+for both. And so four score equivalent
+
+86
+00:08:40,291 --> 00:08:46,562
+scores, we therefore get the following
+rhythm. We can define an undirected graph
+
+87
+00:08:46,562 --> 00:08:52,423
+with nodes being the variables in my
+graphical model. And then I define a
+
+88
+00:08:52,423 --> 00:08:58,788
+weight W, I, J to be the max of the score
+X, I between X, I and X, J and zero. And
+
+89
+00:08:58,788 --> 00:09:05,483
+remember that it doesn't matter whether I
+do I, J, J, I here wouldn't get the exact
+
+90
+00:09:05,483 --> 00:09:11,435
+same thing for score for that networks.
+The zero is going to be a way of
+
+91
+00:09:11,435 --> 00:09:18,626
+eliminating negative edges so that I can
+optimize things efficiently without having
+
+92
+00:09:18,626 --> 00:09:25,375
+to worry about negative edge costs. Now I
+can go ahead and find a forest or tree
+
+93
+00:09:25,375 --> 00:09:30,599
+that has the maximal weight. And in, and
+the nice thing is it turns out that you
+
+94
+00:09:30,599 --> 00:09:36,154
+could use any of the standard algorithms
+for maximal weight spanning trees in order
+
+95
+00:09:36,154 --> 00:09:41,312
+to do this. So, for example, either Prim's
+or Kruskal's algorithm can be used to
+
+96
+00:09:41,312 --> 00:09:46,735
+solve this. And we can in fact explain the
+solution in time that is O of n squared,
+
+97
+00:09:46,735 --> 00:09:52,356
+which is an inevitable cost given that I'm
+considering all unsquared combinations in,
+
+98
+00:09:52,554 --> 00:09:58,201
+in terms of pairs of edges. And then if I
+end up having edges of weight zero, that
+
+99
+00:09:58,201 --> 00:10:03,741
+indicates that the edge there potentially
+contribute with the right from a negative
+
+100
+00:10:03,939 --> 00:10:09,348
+component of the scores, I remove all of
+the edges whose weight is zero to produce
+
+101
+00:10:09,348 --> 00:10:14,426
+a force and that is an [inaudible] and
+square time algorithm for finding the
+
+102
+00:10:14,426 --> 00:10:19,966
+absolutely optimal tree relative to any of
+these three scores, [inaudible] scores
+
+103
+00:10:19,966 --> 00:10:26,951
+that we've defined. So let's look an
+example. This is the ICU alarm network
+
+104
+00:10:26,951 --> 00:10:33,722
+again. This is a picture of the original
+of the original network and if we apply
+
+105
+00:10:33,722 --> 00:10:39,970
+this tree-learning algorithm, we end up
+with the following structure. Where the
+
+106
+00:10:39,970 --> 00:10:45,156
+edges that have been marked in red are
+edges that existed in the original
+
+107
+00:10:45,156 --> 00:10:50,832
+network, and the blue ones are edges that
+are [inaudible], that is they weren't in
+
+108
+00:10:50,832 --> 00:10:55,948
+the original network. So this blue one
+over here, for example, isn't in the
+
+109
+00:10:55,948 --> 00:11:03,471
+original network. And so we see that
+although many most even of the edges that
+
+110
+00:11:03,471 --> 00:11:09,308
+we end up with are edges in original
+network. Some aren't, some are derived
+
+111
+00:11:09,308 --> 00:11:15,770
+from correlation that went through
+indirect path in the original network. And
+
+112
+00:11:15,770 --> 00:11:20,199
+the other thing that's important to see,
+looking at this, is that the inferred
+
+113
+00:11:20,199 --> 00:11:24,571
+edges in the tree are intrinsically
+undirected. It doesn't mean that I can't
+
+114
+00:11:24,571 --> 00:11:28,426
+force a direction on them. But the
+direction isn't determined by my
+
+115
+00:11:28,426 --> 00:11:32,970
+optimization algorithm. And that means
+that I'm not able to determine what came
+
+116
+00:11:32,970 --> 00:11:38,649
+before what in the original graph when I'm
+learning the tree. So to summarize,
+
+117
+00:11:38,649 --> 00:11:44,873
+structured learning is an optimization
+problem over the inventorial set of, space
+
+118
+00:11:44,873 --> 00:11:51,327
+of graphs. The decomposability property
+allows me to break that up as a sole term
+
+119
+00:11:51,327 --> 00:11:57,244
+for the families and that allows me to
+optimize in the specific case of tree
+
+120
+00:11:57,244 --> 00:12:03,238
+structured networks using standard maximal
+wave standing tree algorithm every
+
+121
+00:12:03,238 --> 00:12:05,159
+efficiently in quadratic.

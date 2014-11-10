@@ -1,0 +1,607 @@
+
+1
+00:00:00,000 --> 00:00:04,062
+When we discussed variable elimination, we
+said that variable elimination is correct
+
+2
+00:00:04,062 --> 00:00:08,080
+no matter the elimination ordering that is
+used. But we also showed that the
+
+3
+00:00:08,080 --> 00:00:13,009
+elimination ordering can make a very
+significant different to the computation
+
+4
+00:00:13,009 --> 00:00:17,027
+complexity of the algorithm. So that begs
+the question of how we find a good
+
+5
+00:00:17,027 --> 00:00:22,016
+elimination ordering. Fortunately, the
+computational analysis based on graphs
+
+6
+00:00:22,016 --> 00:00:27,017
+that we recently did, gives us an
+intuition into on how to find, good
+
+7
+00:00:27,017 --> 00:00:32,073
+elimination orderings. Because it turns
+out that the notion of an induced graph and
+
+8
+00:00:32,073 --> 00:00:37,089
+it, the way in which it indicates the
+complexity of variable elimination can allow
+
+9
+00:00:37,089 --> 00:00:42,084
+us to construct good methods for finding
+elimination orderings with good
+
+10
+00:00:42,084 --> 00:00:49,003
+computational properties. How good of an
+elimination ordering can we construct? So,
+
+11
+00:00:49,003 --> 00:00:54,088
+here is yet another example of the fact
+that any interesting problem is NP hard.
+
+12
+00:00:54,088 --> 00:01:00,050
+So, the following problem is NP hard also. For graph "H", determining
+
+13
+00:01:00,050 --> 00:01:06,028
+whether there exist any elimination
+ordering alpha, for which, the
+
+14
+00:01:06,028 --> 00:01:12,020
+induced width is less than or equal to some
+fixed value "K", that problem is NP complete.
+
+15
+00:01:12,020 --> 00:01:16,095
+So you might say to yourself
+well that's not surprising. I mean
+
+16
+00:01:16,095 --> 00:01:21,015
+probalistic inference is NP complete so
+obviously finding a really good
+
+17
+00:01:21,015 --> 00:01:26,033
+elimination ordering is going to be NP complete.
+Turns out that this is a separate NP hardness
+
+18
+00:01:26,033 --> 00:01:31,027
+problem. That is, even if you
+could solve this problem, even if somebody
+
+19
+00:01:31,027 --> 00:01:36,015
+gave you the best elimination ordering
+you're still going to have a graph for
+
+20
+00:01:36,015 --> 00:01:41,052
+which the width is sufficiently large so
+that you can't actually solve the problem in
+
+21
+00:01:41,052 --> 00:01:46,046
+polynomial time. So finding the best
+induced width for these or the elimination
+
+22
+00:01:46,046 --> 00:01:51,053
+ordering that gives you the best induced
+width does not give you polynomial time
+
+23
+00:01:51,053 --> 00:01:59,026
+performance in general. And so these are
+two different NP hard problems So how do
+
+24
+00:01:59,026 --> 00:02:05,021
+you find a good elimination ordering?
+Fortunately, simple heuristics actually do
+
+25
+00:02:05,021 --> 00:02:10,059
+pretty well. So one standard way of
+finding the elimination ordering is to
+
+26
+00:02:10,059 --> 00:02:18,088
+simply do a greedy search. Eliminating one
+variable at a time where at each point in
+
+27
+00:02:18,088 --> 00:02:24,042
+the elimination you've used some kind of
+heuristic cost function to decide which
+
+28
+00:02:24,042 --> 00:02:30,009
+variable you are going to eliminate next.
+And there are some obvious cost functions
+
+29
+00:02:30,009 --> 00:02:34,094
+to use and it turns out that they
+surprisingly work pretty well. So, for
+
+30
+00:02:34,094 --> 00:02:40,029
+example, one cost function is what's
+called min neighbors. Which is to pick the
+
+31
+00:02:40,029 --> 00:02:45,056
+node that has the minimal number of
+neighbors in the current graph. You want
+
+32
+00:02:45,056 --> 00:02:51,045
+to pick the variable that connected to the fewest
+friends so that it has the smallest
+
+33
+00:02:51,045 --> 00:02:57,028
+party or produces um the smallest factor.
+So this corresponds to the smallest factor
+
+34
+00:02:57,097 --> 00:03:03,080
+with the one who's cardinality is
+smallest in terms of the number of variables.
+
+35
+00:03:03,080 --> 00:03:08,074
+Min weight accounts for the fact
+that sometimes you have variables that
+
+36
+00:03:08,074 --> 00:03:13,043
+have a hundred values and others that have
+two values, and if you just count
+
+37
+00:03:13,043 --> 00:03:17,094
+variables you are going to ignore that
+distinction, so min weight
+
+38
+00:03:17,094 --> 00:03:22,039
+computes the weight, or the total number
+of values in the factor form. So
+
+39
+00:03:22,039 --> 00:03:27,040
+min weight is a way of capturing
+the fact that if you have two variables
+
+40
+00:03:27,040 --> 00:03:32,016
+each of which has a hundred values you
+might prefer to never the less, pick a
+
+41
+00:03:32,016 --> 00:03:39,066
+factor that has five variables each of
+which has only two values. So, these just
+
+42
+00:03:39,066 --> 00:03:45,067
+look at the size of the factors form and
+they ignore the fact that some of these
+
+43
+00:03:45,067 --> 00:03:51,007
+factors might be inevitable. So a
+different strategy is to look at how much
+
+44
+00:03:51,007 --> 00:03:56,059
+extra work is caused by the elimination
+ordering. So min fill is a strategy
+
+45
+00:03:56,059 --> 00:04:02,032
+that says if I eliminate this node, how
+many nodes that weren't friends before
+
+46
+00:04:02,032 --> 00:04:07,070
+become friends due to this elimination
+stuff. So here, basically I'm counting
+
+47
+00:04:07,070 --> 00:04:13,036
+added complexity above and beyond the
+complexity that I would have had from the
+
+48
+00:04:13,036 --> 00:04:18,095
+edges that I previously generated. And
+finally, again you have a weighted version
+
+49
+00:04:18,095 --> 00:04:24,042
+of the fill heuristic that takes into
+account not just the number of edges but
+
+50
+00:04:24,042 --> 00:04:29,075
+also how heavy they are. That is, how big
+are the, how, what's the, what's the
+
+51
+00:04:29,075 --> 00:04:35,015
+domain size of the variables that they
+connect. And it turns out that min-fill
+
+52
+00:04:35,015 --> 00:04:41,013
+which is actually quite often used in
+practice is a pretty good heuristic. Now one
+
+53
+00:04:41,013 --> 00:04:48,033
+important way of understanding, the issues
+of finding elimination orderings is by, is
+
+54
+00:04:48,033 --> 00:04:54,088
+by looking at the following result. And
+the result tells us that the induced graph
+
+55
+00:04:54,088 --> 00:05:01,051
+that is produced by variable elimination,
+regardless of the elimination ordering, is
+
+56
+00:05:01,051 --> 00:05:07,097
+triangulated. Now what does triangulated
+mean? Triangulated means that you can not
+
+57
+00:05:07,097 --> 00:05:14,059
+have a loop of size more than three that
+doesn't have a bridge, an edge that goes
+
+58
+00:05:14,059 --> 00:05:21,004
+in one direction or another so that
+there's a way of crossing across that loop
+
+59
+00:05:21,029 --> 00:05:27,097
+without going all the way around. Let's
+convince ourselves that this true. So
+
+60
+00:05:27,097 --> 00:05:34,081
+here's, here's a simple proof. So once
+again, assume, so consider a set of
+
+61
+00:05:34,081 --> 00:05:42,041
+variables that and assume by contradiction
+that, that there is a loop like this. So
+
+62
+00:05:42,041 --> 00:05:56,087
+for example, assume that we have a loop of size greater than three. And, again one
+
+63
+00:05:56,087 --> 00:06:03,063
+of these variables has to be first to be
+eliminated. So assume that C is the first
+
+64
+00:06:03,063 --> 00:06:13,042
+to be eliminated. Well, once we eliminate
+C we end up introducing an edge between B
+
+65
+00:06:13,042 --> 00:06:20,023
+and D. So there has to be an edge between
+those two neighbors of C. This is when C
+
+66
+00:06:20,023 --> 00:06:26,061
+is eliminated, the C D edge must exist.
+The C B edge must exist. Because as we
+
+67
+00:06:26,061 --> 00:06:32,092
+observed before you don't add any
+neighbors to C once you eliminate it. And
+
+68
+00:06:32,092 --> 00:06:45,079
+so, at that point, fill, a fill edge must be
+added. So, it turns out that one way to
+
+69
+00:06:45,079 --> 00:06:49,089
+find an elimination ordering, an
+alternative to the heuristic that I
+
+70
+00:06:49,089 --> 00:06:54,078
+mentioned earlier is to find a low-width
+triangulation of the original graph. And
+
+71
+00:06:54,078 --> 00:06:59,085
+there has been a lot of work in the graph
+theory literature on triangulating graphs
+
+72
+00:06:59,085 --> 00:07:04,068
+which we are not going to talk about, but
+it turns out that you could use all of
+
+73
+00:07:04,068 --> 00:07:09,044
+that literature for finding good low-width
+triangulation and then use that for
+
+74
+00:07:09,044 --> 00:07:15,014
+constructing elimination ordering. So now
+let's convince ourselves that this can
+
+75
+00:07:15,014 --> 00:07:19,065
+make a big difference. So let's consider a
+practical application and this is an
+
+76
+00:07:19,065 --> 00:07:24,010
+application to robo-localization and
+mapping so what we are going to see here
+
+77
+00:07:24,010 --> 00:07:28,089
+is a robot moving around and at each point
+in time it sees several landmarks and it
+
+78
+00:07:28,089 --> 00:07:33,063
+knows which landmarks it sees and it can
+recognize them. And what it senses at each
+
+79
+00:07:33,063 --> 00:07:38,059
+point is some kind of approximate distance
+to the closest landmark. So, let's write
+
+80
+00:07:38,059 --> 00:07:44,037
+that down as a graphical model. The
+graphical model looks something like this,
+
+81
+00:07:44,037 --> 00:07:50,087
+we have at each point in time, a robot
+pose. Which is the robot pose at times zero,
+
+82
+00:07:50,087 --> 00:07:59,055
+one up to the end of the trajectory T. And
+we have a set of landmarks, whose positions
+
+83
+00:07:59,055 --> 00:08:04,098
+are fixed, the landmarks don't move. So
+notice that these are not random variables
+
+84
+00:08:04,098 --> 00:08:10,028
+that change over time, they are just,
+there and they're constant and what you see
+
+85
+00:08:10,028 --> 00:08:15,057
+here in grey are the observations. So this
+for example, assumes that at time one
+
+86
+00:08:16,022 --> 00:08:24,080
+Robots saw landmark one. And so what we
+have here is the observation: the observed
+
+87
+00:08:24,080 --> 00:08:37,048
+distance is a function of the robot pose,
+and the landmark position. And here at
+
+88
+00:08:37,048 --> 00:08:43,055
+time two, we have that the robot saw
+landmark two so we have this dependency
+
+89
+00:08:43,055 --> 00:08:48,071
+over here. And at land... , at time three
+the robot also saw landmark two so we have
+
+90
+00:08:48,071 --> 00:08:52,082
+two observations for the same landmark.
+And here I didn't draw the fact that
+
+91
+00:08:52,082 --> 00:08:57,013
+you can actually see the same landmark, so
+you can see more than one landmark at any
+
+92
+00:08:57,013 --> 00:09:03,055
+given point in time but that also is easy to add in. Eh, so now if we take the
+
+93
+00:09:03,055 --> 00:09:10,025
+previous robot trajectory that we saw and
+we write down the, the Markov networks
+
+94
+00:09:10,025 --> 00:09:16,072
+that represents the factors, we see that
+we have these light blue, little dots.
+
+95
+00:09:16,072 --> 00:09:22,053
+That represents the robot pose at every
+point in time. We see that we have these
+
+96
+00:09:22,053 --> 00:09:28,064
+temporal persistence edges that represent
+the fact that the robot pose at time T is
+
+97
+00:09:28,064 --> 00:09:34,052
+correlated with its, position time T +
+one. And we have these dark blue, robot
+
+98
+00:09:34,052 --> 00:09:40,056
+pose there able that ... Sorry, these dark
+blue landmark position variables where we
+
+99
+00:09:40,056 --> 00:09:46,091
+see that a landmark is connected to all of
+the positions at which it was visible by the
+
+100
+00:09:46,091 --> 00:09:53,059
+robot. And this is an edge that is induced
+by the V structure that we have over here.
+
+101
+00:09:53,059 --> 00:09:59,095
+So this is an edge that's induced by this
+V structure. Umm, which we have because
+
+102
+00:09:59,095 --> 00:10:06,063
+Z1's been observed. So does landmark, does
+elimination ordering matter? Oh boy, this
+
+103
+00:10:06,063 --> 00:10:12,025
+is what you get when you eliminate the
+robot poses first, and then the landmark.
+
+104
+00:10:12,025 --> 00:10:20,038
+And this, what you see here is the
+induced graph. And you can see that
+
+105
+00:10:20,038 --> 00:10:26,017
+you get this huge spaghetti where most of
+the landmarks are connected, to every, to
+
+106
+00:10:26,017 --> 00:10:31,031
+all other landmarks. Okay? What about a
+different elimination ordering? This was
+
+107
+00:10:31,031 --> 00:10:36,084
+already better. This is what happens when
+you eliminate landmarks and then poses and
+
+108
+00:10:36,084 --> 00:10:41,085
+you see the induced graph that you get
+over poses. And you can see that it's
+
+109
+00:10:41,085 --> 00:10:47,031
+still pretty densely connected but it's
+not, nearly as bad as the spaghetti that
+
+110
+00:10:47,031 --> 00:10:54,046
+we had before. And finally, let's look at
+the result of min-fill elimination. So this
+
+111
+00:10:54,046 --> 00:11:00,066
+is what you're seeing is the fill edges
+being constructed. And you can see that
+
+112
+00:11:00,066 --> 00:11:07,032
+it's actually very sparse. Let's look at
+it again. Very few fill edges are
+
+113
+00:11:07,032 --> 00:11:12,058
+actually added over the course of the
+trajectory. So the elimination ordering
+
+114
+00:11:12,058 --> 00:11:17,039
+makes a very big difference. In summary
+we've seen that finding the optimal
+
+115
+00:11:17,039 --> 00:11:22,038
+elimination ordering is an NP hard problem
+and that is an NP hardness that is
+
+116
+00:11:22,038 --> 00:11:27,057
+different from the intrinsic difficulty of
+inference in graphical models. However,
+
+117
+00:11:27,057 --> 00:11:32,088
+we've also shown that the graph based view
+of variable elimination gives us a very
+
+118
+00:11:32,088 --> 00:11:38,032
+simple and intuitive heuristics that allow
+us to construct good elimination orderings
+
+119
+00:11:38,032 --> 00:11:43,054
+and those work by looking at the induced
+graph as it's constructed. In the course
+
+120
+00:11:43,054 --> 00:11:48,075
+of variable elimination in trying to keep
+it small and sparse. These heuristics,
+
+121
+00:11:48,075 --> 00:11:54,032
+although simple and certainly, potentially
+not providing not good performance in the
+
+122
+00:11:54,032 --> 00:11:58,070
+worst case are often quite reasonable in
+practice and are very commonly used.

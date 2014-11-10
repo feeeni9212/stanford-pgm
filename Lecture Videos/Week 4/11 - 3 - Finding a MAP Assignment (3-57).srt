@@ -1,0 +1,224 @@
+
+1
+00:00:00,000 --> 00:00:04,058
+We previously showed a clique tree
+algorithm for performing max sum message
+
+2
+00:00:04,058 --> 00:00:09,059
+passing. But, we didn't talk about how one
+can take the output of that algorithm and
+
+3
+00:00:09,059 --> 00:00:14,030
+construct an actual map assignment. We
+just showed how we can get max
+
+4
+00:00:14,030 --> 00:00:19,025
+marginals. So how do we compute a map
+assignment? Well it turns out this task is
+
+5
+00:00:19,025 --> 00:00:24,069
+easy as our examples already indicated, if
+the map assignment is unique. Because at
+
+6
+00:00:24,069 --> 00:00:29,067
+that point we have a single maximizing
+assignment at each clique. And we've
+
+7
+00:00:29,067 --> 00:00:34,078
+already seen, that the value of that
+maximizing assignment is the theta value
+
+8
+00:00:34,078 --> 00:00:39,059
+of the map assignment. So in our example
+that we showed before we had the A1B1C1
+
+9
+00:00:39,059 --> 00:00:43,092
+assigned as the map assignment and we saw
+that the A1B1 was the maximizing
+
+10
+00:00:43,092 --> 00:00:48,048
+assignment in clique1 and B1C1 was the
+maximizing assignment at clique2 and we
+
+11
+00:00:48,048 --> 00:00:52,075
+also saw that due to the calibration
+property the choices of all of these
+
+12
+00:00:52,075 --> 00:00:57,060
+cliques must agree which means it doesn't
+really matter whether we picked the value
+
+13
+00:00:57,060 --> 00:01:02,016
+of B from this clique or that clique
+because they are going to give us exactly
+
+14
+00:01:02,016 --> 00:01:07,033
+the same answer. So that's all well and
+good, but what happens is life is not as
+
+15
+00:01:07,033 --> 00:01:12,073
+kind to us? So if the Map assignment is
+not unique then we might have multiple
+
+16
+00:01:12,073 --> 00:01:17,079
+choices at some, of the cliques and we
+might have to make a decision. So for
+
+17
+00:01:17,079 --> 00:01:23,054
+example, imagine that, at calibration, at
+convergence of the some part of algorithm,
+
+18
+00:01:23,054 --> 00:01:29,015
+we have these two cliques over here and we
+can see that in this clique over here, we
+
+19
+00:01:29,015 --> 00:01:34,042
+have two assignments, A1-B1 and A2-B2,
+both of which have the value two. And at
+
+20
+00:01:34,042 --> 00:01:40,035
+this clique over here, once again we
+have two maximizing assignments. And the
+
+21
+00:01:40,035 --> 00:01:45,065
+problem is we can't now look separately at
+each of those cliques and pick an assignment
+
+22
+00:01:45,065 --> 00:01:50,064
+because at that point we might pick,
+say, this assignment in this clique and
+
+23
+00:01:50,064 --> 00:01:55,088
+this assignment in that clique and now we
+have a conflict in regarding the value of
+
+24
+00:01:55,088 --> 00:02:01,064
+the variable B. And it's not just a matter
+of saying, well, okay let's forget, for
+
+25
+00:02:01,064 --> 00:02:07,089
+example, the fact that we picked the value
+B2 in this clique over here because what
+
+26
+00:02:07,089 --> 00:02:13,092
+you, because we also picked the value C2
+and intuitively we can see that C2 goes
+
+27
+00:02:13,092 --> 00:02:19,058
+with B2 and not with B1. So the value A1
+B1, the assignment A1, B1, C2 is not a
+
+28
+00:02:19,058 --> 00:02:26,011
+good map assignment. So what we need to do
+is we need to pick. Not this one, but
+
+29
+00:02:26,011 --> 00:02:33,058
+rather B1C1 in the second clique in order
+to agree with the first clique. And so,
+
+30
+00:02:33,058 --> 00:02:39,008
+what we see that arbitrary tie breaking may
+not produce and actual map assignment. So,
+
+31
+00:02:39,008 --> 00:02:44,058
+how do we actually address this problem?
+It turns out there's two main choices in
+
+32
+00:02:44,058 --> 00:02:50,007
+terms of the solution. The first is to
+tweak the problem a little bit so as to
+
+33
+00:02:50,007 --> 00:02:55,027
+make the map assignment unique so, for
+example if you add a tiny random
+
+34
+00:02:55,027 --> 00:03:01,012
+perturbation to all of our factors, then
+with probability that's effectively one there's
+
+35
+00:03:01,012 --> 00:03:06,097
+going to be a unique map assignment at
+which point we can go ahead and use the
+
+36
+00:03:06,097 --> 00:03:12,029
+solution that we had if the map
+assignment was unique. [sound] The second
+
+37
+00:03:12,029 --> 00:03:17,066
+is to use a procedure that picks
+assignments one at a time, building a map
+
+38
+00:03:17,066 --> 00:03:23,017
+assignment clique by clique. So, we start
+out with the AB clique, we pick A1 B1. And
+
+39
+00:03:23,017 --> 00:03:28,075
+then, when we go down to the next clique
+down line, we remember that we picked B1
+
+40
+00:03:28,075 --> 00:03:34,054
+and we only are allowed to now pick an
+assignment that's consistent with B1. And,
+
+41
+00:03:34,054 --> 00:03:39,070
+that turns out to be an alternative
+algorithm that whose complexity is
+
+42
+00:03:39,070 --> 00:03:44,037
+effectively the same as that of
+calibrating the clique tree to
+
+43
+00:03:44,037 --> 00:03:48,091
+begin with. And, so it's not more
+expensive. Each of these options is a very
+
+44
+00:03:48,091 --> 00:03:54,035
+reasonable option. And both are used in
+practice for decoding the map assignment
+
+45
+00:03:54,035 --> 00:00:00,000
+from a calibrated er clique tree.

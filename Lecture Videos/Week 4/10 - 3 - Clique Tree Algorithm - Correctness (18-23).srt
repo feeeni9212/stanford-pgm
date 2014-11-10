@@ -1,0 +1,870 @@
+
+1
+00:00:01,065 --> 00:00:05,083
+We define the belief propagation algorithm
+with a message passing algorithm over a
+
+2
+00:00:05,083 --> 00:00:09,071
+fairly general data structure called a
+cluster graph. And we show that if the
+
+3
+00:00:09,071 --> 00:00:13,064
+different cluster graph has certain
+properties so does the belief propagation
+
+4
+00:00:13,064 --> 00:00:18,002
+algorithm. What we're going to do now, is
+we're going to look at a special case of
+
+5
+00:00:18,002 --> 00:00:22,049
+the belief propagation algorithm, where we
+pass messages not over a general cluster
+
+6
+00:00:22,049 --> 00:00:26,085
+graph, but rather over a data structure
+called a clique tree, which as we'll show,
+
+7
+00:00:26,085 --> 00:00:31,032
+is a special case of a cluster graph. But,
+interestingly, when we pass messages over a
+
+8
+00:00:31,032 --> 00:00:35,068
+clique tree, we can show that the belief
+propagation algorithm has much stronger
+
+9
+00:00:35,068 --> 00:00:39,093
+performance guarantee than it does over
+the general graph. And, specifically, we
+
+10
+00:00:39,093 --> 00:00:43,097
+can show that not only can we get
+convergence much faster, we can also get
+
+11
+00:00:43,097 --> 00:00:49,048
+convergence to the exact answers for
+probabilistic inference. So let's
+
+12
+00:00:49,048 --> 00:00:55,035
+consider the case of passing messages.
+Tree and lets, I'll start with the
+
+13
+00:00:55,035 --> 00:01:00,054
+simplest kind of tree which is just a
+chain. So in this case we have a chain
+
+14
+00:01:00,054 --> 00:01:06,065
+A-B-C-D-E and we're going to assume that
+this is an undirected MRF or CRF and so we
+
+15
+00:01:06,065 --> 00:01:11,078
+have a, and for simplicity we're only
+going to consider the pairwise potential
+
+16
+00:01:11,078 --> 00:01:16,098
+without loss of generality, and so we're
+going to have just, pairwise potentials
+
+17
+00:01:17,017 --> 00:01:22,043
+here, that, for example, in the cluster AB
+we're going to have the, the pairwise
+
+18
+00:01:22,043 --> 00:01:29,045
+belief over, the pairwise potential over
+AB and so on. So, so here we have psi 1,
+
+19
+00:01:29,045 --> 00:01:38,012
+Psi 2. Psi 3. Psi 4. So now let's
+think about the message passing process.
+
+20
+00:01:38,012 --> 00:01:44,015
+And we're going to start passing messages
+from the left and so psi, so cluster the
+
+21
+00:01:44,015 --> 00:01:50,018
+message to cluster to and since there's no
+incoming messages at this point, the
+
+22
+00:01:50,018 --> 00:01:55,092
+message that's get, that gets passed is
+simply the sum over A of psi 1 of AB.
+
+23
+00:01:55,092 --> 00:02:01,094
+And that's a message whose scope is B. Now
+we're going to have cluster two take that
+
+24
+00:02:01,094 --> 00:02:07,033
+message and pass the message to cluster
+three. And so now it's taking its own
+
+25
+00:02:07,033 --> 00:02:13,015
+potential, psi 2, and multiplying
+in this message into this. And the result
+
+26
+00:02:13,015 --> 00:02:19,018
+is a factor over B and C. And we're going
+to sum out over B, because, we only want
+
+27
+00:02:19,018 --> 00:02:24,078
+to restrict to the scope C which is the
+shared scope between cluster two and
+
+28
+00:02:24,078 --> 00:02:32,003
+cluster three. And so delta 2-3 is this
+message over here. Now we're going to pass
+
+29
+00:02:32,003 --> 00:02:38,005
+messages one more time all the way to the
+way down to the end. And so, now again we
+
+30
+00:02:38,005 --> 00:02:43,093
+are taking Delta 2-3, multiplying it with
+psi 3 that comes from there. And that
+
+31
+00:02:43,093 --> 00:02:55,012
+gives us a message over scope D which here
+gets sent to cluster four. You could also
+
+32
+00:02:55,012 --> 00:02:59,085
+pass messages in the other direction. So
+this for example, would be what would
+
+33
+00:02:59,085 --> 00:03:04,098
+happen if we pass messages from cluster
+four to cluster three, Regardless of when
+
+34
+00:03:04,098 --> 00:03:09,093
+that message gets passed the, there is no
+other messages that cluster four would
+
+35
+00:03:09,093 --> 00:03:14,065
+multiply in when sending a message to
+cluster three because, whether it got the
+
+36
+00:03:14,065 --> 00:03:19,048
+message from three or not, its not going
+to multiply that in because remember you
+
+37
+00:03:19,048 --> 00:03:24,055
+only send the cluster message that doesn't
+involve messages you received from it. And
+
+38
+00:03:24,055 --> 00:03:29,051
+so in this case the message that you get
+is the, is the sum over E of the factor of
+
+39
+00:03:29,051 --> 00:03:35,015
+psi 4 which we get from here.
+[sound], [sound] Passing messages in the
+
+40
+00:03:35,015 --> 00:03:42,074
+other direction again, we see that the
+message cluster three passes to cluster
+
+41
+00:03:42,074 --> 00:03:50,005
+two which is delta 3-2, involved
+psi 3 and this message over here.
+
+42
+00:03:50,005 --> 00:04:01,028
+And, finally exactly the same idea these
+are the messages that gets passed. [sound]
+
+43
+00:04:01,080 --> 00:04:07,025
+The one important property that you have
+when you run message passing in the way
+
+44
+00:04:07,025 --> 00:04:12,024
+that we just showed, is that somewhat
+surprisingly relevant to what we've seen
+
+45
+00:04:12,024 --> 00:04:17,084
+before, the resulting beliefs that you get
+are correct. And let's convince ourselves
+
+46
+00:04:17,084 --> 00:04:23,016
+of that, relative to cluster three and
+so, in the order that we defined, cluster
+
+47
+00:04:23,016 --> 00:04:28,055
+one passed delta 1-2 to cluster two, which
+was then used to define delta 23, at the
+
+48
+00:04:28,055 --> 00:04:33,081
+same time, we had delta 43 and so the
+beliefs that we get here are the product
+
+49
+00:04:33,081 --> 00:04:40,070
+of psi 3 times delta 2-3, times delta 4-3. Let's unpack each
+
+50
+00:04:40,070 --> 00:04:48,033
+of those messages. So, delta 2-3 as
+we remember, was defined here. And so
+
+51
+00:04:48,033 --> 00:04:55,002
+we're going to rewrite what delta 2-3 is as the summation over B, of
+
+52
+00:04:55,002 --> 00:05:02,026
+psi 2, delta 1-2. And similarly we unpack
+the Delta 4-3 to get, using this
+
+53
+00:05:02,026 --> 00:05:10,066
+expression that we have over here. Right
+there. Now we're going to do one further
+
+54
+00:05:10,066 --> 00:05:15,086
+level of unpacking and we are going to
+remind ourselves of what delta 1-2
+
+55
+00:05:15,086 --> 00:05:21,026
+is, which is as defined over here and so
+that gives us this expression over there.
+
+56
+00:05:21,026 --> 00:05:28,037
+And now look at what we have. We have a
+product of all four initial factors in the
+
+57
+00:05:28,037 --> 00:05:35,031
+network; psi 1, psi 2, psi 3 and psi 4.
+We have a summation over
+
+58
+00:05:35,031 --> 00:05:42,050
+all, the variables that are not in cluster
+three, which are A, B and E. C and D are
+
+59
+00:05:42,050 --> 00:05:49,027
+in that cluster. So we sum out
+over everything else. So already we see
+
+60
+00:05:49,027 --> 00:06:04,016
+that we have a product of factors.
+Marginalized out. Well, we marginalized out
+
+61
+00:06:04,016 --> 00:06:14,083
+irrelevant variables or unnecessary
+variables. Well this is really reminiscent
+
+62
+00:06:14,083 --> 00:06:19,088
+of variable elimination. And, if you
+recall we talked about the correctness of
+
+63
+00:06:19,088 --> 00:06:25,005
+variable elimination. We said that
+variable elimination is correct as long as
+
+64
+00:06:25,005 --> 00:06:30,055
+you, as when you sent out a variable you
+first multiply in all factors that relate
+
+65
+00:06:30,055 --> 00:06:35,074
+to it. That involve the variable in their
+scope. So lets convince ourselves that,
+
+66
+00:06:35,074 --> 00:06:41,019
+that is in fact what's going on here. So
+lets look first at the variable E. And
+
+67
+00:06:41,019 --> 00:06:46,052
+when we sum out E, we're multiplying, we
+only are, we're only involving psi 4,
+
+68
+00:06:46,052 --> 00:06:53,018
+but that's okay because only the cluster
+four has E in its scope. Here we are
+
+69
+00:06:53,018 --> 00:07:02,083
+summing out A. And once again, only psi 1 involves, involves A in its scope.
+
+70
+00:07:02,083 --> 00:07:07,082
+Here we're summing out B. And really,
+there should be parentheses here. They
+
+71
+00:07:07,082 --> 00:07:13,014
+were there implicitly before and so you
+can see that when I'm summing out B of
+
+72
+00:07:13,014 --> 00:07:18,080
+involved psi 2, which involves B in its
+scope. As well as what was left over from
+
+73
+00:07:18,080 --> 00:07:24,046
+summing out psi 1 which is the other factor
+that B in its scope. And so can see that
+
+74
+00:07:24,046 --> 00:07:29,051
+I've marginalized out the variables in a
+legal order, multiplying in only the
+
+75
+00:07:29,051 --> 00:07:34,057
+expression, multiplying in all of the
+expressions that I needed to multiply
+
+76
+00:07:34,057 --> 00:07:43,033
+before I did this summation. And so this is a legal order of operations. And
+
+77
+00:07:43,033 --> 00:07:52,031
+therefore. It gives me a correct result at
+the end. So, now lets expand that into a
+
+78
+00:07:52,031 --> 00:07:58,053
+somewhat broader into a somewhat broader
+case. We're now going to define this notion
+
+79
+00:07:58,053 --> 00:08:04,017
+called, The Clique Tree. And, a clique
+tree is an undirected tree, kind of like a
+
+80
+00:08:04,017 --> 00:08:10,002
+cluster graph was an undirected graph. So,
+in this case, it's a tree. Such that, once
+
+81
+00:08:10,002 --> 00:08:16,014
+again, the nodes are clusters. And once
+again we have edges between the clusters
+
+82
+00:08:16,014 --> 00:08:22,050
+which are called sepsets and in this case
+where as before we had the sepset needed
+
+83
+00:08:22,050 --> 00:08:28,064
+to be a, only a subset of Ci intersection
+Cj it could be smaller, it could be equal
+
+84
+00:08:28,064 --> 00:08:34,093
+or it could be smaller. Here we are going
+to require that the sepset is actually the
+
+85
+00:08:34,093 --> 00:08:41,072
+intersection of the two adjacent
+clusters. So now let's go and
+
+86
+00:08:41,072 --> 00:08:48,039
+understand what properties the cluster,
+the clique tree that we showed has as a
+
+87
+00:08:48,039 --> 00:08:54,067
+special case of a cluster graph. So for a
+cluster graph, we had the notion of family
+
+88
+00:08:54,067 --> 00:09:00,089
+preservation. And the reason that we had
+family preservation is because if we have
+
+89
+00:09:00,089 --> 00:09:06,026
+a set of factors Phi, we needed to take
+each phi k in Phi. And we needed to
+
+90
+00:09:06,026 --> 00:09:11,063
+assign it to some cluster so that, so that
+each piece of information that we have is
+
+91
+00:09:11,063 --> 00:09:16,044
+represented somewhere. And the factor
+needed to be such that the cluster could
+
+92
+00:09:16,044 --> 00:09:21,062
+accommodate its scope, so that the scope
+of the factor was a subset of the set of
+
+93
+00:09:21,062 --> 00:09:26,041
+variables in a cluster. And the same
+requirement holds here because
+
+94
+00:09:26,041 --> 00:09:31,017
+a clique tree is a special case of the cluster
+graph. So that we have that for every
+
+95
+00:09:31,017 --> 00:09:36,031
+factor Phi K, there must exist at least one cluster whose scope is big enough to
+
+96
+00:09:36,031 --> 00:09:42,013
+accommodate that factor. The second
+property that we had in cluster graphs was
+
+97
+00:09:42,013 --> 00:09:47,013
+the running intersection property. And
+then, we clarified that the property that
+
+98
+00:09:47,013 --> 00:09:52,070
+we see here is the cluster graph variant.
+We're going to make it. Specific to clique
+
+99
+00:09:52,070 --> 00:09:58,075
+trees in just a minute. So the cluster
+graph variant told me before, that for
+
+100
+00:09:58,075 --> 00:10:04,081
+each pair of clusters, Ci and Cj, and a
+variable X that is present in both of
+
+101
+00:10:04,081 --> 00:10:11,011
+them, there needed to exist a path between
+Ci and Cj, for which all clusters and
+
+102
+00:10:11,011 --> 00:10:17,041
+sepsets contain X, and needs to be unique.
+So what does that mean in the context of
+
+103
+00:10:17,041 --> 00:10:23,057
+clique trees? Let's assume that we have C7
+containing X, and C6 containing X. And the
+
+104
+00:10:23,057 --> 00:10:29,042
+cluster, and the running intersection
+property says that there needs to exist a
+
+105
+00:10:29,042 --> 00:10:35,065
+path between them, for which, all clusters
+and sepsets contain X. Well, there's only
+
+106
+00:10:35,065 --> 00:10:43,017
+one path in a tree between C7 and C3, it's
+this one. And so what that property now
+
+107
+00:10:43,017 --> 00:10:48,017
+tells me is that X has to be here, here,
+here and here. Because the running,
+
+108
+00:10:48,017 --> 00:10:53,037
+otherwise the running intersection
+property is going to be violated in this
+
+109
+00:10:53,037 --> 00:10:59,070
+case. So that means that in the context of
+trees, the running intersection property
+
+110
+00:10:59,070 --> 00:11:05,078
+can actually be written much more simply.
+It can, it can be read as saying that for
+
+111
+00:11:05,078 --> 00:11:11,042
+each pair of clusters Ci and Cj, and a
+variable X in their intersection. Each
+
+112
+00:11:11,064 --> 00:11:17,050
+cluster and sepset in the unique path
+between them must contain X. And so this
+
+113
+00:11:17,050 --> 00:11:23,073
+is the just the instantiation of running
+intersection property to the context of
+
+114
+00:11:23,073 --> 00:11:29,086
+clique trees. So now, let's look at a, a
+more complicated clique tree. This is the
+
+115
+00:11:29,086 --> 00:11:34,097
+clique tree, that rep-, corresponds to the
+network that we previously used to
+
+116
+00:11:34,097 --> 00:11:40,013
+demonstrate variable elimination. This is
+the elaboration of our student network.
+
+117
+00:11:40,013 --> 00:11:44,086
+And so this is, unlike the previous
+example, this is actually a, a clique tree
+
+118
+00:11:44,086 --> 00:11:49,084
+for a Bayesian network, as opposed to a
+Markov network. But as you'll see, there's
+
+119
+00:11:49,084 --> 00:11:55,049
+really no difference. So here we have set
+of factors. In this case the factors are
+
+120
+00:11:55,049 --> 00:12:00,031
+CPD, and because of the family
+preservation property we can be assured
+
+121
+00:12:00,031 --> 00:12:06,010
+that each factor, must be assignable to
+some clique. And so here we have, P of C,
+
+122
+00:12:06,010 --> 00:12:11,067
+and P of D given C are assigned to this
+clique, P of G given I D, P of I, and
+
+123
+00:12:11,067 --> 00:12:17,065
+P of S given I, and so on and so forth. So
+each of the CPD's we have is assigned to
+
+124
+00:12:17,065 --> 00:12:23,014
+one and exactly one of the cliques in this
+clique tree. And we can convince
+
+125
+00:12:23,014 --> 00:12:29,012
+ourselves, and we can convince ourselves
+that this tree satisfies, for example, the
+
+126
+00:12:29,012 --> 00:12:34,074
+running intersection property. So let's
+look, for example, at the variable G. The
+
+127
+00:12:34,074 --> 00:12:40,000
+variable G exists here, it exists here.
+And sure enough, it exists here, here,
+
+128
+00:12:40,000 --> 00:12:45,020
+here, here, and here. And you can
+similarly convince yourselves of that for
+
+129
+00:12:45,020 --> 00:12:50,061
+any of the other variable in this clique
+tree, that the running intersection
+
+130
+00:12:50,061 --> 00:12:58,085
+property holds for that. Let's look at what
+message passing looks like for this more
+
+131
+00:12:58,085 --> 00:13:05,062
+elaborate clique tree. So it's a little
+bit only a slight bit more complicated. So
+
+132
+00:13:05,062 --> 00:13:12,029
+here we have, for example, delta. So it's
+not even that much more complicated. So
+
+133
+00:13:12,029 --> 00:13:17,051
+here is delta 2-3, for example. And delta
+2-3, which is the cluster between, which
+
+134
+00:13:17,051 --> 00:13:22,073
+is the message passed between cluster two and
+cluster three. Takes psi 2, which is
+
+135
+00:13:22,073 --> 00:13:27,087
+the product of the factors assigned to
+this clique. Actually, there's only
+
+136
+00:13:27,087 --> 00:13:32,069
+one in this case, so it's only P of G
+given I and D. So that's psi 2.
+
+137
+00:13:32,069 --> 00:13:38,042
+Multiplies it with the incoming message,
+delta 1-2, and sums out over D. The only
+
+138
+00:13:38,042 --> 00:13:43,058
+slight difference between this and the
+previous example that we have is that here
+
+139
+00:13:43,058 --> 00:13:48,093
+for example, when cluster four passes the
+message to cluster three, we can see that
+
+140
+00:13:48,093 --> 00:13:54,015
+over here there is two variables, J and L,
+both of which must be summed out in order
+
+141
+00:13:54,015 --> 00:14:02,058
+to produce the message over the requisite
+subsection. Now, we [inaudible], we
+
+142
+00:14:02,058 --> 00:14:08,002
+defined the running intersection property,
+one of the really nice aspects of the
+
+143
+00:14:08,002 --> 00:14:12,095
+running intersection property is that it,
+by itself together with family
+
+144
+00:14:12,095 --> 00:14:17,061
+preservation, suffices to prove the
+correctness of message passing in a
+
+145
+00:14:17,061 --> 00:14:27,079
+clique tree. And the reason for that is
+the following. If so let's consider a
+
+146
+00:14:27,079 --> 00:14:42,097
+variable X over here. And let's and what
+we want to prove is that Is that if we
+
+147
+00:14:42,097 --> 00:14:49,013
+eliminate X at some point in the tree, at
+some point in the message passing process,
+
+148
+00:14:49,013 --> 00:14:55,081
+then we have multiplied in all factors
+that involve X. And, so here we have for
+
+149
+00:14:55,081 --> 00:15:02,035
+example X here and here. And by the
+running intersection property, we have that
+
+150
+00:15:02,035 --> 00:15:10,017
+X is here and here as well, and on the
+sepsets. And let's imagine that X is
+
+151
+00:15:10,017 --> 00:15:19,026
+eliminated on this edge. That is, the
+message that's passed from C3 to C5
+
+152
+00:15:20,025 --> 00:15:28,050
+Doesn't, The message that passes thru C3
+5o C5 doesn't involve X, so X must be summed
+
+153
+00:15:28,051 --> 00:15:42,016
+out at this point. Well at this point we
+know that X cannot. Be here. Because if X
+
+154
+00:15:42,016 --> 00:15:51,040
+were in C-5, then it would also be in the
+sepset. If, X in C-5 then X is also in
+
+155
+00:15:51,040 --> 00:16:04,098
+S-3-5, at which point, X wouldn't be
+eliminated. And the reason you know that
+
+156
+00:16:04,098 --> 00:16:09,021
+if X is in C five, then X is in S three
+five is because of the running
+
+157
+00:16:09,021 --> 00:16:14,088
+intersection property. So the running
+intersection property relates the
+
+158
+00:16:14,088 --> 00:16:21,010
+structure of the graph to the structure,
+to the time that those variables are
+
+159
+00:16:21,010 --> 00:16:31,023
+eliminated. So now let's convince
+ourselves of the correctness in this
+
+160
+00:16:31,023 --> 00:16:37,068
+slightly more complicated example that,
+that we've seen satisfies the running
+
+161
+00:16:37,068 --> 00:16:45,003
+intersection property. Here once again, we
+have psi 1. Which is the product of
+
+162
+00:16:45,003 --> 00:16:51,094
+these two factors. Psi 2 which is this
+one. Psi 3 which is these, the
+
+163
+00:16:51,094 --> 00:17:00,043
+product of these two factors. Psi 4.
+Psi 5. And once again, let's for
+
+164
+00:17:00,043 --> 00:17:08,068
+example consider what we get at cluster
+three. And you can see that we have
+
+165
+00:17:08,068 --> 00:17:17,059
+multiplied in all of the potential, psi 1,
+psi 2, psi 3, psi 4
+
+166
+00:17:17,059 --> 00:17:27,049
+and psi 5. And that we have
+eliminated all of the variable except for
+
+167
+00:17:27,049 --> 00:17:36,092
+GSI so here we had eliminated C, D, J, L
+and H, leaving us only with the variables
+
+168
+00:17:36,092 --> 00:17:43,080
+G, S, I, which we want to keep. And we can
+similarly convince ourselves, as we
+
+169
+00:17:43,080 --> 00:17:50,042
+did before, that when we eliminate a
+variable, we've multiplied in all of the
+
+170
+00:17:50,042 --> 00:17:58,054
+factors that involve that variable. So to
+summarize, we can take belief
+
+171
+00:17:58,054 --> 00:18:04,005
+propagation and run it over a cluster
+graph that happens to be tree structured.
+
+172
+00:18:04,005 --> 00:18:09,035
+And, when we do that, it turns out that
+the computation that we're running is
+
+173
+00:18:09,035 --> 00:18:14,002
+actually a variant of variable
+elimination. And, because of that, the
+
+174
+00:18:14,002 --> 00:18:19,074
+resulting beliefs are guaranteed not only
+to be calibrated but to actually be the
+
+175
+00:18:19,074 --> 00:18:23,085
+correct marginals of the un-normalized
+density, P tilde Phi.

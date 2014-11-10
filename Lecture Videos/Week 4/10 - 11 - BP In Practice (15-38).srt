@@ -1,0 +1,749 @@
+
+1
+00:00:00,000 --> 00:00:03,097
+The belief propagation algorithm when run
+over a general cluster graph is
+
+2
+00:00:03,097 --> 00:00:08,053
+an iterative algorithm in which messages
+are defined in terms of previous messages.
+
+3
+00:00:08,053 --> 00:00:12,072
+And we said before that when run over a general cluster graph, the algorithm may
+
+4
+00:00:12,072 --> 00:00:16,096
+not converge and even if it converges, it
+may not get to the right answers. What
+
+5
+00:00:16,096 --> 00:00:21,031
+we're gong to talk about now are how bad
+these problems are and what are some of
+
+6
+00:00:21,031 --> 00:00:25,023
+the tricks that we use in practice in
+order to improve behavior of this
+
+7
+00:00:25,023 --> 00:00:29,052
+algorithm in these two different regards.
+So let's get some intuition by looking
+
+8
+00:00:29,052 --> 00:00:35,032
+back on our misconception example. This is
+not actually our misconception example. It's
+
+9
+00:00:35,032 --> 00:00:41,019
+one where we modified some of the
+specifically the potential phi 1 AB to make
+
+10
+00:00:41,019 --> 00:00:48,010
+the behavior even more extreme by making
+these potentials larger so that there is a
+
+11
+00:00:48,010 --> 00:00:54,054
+stronger push to agreement between A and
+B. So A and B really, really prefer to
+
+12
+00:00:54,054 --> 00:01:01,066
+agree. And what happens in this example we
+can see this beautiful oscillatory
+
+13
+00:01:01,066 --> 00:01:08,006
+behavior of the belief propagation
+algorithm. So the x-axis is the iterations
+
+14
+00:01:08,006 --> 00:01:15,024
+of BP, and this is some notion of
+distance. To the true distribution,
+
+15
+00:01:15,024 --> 00:01:25,025
+to the true marginals. And why do you
+have such strong oscillations? Let's look
+
+16
+00:01:25,025 --> 00:01:32,080
+at what these potentials are doing. So
+this potential over here pushes A and B to
+
+17
+00:01:32,080 --> 00:01:41,048
+agreement. And so as you pass this
+message, A and B want to agree. A and D
+
+18
+00:01:41,048 --> 00:01:53,011
+also want to agree. B and C want to agree.
+But C and D really want to disagree. And
+
+19
+00:01:53,011 --> 00:02:00,009
+so as messages are passed they're, you're
+getting conflicting messages from both
+
+20
+00:02:00,009 --> 00:02:06,023
+sides. D for example, on the C side, C
+keeps pulling at it to agree with it,
+
+21
+00:02:06,023 --> 00:02:13,078
+sorry disagree with it. On the other hand,
+when you go all the way around the loop. C
+
+22
+00:02:13,078 --> 00:02:20,043
+is actually urging D to agree with it. And
+so, from the one side, you're getting a
+
+23
+00:02:20,043 --> 00:02:27,008
+pull for C and D, D to be the same. And
+from the other side, you're getting a pull
+
+24
+00:02:27,008 --> 00:02:34,023
+for them to be different. And this, sort
+of, this conflict over the cycle, over the
+
+25
+00:02:34,023 --> 00:02:41,030
+loop, causes this oscillatory behavior as
+messages are passed from one side or the
+
+26
+00:02:41,030 --> 00:02:51,042
+other. This type of configuration of,
+specifically. Tight loops. Strong
+
+27
+00:02:51,042 --> 00:03:05,099
+potentials. And conflicting directions. Is
+probably the single worst example for, the
+
+28
+00:03:05,099 --> 00:03:11,007
+single worst scenario for belief
+propagation. This is the case where it's
+
+29
+00:03:11,007 --> 00:03:16,064
+going to do the worst in terms of both
+convergence and in terms of the accuracy
+
+30
+00:03:16,064 --> 00:03:22,043
+of the results that are obtained. Now in
+this example ultimately, you actually do
+
+31
+00:03:22,043 --> 00:03:27,065
+get convergence. You can see it takes
+about 300 durations, but ultimately you
+
+32
+00:03:27,065 --> 00:03:33,051
+get convergence. 300 is a lot for a graph
+this size. Here is one but up to 500, he
+
+33
+00:03:33,051 --> 00:03:38,094
+didn't get convergence at all, now maybe
+if we ran it for 10,000 he, it might
+
+34
+00:03:38,094 --> 00:03:45,047
+converge, but it's hard to say. And, so how
+do we improve the convergence as well as
+
+35
+00:03:45,047 --> 00:03:52,074
+the accuracy properties of the network? So
+first let's look into what not to do. Here
+
+36
+00:03:52,074 --> 00:03:57,093
+is the most important thing not to do,
+which is a variance of belief propagation
+
+37
+00:03:57,093 --> 00:04:03,013
+called synchronous belief propagation. In
+synchronous belief propagation, which was
+
+38
+00:04:03,013 --> 00:04:08,039
+actually one of the most commonly used
+variants of the very beginning of the use
+
+39
+00:04:08,039 --> 00:04:13,006
+of the BP algorithm. All messages are
+updated in parallel. So all of the
+
+40
+00:04:13,006 --> 00:04:18,032
+processors wake up to all of the, all of
+the clusters wake up, they look at all of
+
+41
+00:04:18,032 --> 00:04:23,064
+their incoming messages and they compute
+all of the outgoing messages, all at once.
+
+42
+00:04:23,064 --> 00:04:27,036
+>> Now, this is a great algorithm from the
+perspective of simplicity of
+
+43
+00:04:27,036 --> 00:04:31,086
+implementation and also from the ability
+to parallelize because you can assign like
+
+44
+00:04:31,086 --> 00:04:36,010
+a processor to each of the cluster and
+they're all working in parallel and there
+
+45
+00:04:36,010 --> 00:04:40,072
+is no dependencies between them.
+Unfortunately, synchronous belief
+
+46
+00:04:40,072 --> 00:04:46,060
+propagation is actually not a very good
+algorithm. And so what you see here is the
+
+47
+00:04:46,060 --> 00:04:51,090
+number of messages that are, have
+converged, as a function of the amount of
+
+48
+00:04:51,090 --> 00:04:57,057
+time spent. This is an ising grid, with
+certain parameters, it doesn't matter. And
+
+49
+00:04:57,057 --> 00:05:03,023
+you can see that, you know, there is a
+certain improvement over time, and then it
+
+50
+00:05:03,023 --> 00:05:09,027
+kind of asymptotes at the certain number
+of messages that have converged. By
+
+51
+00:05:09,027 --> 00:05:15,050
+contrast, let's compare that behavior to
+asynchronous belief propagation, where
+
+52
+00:05:15,050 --> 00:05:23,072
+messages are updated one at a time. So,
+this one and that one. Now notice that
+
+53
+00:05:23,072 --> 00:05:29,038
+this algorithm is poorly specified,
+because I didn't tell you what order we
+
+54
+00:05:29,038 --> 00:05:35,041
+should do the updates in. We'll come back
+to that in a minute. But, by, even by the
+
+55
+00:05:35,041 --> 00:05:41,036
+simple virtue of passing messages in an
+asynchronous way, the behavior improves,
+
+56
+00:05:41,036 --> 00:05:47,017
+both in terms of how quickly we get
+messages to converge. And in terms of the
+
+57
+00:05:47,017 --> 00:05:53,082
+number of messages that are converged.
+Now, this is not a particularly good,
+
+58
+00:05:53,082 --> 00:06:00,035
+message passing order. Here's a much
+better, message passing order. It takes a
+
+59
+00:06:00,035 --> 00:06:07,056
+little bit longer, to get certain messages
+to converge, just trying to make sure that
+
+60
+00:06:07,056 --> 00:06:14,025
+everything is converging, but notice that
+eventually, and in, not that, long of a
+
+61
+00:06:14,025 --> 00:06:19,083
+time, it actually, converges to 100
+percent convergence rate [sound], right.
+
+62
+00:06:20,030 --> 00:06:25,068
+So, here are some important observations
+regarding this. First of all, convergence
+
+63
+00:06:25,068 --> 00:06:30,054
+is a local property in belief
+propagation. Some messages converge quite
+
+64
+00:06:30,054 --> 00:06:36,013
+quickly, others might never converge, and
+when you have some messages that after you
+
+65
+00:06:36,013 --> 00:06:41,079
+run the algorithm for a certain amount of
+time don't converge, one often simply just
+
+66
+00:06:41,079 --> 00:06:46,077
+stops the algorithm and says you know,
+this is what we have and we're done.
+
+67
+00:06:47,037 --> 00:06:52,079
+Synchronous belief propagation has
+considerably worse convergence properties
+
+68
+00:06:52,079 --> 00:06:58,077
+than asynchronous belief propagation which
+is why pretty much at this point, very few
+
+69
+00:06:58,077 --> 00:07:04,088
+people actually ever use synchronous
+belief propagation. And if we're using
+
+70
+00:07:04,088 --> 00:07:11,031
+asynchronous belief propagation, the order
+in which messages are passed, makes a
+
+71
+00:07:11,031 --> 00:07:17,000
+difference both to the rate of
+convergence, but even more surprisingly
+
+72
+00:07:17,000 --> 00:07:23,045
+perhaps, to the actual extent to which
+messages are conversed, ever converged. So
+
+73
+00:07:23,045 --> 00:07:30,048
+how do we pick, the message passing order?
+There's two there's now several different
+
+74
+00:07:30,048 --> 00:07:36,029
+scheduling algorithms. We're going to
+present two of the more popular ones. The
+
+75
+00:07:36,029 --> 00:07:42,039
+first called tree reparameterization or
+TRP for short. And what it does it picks a
+
+76
+00:07:42,039 --> 00:07:48,042
+tree and then passes messages in the tree
+in the same way that you would do in a
+
+77
+00:07:48,042 --> 00:07:54,030
+clique tree algorithm to sort of calibrate
+that tree keeping all other messages
+
+78
+00:07:54,030 --> 00:08:02,077
+fixed. So for example, we might start by
+calibrating. The red tree. Which means I
+
+79
+00:08:02,077 --> 00:08:11,081
+pass messages this way. And then back in
+the other direction. Keeping all other
+
+80
+00:08:11,081 --> 00:08:21,027
+messages fixed. Now I pick a different
+tree. I'm gonna pick the blue tree. Here's
+
+81
+00:08:21,027 --> 00:08:25,068
+a blue tree. Notice that I can't close the
+loop because otherwise it wouldn't be a
+
+82
+00:08:25,068 --> 00:08:29,088
+tree. So I can't go all the way back to
+phi 1-1. And now I calibrate in the other
+
+83
+00:08:29,088 --> 00:08:39,017
+direction. And I continue to do that by
+taking a tree and then, and then running
+
+84
+00:08:39,017 --> 00:08:44,054
+it, and then calibrating it. And the only
+constraints that I need to satisfy is,
+
+85
+00:08:44,054 --> 00:08:53,045
+first of all, that my trees cover all
+edges. So that's a constraint because
+
+86
+00:08:53,045 --> 00:08:59,029
+otherwise I'm going to mis-communicate,
+miss a certain message that needs to be
+
+87
+00:08:59,029 --> 00:09:05,051
+passed. And the second is not so much of a
+constraint but rather it tends to improve
+
+88
+00:09:05,051 --> 00:09:12,039
+performance if the trees are larger. Which
+means it's good to pick spanning trees.
+
+89
+00:09:15,079 --> 00:09:22,012
+Which span as much of the, of the, graph
+as possible without containing a loop. So
+
+90
+00:09:22,012 --> 00:09:33,016
+spanning trees are good. That's one
+message-scheduling algorithm. The second
+
+91
+00:09:33,016 --> 00:09:37,074
+message-scheduling algorithm is something
+that is called residual belief
+
+92
+00:09:37,074 --> 00:09:42,095
+propagation. And there's actually several
+variants of that now. And what it does is
+
+93
+00:09:42,095 --> 00:09:47,077
+it tries to look for good messages,
+messages that are high value messages. So
+
+94
+00:09:47,077 --> 00:09:52,092
+it looks for two clusters whose beliefs
+disagree, a lot. And if they disagree that
+
+95
+00:09:52,092 --> 00:09:57,087
+means that if I pass that message that's
+going to p-, potentially have a large
+
+96
+00:09:57,087 --> 00:10:02,083
+impact on the receiving clique, or cluster
+rather. And so I'm going to look, I'm
+
+97
+00:10:02,083 --> 00:10:15,071
+going to keep a priority queue. Method of,
+of edges. And I'm going to pick the
+
+98
+00:10:15,071 --> 00:10:21,051
+messages from top of the queue based on how
+much I think they are going to affect, how
+
+99
+00:10:21,051 --> 00:10:26,083
+of a effect they are going to have which
+is some kind of heuristic notion
+
+100
+00:10:26,083 --> 00:10:37,061
+potentially of the disagreement between
+the two adjacent clusters. The other big
+
+101
+00:10:37,061 --> 00:10:43,067
+important Trick, that people to use to
+improve the convergence of the belief
+
+102
+00:10:43,067 --> 00:10:48,035
+propagation algorithm, is what's called
+smoothing, or sometimes damping, of
+
+103
+00:10:48,035 --> 00:10:53,064
+messages. And this is a general trick
+that's often used to reduce oscillation in
+
+104
+00:10:53,064 --> 00:10:59,001
+dynamic systems that are based on these
+kinds of fixed-point equations where the
+
+105
+00:10:59,001 --> 00:11:04,059
+left hand side is defined in terms of the
+right hand side. So here we define
+
+106
+00:11:04,059 --> 00:11:09,070
+delta ij in the original belief propagation
+algorithm as a function of other deltas
+
+107
+00:11:09,070 --> 00:11:15,035
+And we've seen that, that can give rise to
+this oscillatory behavior this is just the
+
+108
+00:11:15,035 --> 00:11:21,015
+standard belief propagation message. And
+what we're going to do now is instead of
+
+109
+00:11:21,015 --> 00:11:26,043
+that, I'm going to do a kind of smoothed
+version. So I'm not going to let the
+
+110
+00:11:26,043 --> 00:11:32,000
+message change too drastically. I'm going
+to have a weighted average where the
+
+111
+00:11:32,000 --> 00:11:41,003
+weight is lambda of the new message. Which
+is this thing. And the old message. And
+
+112
+00:11:41,003 --> 00:11:46,069
+that turns out to, again, dampen
+oscillations in the system and increase
+
+113
+00:11:46,069 --> 00:11:56,077
+the chances that it converges. So let's
+look at some example behaviors. So here we
+
+114
+00:11:56,077 --> 00:12:05,019
+see Synchronous belief propagation in red,
+over here. And this is the percentage, or
+
+115
+00:12:05,019 --> 00:12:10,099
+fraction of message converged. So one
+would be perfect convergence. We can see
+
+116
+00:12:10,099 --> 00:12:15,046
+that synchronous plateaus at about 25,
+twenty to 25 percent of messages
+
+117
+00:12:15,046 --> 00:12:21,026
+converged, which is pathetic enough to be
+pretty much useless in practice, if only
+
+118
+00:12:21,026 --> 00:12:26,050
+twenty percent of your messages converged,
+and really the remaining messages don't
+
+119
+00:12:26,050 --> 00:12:32,024
+really mean very much. Without smoothing
+is the green line, this one. And we can
+
+120
+00:12:32,024 --> 00:12:37,055
+see that this is asynchronous,
+asynchronous without smoothing. We can see
+
+121
+00:12:37,055 --> 00:12:41,052
+that even without smoothing. The
+asynchronous algorithm achieves
+
+122
+00:12:41,052 --> 00:12:46,011
+considerably better performance than the
+synchronous algorithm. We didn't even show
+
+123
+00:12:46,011 --> 00:12:50,065
+synchronous without smoothing because it
+would be even worse. And then finally the
+
+124
+00:12:50,065 --> 00:12:59,025
+blue line is asynchronous with smoothing.
+And we can see that it achieves perfect
+
+125
+00:12:59,025 --> 00:13:08,086
+convergence at some point. And, you can,
+look, at behaviors of individual messages
+
+126
+00:13:08,086 --> 00:13:15,049
+or individual marginals rather, individual
+beliefs. So here is the system I
+
+127
+00:13:15,049 --> 00:13:22,036
+[inaudible] by the way, so, Ising grid.
+Which is sort of a standard setup for
+
+128
+00:13:22,036 --> 00:13:28,067
+trying out convergences of various
+approximate inference algorithms, and so
+
+129
+00:13:28,067 --> 00:13:35,081
+what you see here, the line here, the
+black line, is the true. Marginal. And you
+
+130
+00:13:35,081 --> 00:13:41,096
+can see that synchronous belief
+propagation basically flip-flops around it
+
+131
+00:13:42,020 --> 00:13:48,018
+in, indefinitely, whereas asynchronous
+belief propagation converges pretty
+
+132
+00:13:48,018 --> 00:13:54,032
+quickly and very close to the right
+answers. Not always. This is a different
+
+133
+00:13:54,032 --> 00:14:00,096
+variable in the same model. The black line
+again is the true. And here we can see
+
+134
+00:14:00,096 --> 00:14:06,088
+that sure enough, asynchronous does improve
+convergence, but convergence is distilled
+
+135
+00:14:06,088 --> 00:14:12,044
+to an answer that's not quite right. And
+you see that behavior you see both
+
+136
+00:14:12,044 --> 00:14:17,079
+behaviors in real networks. And in
+practice, depending on all of the met, all
+
+137
+00:14:17,079 --> 00:14:23,035
+of the factors that I mentioned at the
+very beginning. How tight the loops are.
+
+138
+00:14:23,035 --> 00:14:29,068
+How strong or peaked the potential is.
+Those are going to determine how many of
+
+139
+00:14:29,068 --> 00:14:35,074
+the factors have this oscillatory
+behavior, and how wrong the answers are.
+
+140
+00:14:37,013 --> 00:14:42,064
+So, as we, so summarizing there's two main
+tricks for achieving BP convergence.
+
+141
+00:14:42,085 --> 00:14:48,036
+Damping or smoothing and intelligent
+message passing. Convergence is often
+
+142
+00:14:48,036 --> 00:14:54,029
+easier to obtain using these tricks then
+correctness. And convergence unfortunately
+
+143
+00:14:54,029 --> 00:15:00,029
+doesn't guarantee correctness. And the bad
+case, the ones that negatively impact both
+
+144
+00:15:00,029 --> 00:15:06,001
+of these are strong potentials that are
+pulling you in different directions and
+
+145
+00:15:06,001 --> 00:15:11,082
+tight loops. And we're not going to have
+time to go into all of these into all of
+
+146
+00:15:11,082 --> 00:15:17,013
+these topics but there is some new
+algorithm that actually have considerably
+
+147
+00:15:17,013 --> 00:15:22,023
+better behavior both in terms of
+convergence and in terms of the accuracy
+
+148
+00:15:22,023 --> 00:15:28,008
+of the results and that is based on a view
+of inference as optimizing some distance
+
+149
+00:15:28,008 --> 00:15:34,000
+to the true distribution. And there's some
+really cool ideas as well as the math in
+
+150
+00:15:34,000 --> 00:15:38,021
+this that much of this is outside the
+scope of this class.

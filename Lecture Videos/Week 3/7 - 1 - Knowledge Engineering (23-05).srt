@@ -1,0 +1,1349 @@
+
+1
+00:00:00,000 --> 00:00:05,030
+But we've learned a lot of little bits and
+pieces of representation that are used to
+
+2
+00:00:05,030 --> 00:00:10,080
+put together a graphical model.
+And now lets try and take a big step back
+
+3
+00:00:10,080 --> 00:00:15,028
+and figure out how you might put these
+back together if you actually wanted to
+
+4
+00:00:15,028 --> 00:00:19,017
+build a graphical model that for some
+application that you care about.
+
+5
+00:00:19,017 --> 00:00:24,029
+Now, let me start by saying that this
+really not a, a science.
+
+6
+00:00:24,029 --> 00:00:30,046
+Just like any other design it's much
+closer to an art or even a black magic
+
+7
+00:00:30,046 --> 00:00:36,014
+than a scientific endeavor.
+And so the only thing that one can do here
+
+8
+00:00:36,014 --> 00:00:41,028
+is to provide, hints about how might go
+about doing this.
+
+9
+00:00:41,028 --> 00:00:48,000
+So lets first identify some important
+distinctions and then we'll go concrete
+
+10
+00:00:48,000 --> 00:00:53,032
+about particular examples.
+There's at least three main classes of
+
+11
+00:00:53,032 --> 00:01:00,003
+design choices that one needs to make.
+The first if whether you have a template
+
+12
+00:01:00,003 --> 00:01:04,097
+based model.
+Versus a very specific model for concrete
+
+13
+00:01:04,097 --> 00:01:10,005
+fix set uo random variables.
+Whether the model is directed or
+
+14
+00:01:10,005 --> 00:01:15,012
+undirected and whether it's generative
+versus discriminative.
+
+15
+00:01:15,012 --> 00:01:19,061
+These are all terms that we've seen before
+and we'll talk about them in just a
+
+16
+00:01:19,061 --> 00:01:22,028
+moment.
+But before we go into the sort of trade
+
+17
+00:01:22,028 --> 00:01:26,020
+offs between each of these, let me
+emphasize this last point, which is
+
+18
+00:01:26,020 --> 00:01:28,075
+probably the most critical thing to
+remember.
+
+19
+00:01:28,075 --> 00:01:33,019
+It's often not the case that you just go
+in one direction or the other.
+
+20
+00:01:33,019 --> 00:01:38,009
+That is, in many models you're going to
+have, for example, template-based pieces
+
+21
+00:01:38,009 --> 00:01:41,065
+as well as some stuff that isn't at the
+template level.
+
+22
+00:01:41,065 --> 00:01:46,014
+You might have directed as well undirected
+components and so on.
+
+23
+00:01:46,014 --> 00:01:51,055
+So these are not a sharp boundary and it's
+useful to keep that in mind that you don't
+
+24
+00:01:51,055 --> 00:01:55,076
+have to go only one direction versus the
+other in real problem.
+
+25
+00:01:55,076 --> 00:02:02,013
+So, the first important distinction is
+template-based versus specific.
+
+26
+00:02:02,013 --> 00:02:06,063
+And, the, so what are some examples of
+specific models?
+
+27
+00:02:06,063 --> 00:02:14,037
+So for example, medical diagnosis is
+usually a specific model.
+
+28
+00:02:14,037 --> 00:02:20,089
+That is you have a particular set of
+symptoms, diseases and so on that you want to
+
+29
+00:02:20,089 --> 00:02:24,075
+encode in your model so that's one
+example.
+
+30
+00:02:24,075 --> 00:02:32,009
+On the other side, on the template based side,
+you have, things like image segmentation.
+
+31
+00:02:37,078 --> 00:02:43,089
+Where you really are going to want to deal
+with drastically different images within
+
+32
+00:02:43,089 --> 00:02:47,075
+the same model and that's going to be
+template based.
+
+33
+00:02:47,075 --> 00:02:52,026
+There all sorts of applications that sit
+in between those two.
+
+34
+00:02:52,026 --> 00:02:56,048
+And you can go either way or incorporate
+elements of both.
+
+35
+00:02:56,048 --> 00:03:05,005
+So for example, fault diagnosis all
+diagnosis has, you can think of it as a
+
+36
+00:03:05,005 --> 00:03:10,027
+specific model, that is you can think
+about writing a diagnostic model for this
+
+37
+00:03:10,027 --> 00:03:14,059
+particular type of printer.
+But really if you're inside a company this
+
+38
+00:03:14,059 --> 00:03:19,061
+writing a diagnostic tool for your line of
+fifteen different printers, they are going
+
+39
+00:03:19,061 --> 00:03:23,068
+to have shared components.
+And if you have a component inside printer
+
+40
+00:03:23,068 --> 00:03:28,063
+one that also appears inside printer two,
+chances are that this is going to have the
+
+41
+00:03:28,063 --> 00:03:32,017
+same fault model.
+And so you are going to have elements that
+
+42
+00:03:32,017 --> 00:03:36,095
+are unique and elements that are shared.
+And so once again, it is something that's
+
+43
+00:03:36,095 --> 00:03:39,084
+going to sit at the intersection between
+the two.
+
+44
+00:03:39,084 --> 00:03:45,091
+That said, once you decided where on this
+spectrum you sit, it kind of really
+
+45
+00:03:45,091 --> 00:03:51,049
+changes the way in which you tackle the
+knowledge engineering problem.
+
+46
+00:03:51,049 --> 00:03:58,004
+Because template-based models are usually,
+not always but usually, have a fairly
+
+47
+00:03:58,004 --> 00:04:08,099
+small Number of variable types, so, for
+example in our image segmentation setting
+
+48
+00:04:08,099 --> 00:04:12,031
+you have the class label.
+That is, one variable type.
+
+49
+00:04:12,031 --> 00:04:17,032
+Nevertheless we manage to construct very
+richly expressive models about this
+
+50
+00:04:17,032 --> 00:04:22,024
+because of interesting interactions
+between multiple class labels for
+
+51
+00:04:22,024 --> 00:04:27,088
+different pixels in the image, but it's a
+very small number of variable types and
+
+52
+00:04:27,088 --> 00:04:32,096
+most of the effort goes into figuring out
+things like which features are most
+
+53
+00:04:32,096 --> 00:04:38,083
+predictive.
+So it's really a lot about feature
+
+54
+00:04:38,083 --> 00:04:43,092
+engineering.
+As opposed to, sort of, complicated model
+
+55
+00:04:43,092 --> 00:04:47,089
+design.
+Not always, I mean, certainly not entirely
+
+56
+00:04:47,089 --> 00:04:51,063
+but the features turn out to play a very
+big role.
+
+57
+00:04:51,063 --> 00:04:57,086
+On the specific model side, you have a
+usually a large number because unless you
+
+58
+00:04:57,086 --> 00:05:01,098
+build small models, each variable is going
+to be unique.
+
+59
+00:05:01,098 --> 00:05:10,037
+So large number of unique variables.
+Each of which requires its own model.
+
+60
+00:05:10,037 --> 00:05:16,012
+And so it's a lot more on the model design
+deciding on the dependency and the
+
+61
+00:05:16,012 --> 00:05:23,093
+parameters for each variable separately.
+A second important distinction is between
+
+62
+00:05:23,093 --> 00:05:29,042
+generative and discriminative.
+So on the discriminative side you really
+
+63
+00:05:29,042 --> 00:05:35,014
+should consider that when you have a
+particular task in mind, a particular
+
+64
+00:05:35,014 --> 00:05:42,091
+prediction task.
+And, when that prediction task, is then
+
+65
+00:05:42,091 --> 00:05:50,034
+often better solved by having richly
+expressive features, richly discriminative
+
+66
+00:05:50,034 --> 00:05:57,058
+features, and then modeling this as a
+discriminative model allows me to avoid,
+
+67
+00:05:57,058 --> 00:06:05,058
+avoid dealing with correlations.
+Between them.
+
+68
+00:06:05,058 --> 00:06:12,010
+And so that gives me usually high
+performance.
+
+69
+00:06:13,033 --> 00:06:20,016
+A higher performance model.
+So you might wonder, so when well when
+
+70
+00:06:20,016 --> 00:06:25,015
+would I use a generative model?
+I mean if you get such high performance
+
+71
+00:06:25,015 --> 00:06:30,006
+using richly expressive features and
+there's multiple answers to that.
+
+72
+00:06:30,006 --> 00:06:35,071
+And one answer is that when I don't have a
+predetermined task, the task shifts so,
+
+73
+00:06:35,071 --> 00:06:39,087
+for example, when I have a medical
+diagnosis task, every patients present,
+
+74
+00:06:39,087 --> 00:06:44,037
+every patient presents differently.
+In each patient's case I have a different
+
+75
+00:06:44,037 --> 00:06:49,015
+subset of things that I happen to know
+about that patient: the symptoms that they
+
+76
+00:06:49,015 --> 00:06:52,022
+present with, and the tests that I happen
+to perform.
+
+77
+00:06:52,022 --> 00:06:55,099
+And so I don't want to train a
+discriminative model that uses a
+
+78
+00:06:55,099 --> 00:07:00,071
+predetermined set of variables as inputs
+and a predetermined set of diseases as
+
+79
+00:07:00,071 --> 00:07:03,042
+outputs.
+Rather I want something that gives me
+
+80
+00:07:03,042 --> 00:07:07,026
+flexibility to measure, different
+variables and predict others.
+
+81
+00:07:07,026 --> 00:07:12,010
+The second reason for using a generative
+model is, and this is looking way forward
+
+82
+00:07:12,010 --> 00:07:18,044
+in the class, is that it turns out that
+generative models Are easier [sound] The
+
+83
+00:07:18,044 --> 00:07:25,095
+train in certain regimes.
+And specifically just to sort of make
+
+84
+00:07:25,095 --> 00:07:30,048
+sure, just to sort of say it out loud, in
+the case where the data is not fully
+
+85
+00:07:30,048 --> 00:07:34,071
+labeled, it's, it turns out that
+generative model, that, that sometimes you
+
+86
+00:07:34,071 --> 00:07:38,094
+can't train a discriminative model but you
+can train a generative model.
+
+87
+00:07:38,094 --> 00:07:43,012
+So we'll definitely see that, when we get
+to that part of the course.
+
+88
+00:07:44,012 --> 00:07:46,095
+Okay.
+So, having talked about these different,
+
+89
+00:07:46,095 --> 00:07:52,027
+these different regimes, now let's, think
+about what are the key decisions that we
+
+90
+00:07:52,027 --> 00:07:55,094
+have to make in the context of designing a
+graphical model.
+
+91
+00:07:55,094 --> 00:08:00,018
+So, first of all, what variables are we
+going to include in the model?
+
+92
+00:08:00,018 --> 00:08:04,040
+And regardless of whether we have a fixed
+we're varying task in hand.
+
+93
+00:08:04,040 --> 00:08:08,027
+We have usually a set of variables that
+are the target variables.
+
+94
+00:08:08,027 --> 00:08:12,097
+These are the ones that we care about.
+So even in the medical diagnosis setting,
+
+95
+00:08:12,097 --> 00:08:17,031
+you have a set of disease variable, which
+are the ones we care to predict.
+
+96
+00:08:17,031 --> 00:08:21,066
+You may not care to predict all of them
+but they are usually the targets.
+
+97
+00:08:21,066 --> 00:08:25,080
+We have the set of observed variables,
+again they might not always be observed
+
+98
+00:08:25,080 --> 00:08:29,094
+but you won't really necessarily care
+about predicting them, so these might be
+
+99
+00:08:29,094 --> 00:08:33,032
+in the medical setting, things like
+symptoms and test results.
+
+100
+00:08:33,032 --> 00:08:41,004
+And then the third category might be a
+little bit surprising so we might have
+
+101
+00:08:41,004 --> 00:08:49,090
+variables that are latent or hidden.
+And these are variables that we don't nor
+
+102
+00:08:49,090 --> 00:08:54,046
+do we necessarily care about predicting.
+They're just there.
+
+103
+00:08:54,046 --> 00:09:00,072
+Why would we ask for a model variables
+that you neither observe nor care to ever
+
+104
+00:09:00,072 --> 00:09:03,050
+look at.
+So let's look at an example.
+
+105
+00:09:03,050 --> 00:09:09,054
+Let's consider, imagine that I asked all
+of you in this class what time does your
+
+106
+00:09:09,054 --> 00:09:10,073
+watch show?
+Okay.
+
+107
+00:09:10,073 --> 00:09:16,062
+So each of these WI's is the watch, the,
+the time on the watch of each of you in
+
+108
+00:09:16,062 --> 00:09:18,086
+the class.
+We have W1 up to WK.
+
+109
+00:09:18,086 --> 00:09:24,067
+Now, these variables are all correlated
+with each other, but really they're not
+
+110
+00:09:24,067 --> 00:09:30,093
+correlated with each other unless we all
+had like a watch-setting party just before
+
+111
+00:09:30,093 --> 00:09:34,036
+class.
+Really, what they're all correlated with
+
+112
+00:09:34,036 --> 00:09:38,071
+is Greenwich Mean Time.
+So you have a model, in this case it's a
+
+113
+00:09:38,071 --> 00:09:42,096
+naive Bayes model, where you have
+Greenwich Mean Time influencing a bunch of
+
+114
+00:09:42,096 --> 00:09:46,048
+random variables that are conditionally
+independent given that.
+
+115
+00:09:46,048 --> 00:09:51,001
+Now Greenwich Mean Time is latent unless
+we actually end up calling Greenwich to
+
+116
+00:09:51,001 --> 00:09:55,054
+find out what the current time is right
+now in Greenwich, which I don't think any
+
+117
+00:09:55,054 --> 00:10:00,024
+of us really care about, but why would we
+want to include Greenwich Mean Time in our
+
+118
+00:10:00,024 --> 00:10:02,098
+model?
+Because if we don't include Greenwich Mean
+
+119
+00:10:02,098 --> 00:10:07,012
+Time, so if we basically eliminate
+Greenwich Mean Time from our model what
+
+120
+00:10:07,012 --> 00:10:09,086
+happens to the dependency structure of our
+model?
+
+121
+00:10:14,034 --> 00:10:17,097
+[sound].
+We end up with a model that is fully
+
+122
+00:10:17,097 --> 00:10:21,084
+connected.
+And so sometimes latent variables can
+
+123
+00:10:21,084 --> 00:10:27,005
+simplify our structure.
+And so they are useful to include, even in
+
+124
+00:10:27,005 --> 00:10:32,076
+cases where we don't really care about
+them because not including them gives us
+
+125
+00:10:32,076 --> 00:10:38,071
+much more complicated models.
+Which brings us to the topic of structure.
+
+126
+00:10:38,071 --> 00:10:45,003
+When we think about the Bayesian that
+works specifically, the concept that comes
+
+127
+00:10:45,003 --> 00:10:51,000
+to mind, the question that comes to mind
+is do the arrows given that they are
+
+128
+00:10:51,000 --> 00:10:56,066
+directed, do they correspond to causality?
+That is, is an arrow from X to Y
+
+129
+00:10:56,066 --> 00:11:01,008
+indicative of having a causal
+connection to X and Y.
+
+130
+00:11:01,008 --> 00:11:06,067
+So the answer to that is yes and no.
+[inaudible] very satisfactory.
+
+131
+00:11:06,067 --> 00:11:13,029
+So what does no mean in this case?
+Well, we've, we've seen and we consider a
+
+132
+00:11:13,029 --> 00:11:19,029
+model where we have X pointing to y,
+[inaudible] you know do the two variable
+
+133
+00:11:19,029 --> 00:11:23,002
+cases.
+Well any distribution that I can model on
+
+134
+00:11:23,002 --> 00:11:29,041
+this graphical model where X is a parent
+of y, I can equally well model in a model,
+
+135
+00:11:29,041 --> 00:11:34,078
+in the Bayes net where I invert that
+edge, it has a y pointing to X.
+
+136
+00:11:34,078 --> 00:11:41,000
+So in this example, as well as in many
+others I can reverse the edges and have a
+
+137
+00:11:41,000 --> 00:11:46,070
+model that's equally expressive.
+And, in fact I can do this in general.
+
+138
+00:11:46,070 --> 00:11:51,084
+That is, you give me any ordering that you
+want on the random variables and I can
+
+139
+00:11:51,084 --> 00:11:56,079
+build you a graphical model that can
+represent this, any distribution that has
+
+140
+00:11:56,079 --> 00:12:01,035
+that ordering on the variables.
+So you want X1 to come before X2 to come
+
+141
+00:12:01,035 --> 00:12:04,084
+before X3 and you want to represent the
+distribution P?
+
+142
+00:12:04,084 --> 00:12:09,028
+That's fine, no problem, I can have a
+graphical model that will do that.
+
+143
+00:12:09,028 --> 00:12:13,015
+But.
+That model might be very nasty.
+
+144
+00:12:13,015 --> 00:12:21,063
+And we've already seen an example of that
+when we had, a case where X1 and X2 were
+
+145
+00:12:21,063 --> 00:12:29,001
+both parents of Y and it was, you know, a
+simple model that looks like this.
+
+146
+00:12:29,001 --> 00:12:36,040
+And if I want to invert, the
+directionality of the edges and put Y as a
+
+147
+00:12:36,040 --> 00:12:44,058
+parent of say X2, Then I have to, if I
+want to capture the distribution that I
+
+148
+00:12:44,058 --> 00:12:50,077
+started out with, that-, for this was the
+graph Then I end up having a direct edge
+
+149
+00:12:50,077 --> 00:12:54,044
+between X1 and X2.
+And so what happens is that causal
+
+150
+00:12:54,044 --> 00:12:59,092
+directionalities are often simpler so to
+drive this home even further, let's go
+
+151
+00:12:59,092 --> 00:13:05,053
+back to our Greenwich mean time example,
+where we have the Greenwich mean time is
+
+152
+00:13:05,053 --> 00:13:10,087
+somehow the cause or the parent of these
+watch time that we see in different
+
+153
+00:13:10,087 --> 00:13:14,027
+individuals.
+And lets imagine that I force you to
+
+154
+00:13:14,027 --> 00:13:17,046
+invert the edges, what's it going to look
+like?
+
+155
+00:13:18,062 --> 00:13:23,017
+Well.
+So now I'm going to force Greenwich Mean
+
+156
+00:13:23,017 --> 00:13:28,060
+Time to be the child of all of these.
+And now what, is this the correct model?
+
+157
+00:13:28,060 --> 00:13:34,032
+No, because this says that all of the
+watch time is independent which we know is
+
+158
+00:13:34,032 --> 00:13:40,018
+not the case and so what we end with as
+the model as the same horrific model that
+
+159
+00:13:40,018 --> 00:13:45,004
+I showed before where everything is
+connected to everything to else.
+
+160
+00:13:45,004 --> 00:13:50,075
+And so causal ordering although is
+not more correct than a non caual
+
+161
+00:13:50,075 --> 00:13:58,010
+ordering, it's sparser.
+So generally sparser as well as more
+
+162
+00:13:58,010 --> 00:14:06,058
+intuitive, so more intuitive.
+As well as easier to parameterize.
+
+163
+00:14:07,070 --> 00:14:16,090
+For a human.
+So, again you're not forced to use it and
+
+164
+00:14:16,090 --> 00:14:19,069
+sometimes there are good reasons not to do
+it.
+
+165
+00:14:19,069 --> 00:14:22,094
+But.
+It's generally good, tip to follow.
+
+166
+00:14:22,094 --> 00:14:26,046
+So how does one actually construct a
+graphical model?
+
+167
+00:14:26,046 --> 00:14:31,099
+Do we have in our minds some monolithic p
+of some set of variables X1 up to XN and
+
+168
+00:14:31,099 --> 00:14:35,099
+we just need to figure out how to encode
+that using a graph?
+
+169
+00:14:35,099 --> 00:14:40,005
+Well maybe implicitly but certainly not in
+any explicit form.
+
+170
+00:14:40,005 --> 00:14:45,011
+The way one typically constructs a
+graphical model in practice is by having
+
+171
+00:14:45,011 --> 00:14:49,097
+some variable or sometimes set of
+variables that we wish to reason about.
+
+172
+00:14:49,097 --> 00:14:54,042
+So for example, we might care about the
+variable, cancer.
+
+173
+00:14:54,042 --> 00:15:00,022
+Or maybe even lung cancer.
+Well, what influences whether we have
+
+174
+00:15:00,022 --> 00:15:05,004
+cancer, whether somebody's going to get
+lung cancer?
+
+175
+00:15:05,004 --> 00:15:09,073
+If we go and ask a doctor, what is the
+probability for someone to get lung
+
+176
+00:15:09,073 --> 00:15:12,072
+cancer?
+The Doctor is going to say, well you know
+
+177
+00:15:12,072 --> 00:15:15,089
+that depends.
+And you might say, well what does that
+
+178
+00:15:15,089 --> 00:15:19,012
+depend on?
+And the doctor will say well whether they
+
+179
+00:15:19,012 --> 00:15:22,073
+smoke for example.
+At which point you're likely to add the
+
+180
+00:15:22,073 --> 00:15:26,027
+variable smoking as a parent of the lung
+cancer variable.
+
+181
+00:15:26,027 --> 00:15:29,082
+The doctor might say, well that's not the
+only thing.
+
+182
+00:15:29,082 --> 00:15:35,021
+It might, the probability of cancer also
+depends, for example, on whet-, on the
+
+183
+00:15:35,021 --> 00:15:39,065
+kind of work that you do.
+Because some kinds of work involve more
+
+184
+00:15:39,065 --> 00:15:45,048
+dust, particles getting into your lungs.
+Again so here's another variable on which,
+
+185
+00:15:45,048 --> 00:15:50,011
+which you that as apparent.
+And you would go and ask either a Doctor
+
+186
+00:15:50,011 --> 00:15:54,070
+or expert in a different domain, what is the
+probability that somebody smokes?
+
+187
+00:15:54,070 --> 00:15:59,016
+And if they think about it, they are
+likely to say, well that depends.
+
+188
+00:15:59,016 --> 00:16:02,044
+And what does that depend on?
+Well, maybe their age.
+
+189
+00:16:03,053 --> 00:16:10,047
+Gender Maybe the-, the country that they
+live in because certainly different
+
+190
+00:16:10,047 --> 00:16:13,035
+countries have different smoking
+frequencies.
+
+191
+00:16:13,035 --> 00:16:18,035
+So once again, we're going to extend the
+conversation backward to include more
+
+192
+00:16:18,035 --> 00:16:21,061
+variables.
+Up to the point that we can stop because
+
+193
+00:16:21,061 --> 00:16:26,035
+if we now ask example, what is the
+probability of gender being male versus
+
+194
+00:16:26,035 --> 00:16:28,084
+female?
+Well anyone can answer that one.
+
+195
+00:16:28,084 --> 00:16:34,003
+And at that point, one can stop because
+there's no way to extend the conversation
+
+196
+00:16:34,003 --> 00:16:35,058
+backward.
+Is that enough?
+
+197
+00:16:35,058 --> 00:16:40,073
+Usually not, because we also need to
+consider, for example, factors that might
+
+198
+00:16:40,073 --> 00:16:46,033
+help us, might indicate to us whether
+somebody is going to have can-, somebody
+
+199
+00:16:46,033 --> 00:16:50,030
+has cancer or not.
+And so we might go and ask the doctor what
+
+200
+00:16:50,030 --> 00:16:55,084
+are some pieces of evidence that might, be
+indicative here, and we would, the doctor
+
+201
+00:16:55,084 --> 00:17:01,072
+would tell us, for example, coughing.
+Or, maybe bloody sputum.
+
+202
+00:17:01,072 --> 00:17:07,049
+And various other things that would be,
+potential indicators.
+
+203
+00:17:07,049 --> 00:17:14,063
+And at that point one would say, well,
+okay, what is the probability of coughing
+
+204
+00:17:14,063 --> 00:17:19,049
+given lung cancer.
+And again, one would now extend the
+
+205
+00:17:19,049 --> 00:17:26,054
+conversation backwards and say other
+things might cause coughing, for example,
+
+206
+00:17:26,054 --> 00:17:31,033
+having allergies.
+And so once again we would go from here
+
+207
+00:17:31,033 --> 00:17:36,013
+and extend backward to construct a
+graphical model that captured all the
+
+208
+00:17:36,013 --> 00:17:39,095
+relevant factors for answering queries
+that we here about.
+
+209
+00:17:39,095 --> 00:17:43,008
+So that's the structure of a graphical
+model.
+
+210
+00:17:43,008 --> 00:17:48,030
+So now let's talk a little bit about
+parameters the values around these
+
+211
+00:17:48,030 --> 00:17:51,036
+parameters and what makes a difference
+here.
+
+212
+00:17:51,036 --> 00:17:56,038
+So here's certain things that really do
+make a difference to parameters.
+
+213
+00:17:56,038 --> 00:18:01,025
+Zeros make a big difference.
+And, when we talked about diagnosis, we
+
+214
+00:18:01,025 --> 00:18:06,080
+saw that many of the mistakes that were
+made in early medical expert systems were
+
+215
+00:18:06,080 --> 00:18:12,034
+derived from the fact that people gave
+zeros to things that were unlikely but not
+
+216
+00:18:12,034 --> 00:18:16,026
+actually impossible.
+And so zeros are something to be very,
+
+217
+00:18:16,026 --> 00:18:21,053
+very careful about because you should only
+use something, you should only give
+
+218
+00:18:21,053 --> 00:18:26,047
+probability zero to something that is
+impossible, perhaps because it's
+
+219
+00:18:26,047 --> 00:18:29,072
+definitional.
+Otherwise things shouldn't really have
+
+220
+00:18:29,072 --> 00:18:33,019
+probability zero.
+Other things that make a difference are
+
+221
+00:18:33,019 --> 00:18:37,015
+sort of weaker versions.
+So for example, orders of magnitude, order
+
+222
+00:18:37,015 --> 00:18:41,024
+of magnitude differences.
+The difference between the probability of
+
+223
+00:18:41,024 --> 00:18:45,014
+one over ten or ten versus one over 100,
+that makes a difference.
+
+224
+00:18:45,014 --> 00:18:51,024
+It makes a much bigger, whereas small
+differences like 0.54 versus 0.57 are
+
+225
+00:18:51,024 --> 00:18:54,084
+unlikely to make a difference to most
+queries.
+
+226
+00:18:54,084 --> 00:19:01,026
+Finally, it turns out the relative values
+between conditional probabilities make a
+
+227
+00:19:01,026 --> 00:19:06,066
+much bigger difference to the answer than
+the absolute probabilities.
+
+228
+00:19:06,066 --> 00:19:13,008
+That is, the comparing different entries
+in the same CPD relative to each other is
+
+229
+00:19:13,008 --> 00:19:18,087
+a very useful way of evaluating the
+graphical model and seeing whether the
+
+230
+00:19:18,087 --> 00:19:22,064
+values that you use for those relative
+ratios really make sense.
+
+231
+00:19:22,064 --> 00:19:31,003
+Finally, Conditional probability tables
+are actually quite rare except in small
+
+232
+00:19:31,003 --> 00:19:35,015
+applications.
+In most cases one would use structured
+
+233
+00:19:35,015 --> 00:19:41,008
+CPDs of the forms that we've discussed as
+well as a variety of other forms.
+
+234
+00:19:41,008 --> 00:19:46,077
+So let's talk a little bit about
+structured CPDs because those actually
+
+235
+00:19:46,077 --> 00:19:53,038
+quite important and we can break up the
+types of CPD's that we've talked about
+
+236
+00:19:53,038 --> 00:19:58,073
+along two axes, one is whether they're
+intended to deal primarily with discrete
+
+237
+00:19:58,073 --> 00:20:03,075
+or with continuous variables.
+And, the other side is whether the type of
+
+238
+00:20:03,075 --> 00:20:08,050
+structure that they encode is
+context-specific, where a variable might
+
+239
+00:20:08,050 --> 00:20:13,073
+make a difference in some circumstances
+and not in others versus aggregating.
+
+240
+00:20:13,073 --> 00:20:20,013
+Of multiple weak influences.
+And so lets give an example of each of
+
+241
+00:20:20,013 --> 00:20:27,040
+these categories so for discrete and
+context specific we had tree CPD as an
+
+242
+00:20:27,040 --> 00:20:31,060
+example.
+For discrete and aggregating we had
+
+243
+00:20:31,060 --> 00:20:37,012
+sigmoid.
+Cpd's as well as noisy or, or noisy max or
+
+244
+00:20:37,012 --> 00:20:43,047
+any one of those, that family.
+For continuous CPD's we didn't actually
+
+245
+00:20:43,047 --> 00:20:49,086
+talk about context-specific,
+representations but one can take the,
+
+246
+00:20:49,086 --> 00:20:56,078
+continuous of a tree CPD called a
+regression tree where one breaks, up the
+
+247
+00:20:56,078 --> 00:21:02,016
+context based on some thresholds on the
+continuous variables.
+
+248
+00:21:03,048 --> 00:21:08,057
+And that is a context-specific version of
+a continuous CPD.
+
+249
+00:21:08,057 --> 00:21:14,078
+And finally the aggregating version of a
+continuous CPD, the Gaussian or
+
+250
+00:21:14,078 --> 00:21:22,088
+conditional linear Gaussian is a is an
+example of that.
+
+251
+00:21:22,088 --> 00:21:30,020
+By the way, note that the conditional
+linear Gaussian that we've talked about is context specific on
+
+252
+00:21:30,020 --> 00:21:38,057
+the discrete variables.
+Finally, it's important to realize that a
+
+253
+00:21:38,057 --> 00:21:42,031
+model is rarely done the first time you
+write it.
+
+254
+00:21:42,031 --> 00:21:48,019
+And just like any code design, model
+design is an iterative process where one
+
+255
+00:21:48,019 --> 00:21:52,043
+starts out somewhere tests it, and then
+improves it over time.
+
+256
+00:21:52,043 --> 00:21:57,042
+So, importantly, once one constructs a
+model, the first thing to do is to test
+
+257
+00:21:57,042 --> 00:22:02,081
+the model, ask it queries and see whether
+the answers that come out are reasonable.
+
+258
+00:22:02,081 --> 00:22:08,006
+There is also a suite of tools that do
+what's called sensitivity analysis, which
+
+259
+00:22:08,006 --> 00:22:13,036
+means that one can do, for, one can look
+at a given query and ask which parameters
+
+260
+00:22:13,036 --> 00:22:18,054
+have the biggest difference on the value
+of the query and that means those are
+
+261
+00:22:18,054 --> 00:22:23,098
+probably the ones that we should fine tune
+in order to get the best results to the
+
+262
+00:22:23,098 --> 00:22:29,030
+queries that we care about.
+Finally, any, iterative refinement process
+
+263
+00:22:29,030 --> 00:22:35,061
+usually depends extensively on a process
+of error analysis where once we have
+
+264
+00:22:35,061 --> 00:22:41,065
+identified the errors that our model makes
+we go back and try and see which
+
+265
+00:22:41,065 --> 00:22:45,083
+improvements to the model are going to
+make those errors go away.
+
+266
+00:22:45,083 --> 00:22:50,052
+It could be for example, adding features
+for example in some of the image
+
+267
+00:22:50,052 --> 00:22:55,091
+segmentation work that we did there's,
+features that might help eliminate certain
+
+268
+00:22:55,091 --> 00:22:58,093
+errors that we see in our segmentation
+results.
+
+269
+00:22:58,093 --> 00:23:03,082
+Or maybe adding dependencies to the model
+that can capture kind, the kind of
+
+270
+00:23:03,082 --> 00:23:05,029
+structure that's in it.

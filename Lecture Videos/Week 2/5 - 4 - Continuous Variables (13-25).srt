@@ -1,0 +1,635 @@
+
+1
+00:00:01,006 --> 00:00:05,082
+That exploit additional forms of local
+structures some kind of pro matrix form
+
+2
+00:00:05,082 --> 00:00:10,011
+are extremely valuable in context of
+general, in the general context of
+
+3
+00:00:10,011 --> 00:00:15,012
+graphical models because they allow us to
+provide a much sparse representation. But
+
+4
+00:00:15,012 --> 00:00:19,095
+they are absolutely essential when we have
+in networks that involves continuous
+
+5
+00:00:19,095 --> 00:00:25,034
+variables because their tables are simply
+not an option. So let's look at some
+
+6
+00:00:25,034 --> 00:00:30,014
+examples of networks that involve
+continous variables, and see what kind of
+
+7
+00:00:30,014 --> 00:00:34,068
+representations we might want to
+incorporate here. So now, let's imagine
+
+8
+00:00:34,068 --> 00:00:39,054
+that we have a continous temperature
+variable. Say the temperature in a room.
+
+9
+00:00:39,054 --> 00:00:44,028
+And we have a sensor, a thermos-, a
+thermometer that mentions, that measures
+
+10
+00:00:44,028 --> 00:00:48,095
+the, the temperature. Now, thermometers
+aren't perfect, and so, what we would
+
+11
+00:00:48,095 --> 00:00:54,000
+expect, then, is the sensor is around the
+right temperature, but not quite. And so.
+
+12
+00:00:54,000 --> 00:01:00,084
+One way to capture that is by saying that
+the sensor S is a normal distribution. And
+
+13
+00:01:00,084 --> 00:01:09,052
+here's an all distribution. Around the
+true temperature, T, with some standard
+
+14
+00:01:09,052 --> 00:01:16,076
+deviation, Sigma S. So this defines for
+every value of T a distribution over S. In
+
+15
+00:01:16,076 --> 00:01:24,062
+a very compact parametric form that has
+just really the parameter of sigma S, and
+
+16
+00:01:24,062 --> 00:01:31,076
+if we just say that S is a Gausian around
+the variable, around the value of the
+
+17
+00:01:31,076 --> 00:01:39,028
+variable T. Now let's make the situation a
+little bit more interesting. This is the
+
+18
+00:01:39,028 --> 00:01:46,020
+temperature now. And this is a
+[inaudible]. So we have P. And P. Prime.
+
+19
+00:01:46,020 --> 00:01:50,098
+Now, P. Prime now depend, the, the
+temperature soon depends on the current
+
+20
+00:01:50,098 --> 00:01:56,011
+temperature, as well as the outside
+temperature, because of some equalization
+
+21
+00:01:56,011 --> 00:02:02,020
+of temperatures from the inside to the
+outside. So, what model what, we, might we
+
+22
+00:02:02,020 --> 00:02:07,082
+have for T prime as the function of it's
+two parents? Temperature the current
+
+23
+00:02:07,082 --> 00:02:14,020
+temperature and the outside temperature.
+Well, so one model might be just some kind
+
+24
+00:02:14,020 --> 00:02:19,070
+of diffusion model that says that T is
+equal to some weighted combination. Sorry,
+
+25
+00:02:19,070 --> 00:02:25,068
+T prime is a Gaussian around,
+a mean that's defined as a combination of
+
+26
+00:02:25,068 --> 00:02:31,011
+the current temperature and the outside
+temperature. So you kind of combine the
+
+27
+00:02:31,011 --> 00:02:36,067
+two, and because there is stochasticity in
+the process, we're going to say that T
+
+28
+00:02:36,067 --> 00:02:43,087
+prime isn't exactly equal to this, but
+rather is a Gaussian around this mean.
+
+29
+00:02:45,078 --> 00:02:51,036
+With some standard deviation stigmatic. To
+be distinguished from the standard
+
+30
+00:02:51,036 --> 00:02:57,075
+deviation stigma x which is the center of
+deviance. Let's make life even more
+
+31
+00:02:57,075 --> 00:03:03,072
+interesting. Let's imagine that there is a
+door in the room. The door can be opened
+
+32
+00:03:03,072 --> 00:03:09,062
+or closed so it's a discreet variable,
+takes two values and clearly the extent of
+
+33
+00:03:09,062 --> 00:03:15,015
+the diffusion is going to depend upon
+whether the door is open and we would
+
+34
+00:03:15,015 --> 00:03:20,068
+expect different parameters to this
+system. In the case of two values of the
+
+35
+00:03:20,068 --> 00:03:26,050
+discreet variable and so if we write the
+model now we're going to have that the
+
+36
+00:03:26,050 --> 00:03:34,029
+temperature time, the temperature soon T
+prime, is going to be a Gaussian
+
+37
+00:03:34,055 --> 00:03:41,032
+who's parameters, alpha and sigma depend
+on the value of a door variable. So, if b
+
+38
+00:03:41,032 --> 00:03:47,017
+equals zero. We're going to have
+parameters alpha zero and sigma zero T.
+
+39
+00:03:47,017 --> 00:03:54,003
+And if b equals one, we have
+a different set of parameters that equal
+
+40
+00:03:54,003 --> 00:04:01,090
+to different diffusion process. So just to
+give all these things name this model that
+
+41
+00:04:01,090 --> 00:04:09,033
+we had over here was called a linear
+Gaussian. We will define that more formally in the
+
+42
+00:04:09,033 --> 00:04:16,085
+next slide. And this model is called the
+conditional linear Gaussian. Because
+
+43
+00:04:16,085 --> 00:04:23,001
+the linear Gaussian whose parameters are
+conditioned on the discrete variable
+
+44
+00:04:23,001 --> 00:04:32,041
+Door. So to generalize these models
+to a broader setting where, where we have
+
+45
+00:04:32,041 --> 00:04:39,060
+a general variable Y and Y has parents X1
+up to XK the linear Gaussian model has the
+
+46
+00:04:39,060 --> 00:04:46,002
+following form. It says that Y is a
+Gaussian, so that's what the N stands for,
+
+47
+00:04:46,002 --> 00:04:53,014
+who's mean, is a linear function, and
+that's why it's called a linear
+
+48
+00:04:53,014 --> 00:05:02,016
+Gaussian. Is a linear function of the
+parents X<u>i. And importantly whose</u>
+
+49
+00:05:02,016 --> 00:05:11,030
+variance doesn't depend at all. On the
+parents So the variance is fixed. That's
+
+50
+00:05:11,030 --> 00:05:17,004
+the definition of a liner Gaussian CPD,
+and obviously, it's restricted. It doesn't
+
+51
+00:05:17,004 --> 00:05:22,078
+capture every situation, but it's a useful
+model and a useful first approximation in
+
+52
+00:05:22,078 --> 00:05:28,039
+many cases. Conditional linear Gaussian
+introduces into the mix, the possibility
+
+53
+00:05:28,039 --> 00:05:33,072
+of one or more discrete parents. In this
+case, we just drew one more simplicity,
+
+54
+00:05:33,072 --> 00:05:38,098
+but you could have more than one. And this
+is just a linear Gaussian whose
+
+55
+00:05:38,098 --> 00:05:56,007
+parameters depend on the value of A. So,
+writing it down it looks exactly like
+
+56
+00:05:56,007 --> 00:06:02,068
+this. We now have, for every one of the
+parameters, we have the ability for the
+
+57
+00:06:02,068 --> 00:06:09,054
+parameters to depend on A. And this case,
+the variants, can depend on the continue
+
+58
+00:06:09,054 --> 00:06:17,008
+on the discreet parent. But not on the
+continuous ones. And this is the
+
+59
+00:06:17,008 --> 00:06:20,098
+conditional in your Gaussian model. And
+again, similarly it is a restricted model,
+
+60
+00:06:20,098 --> 00:06:24,089
+and one can certainly generalize beyond
+that, as we'll show in a moment. But it's
+
+61
+00:06:24,089 --> 00:06:29,086
+a very useful model that's used in a large
+number of applications. One example
+
+62
+00:06:29,086 --> 00:06:35,037
+application that we've seen that involves
+continuous variables is the task of robot
+
+63
+00:06:35,037 --> 00:06:40,068
+localization. I'm not going to show this
+video again now. We're going to see it
+
+64
+00:06:40,068 --> 00:06:46,025
+again when we talk about temporal models.
+But, just as a reminder, what we have here
+
+65
+00:06:46,025 --> 00:06:51,083
+is a robot whose location is a continuous
+quantity. So are the sensor observations
+
+66
+00:06:51,083 --> 00:06:57,027
+that give a noisy version of how far away
+the robot is from an obstacle looking in
+
+67
+00:06:57,027 --> 00:07:04,094
+each one of the different directions. Okay
+and so we have both the continuous state
+
+68
+00:07:04,094 --> 00:07:12,042
+variable as well as the continuous
+observation that the robot needs to deal
+
+69
+00:07:12,042 --> 00:07:20,039
+with. So what kind of observation model
+makes sense in this study. So here lets
+
+70
+00:07:20,039 --> 00:07:28,040
+imagine that this line over here
+represents the true distance. From the
+
+71
+00:07:28,040 --> 00:07:40,072
+robot's current location, from a given
+location to obstacle. So if the robot
+
+72
+00:07:40,072 --> 00:07:46,082
+is looking in, if we're conditioning on
+the robots current location and we're
+
+73
+00:07:46,082 --> 00:07:52,099
+asking, if I look in this diresction how
+far is it before I hit an obstacle. In
+
+74
+00:07:52,099 --> 00:07:59,057
+this case that distance is, 200 and, I
+don't know, twenty centimeters. And what
+
+75
+00:07:59,057 --> 00:08:07,032
+this tells us is that a sonar is a
+Gaussian. You can see this is the sonar.
+
+76
+00:08:07,032 --> 00:08:18,074
+The red is the sonar. Is a Gaussian around,
+the true distance. Now, the laser, which
+
+77
+00:08:18,074 --> 00:08:25,025
+is a different sensing modality for the
+same robot is also a Gaussian around that
+
+78
+00:08:25,025 --> 00:08:31,020
+true distance. But because the laser is a
+more accurate sensor the standard
+
+79
+00:08:31,020 --> 00:08:37,078
+deviation is lower for the laser than for
+the sonar. And that reflects the accuracy
+
+80
+00:08:37,078 --> 00:08:46,060
+of these two different sensor modalities.
+Now, this is an idealized version. But
+
+81
+00:08:46,060 --> 00:08:53,019
+surprisingly corresponds in useful ways to
+the real model. So let's actually look at
+
+82
+00:08:53,019 --> 00:08:59,085
+some of the, Let's look first at the model
+that was used in the system. And then, at,
+
+83
+00:08:59,085 --> 00:09:05,058
+which is the red line. And then we can
+look at the blue line. The red line
+
+84
+00:09:05,058 --> 00:09:11,038
+actually involves three different
+components. So this is the actual center
+
+85
+00:09:11,038 --> 00:09:20,030
+model. Used by the robots and we can see
+that it has three components. It has this
+
+86
+00:09:20,030 --> 00:09:27,046
+peak Which is the Gaussian around the
+true distance. The next most obvious
+
+87
+00:09:27,046 --> 00:09:36,021
+phenomenon is this ridiculous peak over
+here. This corresponds to a max range
+
+88
+00:09:36,021 --> 00:09:42,092
+reading. This is what you get if there
+isn't an obstacle in that direction within
+
+89
+00:09:42,092 --> 00:09:48,089
+a reasonable distance for the laser or the
+sonar to return any signal. And so that's
+
+90
+00:09:48,089 --> 00:09:54,008
+why there's a very large peak, at, at,
+beyond a certain distance. That's the
+
+91
+00:09:54,008 --> 00:09:59,063
+entire rest of the probability mass. The
+final most more subtle aspect of this
+
+92
+00:09:59,063 --> 00:10:06,098
+probability distribution is that you see
+that this is higher than that. So, the,
+
+93
+00:10:06,098 --> 00:10:14,067
+there's more probability mass, for the
+density, before the obstacle than after
+
+94
+00:10:14,067 --> 00:10:23,047
+the obstacle. And why is that? Because
+once you get to the obstacle. The beam
+
+95
+00:10:23,047 --> 00:10:28,025
+returns. But before you get to the
+obstacle there might be some other like,
+
+96
+00:10:28,025 --> 00:10:33,067
+transient things, like a person walking in
+front of the obstacle. And that's going to
+
+97
+00:10:33,067 --> 00:10:38,084
+return the beam in a way that doesn't
+represent the actual structure of the map.
+
+98
+00:10:38,084 --> 00:10:43,072
+And so that's why we have a certain
+probability. Of having the ob, of having
+
+99
+00:10:43,072 --> 00:10:48,061
+the, the beam return sooner than the
+obstacle, and that probability doesn't
+
+100
+00:10:48,061 --> 00:10:53,097
+exist on the downside once the obstacle's
+been reached. So the actual probability
+
+101
+00:10:53,097 --> 00:10:59,039
+distribution is an aggregation of these
+three signals. The sensor model around the
+
+102
+00:10:59,039 --> 00:11:04,080
+obstacle in a given direction. This
+uniform distribution, before
+
+103
+00:11:04,080 --> 00:11:09,047
+the obstacle would [inaudible]
+distribution return and the max range
+
+104
+00:11:09,047 --> 00:11:14,074
+reading at the end. The red line is the
+model that was used and the blue
+
+105
+00:11:14,074 --> 00:11:20,042
+line is, the actual measured distances in
+different settings to sort of show whether this
+
+106
+00:11:20,042 --> 00:11:25,063
+really does, the model that was used
+really represents reality. And the answer
+
+107
+00:11:25,063 --> 00:11:30,083
+is that, it does to a surprising extent.
+So this, this is an example of how
+
+108
+00:11:30,083 --> 00:11:36,002
+continuous sensor, continuous
+distributions are going to be used in a
+
+109
+00:11:36,002 --> 00:11:44,042
+real world application. The next example,
+of that, is actually the robot motion
+
+110
+00:11:44,042 --> 00:11:52,027
+model. So here are the robots. And the
+robot is heading in a given direction
+
+111
+00:11:52,058 --> 00:11:59,002
+alpha. Heading sorry, heading in this
+direction that's what it thinks it's going
+
+112
+00:11:59,002 --> 00:12:05,005
+and the question is if it moves a certain
+distance it thinks it's moving a certain
+
+113
+00:12:05,005 --> 00:12:10,087
+distance in a given direction. What is the
+Actual distribution over it's next
+
+114
+00:12:10,087 --> 00:12:16,024
+location. And the answer is it's a little
+bit tricky because robots actually have
+
+115
+00:12:16,024 --> 00:12:21,015
+heading and there's certain uncertainty
+alpha, over which is the difference
+
+116
+00:12:21,015 --> 00:12:26,026
+between where they think they are going
+and where they are actually going. And
+
+117
+00:12:26,026 --> 00:12:31,065
+then there is also noise. On the distant
+delta, that they think they moved, and,
+
+118
+00:12:31,065 --> 00:12:37,007
+so, when you put all these together, the
+actual cloud, on, the distribution, on
+
+119
+00:12:37,007 --> 00:12:42,048
+where the robots going to be, falling,
+[inaudible] move, is this weird, banana
+
+120
+00:12:42,048 --> 00:12:48,010
+shaped distribution, which is centered
+around. This area where the robot thinks
+
+121
+00:12:48,010 --> 00:12:53,082
+it is. But is, but has a sort of banana
+shape that's, where the banana shape is
+
+122
+00:12:53,082 --> 00:12:59,026
+induced by the uncertainty about the
+angular trajectory. And if you actually
+
+123
+00:12:59,026 --> 00:13:05,020
+run this for a while, you can see that the
+banana shape gets more and more and more
+
+124
+00:13:05,020 --> 00:13:10,021
+diffuse. So here is the first banana
+shape, and now the robot turns, and
+
+125
+00:13:10,021 --> 00:13:15,072
+there's more uncertainty over the heading.
+And so, you get. A larger and larger
+
+126
+00:13:15,072 --> 00:13:21,058
+banana shaped distribution, on the robots
+position, assuming there's no evidence to
+
+127
+00:13:21,058 --> 00:13:25,095
+correct, the position based on say sonar
+or laser readings.

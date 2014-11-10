@@ -1,0 +1,773 @@
+
+1
+00:00:00,000 --> 00:00:04,006
+We previously defined the notion of a
+Markov chain that allows us to generate
+
+2
+00:00:04,006 --> 00:00:09,004
+samples from an intractable distribution,
+but we left unanswered the question of,
+
+3
+00:00:09,004 --> 00:00:14,002
+assuming we have a Markov chain that has
+the desired stationary distribution, how
+
+4
+00:00:14,002 --> 00:00:19,002
+do we go about using it, in the context of
+concrete algorithmic procedure? Well let's
+
+5
+00:00:19,002 --> 00:00:25,003
+imagine that somebody has provided us a
+Markov chain. For a, a distribution.
+
+6
+00:00:25,003 --> 00:00:33,004
+Sorry. Imagine that our goal is to compute
+some probability relative to a
+
+7
+00:00:33,004 --> 00:00:40,009
+distribution P. But, for whatever reason,
+P is to hard to sample from directly. And
+
+8
+00:00:40,009 --> 00:00:46,009
+so how do I, use the Markov chain to get
+around that? First we construct the Markov
+
+9
+00:00:46,009 --> 00:00:52,005
+chain P, whose unique stationary
+distribution is P, so, so it needs to be a
+
+10
+00:00:52,005 --> 00:00:58,004
+regular Markov chain usually. And then
+we're going to generate samples from this
+
+11
+00:00:58,004 --> 00:01:04,005
+distribution. So we're going to start off
+by sampling my initial state from some
+
+12
+00:01:04,005 --> 00:01:10,006
+arbitrary distribution p0. P0 is not the
+same as p. So obviously I can't use the
+
+13
+00:01:10,006 --> 00:01:16,008
+zero sample as a way of estimating an
+event relative to p. And so what I do now,
+
+14
+00:01:16,008 --> 00:01:23,003
+start walking along the chain starting
+sampling x(t+1) from the transition
+
+15
+00:01:23,003 --> 00:01:29,004
+model. And because the chain convergence
+to stationary distribution, eventually
+
+16
+00:01:29,004 --> 00:01:35,006
+I'll have a sample that is very close to,
+to the to being sample from the
+
+17
+00:01:35,006 --> 00:01:43,003
+distribution p that I care about. So now
+here's the sticky issue, and this is
+
+18
+00:01:43,003 --> 00:01:50,007
+really a sticky issue. When have we walked
+long enough that we could actually use our
+
+19
+00:01:50,007 --> 00:01:57,003
+samples? Because we don't want these
+samples at the beginning because they're
+
+20
+00:01:57,003 --> 00:02:04,003
+far from P, and so we need to walk around
+long enough for the chain to get close to
+
+21
+00:02:04,003 --> 00:02:10,009
+its stationary distribution. And that
+state is called mixing. So mix is when P
+
+22
+00:02:10,009 --> 00:02:20,008
+of P is close enough [to] Pi. So that your
+time t distribution is close enough to the
+
+23
+00:02:20,008 --> 00:02:25,004
+stationary. That's the point where I can
+say, good enough, I can start collecting
+
+24
+00:02:25,004 --> 00:02:33,009
+samples. So how do we know if a chain has
+mixed or not? And the short answer is, you
+
+25
+00:02:33,009 --> 00:02:40,009
+don't. And so this is, as I said, the
+sticky part of a Markov chain method. So,
+
+26
+00:02:40,009 --> 00:02:47,004
+in general, you can never really prove
+that a chain has mixed. But, in some
+
+27
+00:02:47,004 --> 00:02:53,004
+cases, you can show that is hasn't mixed.
+And then, if you run lots and lots of
+
+28
+00:02:53,004 --> 00:02:59,000
+tests, and none of them have convinced you
+that the chain hasn't mixed, then you sort
+
+29
+00:02:59,000 --> 00:03:03,008
+of resign yourself to assuming that it
+has, in fact, mixed. But how do you
+
+30
+00:03:03,008 --> 00:03:08,009
+convince yourself that a chain hasn't
+mixed? You compute chain statistics, and
+
+31
+00:03:08,009 --> 00:03:13,009
+we'll show some examples of that in a
+moment, in different windows within a
+
+32
+00:03:13,009 --> 00:03:19,009
+single run of the chain. So, for example,
+here I have a single run of the chain. And
+
+33
+00:03:19,009 --> 00:03:28,005
+they run for a while. And than I look at
+little windows, usually they won?t be this
+
+34
+00:03:28,005 --> 00:03:34,003
+small and I compare this window. To this
+window, computing various statistics. For
+
+35
+00:03:34,003 --> 00:03:39,006
+example, what is the probability of
+hitting a particular state? And I say, is
+
+36
+00:03:39,006 --> 00:03:45,002
+the probability of that in this window,
+close to the probability of that in this
+
+37
+00:03:45,002 --> 00:03:50,003
+window? And if it is, then maybe I've
+reached this, at least some kind of
+
+38
+00:03:50,003 --> 00:03:57,000
+convergence point. In terms of where the
+chain is reached. Now this of course is
+
+39
+00:03:57,000 --> 00:04:04,003
+not a sufficiently good answer because it
+could also be derived in a chain that has
+
+40
+00:04:04,003 --> 00:04:11,002
+these sort of two very high probability
+regions. That are very hard to get from
+
+41
+00:04:11,002 --> 00:04:19,003
+each other. And if the chain is kind of
+ambling along in this part of the space
+
+42
+00:04:19,003 --> 00:04:24,005
+and never hitting the other part of the
+space, then you're still going to get very
+
+43
+00:04:24,005 --> 00:04:29,008
+similar probabilities across a window of a
+single run of the chain because all of the
+
+44
+00:04:29,008 --> 00:04:35,001
+samples are taken from this part and none
+of them are ever taken from that part and
+
+45
+00:04:35,001 --> 00:04:40,006
+so we don't know that we haven't mixed.
+So, a more reliable statistic, is to take
+
+46
+00:04:40,006 --> 00:04:45,008
+these statis-, a more reliable evaluation
+criterion is to take these statistics
+
+47
+00:04:45,008 --> 00:04:51,003
+across different runs that are initialized
+in different parts of the space. And then
+
+48
+00:04:51,003 --> 00:04:55,007
+you might hope that one chain is
+traversing, one run of the chain is
+
+49
+00:04:55,007 --> 00:05:01,001
+traversing this region. And another run of
+the chain is traversing this region. And
+
+50
+00:05:01,001 --> 00:05:06,000
+so now, if the statistics, so now the
+statistics would show a difference, and
+
+51
+00:05:06,000 --> 00:05:12,005
+indicate that mixing hasn't taken place.
+So, what statistics might, So how, what
+
+52
+00:05:12,005 --> 00:05:19,002
+might we do it, more concretely. So let's
+look at two examples. Here is, two example
+
+53
+00:05:19,002 --> 00:05:25,002
+runs of a chain that we'll describe a
+little bit later. And what we measure
+
+54
+00:05:25,002 --> 00:05:31,001
+here, and this is the first statistic to
+measure in Markov chains, is the log
+
+55
+00:05:31,001 --> 00:05:40,005
+probability. Of, of a sample. So you
+compute The log probability of sample.
+
+56
+00:05:40,005 --> 00:05:45,004
+Now, you can't always compute the log
+probability directly, might compute an
+
+57
+00:05:45,004 --> 00:05:50,007
+un-normalized log probability as we'll
+talk about, as we'll talk about later. But
+
+58
+00:05:50,007 --> 00:05:55,000
+basically, you compute the log
+probability, or some constant factor
+
+59
+00:05:55,000 --> 00:06:00,004
+thereof. And now you can compare two runs.
+And this is a run that's initialized from
+
+60
+00:06:00,004 --> 00:06:05,008
+an arbitrary state. And this is one that's
+initialized from a high probability state.
+
+61
+00:06:05,008 --> 00:06:10,009
+And you look at those and you say, has it
+mixed relative to this criterion, the
+
+62
+00:06:10,009 --> 00:06:17,006
+answer is maybe. It looks okay but you're
+not entirely sure. But we can look at
+
+63
+00:06:17,006 --> 00:06:23,009
+other statistics. Oh, sorry. Let's look at
+another example. What about this one? Here
+
+64
+00:06:23,009 --> 00:06:28,001
+is again, again an example of two runs,
+one of which is initialized from an
+
+65
+00:06:28,001 --> 00:06:32,006
+arbitrary state, and initialized from a
+high probability state. And you can see
+
+66
+00:06:32,006 --> 00:06:36,008
+that the log probability values are
+nowhere close to each other. And so the
+
+67
+00:06:36,008 --> 00:06:41,001
+next case, the answer is definitely not.
+These are two runs of the chain, and
+
+68
+00:06:41,001 --> 00:06:47,005
+really neither is mixed. And so you need
+to run for a lot longer, which, you know,
+
+69
+00:06:47,005 --> 00:06:52,003
+this comes up, goes, this goes up to
+600,000, so kind of indicates to you how,
+
+70
+00:06:52,005 --> 00:06:58,002
+much time this might take. A different
+statistic, a different way of looking at
+
+71
+00:06:58,002 --> 00:07:03,004
+this, is for a different kind of
+statistic. So now we have, for example,
+
+72
+00:07:03,004 --> 00:07:09,004
+the probability relative to a window that
+we compute in the chain. So remember, all
+
+73
+00:07:09,004 --> 00:07:15,005
+of this is relative to a window in the
+chain. After we hope that mixing has taken
+
+74
+00:07:15,005 --> 00:07:21,005
+place. And now we compute the probability
+that, within states of this region, what
+
+75
+00:07:21,005 --> 00:07:27,008
+is the probability of, that. The states
+are in subsets. So, for example, the set
+
+76
+00:07:27,008 --> 00:07:36,004
+of states where. X3 is equal to two. And
+now we compute, that statistic, using the
+
+77
+00:07:36,004 --> 00:07:43,004
+two initializations of the chains. So this
+is chain one, or run one, and this is
+
+78
+00:07:43,004 --> 00:07:50,006
+run two. And now, we do a scatter-plot,
+for, for different statistics. So each of
+
+79
+00:07:50,006 --> 00:07:57,000
+these points. This is the probability,
+say, of X3=, X3=value two. This might be
+
+80
+00:07:57,000 --> 00:08:04,005
+the probability that X1 is=to zero. This
+might be some other probability that, you
+
+81
+00:08:04,005 --> 00:08:12,002
+know, X5 is=to seven. And so each of these
+is a statistic. And what you see here is a
+
+82
+00:08:12,002 --> 00:08:19,008
+scatter plot. One is the estimate that
+they get from the one chain and from the
+
+83
+00:08:19,008 --> 00:08:25,009
+other. And looking at this. It should be
+obvious that this first chain has not,
+
+84
+00:08:25,009 --> 00:08:31,004
+the, we have not gotten mixing on the
+left-hand side. Because you can see that
+
+85
+00:08:31,004 --> 00:08:37,005
+there are all these points here. But have
+high probability in one of the two runs
+
+86
+00:08:37,005 --> 00:08:44,000
+and a probability zero in the other. And
+vise versa. Where here most of the
+
+87
+00:08:44,000 --> 00:08:48,009
+estimates are clustered around the
+diagonal, so you're getting similar
+
+88
+00:08:48,009 --> 00:08:56,002
+estimates from the two chains. And so
+again, this one is a, the first one is a
+
+89
+00:08:56,002 --> 00:09:02,009
+clear no and the second one is, maybe. And
+if I do a lot of these statistics and they
+
+90
+00:09:02,009 --> 00:09:09,008
+all come up with maybe then I'm willing to
+trust the answers and assume that mixing
+
+91
+00:09:09,008 --> 00:09:15,009
+is taking place. So now that I've started
+to collecting samples, how do I use these
+
+92
+00:09:15,009 --> 00:09:23,003
+samples? Well, one important observation
+to keep in mind is that once the chain is
+
+93
+00:09:23,003 --> 00:09:29,008
+mixed. All of my samples are from a
+stationary distribution, that is this X(t)
+
+94
+00:09:29,008 --> 00:09:36,004
+is from Pi, so is X(t+one), T+2, T+3, and so on and so forth
+
+95
+00:09:36,004 --> 00:09:41,005
+[sound], and so, we can. Use every single
+one of those samples, because they are
+
+96
+00:09:41,005 --> 00:09:46,003
+from the correct distribution. So once I
+determine that a, that a sample is long
+
+97
+00:09:46,003 --> 00:09:50,008
+enough for mixing or believed that a
+sample are long enough for mixing, we
+
+98
+00:09:50,008 --> 00:09:55,009
+should collect and use all the samples.
+And in fact, there are you might need some
+
+99
+00:09:55,009 --> 00:10:00,007
+papers and say I am going to collect every
+hundredth sample. There are actually
+
+100
+00:10:00,007 --> 00:10:05,005
+papers that prove that using every single
+sample is better than collecting every
+
+101
+00:10:05,005 --> 00:10:10,001
+hundredth sample. But then you might ask,
+well why would those papers tell me that I
+
+102
+00:10:10,001 --> 00:10:14,003
+should only collect every 100 samples,
+opposed to collecting all the samples if
+
+103
+00:10:14,003 --> 00:10:19,000
+they're all from the correct distribution.
+Because and this is undoubtedly true,
+
+104
+00:10:19,000 --> 00:10:24,005
+adjacent samples, ones that are nearby to
+each other in time are correlated with
+
+105
+00:10:24,005 --> 00:10:30,003
+each other. Because how even if X(t) is from
+the right distribution pie and so is X(t+1)
+
+106
+00:10:30,003 --> 00:10:35,008
+one, X(t+1) is still gonna be close to
+T, close to X(t), and so you are not really
+
+107
+00:10:35,008 --> 00:10:41,003
+getting two different sample, you are
+getting two that are very close relatives
+
+108
+00:10:41,003 --> 00:10:46,008
+to each other. Now, as I said, it's
+important to recognize that phenomenon,
+
+109
+00:10:46,008 --> 00:10:52,003
+because it's important to realize that
+just because you've reached mixing and
+
+110
+00:10:52,003 --> 00:10:58,002
+collected 1000 samples, doesn't mean you
+have 1000 samples worth of information. So
+
+111
+00:10:58,002 --> 00:11:04,004
+you shouldn't go back and apply the, apply
+the, you know, one of the bounds that we
+
+112
+00:11:04,004 --> 00:11:12,001
+saw in, assuming you have IID samples. The
+samples are not. I, I d. So, but that
+
+113
+00:11:12,001 --> 00:11:18,009
+doesn't mean you shouldn't use them. Using
+them is still better than not. Now this is
+
+114
+00:11:18,009 --> 00:11:23,006
+where you get bitten twice by the same
+phenomenon. The worse a chain is to mix,
+
+115
+00:11:23,006 --> 00:11:28,003
+so the longer you need to wait for the
+initial, for the initial samples to be
+
+116
+00:11:28,003 --> 00:11:33,001
+good enough, the more correlated the
+samples are because the slower you moving
+
+117
+00:11:33,001 --> 00:11:38,000
+around in space in general. And so, if the
+chain is bad it's bad in two different
+
+118
+00:11:38,000 --> 00:11:42,008
+ways. It's bad because you took longer to
+mix and it's bad because the samples
+
+119
+00:11:42,008 --> 00:11:47,003
+you're collecting are not as useful
+because of the correlation structure
+
+120
+00:11:47,003 --> 00:11:53,005
+between the samples. So to summarize,
+first the algorithm and then the
+
+121
+00:11:53,005 --> 00:11:59,008
+implications. Here's how we would actually
+end up using a Markov chain. So first of
+
+122
+00:11:59,008 --> 00:12:06,001
+all, I'm running C chains in parallel and
+I'm going to sample an initial state from
+
+123
+00:12:06,001 --> 00:12:12,007
+each of them. And then I'm going to repeat
+until a reach some determination that
+
+124
+00:12:12,007 --> 00:12:19,004
+mixing has taken place. And, what I do is
+I forward march each of the chains using a
+
+125
+00:12:19,004 --> 00:12:25,008
+random walk process, where I generate the
+P plus the first sample from the peak
+
+126
+00:12:25,008 --> 00:12:33,000
+sample for that corresponding chain. Then
+I compare windows statistics of the type
+
+127
+00:12:33,000 --> 00:12:38,005
+that we showed earlier in the different
+chains to try and determine whether mixing
+
+128
+00:12:38,005 --> 00:12:45,007
+has taken place. And then I repeat until I
+am co-, confident in the mixing
+
+129
+00:12:45,007 --> 00:12:53,001
+properties. With that, I now repeat, until
+there is sufficient samples to collect
+
+130
+00:12:53,001 --> 00:12:59,006
+data. So I start out with an empty sample
+set, and then for each of my chains, I
+
+131
+00:12:59,006 --> 00:13:07,004
+generate, a sample. And I put it in my
+sample set. And I repeat until I have
+
+132
+00:13:07,004 --> 00:13:16,009
+enough, enough samples. And then finally,
+when I've collected enough samples. I can
+
+133
+00:13:16,009 --> 00:13:22,006
+go ahead, and compute the expectation, in
+anything that I care about. Whether it's
+
+134
+00:13:22,006 --> 00:13:30,003
+an indicator function or a more
+complicated function. Summarizing the
+
+135
+00:13:30,003 --> 00:13:35,008
+implications. Markov chains are a very
+general-purpose class of methods for doing
+
+136
+00:13:35,008 --> 00:13:41,002
+approximate inference in a, in general
+probabilistic models. Not even necessarily
+
+137
+00:13:41,002 --> 00:13:46,008
+probabilistic graphical models. They're
+often very easy to implement, because the
+
+138
+00:13:46,008 --> 00:13:52,002
+local sampling that we're doing is often
+quite straightforward to execute. And it
+
+139
+00:13:52,002 --> 00:13:57,007
+has good theoretical properties as we
+sample, as we generate enough samples that
+
+140
+00:13:57,007 --> 00:14:03,004
+are, sufficiently far away from our
+starting distribution. Unfortunately these
+
+141
+00:14:03,004 --> 00:14:09,000
+theoretical guarantees are. Very
+theoretical, in many cases. And so this
+
+142
+00:14:09,000 --> 00:14:14,007
+method also has some significant cons.
+First, it has a very large number of
+
+143
+00:14:14,007 --> 00:14:21,000
+tunable parameters and design choices.
+What's my mixing time? Which statistics do
+
+144
+00:14:21,000 --> 00:14:27,002
+I measure? How close are the statistics to
+each other, in order for me to declare
+
+145
+00:14:27,002 --> 00:14:33,008
+that mixing has taken place? How many
+samples do I collect? Do I, what window
+
+146
+00:14:33,008 --> 00:14:40,000
+size do I use to evaluate mixing? All of
+these are design choices, they all make a
+
+147
+00:14:40,000 --> 00:14:45,009
+difference. And so there's a lot of
+finicky tuning that needs to be done when
+
+148
+00:14:45,009 --> 00:14:52,004
+running an MCMC method in practice. The
+second is that depending on the design of
+
+149
+00:14:52,004 --> 00:14:57,008
+the chain this can be quite slow to
+converge because it's very difficult to
+
+150
+00:14:57,008 --> 00:15:03,003
+design chains that have good mixing
+properties. And finally it's very hard to
+
+151
+00:15:03,003 --> 00:15:09,000
+tell whether a chain is working. That is,
+it's not straightforward to determine
+
+152
+00:15:09,000 --> 00:15:14,001
+whether the chain has mixed and how,
+whether my samples are sufficiently
+
+153
+00:15:14,001 --> 00:15:19,009
+uncorrelated with each other that I'm
+getting a reliable estimate of whatever it
+
+154
+00:15:19,009 --> 00:15:25,001
+is that I'm trying to figure out. So, a
+lot of advantages, but also some
+
+155
+00:15:25,001 --> 00:15:27,001
+significant disadvantages.

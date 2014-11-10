@@ -1,0 +1,1053 @@
+
+1
+00:00:00,000 --> 00:00:05,805
+Until now we've tackled the problem of
+learning a model, structure, or parameters
+
+2
+00:00:05,805 --> 00:00:11,683
+from the case of complete data. We're now
+going to move to what turns out to be a
+
+3
+00:00:11,683 --> 00:00:17,344
+much harder situation, where we're trying
+to learn when we have only partially
+
+4
+00:00:17,344 --> 00:00:24,357
+observed data. This arises in a variety
+of settings. It arises when we have a
+
+5
+00:00:24,357 --> 00:00:30,085
+scenario where we, where some variables
+are just never observed. They are hidden
+
+6
+00:00:30,085 --> 00:00:35,522
+or latent. It also occurs when some
+variables are just missing because some
+
+7
+00:00:35,522 --> 00:00:41,802
+measurements weren't taken. It turns out
+as will see that these settings provide
+
+8
+00:00:41,802 --> 00:00:47,555
+significant challenges both in terms of
+the foundations defining the learning
+
+9
+00:00:47,555 --> 00:00:53,381
+tasks in a reasonable way and from a
+computational perspective where as we see
+
+10
+00:00:53,381 --> 00:00:58,617
+the computational issues that arise in
+this incomplete data setting or
+
+11
+00:00:58,617 --> 00:01:04,627
+considerably more challenging. I mention
+latent variables. Let's try to argue why
+
+12
+00:01:04,627 --> 00:01:10,780
+we might care about latent variables. So,
+one reason is latent variables can often
+
+13
+00:01:10,780 --> 00:01:16,857
+give rise to sparser and therefore easier
+to learn models. So let's imagine that
+
+14
+00:01:16,857 --> 00:01:24,103
+this is my true network. G star, where we
+have three variables leading into this
+
+15
+00:01:24,103 --> 00:01:29,940
+variable, H, and then the three variables
+at the bottom. And if all variables are
+
+16
+00:01:29,940 --> 00:01:35,260
+binary, then this is a network that can
+be parameterized with seventeen
+
+17
+00:01:35,260 --> 00:01:41,437
+independent parameters. But now, let's
+imagine that I've decided that h is
+
+18
+00:01:41,437 --> 00:01:47,864
+latent. And I'm just going to learn the
+network over the observable variables which
+
+19
+00:01:47,864 --> 00:01:54,212
+are the x's and the y's. And, so what is
+the network that correctly captures the
+
+20
+00:01:54,212 --> 00:02:00,237
+structure of the distribution p over x
+one, x two, x three, y one, y two and y
+
+21
+00:02:00,237 --> 00:02:09,091
+three. And it turns out that this network,
+if you think about this, has first because
+
+22
+00:02:09,091 --> 00:02:19,279
+H is not there, an edge from every X to
+every Y. And furthermore. Because the Ys
+
+23
+00:02:19,279 --> 00:02:24,329
+are no longer conditionally independent,
+given the X's, because they're only
+
+24
+00:02:24,329 --> 00:02:29,447
+conditionally independent, given the H
+that I don't observe. Then I have also
+
+25
+00:02:29,447 --> 00:02:34,766
+edges between the Ys directly. So the
+spaghetti actually turns out to look like
+
+26
+00:02:34,766 --> 00:02:40,220
+this, with a total of 59 parameters in the
+network. So by dropping this one latent
+
+27
+00:02:40,220 --> 00:02:45,202
+variable, I've created a model which is
+much harder to learn. Now, of course,
+
+28
+00:02:45,202 --> 00:02:51,848
+learning a model with the latent variables
+is, by itself, a, A problematic situation
+
+29
+00:02:51,848 --> 00:03:01,666
+but it may well be worth the tradeoff. So
+the other reason why we might care about
+
+30
+00:03:01,666 --> 00:03:06,417
+learning latent variables is because they
+might be interesting. They might provide
+
+31
+00:03:06,417 --> 00:03:11,604
+us with an interesting characterization of
+structure in the data, and I'll give
+
+32
+00:03:11,604 --> 00:03:16,791
+examples of that in a later module. But
+for the moment, just as a teaser, imagine
+
+33
+00:03:16,791 --> 00:03:22,175
+that we have a data set corresponding to
+3D point clouds, that are scanned of a
+
+34
+00:03:22,175 --> 00:03:27,494
+human body. And we would like to discover
+from that, what are the, what is the limb
+
+35
+00:03:27,494 --> 00:03:33,009
+structure of the person, that, to which
+the scans correspond? That is, we want to
+
+36
+00:03:33,009 --> 00:03:38,921
+identify clusters in the data, cluster in
+the point cloud, that correspond
+
+37
+00:03:38,921 --> 00:03:46,230
+to body parts. And so we want to basically
+end up with an output where each point has
+
+38
+00:03:46,230 --> 00:03:53,972
+a latent variable representing which body
+part it belongs to. So having motivated
+
+39
+00:03:53,972 --> 00:03:59,224
+why we might care about missing data,
+let's think about some of the complexities
+
+40
+00:03:59,224 --> 00:04:04,738
+that arise. So let's imagine that somebody
+gives us this sequence over here and says,
+
+41
+00:04:04,738 --> 00:04:09,924
+you know, here's these question marks,
+marks that correspond to missing data. How
+
+42
+00:04:09,924 --> 00:04:14,954
+do we treat this? And the answer is, if
+you don't know why these data are missing,
+
+43
+00:04:14,954 --> 00:04:19,739
+you have no idea how to proceed. And so to
+understand that, let's consider two
+
+44
+00:04:19,739 --> 00:04:24,647
+different scenarios. The first one is an
+experimenter is asked to toss the coin.
+
+45
+00:04:24,647 --> 00:04:29,494
+And occasionally, the, the coin misses the
+table, and drops on the floor, and the
+
+46
+00:04:29,494 --> 00:04:34,154
+experimenter is, you know, too tired to go
+crawl under the table to see what
+
+47
+00:04:34,154 --> 00:04:39,001
+happened. And so they don't record the
+value of the coin in the cases where it
+
+48
+00:04:39,001 --> 00:04:46,237
+fell on the floor. Case two is the coin is
+tossed but the experimenter doesn't like
+
+49
+00:04:46,237 --> 00:04:52,540
+tails. For some reason tails are, are you
+know, give him the heebie jeebies and so
+
+50
+00:04:52,540 --> 00:04:59,219
+tails are not reported sometimes. Note in
+these two cases really should give rise to
+
+51
+00:04:59,219 --> 00:05:04,874
+very different estimation procedures if we
+are trying to learn from this dataset.
+
+52
+00:05:04,874 --> 00:05:11,207
+Specifically, in the first case, we should
+probably just ignore the question marks and
+
+53
+00:05:11,207 --> 00:05:16,938
+just learn from the sequence of observed
+instances, HTHH. Because the other one,
+
+54
+00:05:16,938 --> 00:05:23,139
+beside from being missing it doesn't help
+anything about the point. In case two on
+
+55
+00:05:23,139 --> 00:05:29,268
+the other hand, we can't really ignore the
+missing measurements. We need to learn
+
+56
+00:05:29,268 --> 00:05:35,626
+from the sequence H T, T, T H T H, because
+ignoring the missing values is effectively
+
+57
+00:05:35,626 --> 00:05:41,525
+ignoring something that is, predominantly or
+entirely tails. And so, we can get
+
+58
+00:05:41,525 --> 00:05:48,956
+incorrect estimates if we just ignore
+them. So in order to correctly learn the
+
+59
+00:05:48,956 --> 00:05:55,648
+missing data we need to actually consider
+the, the mechanism by which the data was
+
+60
+00:05:55,648 --> 00:06:02,362
+made to be missing. And so how do we model
+the notion of missing data? So, let's
+
+61
+00:06:02,362 --> 00:06:08,372
+imagine that we have a set of random
+variables that, that define our model,
+
+62
+00:06:08,372 --> 00:06:14,303
+and, in some instances, we may observe
+some, but not others. And so we're going
+
+63
+00:06:14,303 --> 00:06:20,781
+to define a set of observability variables
+which are always observed. And basically,
+
+64
+00:06:20,781 --> 00:06:29,582
+O sub I tells us, is one if XI is
+observed. And zero otherwise. And so we
+
+65
+00:06:29,582 --> 00:06:33,716
+always know whether we observe the
+variable or not, and so OI is always
+
+66
+00:06:33,716 --> 00:06:39,038
+observed. And now we're going to add a new
+set of random variables, which are also
+
+67
+00:06:39,038 --> 00:06:46,524
+always observed. These are the variables
+that we're going to call yi which have the
+
+68
+00:06:46,524 --> 00:06:54,050
+same value as xi. So each one has the same
+value space as xi. Except that there is
+
+69
+00:06:54,050 --> 00:07:00,927
+also the, I didn't get to observe it
+value. And so in the real data case, we,
+
+70
+00:07:00,927 --> 00:07:08,453
+in the real scenario, we basically get to
+observe the y and we get to observe the
+
+71
+00:07:08,453 --> 00:07:15,511
+o's and the x's are not observed. Now, the Y's are a deterministic function of the X's
+
+72
+00:07:15,511 --> 00:07:21,356
+and the O's. So Y is equal, YI is equal to
+XI when O is observed. And is equal to
+
+73
+00:07:21,356 --> 00:07:27,274
+question mark when O is not observed. So
+in the cases wh-, where the val-, where I
+
+74
+00:07:27,274 --> 00:07:33,489
+have OI is equal to one, I can reconstruct
+the value of XI. But for the cases where I
+
+75
+00:07:33,489 --> 00:07:39,482
+don't have the observation, I can't. And
+so this is a way of just defining the, the
+
+76
+00:07:39,482 --> 00:07:46,516
+observability, pattern that I have. With
+this set of variables, I can now model the
+
+77
+00:07:46,516 --> 00:07:52,195
+two, the two different scenarios that we
+had before. In this scenario. This
+
+78
+00:07:52,195 --> 00:07:57,806
+corresponds to the coin falling on the
+ground every once in awhile. We have a
+
+79
+00:07:57,806 --> 00:08:03,865
+separate model over here that represents
+our, our observability pattern and we see
+
+80
+00:08:03,865 --> 00:08:10,149
+that a variable is sometimes observed by
+chance. And that the target and observed
+
+81
+00:08:10,149 --> 00:08:16,358
+value Y depends on X and on O, but there
+is no interaction between the value of the
+
+82
+00:08:16,358 --> 00:08:22,873
+coin and whether I end up observing it or
+not. By comparison, in the case where the,
+
+83
+00:08:23,099 --> 00:08:29,054
+experimenter doesn't like tails, we see
+that the X, that the true value of the X
+
+84
+00:08:29,054 --> 00:08:35,160
+variable affects whether it's observed or
+not. And so, we have an edge from X to O.
+
+85
+00:08:36,900 --> 00:08:43,261
+So when can, in which of those cases can
+we ignore the missing data mechanisms, and
+
+86
+00:08:43,261 --> 00:08:49,623
+focus only on the likelihood of the stuff
+that I get to observe? And the answer is,
+
+87
+00:08:49,623 --> 00:08:56,062
+one can define a notion called "missing at
+random." Missing at random is a way for me
+
+88
+00:08:56,062 --> 00:09:05,003
+to say I can ignore the mechanism. With
+the observability and focus only on this
+
+89
+00:09:05,003 --> 00:09:14,909
+piece over here. Personal famous
+[inaudible]. So one can show that it
+
+90
+00:09:14,909 --> 00:09:24,855
+suffices for this question, for focusing
+only on the likelihood, that this
+
+91
+00:09:24,855 --> 00:09:35,210
+distribution over X and Y and O have the
+following characteristics. That the
+
+92
+00:09:35,210 --> 00:09:48,297
+observation variables, O. [inaudible] are
+independent of the unobserved X's. Which
+
+93
+00:09:48,297 --> 00:09:59,820
+we're going to denote h, given the
+observed values. Y, which are my data
+
+94
+00:09:59,820 --> 00:10:07,282
+instances. Which means that if, you tell
+me the values that you observe, then the
+
+95
+00:10:07,282 --> 00:10:12,531
+fact that something may or may not been
+observed doesn't carry any additional
+
+96
+00:10:12,531 --> 00:10:17,981
+information. Now this is a little bit of a
+tricky notion, so let's try and give an
+
+97
+00:10:17,981 --> 00:10:24,398
+example. Imagine that a doctor, a patient
+come, comes into the doctor's office, and
+
+98
+00:10:24,398 --> 00:10:30,123
+the doctor chooses what set of tests to
+perform. For example, the doctor chooses
+
+99
+00:10:30,123 --> 00:10:36,040
+to perform or not perform say, a chest
+x-ray. The fact that the doctor didn't
+
+100
+00:10:36,040 --> 00:10:42,165
+chose to perform a chest x-ray. Probably
+indicates that the person didn't come in
+
+101
+00:10:42,165 --> 00:10:47,988
+with a deep cough or some other symptom,
+or some other symptom that suggested
+
+102
+00:10:47,988 --> 00:10:53,455
+tuberculosis or pneumonia. And therefore
+the test wasn't performed. So, the
+
+103
+00:10:53,455 --> 00:10:59,025
+observation or lack thereof, of a chest
+x-ray, the fact that a chest x-ray doesn't
+
+104
+00:10:59,025 --> 00:11:04,663
+exist in my patient?s record, is probably
+an indication that the patient didn't have
+
+105
+00:11:04,663 --> 00:11:10,912
+tuberculosis or pneumonia. So, these are
+not independent. So, in that model. We do
+
+106
+00:11:10,912 --> 00:11:16,445
+not have the missing at random. Assumption
+holding because the observability pattern
+
+107
+00:11:16,445 --> 00:11:21,979
+tells me something about the disease which
+is the unobserved valuable that I care
+
+108
+00:11:21,979 --> 00:11:27,310
+about. On the other hand, if I have in my
+medical record. Things like the primary
+
+109
+00:11:27,310 --> 00:11:32,538
+complaint, that the patient came in. For
+example, a broken leg. Then at that point,
+
+110
+00:11:32,538 --> 00:11:37,624
+given that the primary complaint was a
+broken leg I already know that the patient
+
+111
+00:11:37,624 --> 00:11:42,151
+is likely didn't have tuberculosis or
+pneumonia. And therefore given that
+
+112
+00:11:42,337 --> 00:11:46,679
+observed feature, observed variable which
+is the primary complaint, the
+
+113
+00:11:46,679 --> 00:11:51,889
+observability pattern no longer gives me
+any information about the variables that I
+
+114
+00:11:51,889 --> 00:11:56,354
+didn't observe. And so that is the
+difference between a scenario that is
+
+115
+00:11:56,354 --> 00:12:02,133
+missing at random and a scenario that
+isn't missing at random. For the perspe-,
+
+116
+00:12:02,133 --> 00:12:06,915
+for the, for the purposes of our
+discussion, we're going to make the
+
+117
+00:12:06,915 --> 00:12:14,972
+missing random assumption from here on.
+What's the next complication with the case
+
+118
+00:12:14,972 --> 00:12:23,523
+of incomplete data? It turns out that the
+likelihood can have multiple, global
+
+119
+00:12:23,523 --> 00:12:31,626
+maximum. So, intuitively, that's almost,
+almost obvious. Because, if you have a
+
+120
+00:12:31,626 --> 00:12:38,235
+hidden variable. That has two values, zero
+and one. The values of zero and one don't
+
+121
+00:12:38,235 --> 00:12:44,279
+mean anything. We could rename the one and
+zero. And just invert everything. And it
+
+122
+00:12:44,279 --> 00:12:50,174
+would basically give us an exact the
+equivalent model to the one with zero and
+
+123
+00:12:50,174 --> 00:12:55,622
+one. Because the names don't mean
+anything. So that immediately means, that
+
+124
+00:12:55,622 --> 00:13:01,293
+I have a reflection of my likelihood
+function that occurs when I rename the
+
+125
+00:13:01,293 --> 00:13:06,087
+variables. And, it turns out that this is
+not something that happens just in this
+
+126
+00:13:06,087 --> 00:13:10,367
+case. When I have multiple hidden
+variables the problem only becomes worse
+
+127
+00:13:10,367 --> 00:13:15,166
+because the number of local, the number of
+global maxima becomes exponentially
+
+128
+00:13:15,166 --> 00:13:19,736
+large in the number of hidden variables.
+And so now we have a function with
+
+129
+00:13:19,736 --> 00:13:25,086
+exponentially many reflections of itself
+and it turns out that this can also occur
+
+130
+00:13:25,086 --> 00:13:30,307
+when you have missing data not just with hidden
+variables. So even if I already have a
+
+131
+00:13:30,307 --> 00:13:35,979
+data where, where only some occurrences of
+a variable are missing its value, even that
+
+132
+00:13:35,979 --> 00:13:41,578
+can give me multiple local in global
+maximum. So to understand that a little
+
+133
+00:13:41,578 --> 00:13:47,376
+bit in more depth, let's go back to the
+comparisons between the likelihood in the
+
+134
+00:13:47,376 --> 00:13:53,820
+complete data case and the likelihood in
+the incomplete data case. So, here is a
+
+135
+00:13:53,820 --> 00:13:59,931
+simple model where I have two variables x
+and y with x being a parent of y. And I
+
+136
+00:13:59,931 --> 00:14:06,041
+have three instances and if we just go
+ahead and write down the complete data
+
+137
+00:14:06,041 --> 00:14:11,548
+likelihood. It turns out to have the
+following beautiful form which we've
+
+138
+00:14:11,548 --> 00:14:17,760
+already seen before. Where we have, the
+product of probability is for the three
+
+139
+00:14:17,760 --> 00:14:23,508
+instances. And, each of these can be,
+we've omitted writing the parameters for
+
+140
+00:14:23,508 --> 00:14:29,990
+clarity, and that's going to be equal to,
+here is. The, probability for theta X0, Y0
+
+141
+00:14:29,990 --> 00:14:37,004
+given the parameters, the second instance,
+and the third instance. And the point is
+
+142
+00:14:37,004 --> 00:14:44,210
+this ends up being a nice decomposable
+function of the parameters. As, in terms
+
+143
+00:14:44,210 --> 00:14:49,283
+of, of a product, which, when we take the
+log, ends up being a sum. So the
+
+144
+00:14:49,283 --> 00:14:54,226
+likelihood decomposes. It decomposes by
+variables and it decomposes within the
+
+145
+00:14:54,226 --> 00:15:00,087
+CPD. What about the incomplete data case?
+Let's make our life a little bit more
+
+146
+00:15:00,087 --> 00:15:05,369
+complicated, and, whereas before we had
+these complete instances, now notice that
+
+147
+00:15:05,369 --> 00:15:10,384
+these, both of these instances have an
+incomplete observation regarding the
+
+148
+00:15:10,384 --> 00:15:16,784
+variable, X. And now let's write down the
+likelihood function in this case. Well,
+
+149
+00:15:16,784 --> 00:15:22,673
+the likelihood function is now the
+probability of Y0, which is the first data
+
+150
+00:15:22,673 --> 00:15:28,791
+instance, times the probability of X0 Y1,
+which is the second data instance, times
+
+151
+00:15:28,791 --> 00:15:35,018
+another probability of Y0. So, since Pi P
+of Y zero appears twice of we've squared
+
+152
+00:15:35,018 --> 00:15:40,498
+this term over here and the probability of
+Y zero is the sum over X of the
+
+153
+00:15:40,498 --> 00:15:46,417
+probability of X comma Y zero. That is you
+have to consider both possible ways of
+
+154
+00:15:46,417 --> 00:15:52,794
+completing the data X for the different
+values of X. X zero and X one. And so if
+
+155
+00:15:52,794 --> 00:16:00,651
+we unravel this expression inside the
+parentheses, it ends up looking like this:
+
+156
+00:16:00,651 --> 00:16:08,172
+Theta X0 times Theta Y0X0 plus Theta X1,
+Theta Y0 given X1. And the important
+
+157
+00:16:08,172 --> 00:16:13,484
+observation about this expression, is that
+it is not a product of parameters in the
+
+158
+00:16:13,484 --> 00:16:18,797
+model. Which means we cannot take its log
+and have it decompose over parameters of
+
+159
+00:16:18,797 --> 00:16:23,767
+this summation. Because a log of a
+summation doesn't, doesn't decompose. And
+
+160
+00:16:23,767 --> 00:16:29,200
+so that means that our nicely
+compositioned properties of the likelihood
+
+161
+00:16:29,200 --> 00:16:35,303
+function have disappeared in the case of
+incomplete data. It does not decompose by
+
+162
+00:16:35,303 --> 00:16:41,480
+variables. Notice we have a theta. For the
+X variable sitting in the same expression
+
+163
+00:16:41,480 --> 00:16:46,746
+as an entry from the P of Y given
+X CPD. It does not decompose within
+
+164
+00:16:46,746 --> 00:16:52,292
+CPD and even computing this likelihood
+function actually requires that we do a
+
+165
+00:16:52,292 --> 00:16:57,557
+sum product computation. So it requires
+effectively a form of probabilistic
+
+166
+00:16:57,557 --> 00:17:04,035
+inference. So what does that imply both of
+these properties that we talked about in
+
+167
+00:17:04,035 --> 00:17:08,999
+previous slide? What does that imply
+about the likelihood function? Before, our
+
+168
+00:17:08,999 --> 00:17:14,215
+likelihood function had the form of these
+gray lines over here. So for example like
+
+169
+00:17:14,215 --> 00:17:21,486
+this. This is a likelihood function of the
+complete data scenario. Then, when we have
+
+170
+00:17:21,486 --> 00:17:29,421
+a multi, when we have a case of incomplete
+data we're effectively summing up the
+
+171
+00:17:29,421 --> 00:17:37,257
+probability of all possible completions of
+the unobserved variables and so the
+
+172
+00:17:37,257 --> 00:17:45,126
+overall likelihood function ends up being
+a product of Ends up being a summation,
+
+173
+00:17:45,126 --> 00:17:51,476
+sorry. A summation of likelihood functions
+that corresponds to the different ways
+
+174
+00:17:51,476 --> 00:17:58,140
+that I have to complete the data. So this
+end up being, where this is one summation.
+
+175
+00:17:58,140 --> 00:18:04,589
+So the likelihood function ends up being a
+sum of. Like, some of these nice concave
+
+176
+00:18:04,589 --> 00:18:09,936
+likelihood functions. Well [inaudible]
+concave likelihood functions. But the
+
+177
+00:18:09,936 --> 00:18:15,211
+point is, when you add them all up it doesn't look so nice at all. It ends up having multiple
+
+178
+00:18:15,211 --> 00:18:22,014
+modes and it's very much harder to deal
+with. The second problem that we have, in
+
+179
+00:18:22,014 --> 00:18:27,858
+addition to multi modality, is the fact
+that the parameters start being correlated
+
+180
+00:18:27,858 --> 00:18:33,560
+with each other. So if you remember when
+we were doing the case of complete data,
+
+181
+00:18:33,774 --> 00:18:38,691
+we had the likelihood function being
+composed as a product of little
+
+182
+00:18:38,691 --> 00:18:44,464
+likelihoods for the different parameters.
+What happens when we have an incomplete,
+
+183
+00:18:44,678 --> 00:18:50,237
+data scenario? So, when you look at this,
+you can see, for example, that when X is
+
+184
+00:18:50,237 --> 00:18:58,002
+not observed, that when X is not observed.
+You have an active V structure that goes
+
+185
+00:18:58,002 --> 00:19:05,214
+from theta YX through Y all the way to
+theta X. And so intuitively that suggests
+
+186
+00:19:05,214 --> 00:19:11,730
+to us that there is a correlation, an
+interaction, between the values that I
+
+187
+00:19:11,730 --> 00:19:19,562
+chose for theta Y given X and for theta X.
+And when you think about the intuition for
+
+188
+00:19:19,562 --> 00:19:26,060
+that, it makes perfect sense. Because, for
+example, if theta X chooses to make XO
+
+189
+00:19:26,060 --> 00:19:32,225
+very, very likely, then most of the
+instances where X is unobserved will be
+
+190
+00:19:32,225 --> 00:19:39,397
+assigned to the XO case, and that's going
+to basically, have me, you can assign the
+
+191
+00:19:39,397 --> 00:19:45,220
+data instances to the x0 and that's going
+to change the estimates of theta y given x0
+
+192
+00:19:45,220 --> 00:19:50,632
+relative to theta y given x1 because most
+of the instances now correspond to x0
+
+193
+00:19:50,632 --> 00:19:56,861
+rather than x1. In absence of correlation
+between sum and to see that correlation
+
+194
+00:19:56,861 --> 00:20:02,632
+manifesting. Let's look at some graphs.
+And so what we're seeing here is actually
+
+195
+00:20:02,632 --> 00:20:08,547
+the correlation between two entries in the
+CPD theta y given x. So, over here we see
+
+196
+00:20:08,547 --> 00:20:14,352
+theta y given x0 and here is theta one
+given x1. What you see here is the contour
+
+197
+00:20:14,352 --> 00:20:20,031
+plot of the likelihood function, a data
+points and zero missing measurements and
+
+198
+00:20:20,031 --> 00:20:25,709
+you can see that this is a nice product
+likelihood function with a nice peak in
+
+199
+00:20:25,709 --> 00:20:32,300
+the middle and there's no interaction
+between two parameters. But as we start to
+
+200
+00:20:32,300 --> 00:20:37,858
+gain more, more missing measurements, you
+can see that the curves starts, that the
+
+201
+00:20:37,858 --> 00:20:43,556
+counter flocks start to deform and even
+with three missing measurements see there
+
+202
+00:20:43,556 --> 00:20:49,462
+is significant interaction between the
+value that I end up picking for theta
+
+203
+00:20:49,462 --> 00:20:55,320
+of y given x1 and the value will be end up
+theta y given x0. So to summarize
+
+204
+00:20:55,320 --> 00:21:00,320
+incomplete data, is actually something
+that arises very often in practice, and it
+
+205
+00:21:00,320 --> 00:21:05,320
+raises multiple challenges and issues. How
+are the, how are the missing values
+
+206
+00:21:05,320 --> 00:21:10,258
+generated? What makes them missing, turns
+out to be very important. The fact that
+
+207
+00:21:10,258 --> 00:21:15,571
+there are certain components of the model
+that are just unidentifiable because there
+
+208
+00:21:15,571 --> 00:21:20,634
+is several equally good solutions. So, if
+you pick the best one, you better realize
+
+209
+00:21:20,634 --> 00:21:25,830
+that there are others that are equally
+good out there. And finally the complexity
+
+210
+00:21:25,830 --> 00:21:31,357
+of the likelihood function is another
+significant complication when doing this
+
+211
+00:21:31,357 --> 00:21:34,863
+kind of when trying to deal with
+incomplete data.

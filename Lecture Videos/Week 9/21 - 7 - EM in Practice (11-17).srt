@@ -1,0 +1,660 @@
+
+1
+00:00:00,000 --> 00:00:04,539
+One simple yet extraordinarily useful
+class of probabilistic temporal models is
+
+2
+00:00:04,539 --> 00:00:09,248
+the class of hidden [inaudible] models.
+Although these models can be viewed as a
+
+3
+00:00:09,248 --> 00:00:13,560
+subclass of [inaudible] networks, we'll
+see that they have their own type of
+
+4
+00:00:13,560 --> 00:00:18,100
+structure that makes them particularly
+useful for a broad range of applications.
+
+5
+00:00:18,100 --> 00:00:24,297
+So, a hidden mark up model in its simplest
+form can be viewed as a probabilistic
+
+6
+00:00:24,297 --> 00:00:30,572
+model that has a single state variable S
+and a single observation variable O. And
+
+7
+00:00:30,572 --> 00:00:35,763
+so the model really has only two
+probabilistic pieces, there is the
+
+8
+00:00:35,763 --> 00:00:41,472
+transition model. That tells us the
+transition from one state to the next over
+
+9
+00:00:41,472 --> 00:00:46,496
+time, and then there is the observation
+model, that tells us, in a given state,
+
+10
+00:00:46,496 --> 00:00:51,471
+how likely we are to see different
+observations. Now, you can unroll this
+
+11
+00:00:51,471 --> 00:00:57,400
+simple 2TBMs. So if this is our 2TBM, you
+can unroll that to produce an unrolled
+
+12
+00:00:57,400 --> 00:01:03,029
+network, which has the same repeated
+structure of, you started this state at
+
+13
+00:01:03,029 --> 00:01:08,958
+time zero, move to the state of time one,
+and so on. And in each state, we make an
+
+14
+00:01:08,958 --> 00:01:14,694
+appropriate observation. But what's
+interesting about hidden Markov models is
+
+15
+00:01:14,694 --> 00:01:20,781
+that they often have a lot of internal
+structure that manifests most notably here
+
+16
+00:01:20,781 --> 00:01:26,646
+in the transition model. But sometimes
+also in the observation model. So here is
+
+17
+00:01:26,646 --> 00:01:32,140
+an example of what the, of what a
+structure transition model would look
+
+18
+00:01:32,140 --> 00:01:37,856
+like. And this entire model is actually an
+un-, is peering into the CPD of the
+
+19
+00:01:37,856 --> 00:01:43,207
+probability of. The state at time of the
+next state given the current state. So
+
+20
+00:01:43,207 --> 00:01:48,386
+each of these nodes in here is not a
+random variable rather it is particular
+
+21
+00:01:48,386 --> 00:01:53,095
+assignment to the state variable
+[inaudible], the state that the model
+
+22
+00:01:53,095 --> 00:01:58,677
+might be in and what you see here is the
+structure of transition matrix that tells
+
+23
+00:01:58,677 --> 00:02:03,789
+us that from S1 for example the model is
+likely to transition to S2 with
+
+24
+00:02:03,789 --> 00:02:08,634
+probability 0.7 or stay in S1 with
+probability 0.3. And so the. These two
+
+25
+00:02:08,634 --> 00:02:14,167
+outgoing probabilities have to sum to one,
+because it's a probability distribution
+
+26
+00:02:14,167 --> 00:02:19,497
+over the next state, given that, in the
+current time point, the model is in state
+
+27
+00:02:19,497 --> 00:02:24,287
+S1. And we similarly have that for all
+other states. So here, from S4, for
+
+28
+00:02:24,287 --> 00:02:29,760
+example, there is a probability of 0.9 of
+going to S2, and 0.1 of staying at S4. So
+
+29
+00:02:29,760 --> 00:02:35,360
+here the structure is actually a sparsity
+in the transition model as opposed to
+
+30
+00:02:35,360 --> 00:02:41,030
+something that manifests at the level of
+the two TDN structure which is actually
+
+31
+00:02:41,030 --> 00:02:46,121
+fairly simple. [sound] It turns out that
+this kind of structure is useful for a
+
+32
+00:02:46,121 --> 00:02:50,465
+broad range of applications. Robot
+localization, speech recognition, where
+
+33
+00:02:50,465 --> 00:02:55,041
+[inaudible] are really the method of
+choice for all current speech recognition
+
+34
+00:02:55,041 --> 00:02:59,385
+systems, biological sequence analysis,
+[inaudible], for example, annotating in
+
+35
+00:02:59,385 --> 00:03:03,903
+DNA sequence with elements that are
+functionally important and other elements
+
+36
+00:03:03,903 --> 00:03:08,421
+that are not of importance, and similarly
+annotating a text sequence with a
+
+37
+00:03:08,421 --> 00:03:13,402
+particular, annotating words with the role
+in the sentence, for example. All of these
+
+38
+00:03:13,402 --> 00:03:18,078
+are methods where hidden Markov models
+have been used with. Great success. So
+
+39
+00:03:18,078 --> 00:03:23,908
+let's look for example what the HMM would
+look like for robot localization. This
+
+40
+00:03:23,908 --> 00:03:28,313
+might not look exactly like an HM to begin
+with because it has some additional
+
+41
+00:03:28,313 --> 00:03:32,662
+variables. So, let's talk about what each
+of these variables means. Here what we
+
+42
+00:03:32,662 --> 00:03:36,732
+have here is a state variable that
+represents the robot pose, that is the
+
+43
+00:03:36,732 --> 00:03:41,360
+position and potential orientation of the
+robot within a map at each point in time.
+
+44
+00:03:41,360 --> 00:03:48,396
+We also have an external control signal,
+you, which is the guidance that the robot
+
+45
+00:03:48,396 --> 00:03:54,260
+is told to move left, move right, turn
+around. Since these variables are.
+
+46
+00:03:54,465 --> 00:03:59,946
+Observed and externally imposed, they're
+not really [inaudible] random variables.
+
+47
+00:03:59,946 --> 00:04:05,975
+They're just, inputs to the system, if you
+will. And then we have, in addition, the
+
+48
+00:04:05,975 --> 00:04:11,182
+observation variables, which is what the
+robot observes at each point in the
+
+49
+00:04:11,182 --> 00:04:16,400
+process. Which depends on both their
+position and, of course, on. The math.
+
+50
+00:04:16,400 --> 00:04:21,743
+Position, so that the robot's observations
+depend on the overall architecture of the
+
+51
+00:04:21,743 --> 00:04:26,641
+space that they're in and the state of the
+building. Now since, in many of the
+
+52
+00:04:26,641 --> 00:04:31,667
+applications that we'll be considering the
+map is observed, which is why I just
+
+53
+00:04:31,667 --> 00:04:36,883
+graded out then you can effectively think
+of this as something where the basic
+
+54
+00:04:36,883 --> 00:04:41,645
+structure. Over which where reasoning is
+just the set of variables that represent
+
+55
+00:04:41,645 --> 00:04:46,235
+the s's and the o's which is why this is
+really a slight elaboration of the
+
+56
+00:04:46,235 --> 00:04:50,884
+standard h m model. And here also we're
+going to have sparsity in the transition
+
+57
+00:04:50,884 --> 00:04:55,300
+wall because the robot can jump around
+from one state to the other within a
+
+58
+00:04:55,300 --> 00:04:59,890
+single step and so there's only going to
+be a limited set of positions at time
+
+59
+00:04:59,890 --> 00:05:04,231
+tables one given where the robot is
+[inaudible]. Speech recognition, as I
+
+60
+00:05:04,231 --> 00:05:09,628
+mentioned, is perhaps the prototypical
+HMM, success story, because it's so, it's
+
+61
+00:05:09,628 --> 00:05:14,688
+so much in common use. The speech
+recognition problem is to take a sentence,
+
+62
+00:05:14,688 --> 00:05:20,220
+such as Dorothy lived in, whatever. And
+imagine somebody is saying that. And what
+
+63
+00:05:20,220 --> 00:05:25,213
+is given is input to the probabilistic
+reasoning system, is this very noisy
+
+64
+00:05:25,213 --> 00:05:30,745
+acoustic signal that represents the, the
+values of the different, frequencies of
+
+65
+00:05:30,745 --> 00:05:35,977
+speech in a different fre-, acoustic
+frequencies at each point in time. And
+
+66
+00:05:35,977 --> 00:05:41,960
+what we would like to do is we would like
+to Take that input, and put it into a
+
+67
+00:05:41,960 --> 00:05:46,674
+decoder, that, is going to evaluate
+different possible sentences, and
+
+68
+00:05:46,674 --> 00:05:51,928
+hopefully guess what the source sentence
+is, and maybe able to predict it with
+
+69
+00:05:51,928 --> 00:05:57,061
+reasonable accuracy. So how does speech
+recognition work. So this is what an
+
+70
+00:05:57,061 --> 00:06:02,577
+acoustic signal looks like. We can see
+that over here, where at each point and
+
+71
+00:06:02,577 --> 00:06:09,008
+time we have these frequencies and we can
+convert that to the frequency spectrum. By
+
+72
+00:06:09,008 --> 00:06:14,306
+using Fourier transforms. And what we
+would like to do is we would like to break
+
+73
+00:06:14,306 --> 00:06:19,054
+up this continuous signal into. These
+pieces that correspond to words and
+
+74
+00:06:19,054 --> 00:06:24,248
+recognize for each piece that, which word
+it corresponds to. So this is a two-fold
+
+75
+00:06:24,249 --> 00:06:29,253
+problem because in general in continuous
+speech we have to build, identify the
+
+76
+00:06:29,253 --> 00:06:34,512
+boundaries between words as we are also
+trying to identify the words. And it turns
+
+77
+00:06:34,512 --> 00:06:39,580
+out that the way to do this is not to
+think about words as the basic units but
+
+78
+00:06:39,580 --> 00:06:44,840
+rather think about the smaller entities
+that are called phones or phonemes as the
+
+79
+00:06:44,840 --> 00:06:50,100
+basic units from which words are comprised
+and then as we recognize phones we can.
+
+80
+00:06:50,100 --> 00:06:56,278
+Put them together to figure out what the
+words mean. So here is a phonetic alphabet
+
+81
+00:06:56,489 --> 00:07:02,744
+one of several that break the is used to
+define how words are broken up into these
+
+82
+00:07:02,744 --> 00:07:08,296
+little pieces. And so you can see that
+these don't line up exactly with, with
+
+83
+00:07:08,296 --> 00:07:13,988
+characters in the alphabet. Because the
+same character can actually be pronounced
+
+84
+00:07:13,988 --> 00:07:19,822
+in different way, giving rise to different
+phones and vice versa. Sometimes the same
+
+85
+00:07:19,822 --> 00:07:25,093
+phones can come from different letters.
+And so what we see here are the, for
+
+86
+00:07:25,093 --> 00:07:30,105
+example, the phone called. Er we call it
+ur and is pronounced in the same way as
+
+87
+00:07:30,105 --> 00:07:34,989
+the ur in hurt. And so this is a phonetic
+alphabet, and as I said there is many of
+
+88
+00:07:34,989 --> 00:07:45,550
+those that one can consider. [sound] So,
+Once we have the phonetic alphabet, we can
+
+89
+00:07:45,550 --> 00:07:53,492
+look at a word, in this case this is the.
+Phonetic alphabet for the phonetic
+
+90
+00:07:53,492 --> 00:07:58,805
+breakdown of the word nine. N-, Nine. And,
+so you can see that this is an HMM
+
+91
+00:07:58,805 --> 00:08:04,333
+structure. This is not the DBN, this is
+the HMM of, that tells us, at each point
+
+92
+00:08:04,333 --> 00:08:09,574
+in time, whether you're within the phone
+N, I, or [noise]. And so there is a
+
+93
+00:08:09,574 --> 00:08:15,604
+self-transition loop, because you can stay
+in the same phone for more than time unit.
+
+94
+00:08:15,604 --> 00:08:21,635
+And then eventually, you transition to the
+next phone and the next phone. And this is
+
+95
+00:08:21,635 --> 00:08:28,439
+a typical HMM for a word. Now within a
+phone, a phone also lasts a certain unit
+
+96
+00:08:28,439 --> 00:08:35,812
+of time, and so what we have here is the,
+within the phone for a given, within a
+
+97
+00:08:35,812 --> 00:08:43,297
+given phone, there is a transition model.
+In this case the aa phone and it has. In
+
+98
+00:08:43,297 --> 00:08:48,685
+this case, three states. The beginning, B,
+the middle and the final. And this is a
+
+99
+00:08:48,685 --> 00:08:54,419
+fairly standard breakdown for most phones
+that have the beginning of the phone, the
+
+100
+00:08:54,419 --> 00:08:59,531
+middle and the end. And each of these,
+typically corresponds to a different
+
+101
+00:08:59,531 --> 00:09:04,920
+distribution over the acoustic signal that
+you see at that stage in the phone.
+
+102
+00:09:05,520 --> 00:09:12,493
+[sound] So if you put all these together
+if you're trying to do speech recognition
+
+103
+00:09:12,493 --> 00:09:19,131
+then, and this is for the moment speech
+recognition for isolated words, so there
+
+104
+00:09:19,131 --> 00:09:24,794
+is a start state. And then there is a
+transition model from the start state,
+
+105
+00:09:24,794 --> 00:09:30,342
+that tells us how likely we are, in the
+current state to go into one of many
+
+106
+00:09:30,342 --> 00:09:36,328
+words, and that would be a language model
+that tells us how likely different words
+
+107
+00:09:36,328 --> 00:09:41,803
+are to occur, at this point, and then
+assuming, and then given that the model
+
+108
+00:09:41,803 --> 00:09:47,989
+has transitioned to say the one. Word, the
+word one. And we can see that we now have,
+
+109
+00:09:47,989 --> 00:09:54,533
+across different points in time, that the
+model transitions to the [inaudible], and
+
+110
+00:09:54,533 --> 00:10:00,307
+then ultimately to the [inaudible]. And
+then, finally to the [inaudible]. And
+
+111
+00:10:00,307 --> 00:10:06,389
+then, at the end of it, it transitions to
+the end of the word, at which point, the
+
+112
+00:10:06,389 --> 00:10:12,126
+process circles back, and we move on to
+the next word. And the self, and the
+
+113
+00:10:12,126 --> 00:10:17,649
+transition back to the start is what
+allows us to do continued speech
+
+114
+00:10:17,649 --> 00:10:24,118
+recognition. So this is a probabilistic
+model that tells us how speech might be
+
+115
+00:10:24,118 --> 00:10:30,114
+constructed of first words, then phones
+within words and then finally pieces,
+
+116
+00:10:30,114 --> 00:10:35,952
+little bits of the phone, that we see in
+this, in the phone HMM that we saw
+
+117
+00:10:35,952 --> 00:10:43,395
+previously. And this is a generative model
+of speech but what happens is that as you
+
+118
+00:10:43,395 --> 00:10:50,330
+feed in evidence about the observed
+acoustic signal over here and you run
+
+119
+00:10:50,330 --> 00:10:57,446
+publicist inference over this model what
+you get out is the most likely set of
+
+120
+00:10:57,446 --> 00:11:04,984
+words that gave rise to the observed
+speech signal. So, to summarize. Hmms in
+
+121
+00:11:04,984 --> 00:11:10,053
+some simplistic way can be viewed as a
+subclass of the framework from [inaudible]
+
+122
+00:11:10,053 --> 00:11:14,999
+Bayesian networks. And while they seem
+unstructured when we observe them at that
+
+123
+00:11:14,999 --> 00:11:19,944
+level. When we think of structure at the
+level of random variable, there is a lot
+
+124
+00:11:19,944 --> 00:11:24,148
+of structure that manifests in the
+sparsity structure of the, of the
+
+125
+00:11:24,148 --> 00:11:28,970
+conditional probabilities and also in
+terms of repeated elements as we saw in
+
+126
+00:11:28,970 --> 00:11:33,668
+the previous slides, the phoning, the
+phone model can occur in multiple words
+
+127
+00:11:33,668 --> 00:11:38,490
+and we re, replicate that structure across
+the different places where the same.
+
+128
+00:11:38,490 --> 00:11:42,850
+[inaudible] can be used in, in the
+language. And so that gives a lot of
+
+129
+00:11:42,850 --> 00:11:47,897
+structure in the transition model that
+really doesn't manifest in any way at the
+
+130
+00:11:47,897 --> 00:11:53,130
+level of random variables. And we've seen
+that HMMs are used in a wide variety of
+
+131
+00:11:53,130 --> 00:11:57,927
+applications for sequence modeling and
+they're probably one of the most used
+
+132
+00:11:57,927 --> 00:12:00,980
+forms of probabilistic graphical models
+out there.

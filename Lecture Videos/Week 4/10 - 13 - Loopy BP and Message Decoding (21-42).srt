@@ -1,0 +1,1143 @@
+
+1
+00:00:00,000 --> 00:00:04,047
+One of the more interesting stories in the
+field of probabilistic graphical model,
+
+2
+00:00:04,047 --> 00:00:08,044
+relate to the connection between the
+algorithm of loopy belief
+
+3
+00:00:08,044 --> 00:00:12,091
+propagation, and the problem of decoding
+messages sent on a noisy channel. This is
+
+4
+00:00:12,091 --> 00:00:17,000
+a connection that was discovered fairly
+recently, and has proven to have a
+
+5
+00:00:17,000 --> 00:00:21,019
+tremendous impact on both disciplines,
+that of probabilistic graphical models,
+
+6
+00:00:21,019 --> 00:00:26,065
+and that of message decoding. So, let's
+understand this decoding problem. Imagine
+
+7
+00:00:26,065 --> 00:00:30,091
+that I want to send K bits across a noisy
+channel. If I just go ahead and I easily
+
+8
+00:00:30,091 --> 00:00:35,011
+send those k bits. Then it's impossible
+for me to know from the noisy bits that I
+
+9
+00:00:35,011 --> 00:00:39,047
+received at the other end what the correct
+bits ought to have been because we don't
+
+10
+00:00:39,047 --> 00:00:43,077
+know which ones got corrupted and which
+ones didn't. And so what people have
+
+11
+00:00:43,077 --> 00:00:49,024
+developed is the notion of coding theory
+where those K bits are passed through an
+
+12
+00:00:49,024 --> 00:00:54,057
+encoder and what we get at the end are N
+bits, where N is usually greater than K,
+
+13
+00:00:54,057 --> 00:01:00,017
+and those are the bits that are actually
+transmitted across a noisy channel to give
+
+14
+00:01:00,017 --> 00:01:05,070
+us a set of noisy bits, Y1 up to YN, which
+we now hope to be able to decode in a way
+
+15
+00:01:05,070 --> 00:01:10,096
+that ideally gives us bits V1 up to VK
+that are close and hopefully completely
+
+16
+00:01:10,096 --> 00:01:16,019
+accurate relative to the bits that were
+originally sent, U1 on up to UK. That's
+
+17
+00:01:16,019 --> 00:01:21,074
+our message coding and decoding in a
+nutshell. And the rate of a code such as
+
+18
+00:01:21,074 --> 00:01:27,040
+this is K. Over M. That is you send M.
+Bits of which K. Are actual information. The
+
+19
+00:01:27,040 --> 00:01:33,094
+bit error rate that one gets, and that's a
+function of the channel itself, is the
+
+20
+00:01:33,094 --> 00:01:40,046
+overall probability that a bit that we
+get. On this side, say the first bit, what
+
+21
+00:01:40,046 --> 00:01:46,080
+is the probability that the first bit is
+correct? That is, the same as, the, as the
+
+22
+00:01:46,080 --> 00:01:52,084
+original bit. And so the error rate is the
+total average of the probability that
+
+23
+00:01:52,084 --> 00:02:00,004
+these are different across the K decoded
+bits. So, we can now think about different
+
+24
+00:02:00,004 --> 00:02:05,084
+channels and their properties. And there
+is this very important notion called a
+
+25
+00:02:05,084 --> 00:02:11,001
+channel capacity. So, let's first think
+about different error rates that a
+
+26
+00:02:11,001 --> 00:02:15,089
+channel, different error modes that a
+channel might exhibit. So, here's
+
+27
+00:02:15,089 --> 00:02:21,027
+something called the binary symmetric
+channel, often abbreviated BSC, and the
+
+28
+00:02:21,027 --> 00:02:26,093
+binary symmetric channel says that when I
+send a zero, then with probabilit .9, I
+
+29
+00:02:26,093 --> 00:02:32,009
+get a zero; but with probability 0.1, I
+get a one. And conversely with prob, when
+
+30
+00:02:32,009 --> 00:02:35,099
+I send the one I get a one with
+probability 0.9 and the zero with
+
+31
+00:02:35,099 --> 00:02:40,047
+probability of 0.1. You can see why it's
+called the binary symmetric channel
+
+32
+00:02:40,047 --> 00:02:44,078
+because the error is symmetric between
+zero and one. A different error
+
+33
+00:02:44,078 --> 00:02:50,012
+[inaudible] erasure channel, where the
+bits don't get corrupted they just get
+
+34
+00:02:50,012 --> 00:02:55,068
+destroyed. Now the big difference between
+the binary erasure channel, abbreviated
+
+35
+00:02:55,068 --> 00:03:01,023
+BEC, is that when a bit gets destroyed I
+know it. That is what I get at the end, a
+
+36
+00:03:01,023 --> 00:03:06,064
+question mark, as opposed to a bit where I
+don't actually know if that was the
+
+37
+00:03:06,064 --> 00:03:11,084
+original bit that was sent or a corrupted
+bit. Here I know that the bit was
+
+38
+00:03:11,084 --> 00:03:18,007
+corrupted. And finally here is what's
+called a Gaussian channel where the noise
+
+39
+00:03:18,007 --> 00:03:24,045
+that gets added on top of [inaudible] is
+actually analog noise, and so there's sort
+
+40
+00:03:24,045 --> 00:03:30,080
+of a Gaussian distribution relative to the
+signal that was sent. And it turns out
+
+41
+00:03:30,080 --> 00:03:35,096
+that these different channels have very
+different notions of what capacity means.
+
+42
+00:03:35,096 --> 00:03:40,093
+And capacity will define exactly what
+implications that it has in the moment but
+
+43
+00:03:40,093 --> 00:03:45,052
+information theorist The super smart
+people have computed the capacity for
+
+44
+00:03:45,052 --> 00:03:50,014
+different kinds of channels that it turns
+out, that for example, the capacity for
+
+45
+00:03:50,014 --> 00:03:54,059
+binary symmetric channel is zero, is a
+little bit over 0.5 where the capacity
+
+46
+00:03:54,059 --> 00:03:59,061
+binary erasure channel is 0.9 where 0.9 is,
+is this probability on getting the correct
+
+47
+00:03:59,061 --> 00:04:04,023
+bit. And if you think about that, it makes
+perfect sense that the capacity of the
+
+48
+00:04:04,023 --> 00:04:08,074
+channels where you know the bits were
+erased is higher than the once you have
+
+49
+00:04:08,074 --> 00:04:14,034
+figure out whether bits are right or wrong.
+So this is less a more benign type of
+
+50
+00:04:14,034 --> 00:04:19,053
+noise. And the, what you see over here is
+the capacity of the Gaussian channel. And
+
+51
+00:04:19,053 --> 00:04:24,093
+it's, it's an expression that involves
+things like the width of this Gaussian for
+
+52
+00:04:24,093 --> 00:04:31,010
+example, the wider it is, the lower the
+capacity. Now Shannon, in the very famous
+
+53
+00:04:31,010 --> 00:04:38,033
+result known as Shannon's theorem related
+the notion of channel capacity and
+
+54
+00:04:38,033 --> 00:04:44,074
+bit error probability in a way that tells us
+[inaudible] that an extremely sharp
+
+55
+00:04:44,074 --> 00:04:51,047
+boundary between codes that are feasible and
+codes that are infeasible. So let's look at the
+
+56
+00:04:51,047 --> 00:04:57,090
+pictogram. The x axis is the rate of the
+code. Remember the rate was k over n. In
+
+57
+00:04:57,090 --> 00:05:02,075
+the example that we gave, mm-hm, and this
+a rate in multiples of channel capacity.
+
+58
+00:05:02,075 --> 00:05:07,084
+So this says once you define the channel
+capacity we can look at the rate of a code
+
+59
+00:05:07,084 --> 00:05:12,056
+and each code will try for a different,
+could, could be in a different point on
+
+60
+00:05:12,056 --> 00:05:18,042
+the spectrum in terms of the rate. On this
+axis, we have the bit error probability.
+
+61
+00:05:18,042 --> 00:05:24,089
+So, obviously, lower is better in terms of
+big error probability. And what Shannon
+
+62
+00:05:24,089 --> 00:05:31,044
+proved is that this region over here, the,
+the, the region that I'm marking here in
+
+63
+00:05:31,044 --> 00:05:38,031
+blue. The attainable region is you could
+construct codes that achieve any point in
+
+64
+00:05:38,031 --> 00:05:44,039
+the space. That is for any point in this,
+in this two dimensional space of rate and bit
+
+65
+00:05:44,039 --> 00:05:50,024
+error probability, you could achieve that,
+that, you can construct a code. He didn't
+
+66
+00:05:50,024 --> 00:05:56,008
+show it as a constructive argument. It was
+a, it was a nonconstructive argument, but
+
+67
+00:05:56,008 --> 00:06:01,079
+he proved that there existed such codes.
+Conversely, he showed that anything that
+
+68
+00:06:01,079 --> 00:06:06,034
+passes. On this side of the boundary, the
+forbidden region is just not attainable.
+
+69
+00:06:06,034 --> 00:06:10,089
+That is, no matter how clever of a coding
+theorist you are, you could not construct
+
+70
+00:06:10,089 --> 00:06:15,033
+a code that had a rate above a certain
+value, and bit error probability that was
+
+71
+00:06:15,033 --> 00:06:19,077
+below a certain value, which is the shape
+of this boundary that we see over here.
+
+72
+00:06:19,077 --> 00:06:23,093
+And you can see why, the channel
+capacity's called capacity. Because this
+
+73
+00:06:23,093 --> 00:06:28,073
+is a multiple of one. So this was
+Shannon's Theorem, and it set up as we
+
+74
+00:06:28,073 --> 00:06:34,070
+said a nonconstructive, proof, that the
+blue region was an attainable region, but
+
+75
+00:06:34,070 --> 00:06:40,023
+the question is, how can you achieve
+something that's close. To the Shannon
+
+76
+00:06:40,023 --> 00:06:47,013
+limit? [inaudible] And around, up to
+a certain point in time, the mid 90's,
+
+77
+00:06:47,013 --> 00:06:54,020
+this was sort of the diagram of the kind
+of achieve what, what was achievable in
+
+78
+00:06:54,020 --> 00:07:01,011
+terms of codes, and so this is a diagram
+we'll see several times from in a minute,
+
+79
+00:07:01,035 --> 00:07:07,076
+so here is on the x axis we have the
+signal to noise ratio measured in dB and
+
+80
+00:07:07,076 --> 00:07:14,031
+on the y axis we have the log of the bit
+error probability. And what you see are
+
+81
+00:07:14,031 --> 00:07:21,010
+codes that were used, first up here, we
+see the uncoded, version. And you can see
+
+82
+00:07:21,010 --> 00:07:28,022
+that the uncoded is not very good. It has
+very high, bit error rates. So higher here
+
+83
+00:07:28,022 --> 00:07:34,060
+is worse bit error rates. So, very
+bad. And, of course, as the signal to
+
+84
+00:07:34,060 --> 00:07:41,015
+noise ratio moves to the left, the error
+rate grows. And what you see over here, in
+
+85
+00:07:41,015 --> 00:07:47,021
+these two other lines, are. >> The bit
+error rate. Sorry. The curves achieved by
+
+86
+00:07:47,021 --> 00:07:53,037
+two of the NASA space missions Voyager and
+Cassini. As you can see there was a good
+
+87
+00:07:53,037 --> 00:08:01,027
+improvement between Voyager and Cassini.
+>> Yes. >> 1977 to 2004. And then in May
+
+88
+00:08:01,027 --> 00:08:11,066
+93 a revolution happened in coding theory.
+And this was a paper by Berrou et al. You can
+
+89
+00:08:11,066 --> 00:08:17,025
+read the title on the paper. It was a
+shocking title, it says near Shannon limit
+
+90
+00:08:17,025 --> 00:08:22,049
+error on correcting codes. And they call
+this turbo-codes. And initially,
+
+91
+00:08:22,049 --> 00:08:26,088
+when they tried to submit this paper,
+people didn't believe them, that this was
+
+92
+00:08:26,088 --> 00:08:31,043
+possible. Because this was so much better
+than any of the previous codes that had
+
+93
+00:08:31,043 --> 00:08:35,081
+been proposed. And people said, no, this
+can't be, can't possibly be the case. And
+
+94
+00:08:35,081 --> 00:08:39,097
+then they checked it, and it turned out
+that, in fact, their code worked. But
+
+95
+00:08:39,097 --> 00:08:44,030
+nobody really understood why. Okay, so
+know you might wonder, well, why the heck
+
+96
+00:08:44,030 --> 00:08:48,052
+am I telling you all this? What does it
+have to do with the probabilistic
+
+97
+00:08:48,052 --> 00:08:59,030
+graphical models? [sound] [inaudible]. So
+why was this so surprising? Because if you
+
+98
+00:08:59,030 --> 00:09:05,050
+look at the turbo codes, in terms of this
+diagram that I showed you, a minute ago,
+
+99
+00:09:05,050 --> 00:09:10,072
+you can see that, over here, we have,
+again, this is, remember, the uncoded.
+
+100
+00:09:10,072 --> 00:09:16,077
+This is the same kind of diagram, signal
+to noise in the X axis. Bit, log bit error
+
+101
+00:09:16,077 --> 00:09:22,030
+probability in the Y axis. Here, once
+again, we have voyager, and Cassini
+
+102
+00:09:22,030 --> 00:09:31,013
+there. And look at the turbo codes. The
+turbo codes are way to the left. Of any of
+
+103
+00:09:31,013 --> 00:09:36,068
+these previous codes. Now again remember
+left is better. Left means that you're
+
+104
+00:09:36,068 --> 00:09:42,048
+achieving the same bit error probability
+with a higher signal to noise ratio. So,
+
+105
+00:09:42,066 --> 00:09:47,069
+so what is the magic of turbo codes? And
+this is where we bring ourselves back to
+
+106
+00:09:47,069 --> 00:09:52,047
+probabilistic graphical models. Because
+you might be sitting there thinking, well,
+
+107
+00:09:52,047 --> 00:09:57,032
+you know, fine. Coding theory's great, but
+this isn't a coding theory class, so what
+
+108
+00:09:57,032 --> 00:10:02,004
+does this have to do with probabilistic
+graphical models? So to understand that,
+
+109
+00:10:02,004 --> 00:10:07,000
+let's look at what turbo codes do. So
+turbo codes took the same set of bits that
+
+110
+00:10:07,000 --> 00:10:11,073
+you want to transmit U1 up to UK.
+And they pass them through two encoders,
+
+111
+00:10:11,073 --> 00:10:16,047
+encoder one and encoder two. And then
+those bits will pass through our noisy
+
+112
+00:10:16,047 --> 00:10:21,058
+channel over here, so that what we get at
+the end is noisy versions of those two
+
+113
+00:10:21,058 --> 00:10:27,066
+sets of bits. And what we'd like to do
+really coding is a probabilistic inference
+
+114
+00:10:27,066 --> 00:10:32,090
+problem when you think about it because
+what it's trying to do, is it's trying to
+
+115
+00:10:32,090 --> 00:10:38,001
+compute a probability distribution over
+the message bits given the noisy
+
+116
+00:10:38,001 --> 00:10:43,052
+evidence y1 and y2 which are the noisy
+bits I receive on the channel. But instead
+
+117
+00:10:43,052 --> 00:10:48,063
+of trying to solve this probabilistic
+inference problem exactly. What
+
+118
+00:10:48,085 --> 00:10:54,083
+Berrou et al proposed in this turbo coding
+paper, is this sort of iterative approach,
+
+119
+00:10:54,083 --> 00:11:00,045
+where we have a decoder that matches the
+first encoder. So decoder one matches
+
+120
+00:11:00,045 --> 00:11:06,029
+encoder one. And decoder one takes these
+noisy bits that you get from encoder one
+
+121
+00:11:06,051 --> 00:11:12,012
+after they pass through the noisy channel.
+And decoder two gets a separate set of
+
+122
+00:11:12,012 --> 00:11:17,029
+bits, the bits that were passed through
+encoder two and then the noisy channel.
+
+123
+00:11:17,029 --> 00:11:22,059
+And what happens, roughly speaking in
+turbo codes is that the two decoders
+
+124
+00:11:22,059 --> 00:11:27,069
+start to communicate with each other. So
+decoder one looks at its bits and it
+
+125
+00:11:27,069 --> 00:11:33,039
+doesn't exactly know what the correct bits
+are but it computes a posterior over those
+
+126
+00:11:33,039 --> 00:11:38,089
+noisy bits and it takes the posterior over
+each of the noisy bits and it passes it.
+
+127
+00:11:38,089 --> 00:11:46,053
+To decoder two, which now uses it as a
+prior over the values of the, of these
+
+128
+00:11:46,053 --> 00:11:54,086
+target bits to the U. Combines it with the
+evidence from the noisy bits Y, and now
+
+129
+00:11:54,086 --> 00:12:02,069
+computes a more informed posterior over
+the U's. Which it then sends to decoder
+
+130
+00:12:02,069 --> 00:12:09,020
+one. And this process continues to
+iterate. Until convergence. So each
+
+131
+00:12:09,020 --> 00:12:15,084
+decoder computes a posterior and passes it
+to the other decoder which uses it as a
+
+132
+00:12:15,084 --> 00:12:22,040
+prior. And if you look at the, the
+implications of this iterative algorithm
+
+133
+00:12:22,040 --> 00:12:28,018
+what happens. So you can see here is, is
+the, are the different values for turbo
+
+134
+00:12:28,040 --> 00:12:34,032
+for turbo decoding. And what you see here
+again is the signal-to-noise ratio of the,
+
+135
+00:12:34,054 --> 00:12:40,039
+the X-axis, the log bit error probability
+on the Y-axis. And you can that initially
+
+136
+00:12:40,039 --> 00:12:47,001
+in the first iteration of turbo decoding;
+the curve is not that great. But then as
+
+137
+00:12:47,001 --> 00:12:55,062
+the iterations improve, the bit error rate
+goes down. So for example, for a fixed
+
+138
+00:12:55,062 --> 00:13:02,032
+signal to noise ratio, say here. The bit
+error rate goes down from here to here
+
+139
+00:13:02,032 --> 00:13:08,015
+over iterations. And what you see is the,
+as the dark line at the bottom is the
+
+140
+00:13:08,015 --> 00:13:13,091
+optimum bit decision, if we were to do
+correct probabilistic inference. And so
+
+141
+00:13:13,091 --> 00:13:19,045
+the surprising part was how close this
+totally heuristic and unmotivated
+
+142
+00:13:19,045 --> 00:13:25,057
+algorithm, as it seemed at the time, comes
+to the optimum of the bit decision. The
+
+143
+00:13:25,084 --> 00:13:32,088
+revolution that happened in this field
+came up when other people realize, people
+
+144
+00:13:32,088 --> 00:13:40,002
+like a Mikolis and Maki and Fay, realize
+that what really going on here, is that
+
+145
+00:13:40,002 --> 00:13:46,062
+this algorithm that we saw over here is
+running a variant of loopy belief
+
+146
+00:13:46,062 --> 00:13:53,079
+propagation. Because what going on here is
+that, each of these decoders. Is actually
+
+147
+00:13:53,079 --> 00:13:59,057
+running exact inference over a network
+that is sort of tractable and then its
+
+148
+00:13:59,057 --> 00:14:05,041
+passing messages. These [inaudible], these
+beliefs that are being passed. Are what we
+
+149
+00:14:05,041 --> 00:14:10,084
+have, as the delta I j. Between in these
+case, these two components. Really, what
+
+150
+00:14:10,084 --> 00:14:16,048
+is going on here are two decoders that are
+communicating with each other via
+
+151
+00:14:16,048 --> 00:14:22,009
+processes, is exactly identical to
+loopy belief propagation. And this
+
+152
+00:14:22,009 --> 00:14:27,025
+caused a revolution in the field in two
+different ways. Actually, it caused a
+
+153
+00:14:27,025 --> 00:14:33,007
+revolution in two different fields. It
+caused a revolution in. The field of
+
+154
+00:14:33,007 --> 00:14:37,032
+probabilistic graphical models. Because up
+until that point, people had known that
+
+155
+00:14:37,032 --> 00:14:41,051
+you could pass loopy messages over the
+graph. In fact, this was an observation
+
+156
+00:14:41,051 --> 00:14:45,029
+that was made as early as 1988, by
+Judea Pearl, when he wrote the seminal
+
+157
+00:14:45,029 --> 00:14:49,012
+book that really introduced Bayesian
+networks to the field of artificial
+
+158
+00:14:49,012 --> 00:14:53,011
+intelligence. And he wrote at the time
+that, sure, you can pass these messages
+
+159
+00:14:53,011 --> 00:14:57,047
+over this loopy graph, but it doesn't, but
+you have no guarantees of convergence, and
+
+160
+00:14:57,047 --> 00:15:01,077
+you have no guarantees that this gets the
+right answers. And so it's not, perhaps, a
+
+161
+00:15:01,077 --> 00:15:05,086
+good idea. And from 1988 until the mid
+1990s, the algorithm had been completely
+
+162
+00:15:05,086 --> 00:15:11,078
+abandoned. Because people said that it had
+these limitations so wasn't a good idea.
+
+163
+00:15:11,078 --> 00:15:17,004
+So when. People realize that in the
+context of coding theory this algorithm
+
+164
+00:15:17,004 --> 00:15:22,069
+which is obviously heuristic has all these
+potential limitations. Nevertheless
+
+165
+00:15:22,069 --> 00:15:32,054
+succeeds in achieving performance. That
+looks. Like this. Then people said, wait a
+
+166
+00:15:32,054 --> 00:15:37,079
+minute. If it works so well for decoding,
+maybe it's a good algorithm to think about
+
+167
+00:15:37,079 --> 00:15:42,078
+after all. And from the mid 1990s until
+today, this set up a huge amount of work
+
+168
+00:15:42,078 --> 00:15:47,058
+in the field of probabilistic graphical
+models on understanding when and why
+
+169
+00:15:47,058 --> 00:15:52,077
+loopy belief propagation works as
+well as constructing improved versions of
+
+170
+00:15:52,077 --> 00:15:57,082
+loopy belief propagations, some of
+which were, we briefly mentioned in this
+
+171
+00:15:57,082 --> 00:16:03,025
+course. That's the first revolution. The
+second revolution occurred in the field of
+
+172
+00:16:03,025 --> 00:16:08,046
+coding theory. What people said, well if. All
+that's going on is that we're running
+
+173
+00:16:08,046 --> 00:16:13,066
+loopy belief propagation over a graph
+that is trying to compute the posterior
+
+174
+00:16:13,066 --> 00:16:18,052
+over the U's, the message bits given, the
+noisy bits, the Y's. Well, we can construct
+
+175
+00:16:18,052 --> 00:16:23,039
+lots of other codes and use those codes
+and run loopy belief propagation on
+
+176
+00:16:23,039 --> 00:16:28,026
+the resulting graph. And sure enough, some
+of the more successful codes that are in
+
+177
+00:16:28,026 --> 00:16:33,019
+use today are in fact not the, necessarily
+the turbo codes that Berrou et al
+
+178
+00:16:33,019 --> 00:16:38,000
+originally come up with but a class of
+codes called load density parity checking
+
+179
+00:16:38,000 --> 00:16:42,015
+codes that are actually really good in
+elegant match to loopy belief
+
+180
+00:16:42,015 --> 00:16:47,017
+propagation. Now it turns out [inaudible]
+security checking codes were actually
+
+181
+00:16:47,017 --> 00:16:52,043
+invented by Robert Gallagher in 1962. And
+since 1962, up until sort of the late'90s,
+
+182
+00:16:52,043 --> 00:16:57,063
+they had been totally abandoned because
+they were computationally intractable to
+
+183
+00:16:57,063 --> 00:17:02,058
+do in terms of exact probabilistic
+inference. But by realizing that one could
+
+184
+00:17:02,058 --> 00:17:07,026
+run loopy belief propagation as a way of
+decoding, using these codes that
+
+185
+00:17:07,026 --> 00:17:12,066
+reintroduced the codes into the field and
+now they're wildly successful and there's
+
+186
+00:17:12,066 --> 00:17:17,060
+all sorts of variations on them and
+extensions and so on. So what are these
+
+187
+00:17:17,082 --> 00:17:23,042
+parity checking codes? So, in a parity
+checking code we're actually sending two
+
+188
+00:17:23,042 --> 00:17:29,092
+types of bits. These are original bits U,
+U1 up to U4. The original set of bits. Are
+
+189
+00:17:29,092 --> 00:17:35,082
+just, the first set of bits are just the
+original message bits. So I denoted them
+
+190
+00:17:35,082 --> 00:17:41,035
+here, even though X1 is actually identical
+to U1. I just wanted to denote
+
+191
+00:17:41,035 --> 00:17:47,040
+specifically X1 is the sent bit. So X1 is
+just a copy of U1, X4 is a copy of U4. And
+
+192
+00:17:47,040 --> 00:17:55,035
+once again, the Ys are the noisy. Bits
+that are received after transmission. On
+
+193
+00:17:55,035 --> 00:18:02,037
+the other side, the x's that you see here
+on the bottom are parity bits. Parity bits
+
+194
+00:18:02,037 --> 00:18:08,096
+are like check sums on a file. They look
+at [inaudible] they compute different,
+
+195
+00:18:08,096 --> 00:18:16,083
+parity of the different subsets of the
+bits. So x5 here is the parity that is
+
+196
+00:18:16,083 --> 00:18:27,080
+whether even or odd, zero if even and one
+if odd, of u1, u2 and u3. We'll see
+
+197
+00:18:27,080 --> 00:18:34,039
+[inaudible]. X6 tests the parity of a
+different set of bits. U1, U2 and U4 and
+
+198
+00:18:34,039 --> 00:18:39,068
+X7 does U2, U3 and U4. So, here we're
+sending four original bits and three
+
+199
+00:18:40,012 --> 00:18:45,077
+parity bits. So, this, in total is a code
+whose rate is four over seven because
+
+200
+00:18:45,077 --> 00:18:51,065
+there're seven bits sent of which four
+message bits or, [inaudible] four message
+
+201
+00:18:51,065 --> 00:18:58,000
+bits. And, when you think about this, this
+really lends itself beautifully to a
+
+202
+00:18:58,000 --> 00:19:04,047
+belief propagation algorithm, because you
+have these because you have these factors
+
+203
+00:19:04,047 --> 00:19:12,062
+over here, these This factor over U1, U2,
+U3 and the receive bit Y5 and so messages
+
+204
+00:19:12,062 --> 00:19:21,060
+are passed over a graph of [inaudible]
+that has these factors associated with it
+
+205
+00:19:21,060 --> 00:19:29,035
+as well as these factors over the
+singleton U1 up to U4 separately. So this
+
+206
+00:19:29,035 --> 00:19:38,086
+as an evidence Y1 up to Y4 separately. And
+so decoding is now done as loopy belief
+
+207
+00:19:38,086 --> 00:19:46,058
+propagation where we have as we said the
+U1 cluster, U2, U3, and U4. These are my
+
+208
+00:19:46,058 --> 00:19:55,031
+singleton clusters. And then these are the
+large factors. And, some of you will
+
+209
+00:19:55,031 --> 00:20:02,019
+recognize this as a bethe cluster graph.
+Bethe Structure Cluster graph. And so this
+
+210
+00:20:02,019 --> 00:20:08,024
+is just a list of applications. This is
+probably the, maybe the most, one of the
+
+211
+00:20:08,024 --> 00:20:13,062
+most ubiquitous applications of
+probabilistic graphical models, in use
+
+212
+00:20:13,062 --> 00:20:19,068
+today. Simply because it exists in so many
+instantiations of, you know, in many set
+
+213
+00:20:19,068 --> 00:20:25,088
+top boxes. And, when you're doing digital
+video broadcasting in communications of
+
+214
+00:20:25,088 --> 00:20:31,056
+mobile television, mobile telephones to
+satellites. Nasa missions, wireless
+
+215
+00:20:31,056 --> 00:20:38,001
+networks and so on. So, one of. Really
+powerful applications of loopy belief propagation
+
+216
+00:20:38,001 --> 00:20:42,035
+in probabilistic graphical models that arose, from this unexpected concourse of
+
+217
+00:20:42,035 --> 00:20:48,026
+these two disciplines. So. Really you
+could say that loopy belief propagation,
+
+218
+00:20:48,026 --> 00:20:52,058
+which was originally discovered or
+proposed by Judea Pearl in 1988, was
+
+219
+00:20:52,058 --> 00:20:56,073
+actually rediscovered by practitioners of
+coding theory. These were not
+
+220
+00:20:56,073 --> 00:21:01,051
+theoreticians of coding theory, these were
+people actually sat down and engineered
+
+221
+00:21:01,051 --> 00:21:06,036
+codes. And understanding those turbo codes
+in terms of loopy belief propagation, and
+
+222
+00:21:06,036 --> 00:21:11,009
+that was done by a bunch of more machine
+learning and information theory type
+
+223
+00:21:11,009 --> 00:21:15,093
+people, led to the development of many,
+many new and better codes and the current
+
+224
+00:21:15,093 --> 00:21:20,055
+codes are actually coming gradually closer
+and closer. To the Shannon limit, in a
+
+225
+00:21:20,055 --> 00:21:25,032
+constructive as opposed to a theoretical
+way. And at the same time the resurgence
+
+226
+00:21:25,032 --> 00:21:30,040
+of interest in belief propagation led us
+to much of the work that we see today in
+
+227
+00:21:30,040 --> 00:21:35,017
+approximate inference and graphical
+models. As well as both on theoretical
+
+228
+00:21:35,017 --> 00:21:40,025
+understanding side as well as on, on new
+algorithms that people are coming up with
+
+229
+00:21:40,025 --> 00:21:42,049
+derived from that new understanding.

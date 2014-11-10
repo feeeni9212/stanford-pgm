@@ -1,0 +1,483 @@
+
+1
+00:00:00,076 --> 00:00:10,057
+[sound] As we said, there's many different
+kinds of queries that one can use a
+
+2
+00:00:10,057 --> 00:00:17,000
+graphical model to answer. Conditional
+probability queries are m-, very commonly
+
+3
+00:00:17,000 --> 00:00:23,051
+used, but another commonly used type of
+inference is what's called MAP inference.
+
+4
+00:00:23,051 --> 00:00:29,078
+So what is MAP inference? Map stands as a
+shorthand for what's c-, for
+
+5
+00:00:30,040 --> 00:00:36,028
+Maximum a Posteriori and it's defined as follows,
+here we have a set of evidence o-,
+
+6
+00:00:36,028 --> 00:00:42,063
+observations, little e over some variables
+E. And we have a query Y, and it turns out
+
+7
+00:00:42,063 --> 00:00:49,019
+that for computational reasons that we're
+not going to discuss for the moment, it's
+
+8
+00:00:49,019 --> 00:00:54,054
+important that the set of Ys is
+everything, all of the variables other
+
+9
+00:00:54,054 --> 00:01:07,007
+than e. So now, our task is to compute
+what's called the map assignment, which is
+
+10
+00:01:07,007 --> 00:01:14,026
+the Y, the assignment little Y to the
+variables Y that maximizes the conditional
+
+11
+00:01:14,026 --> 00:01:21,081
+probability of, the variables Y given the
+evidence. Now, so for those of you who
+
+12
+00:01:21,081 --> 00:01:28,096
+haven't seen the notation argmax,
+argmax is the Y. That provides the maximal
+
+13
+00:01:28,096 --> 00:01:35,012
+value to this expression over here. Now,
+note that, in some cases, this maximizing
+
+14
+00:01:35,012 --> 00:01:40,069
+value might not be unique. That is, there
+might be several different assignments.
+
+15
+00:01:40,069 --> 00:01:46,012
+Say one, Y1 and Y2 that give the exact
+same probability. And so the map is not
+
+16
+00:01:46,012 --> 00:01:52,028
+necessarily a unique, assignment. This has
+many applications, some of which we've
+
+17
+00:01:52,028 --> 00:01:57,021
+discussed before. So in the context of
+message decoding, for example, where we
+
+18
+00:01:57,021 --> 00:02:02,060
+have a set of noisy bits that are passed
+over the channel, over noisy communication
+
+19
+00:02:02,060 --> 00:02:07,092
+channel, what we often want to get is the
+most likely message that was transmitted,
+
+20
+00:02:07,092 --> 00:02:13,011
+that is as assignment to the transmitted
+bits that is the most likely given our
+
+21
+00:02:13,011 --> 00:02:17,078
+evidence. In the context of image
+segmentation, we would like to take the
+
+22
+00:02:17,078 --> 00:02:22,061
+pixels and figure out the most likely
+assignment of pixels to, to semantic
+
+23
+00:02:22,061 --> 00:02:28,072
+category. So both of these can be
+viewed as map assignment problems. Now, an
+
+24
+00:02:28,072 --> 00:02:33,069
+important thing to understand about map,
+is it really is a different problem than
+
+25
+00:02:33,069 --> 00:02:37,093
+conditional probability queries. So
+understand that, let's look at the
+
+26
+00:02:37,093 --> 00:02:42,095
+following very simple example over just
+two random variables. So here we have, a
+
+27
+00:02:42,095 --> 00:02:47,098
+Bayesian network over the variables A and
+B. And if you multiply the two CPDs, it's,
+
+28
+00:02:48,017 --> 00:02:52,083
+you get the joint distribution shown over
+here. And it's not, and it's fairly
+
+29
+00:02:52,083 --> 00:02:57,080
+immediate to see that the map assignment
+is this one, because it has the highest
+
+30
+00:02:57,080 --> 00:03:03,057
+probability. Can we get at the map
+assignment by looking separately at the
+
+31
+00:03:03,057 --> 00:03:09,090
+variable A and at the variable B? So if we
+look at that we see that if we look
+
+32
+00:03:09,090 --> 00:03:16,048
+separately at the variable A the most
+likely assignment to the variable A is A-1
+
+33
+00:03:16,048 --> 00:03:22,059
+as opposed to, in the map assignment, the
+variable A took the value A0. And so, we
+
+34
+00:03:22,059 --> 00:03:28,095
+can't look separately at the marginal over
+A and over B and use that to infer the map
+
+35
+00:03:28,095 --> 00:03:34,095
+assignment. And the reason is that we're
+looking for a single assignment over all
+
+36
+00:03:34,095 --> 00:03:40,077
+of the variables, that together has, has
+the highest probability. Unfortunately,
+
+37
+00:03:40,077 --> 00:03:45,084
+just like the conditional probability
+inference, however, this problem, too, is
+
+38
+00:03:45,084 --> 00:03:50,098
+NP hard. So, again, let's formalize what,
+exact problem is at the heart of this
+
+39
+00:03:50,098 --> 00:03:56,032
+context. And it, and so here is, again,
+one example of an NP hard problem in
+
+40
+00:03:56,032 --> 00:04:01,065
+the context of map, which is just to find
+the joint assignment with the highest
+
+41
+00:04:01,065 --> 00:04:07,075
+probability. It's not the only NP hard
+problem. Here is another one. Figuring out
+
+42
+00:04:07,075 --> 00:04:14,007
+what for given probabilistic graphical
+model and some threshold little P, whether
+
+43
+00:04:14,007 --> 00:04:20,071
+there exists an assignment little X whose
+probability is great than P. That problem,
+
+44
+00:04:20,071 --> 00:04:25,023
+too, is NP Hard. So, should we give up?
+Well, just like in the context of
+
+45
+00:04:25,023 --> 00:04:30,049
+conditional probability queries the answer
+is no. And, there is algorithms that can
+
+46
+00:04:30,067 --> 00:04:35,062
+solve this problem very efficiently and
+fast in an even broader set of problems
+
+47
+00:04:35,062 --> 00:04:41,060
+than for conditional probability queries.
+So let's again look deeper into this
+
+48
+00:04:41,060 --> 00:04:48,032
+problem, and understand the foundations of
+what might make it tractable. So. Going
+
+49
+00:04:48,032 --> 00:04:54,027
+back to our example of a Bayesian network.
+Once again we are going to view CPDs as
+
+50
+00:04:54,027 --> 00:05:00,043
+factors so here P of C again translates into
+a factor over C just like before and whereas
+
+51
+00:05:00,043 --> 00:05:06,046
+in the case of conditional probability
+queries, we wanted to sum out some of the
+
+52
+00:05:06,046 --> 00:05:11,075
+variables, marginalize them. Now we're
+going to, to, what to find the argmax
+
+53
+00:05:11,075 --> 00:05:17,070
+which is the assignment of these variables
+which maximizes the product. So here we
+
+54
+00:05:17,070 --> 00:05:23,014
+have the max. Of a product which is why
+this is often called a max product
+
+55
+00:05:23,014 --> 00:05:29,036
+problem. Let's break down the max product
+problem. So imagine that we in more
+
+56
+00:05:29,036 --> 00:05:35,067
+general have. In more general case have a
+probability over y. Given E equal little e.
+
+57
+00:05:35,067 --> 00:05:42,023
+And [inaudible] remind ourselves that y is
+a. Is the set of all variables. Other than
+
+58
+00:05:42,023 --> 00:05:48,039
+the ones in e. And so by the definition of
+conditional probability. We have this
+
+59
+00:05:48,039 --> 00:05:54,055
+ratio. Who's what we're trying to find is
+the maximal y. The maximize to this
+
+60
+00:05:54,055 --> 00:06:04,027
+ratio. And notice that the denominator. Is
+constant relative to y. Sorry, yes, with
+
+61
+00:06:04,027 --> 00:06:10,064
+respect to y. Which means that, for the
+purpose of finding the maximum y, we don't
+
+62
+00:06:10,064 --> 00:06:17,010
+really care about the denominator, only
+the numerator, which is the probability of
+
+63
+00:06:17,010 --> 00:06:22,076
+y comma e equals little e, the
+unnormalized, an unnormalized measure. The
+
+64
+00:06:22,076 --> 00:06:29,014
+probabil-, this numerator, in the general
+case, is a product of factors normalized
+
+65
+00:06:29,014 --> 00:06:34,095
+by the partition function, where the
+factors here are the reduced factors.
+
+66
+00:06:35,074 --> 00:06:47,054
+Reduced relative to the evidence. [sound].
+Once again we notice, that, this, is the
+
+67
+00:06:47,054 --> 00:06:57,055
+partition function, and it's constant.
+Relative to y. Which means that we can
+
+68
+00:06:57,055 --> 00:07:03,043
+ignore it. And, so, once again we have
+this, the expression is now proportional
+
+69
+00:07:03,043 --> 00:07:09,069
+to a product of the same reduced factors.
+And so what we're trying to do is we're
+
+70
+00:07:09,069 --> 00:07:18,018
+trying to maximize a product of factors in
+this more general case as well. Which
+
+71
+00:07:18,018 --> 00:07:24,073
+gives us the following as the optimization
+problem. There's many algorithms that can
+
+72
+00:07:24,073 --> 00:07:30,064
+solve the map problem. The first is
+analogous to algorithms for sum product.
+
+73
+00:07:30,088 --> 00:07:37,019
+These algorithms take the maximization
+operation, and pushes that into the factor
+
+74
+00:07:37,019 --> 00:07:44,018
+product. Giving rise to a max product
+variable elimination algorithm. We
+
+75
+00:07:44,018 --> 00:07:48,074
+also have message passing algorithms,
+which, again, are a direct analog to
+
+76
+00:07:48,074 --> 00:07:53,074
+algorithms for sum product. And they give
+rise to a class of algorithms called
+
+77
+00:07:53,074 --> 00:07:58,048
+max product belief propagation.
+However, because the map problem is
+
+78
+00:07:58,048 --> 00:08:03,057
+intrinsically an optimization problem.
+One can also call in techniques that are
+
+79
+00:08:03,057 --> 00:08:09,012
+specific to optimization. And the class of
+such methods include methods that are based
+
+80
+00:08:09,012 --> 00:08:14,011
+on integer programming. Which is a general
+class of optimization over discreet
+
+81
+00:08:14,011 --> 00:08:19,022
+spaces. It turns out that this class of 
+methods that build on integer programming
+
+82
+00:08:19,022 --> 00:08:24,001
+techniques is one of the most popular
+methods in the last few years. And has
+
+83
+00:08:24,001 --> 00:08:29,018
+given rise to a whole new range of map algorithms that are considerably better
+
+84
+00:08:29,018 --> 00:08:33,059
+than in any of the previous algorithms developed up to that point so
+
+85
+00:08:33,059 --> 00:08:37,076
+especially for the approximate case.
+[sound] It also turns out that, for
+
+86
+00:08:37,076 --> 00:08:43,086
+certain types of networks, that, some of
+which we'll discuss, there are specific
+
+87
+00:08:43,086 --> 00:08:49,087
+algorithms that are very efficient for
+that particular class of, of graphical
+
+88
+00:08:49,087 --> 00:08:55,074
+model. And one of those, perhaps the most
+commonly used, but not the only one, is,
+
+89
+00:08:55,096 --> 00:09:01,056
+methods based on, a class of algorithms
+called graph cuts. And. And finally,
+
+90
+00:09:01,056 --> 00:09:06,080
+because it's a optimization problem one
+can also use standard search techniques
+
+91
+00:09:06,080 --> 00:09:11,098
+over combinatorial search spaces. And
+there are problems for which this is also
+
+92
+00:09:11,098 --> 00:09:17,070
+a very useful and successful solution. So
+to summarize, the map problem aims to
+
+93
+00:09:17,070 --> 00:09:23,065
+find a single coherent assignment of the
+highest probability, and that means that
+
+94
+00:09:23,065 --> 00:09:29,001
+it is not the same as maximizing
+individual marginal probabilities as we
+
+95
+00:09:29,001 --> 00:09:35,040
+saw in the example. One can reformulate
+this problem as one of finding the max
+
+96
+00:09:35,040 --> 00:09:41,028
+over a factor product. And this is a
+communitorial optimization problem which
+
+97
+00:09:41,028 --> 00:09:46,071
+admits a whole range of different
+solutions on which are exact and others approximate.

@@ -1,0 +1,1290 @@
+
+1
+00:00:00,000 --> 00:00:03,008
+We've shown how probabilistic graphical
+models can be used for a variety of
+
+2
+00:00:03,008 --> 00:00:07,005
+inference tasks, like computing
+conditional probabilities or finding the
+
+3
+00:00:07,005 --> 00:00:11,007
+map assignment. But often, the thing that
+you actually want to do with a probability
+
+4
+00:00:11,007 --> 00:00:15,007
+distribution is make decisions in the
+world. So for example, if you're a doctor
+
+5
+00:00:15,008 --> 00:00:19,007
+encountering a patient, it's not just
+enough to figure out what disease the
+
+6
+00:00:19,007 --> 00:00:23,006
+patient has. Ultimately, you need to
+decide what treatment to give the patient.
+
+7
+00:00:23,006 --> 00:00:27,007
+How do we use a probability distribution,
+specifically a probabilistic graphical
+
+8
+00:00:27,007 --> 00:00:32,000
+model, in order to make good decisions? It
+turns out that the theoretical foundations
+
+9
+00:00:32,000 --> 00:00:36,008
+for doing this kind of inference. Thus,
+were actually established long before
+
+10
+00:00:36,009 --> 00:00:41,007
+models came to forefront, and that
+framework is called the framework of
+
+11
+00:00:41,007 --> 00:00:46,008
+maximum expected utility. So let's
+formulate the problem that we're trying to
+
+12
+00:00:46,008 --> 00:00:51,004
+solve, and then we can define the
+principle of MEU, or maximum expected
+
+13
+00:00:51,004 --> 00:00:56,007
+utility. So what is the simple decision
+making situation D comprised of? Well, we
+
+14
+00:00:56,007 --> 00:01:01,004
+have a set now. It's no longer a pure
+probabilistic model. We have other
+
+15
+00:01:01,004 --> 00:01:06,007
+elements in it. We have an action A, which
+has several different choices that we
+
+16
+00:01:06,007 --> 00:01:12,000
+might pick. For example, different drugs
+that we might choose to give the patient.
+
+17
+00:01:12,000 --> 00:01:17,008
+We have a set of states of the world, X1
+up to XN. And the action can affect which
+
+18
+00:01:17,008 --> 00:01:23,004
+of those states comes about. So this set
+of states might include those things that
+
+19
+00:01:23,004 --> 00:01:28,005
+I can't affect, like the patient
+predisposing factor of which disease they
+
+20
+00:01:28,005 --> 00:01:34,001
+have, or which test results came out which
+way. But it can also include things like
+
+21
+00:01:34,001 --> 00:01:39,008
+the outcome that, that the patient will
+have, after I administer the drugs. So the
+
+22
+00:01:39,008 --> 00:01:45,003
+set of variables that defines the state
+can involve things that I can affect, and
+
+23
+00:01:45,003 --> 00:01:51,000
+things that I cannot affect. And then
+finally, the final piece of the puzzle
+
+24
+00:01:51,000 --> 00:01:55,009
+here is something that defines the agent's
+preferences. That is, I cannot make
+
+25
+00:01:55,009 --> 00:02:00,006
+decisions that weight different, that
+consider different actions without
+
+26
+00:02:00,006 --> 00:02:05,006
+weighing the relative merits of different
+actions. And my way of evaluating the
+
+27
+00:02:05,006 --> 00:02:10,009
+merits of different actions is to have
+some kind of numerical utility that tells
+
+28
+00:02:10,009 --> 00:02:15,008
+me if I take action A, and this, and I
+have this particular state of the world,
+
+29
+00:02:15,008 --> 00:02:20,008
+how happy am I? Am I
+very happy, medium, moderately happy or
+
+30
+00:02:20,008 --> 00:02:25,008
+extremely unhappy. So, this numerical
+utility function is going the thing that's
+
+31
+00:02:25,008 --> 00:02:30,008
+going to allow me to evaluate different
+actions in terms of how much I prefer
+
+32
+00:02:30,008 --> 00:02:39,003
+them. So, now I can go ahead, and write
+down the notion of an expected utility,
+
+33
+00:02:39,003 --> 00:02:46,006
+for a decision problem, the given, an
+action A. And the way in which that's done
+
+34
+00:02:46,006 --> 00:02:52,004
+is a simple expectation. I sum up over all
+possible states of the world. The
+
+35
+00:02:52,004 --> 00:02:58,003
+probability that I get that state given
+the action and remember not everything in
+
+36
+00:02:58,003 --> 00:03:04,000
+that action might, everything in that
+state might be effected by, by the action.
+
+37
+00:03:04,000 --> 00:03:10,003
+And then I multiply that by the utility of
+the state action pair. And, I sum up over
+
+38
+00:03:10,003 --> 00:03:16,002
+all possible states that I might end up
+with. And that, summation, that
+
+39
+00:03:16,002 --> 00:03:23,004
+expectation is the overall happiness that
+I have on average, in this decision making
+
+40
+00:03:23,004 --> 00:03:30,009
+situation if I take the action A. Clearly
+I want to maximize my overall happiness,
+
+41
+00:03:30,009 --> 00:03:37,006
+and so the purpose of the maximum expected
+utility computation, the principle of
+
+42
+00:03:37,006 --> 00:03:46,001
+maximum expected utility. Maximum,
+expected, utility. Is that I want to
+
+43
+00:03:46,001 --> 00:03:54,006
+choose the action A that maximizes this
+expected utility. We can use the, ideas
+
+44
+00:03:54,006 --> 00:04:00,002
+that we developed in the context of
+graphical models to represent decision
+
+45
+00:04:00,002 --> 00:04:05,009
+making situations in a very interpretable
+way. So this a structure called an
+
+46
+00:04:05,009 --> 00:04:12,000
+influence diagram, and it's an extension
+of a Bayesian network with two additional
+
+47
+00:04:12,000 --> 00:04:17,008
+pieces. We have, in addition to random
+variables, which are denoted, as usual, at
+
+48
+00:04:17,008 --> 00:04:27,004
+ovals. So here's a random variable. And
+random variable is part of my state X. We
+
+49
+00:04:27,004 --> 00:04:36,002
+also have two other kinds of nodes in this
+diagram. We have action variables. Which
+
+50
+00:04:36,002 --> 00:04:42,008
+are places where it's not nature that gets
+to make a choice over the value of the
+
+51
+00:04:42,008 --> 00:04:49,000
+variable, but rather the agent that gets
+the pick. And then we have the green
+
+52
+00:04:49,002 --> 00:04:57,000
+diamonds at the bottom, which represents
+utility. Well let's look at this
+
+53
+00:04:57,000 --> 00:05:03,003
+particular example, which is a probably
+one of the, it's the simplest thing you
+
+54
+00:05:03,003 --> 00:05:10,000
+could construct. This a, budding entreprenuer who
+just graduated from college and ones of
+
+55
+00:05:10,000 --> 00:05:16,000
+the site is whether to found a widget
+making company or not. So he has two
+
+56
+00:05:16,000 --> 00:05:22,007
+possible actions S zero which is do not
+found and go take a more conventional job.
+
+57
+00:05:23,006 --> 00:05:30,004
+And this is, found the company, which of
+course is a much more risky strategy. We
+
+58
+00:05:30,004 --> 00:05:38,004
+have a random variable, which is the
+market for widgets. And, this is a poor
+
+59
+00:05:38,004 --> 00:05:49,001
+market. Moderate. And the great market.
+And so now we can and we have a
+
+60
+00:05:49,001 --> 00:05:55,000
+probability distribution over those
+different values. The utility of the
+
+61
+00:05:55,000 --> 00:06:00,007
+agent obviously depends on both whether
+he decides to found the company and on the
+
+62
+00:06:00,007 --> 00:06:06,002
+market. And we're denoting that by having
+both of these be parents of the utility
+
+63
+00:06:06,002 --> 00:06:11,007
+variables. So the parents of the utility
+variable, or the utility function, are the
+
+64
+00:06:11,007 --> 00:06:17,002
+attributes or the variables on which the
+utility, the agent utility depends. So in
+
+65
+00:06:17,002 --> 00:06:22,009
+this case our utility has two arguments S
+and M, and we can see that if the agent
+
+66
+00:06:22,009 --> 00:06:28,008
+decides not to found the company, then the
+utility is zero, regardless of the market
+
+67
+00:06:28,008 --> 00:06:34,002
+condition for widgets because at that
+point you don't really care. And if the
+
+68
+00:06:34,002 --> 00:06:40,001
+agent does decide to found the company and
+the market for widgets is poor then his
+
+69
+00:06:40,001 --> 00:06:45,005
+utility is negative seven, say he invests
+a bunch of money and he, and ends up
+
+70
+00:06:45,005 --> 00:06:51,009
+losing all of it. If the market is
+moderate his utility is five. And if the
+
+71
+00:06:51,009 --> 00:06:57,008
+market is great the utility is twenty.
+Alright. So, now we can go ahead and
+
+72
+00:06:57,008 --> 00:07:04,008
+compute expected utility for the two
+action choices. So, in this case, the
+
+73
+00:07:04,008 --> 00:07:21,004
+expected utility of F zero is zero. And
+the expected utility of F1 is going to be
+
+74
+00:07:21,004 --> 00:07:34,007
+equal to 0.5 times negative seven plus 0.3
+times five plus 0.2 times twenty. Which,
+
+75
+00:07:34,007 --> 00:07:42,003
+if you add it all up, is equal to two. So
+obviously in this case the optimal action
+
+76
+00:07:42,003 --> 00:07:50,007
+is to found the company. Let's look at a more
+complicated influence diagram that
+
+77
+00:07:50,007 --> 00:07:56,007
+involves more random variables and also
+other richer structures. So this is an
+
+78
+00:07:56,007 --> 00:08:03,004
+elaboration of our student network. It has
+the variables difficulty and intelligence,
+
+79
+00:08:03,004 --> 00:08:09,000
+the grade, the quality of the letter, and
+in this case also a variable that
+
+80
+00:08:09,000 --> 00:08:13,006
+represents the, the job. Student's job
+prospect which we're going to assume
+
+81
+00:08:13,006 --> 00:08:18,000
+depend both on the quality of the letter
+as well as on the student's grade because
+
+82
+00:08:18,000 --> 00:08:24,001
+the recruiter has access to the student's
+transcript. The student has one decision
+
+83
+00:08:24,001 --> 00:08:31,001
+in this example, which is whether to study
+in the course or not, which is going to
+
+84
+00:08:31,001 --> 00:08:38,000
+probably affect their grade. And so we
+have the study variable, the study action
+
+85
+00:08:38,000 --> 00:08:46,000
+affects the distribution that the student
+has over grades. Now in this case, you'll
+
+86
+00:08:46,000 --> 00:08:55,008
+notice that we have three different
+utility diamonds, VG. V S and V Q. What
+
+87
+00:08:55,008 --> 00:09:01,002
+are these what do these represent? They
+represent different components of the
+
+88
+00:09:01,002 --> 00:09:06,004
+utility functions, so this [inaudible]
+broken down the utility functions into
+
+89
+00:09:06,004 --> 00:09:12,000
+constituent pieces. This one represent the
+happiness with the grade by itself, this
+
+90
+00:09:12,000 --> 00:09:17,002
+is the utility that you gut by saying,
+yay, I got an A in the course, oh, it's
+
+91
+00:09:17,002 --> 00:09:22,007
+not so good I got a C. So that's one piece
+of utility function. A second piece of
+
+92
+00:09:22,007 --> 00:09:28,007
+your utility function is your overall
+career, aspirations, which is the value of
+
+93
+00:09:28,007 --> 00:09:34,004
+getting a good job versus not getting a
+good job, so that's this piece over here.
+
+94
+00:09:35,001 --> 00:09:40,001
+And the final one, is the component that
+is ascribed to the quality of life that you
+
+95
+00:09:40,001 --> 00:09:44,009
+have during your studies. So if you don't
+study maybe a single and play ultimate
+
+96
+00:09:44,009 --> 00:09:49,007
+frisbee and go to the movies every
+night and so that might give you more
+
+97
+00:09:49,007 --> 00:09:54,009
+happiness than sitting there reading the
+books every evening. And so we're going to
+
+98
+00:09:54,009 --> 00:09:59,003
+assume that particular utility
+defends on how much you study and how
+
+99
+00:09:59,003 --> 00:10:04,004
+difficult the course is. Because maybe
+it's more fun to study if it's easy. And
+
+100
+00:10:04,004 --> 00:10:10,000
+we're going to assume that your overall
+utility, that the agent's overall utility
+
+101
+00:10:10,000 --> 00:10:15,008
+is the sum of these different components.
+And this is called the decomposed utility
+
+102
+00:10:15,008 --> 00:10:24,008
+function. And we'll come back to that
+later. Now you might wonder why I would
+
+103
+00:10:24,008 --> 00:10:29,008
+bother decomposing the utility function,
+instead of having just a single big
+
+104
+00:10:29,008 --> 00:10:34,007
+monolithic utility function, that is
+affected by all of these, different
+
+105
+00:10:34,007 --> 00:10:39,005
+factors. Well, that is exactly why.
+Because it is, in fact, affected by all of
+
+106
+00:10:39,005 --> 00:10:44,007
+these different factors. So whereas, here,
+I have a utility function that has one
+
+107
+00:10:44,007 --> 00:10:49,004
+argument. And another one has one argument
+and one has two arguments. If I had put
+
+108
+00:10:49,004 --> 00:10:53,009
+them all together, I would have single
+monolithic which already function which
+
+109
+00:10:53,009 --> 00:10:58,004
+has four arguments that would be much
+harder elicit, because the exponential
+
+110
+00:10:58,004 --> 00:11:02,006
+combinatorial growth and the number of
+possible combinations that I need to
+
+111
+00:11:02,006 --> 00:11:07,000
+consider. So this is a decomposition of a
+function and in this case, utility
+
+112
+00:11:07,000 --> 00:11:11,007
+function into factors and in exactly the
+same way. For example, like to be compose
+
+113
+00:11:11,007 --> 00:11:19,004
+a probability distribution as a product of
+factors. So, another interesting extension
+
+114
+00:11:19,004 --> 00:11:24,004
+of the influence diagram representation
+allows us to capture, is the notion of the
+
+115
+00:11:24,004 --> 00:11:29,003
+information available to the agent when
+they make their decision. So, let's look
+
+116
+00:11:29,003 --> 00:11:33,007
+at this example over here, which
+elaborates our entrepreneur example. And
+
+117
+00:11:33,007 --> 00:11:38,007
+here we come in with the assumption that
+the entrepreneur has the opportunity to
+
+118
+00:11:38,007 --> 00:11:44,001
+conduct a survey, regarding the overall
+market demand for widgets, before deciding
+
+119
+00:11:44,001 --> 00:11:48,008
+whether to found the company. Now, the
+survey is not entirely reliable, so over
+
+120
+00:11:48,008 --> 00:11:54,005
+here, we have this CPD that tells us. How
+likely different survey results are to
+
+121
+00:11:54,005 --> 00:12:00,008
+come up given different values of the true
+market demand. Now the point is, that
+
+122
+00:12:00,008 --> 00:12:06,005
+having conducted the survey, the agent can
+base his decision on the value of the
+
+123
+00:12:06,005 --> 00:12:11,009
+survey. And we denote that with the
+presence of a [inaudible] such as this.
+
+124
+00:12:11,009 --> 00:12:16,008
+Which indicates that the. Founder, that
+the entrepreneur can make different
+
+125
+00:12:16,008 --> 00:12:21,007
+decisions depending on how the value of
+the survey turns out. So from a formal
+
+126
+00:12:21,007 --> 00:12:26,006
+perspective, that means there would be
+agents who [inaudible] to do is choose a
+
+127
+00:12:26,006 --> 00:12:31,003
+decision rule, which we are going to
+denote delta at the action node, so the,
+
+128
+00:12:31,003 --> 00:12:36,000
+and what, the decision rule is effectively
+a CPD, it tells the agent given an
+
+129
+00:12:36,000 --> 00:12:41,001
+assignment of the values to the apparent
+[inaudible], which are the variable that
+
+130
+00:12:41,001 --> 00:12:45,008
+the agent can observe prior to making
+decision, the agents based on that can
+
+131
+00:12:45,008 --> 00:12:50,005
+decide on the probability distribution of
+the action that it takes in that
+
+132
+00:12:50,005 --> 00:12:55,004
+particular situation. So here for example,
+we would have a CPD which. Tells us the
+
+133
+00:12:55,004 --> 00:12:59,009
+probability of founding a company which in
+this case is a binary value variable,
+
+134
+00:12:59,009 --> 00:13:04,005
+given the three possible values of the
+survey variable. They might say, why would
+
+135
+00:13:04,005 --> 00:13:09,006
+I need to have CPD? Why would be urging
+anyone to make a random choice between two
+
+136
+00:13:09,006 --> 00:13:14,005
+different actions? It turns out in fact,
+that in the single agents decision making
+
+137
+00:13:14,005 --> 00:13:19,007
+situations there is no value to allowing
+that extra expressive power because of the
+
+138
+00:13:19,007 --> 00:13:24,007
+terministic CPD would work just as well.
+Nevertheless for reasons that would become
+
+139
+00:13:24,007 --> 00:13:29,004
+clear on the next point, is actually
+useful to think about the first CPD is the
+
+140
+00:13:29,004 --> 00:13:34,004
+known on most cases that would actually be
+the terministic listening sample that we
+
+141
+00:13:34,004 --> 00:13:40,007
+talking about. So now, that we given the
+agent that expressive power, how do you
+
+142
+00:13:40,007 --> 00:13:46,008
+formulate the, the decision problem that
+they need to make? That is what did they
+
+143
+00:13:46,008 --> 00:13:52,005
+get to choose and how do they choose it.
+So, given a decision role data for an
+
+144
+00:13:52,005 --> 00:13:58,001
+action variable a. If we inject that into
+the decision network, now all of the
+
+145
+00:13:58,001 --> 00:14:04,002
+variables on that network those a and the
+remaining variable x there, that all have
+
+146
+00:14:04,002 --> 00:14:10,008
+a cpd associated from. So now we have
+effectively defined the joint. Probability
+
+147
+00:14:10,008 --> 00:14:21,000
+distribution. Over all the variables X
+union. The variable A, because each of
+
+148
+00:14:21,000 --> 00:14:26,008
+them has a CPD and so this. Is the, this
+probability distribution. And the agent
+
+149
+00:14:26,008 --> 00:14:32,004
+expected utility, once they've selected
+the decision rule delta A, is simply the
+
+150
+00:14:32,004 --> 00:14:38,001
+expectation over here. We average out over
+all possible scenarios, where scenarios
+
+151
+00:14:38,001 --> 00:14:44,000
+are assigned into the chance variable X as
+well as into the agent action A, and for
+
+152
+00:14:44,000 --> 00:14:49,006
+averaging out is the agent utility in that
+scenario. And so that's the overall
+
+153
+00:14:49,006 --> 00:14:54,008
+expectation that the agent prior to
+anything going on can expect to gain,
+
+154
+00:14:54,008 --> 00:15:00,004
+given this numeral dot A. So obviously the
+agents want, the agent wants to choose,
+
+155
+00:15:00,004 --> 00:15:06,001
+the decision rule delta A, that is going
+to give him the maximum value for this
+
+156
+00:15:06,001 --> 00:15:11,007
+expression that denotes his expected
+utility. And so this is the optimization
+
+157
+00:15:11,007 --> 00:15:21,006
+problem of the agent is trying to solve.
+Okay. So how do we go about finding the
+
+158
+00:15:21,006 --> 00:15:27,005
+decision rule that maximizes the agent's
+expected utility? So let's look at this
+
+159
+00:15:27,005 --> 00:15:33,002
+first in the context of a simple example,
+and then we'll do the general case. So,
+
+160
+00:15:33,002 --> 00:15:39,000
+over here, we see once more, the expected
+utility equation for a given decision
+
+161
+00:15:39,000 --> 00:15:47,008
+rule. And now we're trying to optimize.
+This of A. So let's write down the
+
+162
+00:15:47,008 --> 00:15:54,003
+expected utility in this particular
+example. So, the Bayesian network, in this
+
+163
+00:15:54,003 --> 00:16:01,002
+case, has now two original CPDs. There is
+P of M that comes in from the M variable.
+
+164
+00:16:01,002 --> 00:16:08,001
+There is P of S given M, which comes out
+from the survey variable. And we have the
+
+165
+00:16:08,001 --> 00:16:15,003
+CPD that is, as yet, to be selected, which
+specifies the decision rule at the, at the
+
+166
+00:16:15,003 --> 00:16:21,008
+action F. And then multiplied with all
+that is the utility. Which depends on the
+
+167
+00:16:21,008 --> 00:16:26,009
+decision to found the company and on the
+true market value. Well this should look
+
+168
+00:16:26,009 --> 00:16:31,007
+awfully familiar. It is simply a product
+of factors. Some of these factors are
+
+169
+00:16:31,007 --> 00:16:37,000
+problematic factors and one of them the u,
+is a different numerical factor, but it's
+
+170
+00:16:37,000 --> 00:16:44,002
+still a factor. Which, depends on a scope
+of some variables. In this case S and M.
+
+171
+00:16:44,002 --> 00:16:50,005
+So now we can go ahead and apply the same
+kinds of analysis that we've done in
+
+172
+00:16:50,005 --> 00:16:56,007
+previous computations. Specifically, we
+can. Since we're trying to optimize over
+
+173
+00:16:56,007 --> 00:17:02,004
+this. Expression over here, the delta F of
+F given S. We're going to push in
+
+174
+00:17:02,004 --> 00:17:08,009
+everything that we don't currently need to
+manipulate, which is just F and S. Which
+
+175
+00:17:08,009 --> 00:17:14,006
+are the two things that appear in the
+factor of the decision rule? And so,
+
+176
+00:17:14,006 --> 00:17:20,006
+specifically, we're going to push in M,
+and leave within the summation over M, all
+
+177
+00:17:20,006 --> 00:17:27,005
+of the factors. That depend on M. And so
+that gives us a sum over M. P of M, P of F
+
+178
+00:17:27,005 --> 00:17:34,002
+given M, U of F, M. And if we marginalize
+out M, what we end up with if we multiply
+
+179
+00:17:34,002 --> 00:17:41,001
+these three factors and marginalize that
+M, is a factor that we're going to call MU
+
+180
+00:17:41,001 --> 00:17:48,001
+of FS. And the reason it's called MU is to
+suggest that it has a utility component U,
+
+181
+00:17:48,001 --> 00:17:55,007
+so MU and you. And now we have actually a
+fairly simple expression that the agent is
+
+182
+00:17:55,007 --> 00:18:03,005
+trying to optimize. It's a summation over
+all possible values of S and F over here,
+
+183
+00:18:03,005 --> 00:18:11,000
+of the delta, the decision rule that the
+agent takes over F given the situation, as
+
+184
+00:18:11,000 --> 00:18:18,009
+given the observation S, multiplied by
+this factor that I just computed. And now,
+
+185
+00:18:18,009 --> 00:18:27,002
+if our goal, is now to optimize this
+expression, what the agent ought to do is
+
+186
+00:18:27,002 --> 00:18:34,009
+to pick, within this factor, U of FS, the
+highest value. The S that gives it the
+
+187
+00:18:34,009 --> 00:18:40,003
+highest value in each circumstance S. So
+this is a little bit abstract, so let's
+
+188
+00:18:40,003 --> 00:18:46,000
+look at this in the context of an actual
+numerical example to see this. So here are
+
+189
+00:18:46,000 --> 00:18:51,008
+the three factors that, we have in this
+network to begin with. This is the CPD for
+
+190
+00:18:51,008 --> 00:18:57,003
+M over here. The CPD for S, given M in the
+middle. And here is the utility factor U,
+
+191
+00:18:57,003 --> 00:19:02,008
+it comes from here. And now if we're going
+to go through this expression, through
+
+192
+00:19:02,008 --> 00:19:10,008
+this, computation. And we're going to
+compute. This. Expression over here. Th,
+
+193
+00:19:10,008 --> 00:19:18,005
+this is what we get. It's a factor that
+gives us this value for each value for, of
+
+194
+00:19:18,005 --> 00:19:25,007
+the variable of the action F and each
+value [inaudible]. And if we want to
+
+195
+00:19:25,007 --> 00:19:33,005
+maximize the summation. And we look at
+this factor over here. It seems clear that
+
+196
+00:19:33,005 --> 00:19:39,007
+what's going to maximize the summation, is
+if we put full weight on S zero, in the
+
+197
+00:19:39,007 --> 00:19:45,008
+case S zero, which, if you think about, if
+you look at these CPDs as the case where
+
+198
+00:19:45,008 --> 00:19:51,008
+the survey suggests that the market demand
+is bad. And, at the same time, in the
+
+199
+00:19:51,008 --> 00:19:58,000
+other two cases, we're going to choose the
+action to found the company. And if you
+
+200
+00:19:58,000 --> 00:20:04,001
+look at this you can see that no other
+choice of delta is going to give us a
+
+201
+00:20:04,001 --> 00:20:10,007
+higher value for the summation than this
+deterministic choice that chooses in the
+
+202
+00:20:10,007 --> 00:20:16,005
+case s zero, we choose zero and in the
+case s one and s two we choose the
+
+203
+00:20:16,005 --> 00:20:23,004
+[inaudible] and so this is the optimal
+decision rule. And if you ask what is the
+
+204
+00:20:23,004 --> 00:20:31,009
+expectation, what is the agent's expected
+utility with this strategy before it does
+
+205
+00:20:31,009 --> 00:20:40,001
+anything, before it, before the survey is
+conducted? Well, it's just going to be the
+
+206
+00:20:40,001 --> 00:20:47,001
+sum of zero+1.15+2.1, which sums up to
+2.25 as the overall, expected utility,
+
+207
+00:20:47,001 --> 00:20:53,007
+sorry, 3.25. As the agent's overall
+expected utility in this case. Now, if you
+
+208
+00:20:53,007 --> 00:20:59,008
+think back to the agent's expected utility
+when he didn't have the information, about
+
+209
+00:20:59,008 --> 00:21:06,004
+the survey. That expected utility if you
+recall was two, so without. Survey, the
+
+210
+00:21:06,004 --> 00:21:14,002
+agent's best Mac expected utility was
+equal to two. So by conducting the survey,
+
+211
+00:21:14,002 --> 00:21:22,005
+the agent has gained 1.25 utility points.
+Then let's generalize this to arbitrary
+
+212
+00:21:22,005 --> 00:21:28,001
+decision diagrams. We're going to focus,
+for the moment, on single utility nodes,
+
+213
+00:21:28,001 --> 00:21:34,000
+and single action nodes. The more general
+case is a little bit more complicated, and
+
+214
+00:21:34,000 --> 00:21:39,004
+we're not going to go through it, but the
+principles are very similar. So, once
+
+215
+00:21:39,004 --> 00:21:45,000
+again, going into this example, we see
+that delta A, the decision rule with A,
+
+216
+00:21:45,000 --> 00:21:51,009
+defines a joint distribution. Over all of
+the chance node and the action node, and
+
+217
+00:21:51,009 --> 00:21:58,007
+that is multiplied by the utility in the
+scenario. And so we can open up the
+
+218
+00:21:58,007 --> 00:22:04,001
+expected, the, the probability
+distribution piece of delta A, as a
+
+219
+00:22:04,001 --> 00:22:11,001
+product of two types of CPDs. We have the
+original CPDs, which is simply the product
+
+220
+00:22:11,001 --> 00:22:17,005
+over I, P of XI, given its parents. And
+then we multiply that by the decision
+
+221
+00:22:17,005 --> 00:22:23,005
+rule, delta A. And we're going to use Z,
+just as a shorthand, to denote the
+
+222
+00:22:23,005 --> 00:22:33,005
+parents. That is, the observations.
+[inaudible] that the agent makes, prior.
+
+223
+00:22:34,007 --> 00:22:43,000
+Who, deciding on A. So we can do the exact
+same moving in of factors inside and
+
+224
+00:22:43,000 --> 00:22:48,006
+outside of the summation. We're going to
+marginalize out everything except. The
+
+225
+00:22:48,006 --> 00:22:53,000
+factor is because the variables that
+appear in this factor delta a, so
+
+226
+00:22:53,000 --> 00:22:57,007
+everything plus a and its' pairing b. And
+we're going to sum out all of the
+
+227
+00:22:57,007 --> 00:23:02,005
+remaining variables with, for simplicity
+we're going to denote w. So this is
+
+228
+00:23:02,005 --> 00:23:07,008
+summing up over all variables other than a
+and z of this product of factors
+
+229
+00:23:07,008 --> 00:23:13,003
+including. Utility variable. Utility
+factor. And, so we're going to get a
+
+230
+00:23:13,003 --> 00:23:18,009
+utility factor, just as we did before,
+which is a function of A and its parents.
+
+231
+00:23:18,009 --> 00:23:24,008
+And we want to optimize the, decision rule
+says to maximize the possible summation
+
+232
+00:23:24,008 --> 00:23:30,004
+over here. And once again, the optimal
+decision rule is just the one that picks
+
+233
+00:23:30,004 --> 00:23:36,003
+for every combination of the parent Z. The
+action [inaudible] gives us the maximum
+
+234
+00:23:36,003 --> 00:23:42,005
+entry in this factor. So delta star of AZ
+is something that gives us a probability
+
+235
+00:23:42,005 --> 00:23:48,004
+of one. This is the start of probability
+one. The action that gives us the
+
+236
+00:23:48,004 --> 00:23:53,000
+argument. The arg max action for this
+factor. And, and the other action that
+
+237
+00:23:53,000 --> 00:23:59,008
+selects to the probability zero in this
+conditioning case for z. So summarizing
+
+238
+00:23:59,008 --> 00:24:05,003
+how this algorithm goes, to compute the
+maximum expected utility, and find the
+
+239
+00:24:05,003 --> 00:24:11,002
+optimal decision [inaudible] in action A.
+We take the following steps. We treat A as
+
+240
+00:24:11,002 --> 00:24:16,009
+a random variable, with, at this point an
+unknown CPD. We introduce an additional
+
+241
+00:24:16,009 --> 00:24:21,009
+factor beyond the CPDs, which is the
+utility factor whose scope is the,
+
+242
+00:24:22,001 --> 00:24:27,005
+variables that the, that the utility
+depends on. So now we have, as usual, a
+
+243
+00:24:27,005 --> 00:24:32,006
+collection of factors. We now do
+effectively variable elimination
+
+244
+00:24:32,006 --> 00:24:38,005
+algorithm. So this is plain, good old
+variable elimination to eliminate all
+
+245
+00:24:38,005 --> 00:24:45,007
+variables except a and a's parents. Which
+produces a factor. New sub AZ and then for
+
+246
+00:24:45,007 --> 00:24:54,006
+each parent assignment Z to the variable A
+we chose the action that maximizes over A
+
+247
+00:24:54,006 --> 00:25:01,005
+within that factor. So summarizing this
+the MEU principle provides us with a
+
+248
+00:25:01,005 --> 00:25:07,007
+rigorous foundation for decision making
+under uncertainty. Building on that, the
+
+249
+00:25:07,007 --> 00:25:13,004
+framework of probabilistic graphical
+models allows us to provide a compactor
+
+250
+00:25:13,004 --> 00:25:19,000
+presentation for complicated high
+dimensional decision making. Settings
+
+251
+00:25:19,000 --> 00:25:24,009
+where we have multiple chance variables
+multiple actions, and utilities that
+
+252
+00:25:24,009 --> 00:25:29,009
+depend on multiple variables. We can now
+build on inference methods in
+
+253
+00:25:29,009 --> 00:25:34,002
+probabilistic graphical models.
+Specifically, in this case, the variable
+
+254
+00:25:34,002 --> 00:25:38,009
+elimination algorithm, to both find the
+optimal strategy, and figure out the
+
+255
+00:25:38,009 --> 00:25:44,001
+overall value to the agent of a particular
+decision situation. And whereas we didn't
+
+256
+00:25:44,001 --> 00:25:49,001
+talk about this, these methods can also be
+extended for richer scenarios, where we
+
+257
+00:25:49,001 --> 00:25:53,004
+have multiple utility componsen-,
+components, as in the example that we
+
+258
+00:25:53,004 --> 00:25:57,007
+gave. As well as multiple decisions that
+the agent makes in a sequence.

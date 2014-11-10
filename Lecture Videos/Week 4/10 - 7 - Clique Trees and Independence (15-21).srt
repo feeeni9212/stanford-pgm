@@ -1,0 +1,734 @@
+
+1
+00:00:00,000 --> 00:00:04,080
+We've shown that the clique tree algorithm
+has some pretty cool properties, that it
+
+2
+00:00:04,080 --> 00:00:09,014
+guarantees that we achieve the correct
+marginal, at every single clique, and
+
+3
+00:00:09,014 --> 00:00:13,089
+therefore that these marginals necessarily
+agree with each other. We have also seen
+
+4
+00:00:13,089 --> 00:00:18,040
+that these marginals can be computed
+using a single upward and downward pass
+
+5
+00:00:18,040 --> 00:00:22,097
+over the clique tree. So fairly efficient
+computation. But we also know that the
+
+6
+00:00:22,097 --> 00:00:27,037
+problem of inference and the problem is
+the graphical models is an NP hard
+
+7
+00:00:27,037 --> 00:00:31,088
+problem, and so somewhere over there,
+there must be a catch. That is there must
+
+8
+00:00:31,088 --> 00:00:36,025
+be a computational cost that occurs, at least
+in certain cases when we run the clique
+
+9
+00:00:36,025 --> 00:00:39,075
+tree algorithm. And what we're going to
+do now, is we're going to try and
+
+10
+00:00:39,075 --> 00:00:48,058
+understand where that hidden cost might
+lie. So while what we are going to do. So
+
+11
+00:00:48,058 --> 00:00:54,060
+in order to analyze the computational
+complexity of a clique tree, we are going
+
+12
+00:00:54,060 --> 00:01:00,055
+to define a little bit of notation. So
+let's consider an edge i,j, in the clique
+
+13
+00:01:00,055 --> 00:01:06,050
+tree, T, and let's assign a little bit of
+notation. We are going to divide the
+
+14
+00:01:06,050 --> 00:01:12,068
+variables into three groups. There is this
+group, so here what we have is a clique
+
+15
+00:01:12,068 --> 00:01:18,002
+tree; here is Ci, and Cj. They are
+adjacent cliques and they are connected to
+
+16
+00:01:18,002 --> 00:01:22,094
+each other via sepset Sij. And then
+there's this whole clique tree, whole
+
+17
+00:01:22,094 --> 00:01:28,035
+bunch of cliques on the left side and
+whole bunch of cliques on the right side.
+
+18
+00:01:28,035 --> 00:01:33,083
+We are going to divide these variables
+into these three groups. W, less, W that's
+
+19
+00:01:33,083 --> 00:01:39,093
+on the i side of the i,j edge. Are the
+variables that are just. In this group
+
+20
+00:01:39,093 --> 00:01:47,013
+here not counting the sepset which is
+going to appear in both types. W that's on
+
+21
+00:01:47,013 --> 00:01:54,023
+the J side is over there. And Sij is the
+stuff in the middle. So these are three
+
+22
+00:01:54,023 --> 00:02:01,079
+mutually exclusive and exhaustive groups,
+that partition all the variables in the
+
+23
+00:02:01,079 --> 00:02:09,037
+tree. And now here is a, an interesting and
+quite enlightening theorem, that says the
+
+24
+00:02:09,037 --> 00:02:15,071
+clique tree T satisfies the running
+intersection property, if and only if, for
+
+25
+00:02:15,071 --> 00:02:21,097
+every sepset ij, we have that the
+variables on the left side of the edge are
+
+26
+00:02:21,097 --> 00:02:28,082
+independent of the variables on the right
+side of the edge given the variables on
+
+27
+00:02:28,082 --> 00:02:36,040
+the middle of the edge. That is, these
+variables, the sepset, separate. The left
+
+28
+00:02:36,040 --> 00:02:43,053
+side from the right side. Now remember
+that the running intersection property was
+
+29
+00:02:43,053 --> 00:02:48,075
+the critical property that we used to
+prove correctness, of the clique tree
+
+30
+00:02:48,075 --> 00:02:54,040
+algorithm. So this is a, coming up with
+this condition that tells us exactly when
+
+31
+00:02:54,040 --> 00:03:00,012
+running intersection holds is important
+because this is the defining property for
+
+32
+00:03:00,012 --> 00:03:06,005
+all of those nice behaviors that we talked
+about earlier in terms of the clique tree
+
+33
+00:03:06,005 --> 00:03:11,026
+algorithm. So let's try and convince
+ourselves of this by looking at a concrete
+
+34
+00:03:11,026 --> 00:03:15,090
+example first. Let's look at the
+clique tree that we have over here and
+
+35
+00:03:15,090 --> 00:03:20,080
+let's for example focus on this sepset
+which has the variables G and S. And
+
+36
+00:03:20,080 --> 00:03:26,049
+variables on the left side of that sepset
+excluding variables G and S are I. D and C.
+
+37
+00:03:26,049 --> 00:03:32,046
+On the other hand, the variables on the
+right side of this sepset, again excluding
+
+38
+00:03:32,046 --> 00:03:37,070
+G and S, are H, J, and L. So now let's
+look at where these variables place
+
+39
+00:03:37,070 --> 00:03:42,094
+themselves on the graph structure over
+here, which is the induced graph
+
+40
+00:03:42,094 --> 00:03:48,069
+corresponding to the Markov network which
+we derived from the factors in this
+
+41
+00:03:48,069 --> 00:03:54,082
+Bayesian network. So Bayesian network CPDs
+produce factors. The factors give us this
+
+42
+00:03:54,082 --> 00:04:00,082
+induced Markov network. So, where are the
+sepset variables G and S? Those are over
+
+43
+00:04:00,082 --> 00:04:07,002
+here. Where are the variables on the left
+hand side? These are the blue variables C,
+
+44
+00:04:07,002 --> 00:04:12,054
+I, D and they're sitting over there. And,
+the green variables H, J and L, are
+
+45
+00:04:12,054 --> 00:04:17,098
+sitting over here. And, a simple
+inspection can show us that are no paths
+
+46
+00:04:17,098 --> 00:04:24,033
+or trails, between the blue variables and
+the green variables that do not go through
+
+47
+00:04:24,033 --> 00:04:30,093
+the red variables. So that we conclude
+from that, that the variables C, I, D
+
+48
+00:04:30,093 --> 00:04:43,016
+are separated. From. H. L. And J given, G
+and S. And from the connection between the
+
+49
+00:04:43,016 --> 00:04:52,007
+graph structure and independence in Markov
+networks, we can conclude from that, that
+
+50
+00:04:52,007 --> 00:05:01,024
+this independence property. Holes that is
+C, I and D are independent of H, J and L given G and S,
+
+51
+00:05:01,024 --> 00:05:09,054
+Which is exactly what we wanted to show
+that the sepset separates the variables on
+
+52
+00:05:09,054 --> 00:05:16,072
+the left. The blue variables, from the
+variables from on the right, green
+
+53
+00:05:16,072 --> 00:05:26,020
+variables. Let's try and give a slightly
+more, general argument for this, one that
+
+54
+00:05:26,020 --> 00:05:33,008
+isn't just demonstrating it in the context
+of a particular example. So let's ignore
+
+55
+00:05:33,008 --> 00:05:39,049
+for a moment the concrete letters inside
+this example and just think about what
+
+56
+00:05:39,049 --> 00:05:46,006
+would, why this is going to be true. So
+let's imagine that this is now a generic.
+
+57
+00:05:47,001 --> 00:05:55,070
+sepset and this is it over here and we'd
+like to prove that all the variables on
+
+58
+00:05:55,070 --> 00:06:04,097
+the green side are independent of all the
+variables on the blue side. So let's
+
+59
+00:06:04,097 --> 00:06:10,064
+assume otherwise. This is going to be a
+proof by contradiction. If this were not
+
+60
+00:06:10,064 --> 00:06:17,071
+the case, then that means that in this
+induced Markov network, there needs to be
+
+61
+00:06:17,071 --> 00:06:30,014
+some. So there's needs to be, though assume
+otherwise. Which means there needs to be a
+
+62
+00:06:30,014 --> 00:06:48,094
+path. In the induced Markov network. Between.
+The blue side and the green side, so
+
+63
+00:06:48,094 --> 00:07:02,025
+between W less than IJ. And W less than
+JI. But if there exists a path that goes
+
+64
+00:07:02,025 --> 00:07:06,057
+from one side of this graph to the other
+it means that there eventually has to be
+
+65
+00:07:06,057 --> 00:07:12,003
+an edge where one node is on one side and
+one node's on the other. So there, that
+
+66
+00:07:12,003 --> 00:07:18,059
+means there needs to be some edge that
+goes from the blue side to the green side.
+
+67
+00:07:18,059 --> 00:07:24,098
+Now notice, as I forgot to say, this path
+that exists in the induced Markov
+
+68
+00:07:24,098 --> 00:07:33,096
+network doesn't. That doesn't go through.
+The sepset. Because otherwise the sepset
+
+69
+00:07:33,096 --> 00:07:39,064
+was separated, so doesn't go through S I
+j. So there needs to be an edge, that goes
+
+70
+00:07:39,064 --> 00:07:44,097
+for example, from here to there. Or, it
+doesn't matter which node I pick, which
+
+71
+00:07:44,097 --> 00:07:50,065
+pair of nodes I pick. There needs to be
+some node on the green side and some node
+
+72
+00:07:50,065 --> 00:07:56,026
+on the blue side. This is the green side,
+and this is the blue side. And an edge that
+
+73
+00:07:56,026 --> 00:08:03,053
+goes between though it doesn't go through
+the sepset. But now that implies that
+
+74
+00:08:03,053 --> 00:08:12,018
+there needs to be some factor,
+phi, that involves those two
+
+75
+00:08:12,018 --> 00:08:24,017
+variables, so in this case, C comma H. But
+now because of family preservation, that
+
+76
+00:08:24,017 --> 00:08:31,062
+factor must sit in some. One of the
+cliques in this clique tree. And that
+
+77
+00:08:31,062 --> 00:08:37,026
+clique is either on the green side or on
+the blue side. It has to be somewhere. So
+
+78
+00:08:37,026 --> 00:08:41,094
+let's assume that we put that clique
+without loss of generality on.
+
+79
+00:08:42,070 --> 00:08:48,086
+the green side, but now what happens? We have
+an H that's sitting here, remember that H
+
+80
+00:08:48,086 --> 00:08:54,080
+is a blue variable, and H is also sitting
+here because it's in the blue side. And
+
+81
+00:08:54,080 --> 00:09:00,082
+now we have an H in one clique and an H in
+the other, and running the intersection
+
+82
+00:09:00,082 --> 00:09:06,062
+property tells us that H needs to be
+everywhere in between, and specifically.
+
+83
+00:09:07,025 --> 00:09:14,027
+It needs to be in the sepset which is a
+violation of the assumption either of the
+
+84
+00:09:14,027 --> 00:09:20,063
+running intersection property or of the
+assumption that the, the variable H is not
+
+85
+00:09:20,063 --> 00:09:26,012
+in the sepset. And so that's sort of a
+somewhat formal proof outline that can,
+
+86
+00:09:26,012 --> 00:09:30,089
+with a little bit of extra effort and
+notation, be made into a rigorous proof
+
+87
+00:09:30,089 --> 00:09:35,073
+of why running intersection property
+implies this independence assumption. And
+
+88
+00:09:35,073 --> 00:09:40,081
+I didn't prove the other direction because
+this is actually the direction that we
+
+89
+00:09:40,081 --> 00:09:45,052
+care about more. So we start out this
+whole discussion by saying th, these
+
+90
+00:09:45,052 --> 00:09:50,028
+properties have computational implications
+th, where are these computational
+
+91
+00:09:50,028 --> 00:09:55,041
+implications? What can we conclude from
+the fact that the sepset needs to separate
+
+92
+00:09:55,041 --> 00:10:00,023
+the graph into conditionally independent pieces? Well,
+it turns out that in many graphs that
+
+93
+00:10:00,023 --> 00:10:05,043
+implies a certain minimal complexity that
+can sometimes be quite large. So let's do
+
+94
+00:10:05,043 --> 00:10:10,062
+this [inaudible], let's look at this in
+the context of two quite simple but very
+
+95
+00:10:10,062 --> 00:10:15,063
+commonly used examples. So here is an
+example of a. It's what's called a, a
+
+96
+00:10:15,063 --> 00:10:23,088
+complete bipartite graph. Where we have
+two sets of variables. That have no edges
+
+97
+00:10:23,088 --> 00:10:29,085
+between each of the sets separately but
+where all of the cross edges are present.
+
+98
+00:10:29,085 --> 00:10:35,075
+This is a structure that is, that we've
+actually seen before. We saw it in the
+
+99
+00:10:35,075 --> 00:10:42,077
+context of the, plate model for student.
+For course difficulty. And students
+
+100
+00:10:42,077 --> 00:10:47,064
+intelligence, where we had a bunch of
+difficulty variables, a bunch of
+
+101
+00:10:47,064 --> 00:10:53,051
+intelligence variables, and there were no
+edges between the difficulties or between
+
+102
+00:10:53,051 --> 00:10:59,030
+the intelligences. But for very difficulty
+and intelligence pair there was an edge
+
+103
+00:10:59,030 --> 00:11:04,088
+that wasn't used by the V structure
+corresponding to an observed student grade
+
+104
+00:11:04,088 --> 00:11:09,089
+between the course difficulty,
+corresponding course difficulty and that
+
+105
+00:11:09,089 --> 00:11:14,090
+student's intelligence. What is the
+smallest sepset that we could possibly
+
+106
+00:11:14,090 --> 00:11:20,046
+construct for this graph, can we for
+example look at just say these two A's and
+
+107
+00:11:20,046 --> 00:11:25,041
+separate out the graph into two
+conditionally independent pieces? Well, no
+
+108
+00:11:25,041 --> 00:11:30,097
+not really because for example if we now
+look at these two B's we can see you can
+
+109
+00:11:30,097 --> 00:11:36,073
+connect them via any one of the other A's
+that I didn't include in the sepset and so
+
+110
+00:11:36,073 --> 00:11:41,088
+this doesn't decouple the graph at all.
+With a little bit of extra thought it's
+
+111
+00:11:41,088 --> 00:11:47,009
+not difficult to convince oneself that the
+smallest sepset that we could construct,
+
+112
+00:11:47,009 --> 00:11:51,079
+that actually breaks up the graph into
+meaningful pieces, is either all the
+
+113
+00:11:51,079 --> 00:11:56,099
+variables on the one side or all of the
+variable on the other which means that the
+
+114
+00:11:56,099 --> 00:12:06,098
+smallest sepset. Where the small in any
+kind of meaningful clique tree has size.
+
+115
+00:12:07,091 --> 00:12:13,040
+Greater than or equal to min of k
+comma m where k is the number of
+
+116
+00:12:13,040 --> 00:12:19,067
+variables on the one side and m on the
+other. A slightly less obvious example but
+
+117
+00:12:19,067 --> 00:12:25,008
+one that is also imposes some very
+significant lower boundaries in the
+
+118
+00:12:25,008 --> 00:12:30,041
+context of the grid, such as we
+encountered in the Izing model or when
+
+119
+00:12:30,041 --> 00:12:36,042
+doing image analysis, where the variables
+correspond to pixels. And now let's try
+
+120
+00:12:36,042 --> 00:12:42,028
+and think about how we might break up this
+graph into separate conditionally
+
+121
+00:12:42,028 --> 00:12:49,023
+independent pieces. Now, we can construct
+clique trees to have smaller sepsets, small
+
+122
+00:12:49,023 --> 00:12:55,012
+sepset. For example, here's a sepset.
+Breaks away A 1,1 from everything
+
+123
+00:12:55,012 --> 00:13:01,035
+else. But notice that, that still leaves
+me a very large everything else. But if we
+
+124
+00:13:01,035 --> 00:13:07,029
+try, for example, to break up the graph so
+that A 1,1 appears on the one side,
+
+125
+00:13:07,029 --> 00:13:13,023
+and A 4,4 appears on the other, any
+clique tree that you give me that will
+
+126
+00:13:13,023 --> 00:13:18,080
+have this separation with A 1,1 on
+the one side and A 4,4 on the
+
+127
+00:13:18,080 --> 00:13:31,096
+other, any such clique tree has to have. A
+sepset. Of size. Greater than or equal to
+
+128
+00:13:31,096 --> 00:13:37,019
+N, where this is an N by N gri-, grid.
+Which means that if you try and break up
+
+129
+00:13:37,019 --> 00:13:42,063
+the N by N grid in a way that puts one
+corner on one side and one corner on the
+
+130
+00:13:42,063 --> 00:13:48,027
+other, then you're going to have a sepset
+that's at least the dimension of the grid.
+
+131
+00:13:48,089 --> 00:13:55,005
+And breaking it up in other ways doesn't
+make it any better. So here are two cases
+
+132
+00:13:55,005 --> 00:14:01,022
+where we can place a lower bound on the
+size of the sepset that is required for
+
+133
+00:14:01,045 --> 00:14:08,001
+running clique tree inference. And that is where we
+pay the, exponential blowup. That is, in
+
+134
+00:14:08,001 --> 00:14:14,010
+some sense, required by the fact that,
+that the problem is intrinsically a
+
+135
+00:14:14,010 --> 00:14:19,003
+NP hard problem. So, to summarize,
+We've shown previously that the
+
+136
+00:14:19,003 --> 00:14:24,060
+correctness of the clique tree inference
+algorithms relies on having the running
+
+137
+00:14:24,060 --> 00:14:29,017
+intersection property. And we have now
+shown in turn that the running
+
+138
+00:14:29,017 --> 00:14:34,041
+intersection property implies certain
+separation properties on the original
+
+139
+00:14:34,041 --> 00:14:39,089
+distribution. These separation properties
+in turn can be used to analyze the
+
+140
+00:14:39,089 --> 00:14:45,067
+complexity of inference in different
+graphs and provide certain minimal bounds
+
+141
+00:14:45,067 --> 00:14:51,067
+on the complexity that would have to be
+incurred by the best possible clique tree
+
+142
+00:14:51,067 --> 00:14:57,060
+on graphs. And we have already seen the
+notion of minimal complexity which is the
+
+143
+00:14:57,060 --> 00:15:03,053
+minimal induced width of the graph; this
+notion is a little bit different because
+
+144
+00:15:03,053 --> 00:15:09,013
+it talks about sepsets. Whereas being used
+with really talks more about tweaks but
+
+145
+00:15:09,013 --> 00:15:14,063
+these are both ways of analyzing the
+complexity certain minimal complexity that
+
+146
+00:15:14,063 --> 00:15:20,000
+has been incurred by exact inference which
+again is related with again is related to
+
+147
+00:15:20,000 --> 00:15:21,060
+the NP hardness of problem.

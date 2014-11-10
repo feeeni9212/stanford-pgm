@@ -1,0 +1,1134 @@
+
+1
+00:00:00,000 --> 00:00:05,063
+So there are many classes of models that,
+that allow us to represent in a single
+
+2
+00:00:05,063 --> 00:00:11,006
+concise representation, a template over,
+rich models that incorporate multiple
+
+3
+00:00:11,006 --> 00:00:16,002
+copies of the same variable. And also
+allows to represent multiple models
+
+4
+00:00:16,002 --> 00:00:21,004
+within, as a byproduct of the single
+representation. But, one of the most
+
+5
+00:00:21,004 --> 00:00:26,006
+commonly used among those, is for
+reasoning about temporal models, where we
+
+6
+00:00:26,006 --> 00:00:36,010
+have a system that evolves over time. So.
+So let's look at what we have, [inaudible]
+
+7
+00:00:36,010 --> 00:00:42,053
+represent a distribution over temporal
+trajectories. So the first thing we wanna
+
+8
+00:00:42,053 --> 00:00:48,080
+do when representing a distribution over
+continuous time, is, in most cases, not
+
+9
+00:00:48,080 --> 00:00:55,040
+always, is to try and forget that time's
+actually continuous. Because continuous
+
+10
+00:00:55,040 --> 00:01:01,035
+quantities are harder to deal with. So
+we're going to discretize time. And
+
+11
+00:01:01,035 --> 00:01:07,021
+specifically. Eyes closed. And
+specifically, we're going to do that by
+
+12
+00:01:07,021 --> 00:01:11,090
+picking a particular time granularity
+delta. Which is the time granularity; it's
+
+13
+00:01:11,090 --> 00:01:16,053
+which we're going to measure time. Now, in
+many cases, this is something that we
+
+14
+00:01:16,053 --> 00:01:21,028
+already, is given to us by the granularity
+of our sensor. So, in many cases, for
+
+15
+00:01:21,028 --> 00:01:26,015
+example, when we have, a video or a robot,
+there is a certain time granularity at
+
+16
+00:01:26,015 --> 00:01:30,078
+which we obtain measurements. And so
+that's usually the granularity that we'll
+
+17
+00:01:30,078 --> 00:01:35,082
+pick. But in other cases, we might want to
+have a different, a different granularity.
+
+18
+00:01:35,082 --> 00:01:41,012
+So there is a choice here. So here's our
+time granularity, for example. And now we
+
+19
+00:01:41,012 --> 00:01:46,065
+have a set of template random variables, X
+of P. And X of P denotes the value of a
+
+20
+00:01:46,065 --> 00:01:51,084
+particular variable X. A variable X being
+a template variable. X of P being a
+
+21
+00:01:51,084 --> 00:01:57,030
+particular instantiation of that variable
+at time point P delta. So that we have
+
+22
+00:01:57,030 --> 00:02:03,032
+multiple copies, one for each time point.
+Now here's some notation that we're going
+
+23
+00:02:03,032 --> 00:02:09,089
+to end up using later on. So [inaudible]
+introduce it. Where X of T denotes the
+
+24
+00:02:09,089 --> 00:02:15,038
+variable X at time T. Xt: T prime denotes
+the set. [inaudible] between P and P
+
+25
+00:02:15,038 --> 00:02:20,051
+prime. So a discrete in this case because
+we've discredited time so a finite set of
+
+26
+00:02:20,051 --> 00:02:25,071
+random variables that spans these two time
+points inclusive. Now our goal is that we
+
+27
+00:02:25,071 --> 00:02:30,097
+would like to be able to have a, a concise
+representation that allows us to represent
+
+28
+00:02:30,097 --> 00:02:35,086
+this probability distribution over the
+traject, over a trajectory of the system
+
+29
+00:02:36,004 --> 00:02:40,093
+of any duration. So we want to start at a
+particular time point, usually this is
+
+30
+00:02:40,093 --> 00:02:45,038
+going to be zero, and then how, what is
+the probability distribution over
+
+31
+00:02:45,038 --> 00:02:50,061
+trajectories of arbitrary length. Well how
+do we represent what is, a, first of all,
+
+32
+00:02:50,061 --> 00:02:55,022
+an infinite family of probability
+distributions because you could look at
+
+33
+00:02:55,022 --> 00:03:00,003
+trajectories of, of duration two, five,
+ten, a million, select an infinite family
+
+34
+00:03:00,003 --> 00:03:05,008
+of distributions. And each of these is a
+distribution over of an unbounded number
+
+35
+00:03:05,008 --> 00:03:10,020
+of random variables, because if you have a
+distribution over a trajectory length a
+
+36
+00:03:10,020 --> 00:03:15,006
+million, you have to represent a million
+dimensional distribution. So how do we.
+
+37
+00:03:15,006 --> 00:03:19,045
+Compactify that, how do we make that a
+much more concise representation? So,
+
+38
+00:03:19,045 --> 00:03:24,014
+there's different pieces to this. The
+first of those is what's typically called
+
+39
+00:03:24,014 --> 00:03:28,095
+the Markov assumption. And the Markov
+assumption, goes, is effectively a type of
+
+40
+00:03:28,095 --> 00:03:33,070
+conditional independence assumption. It's
+the same building block that we use to
+
+41
+00:03:33,070 --> 00:03:38,021
+[inaudible] general purpose graphical
+models we're going to use here in the
+
+42
+00:03:38,021 --> 00:03:42,078
+context of time course data. So here,
+we're saying that the probability of the
+
+43
+00:03:42,078 --> 00:03:48,000
+variable X. Sorry the set of variable
+expanding the time from zero all the way
+
+44
+00:03:48,000 --> 00:03:53,016
+to capital T so I haven't made any
+assumptions yet in the statement so I am
+
+45
+00:03:53,016 --> 00:03:58,051
+just writing this down, we expressing it
+in term of the chain rule for probability,
+
+46
+00:03:58,051 --> 00:04:03,034
+there's no chain rule for daisy and
+network yet here, this is just a chain
+
+47
+00:04:03,034 --> 00:04:08,030
+rule for probabilities and the chain rule
+for probabilities in this context
+
+48
+00:04:08,030 --> 00:04:13,039
+basically says that, that probability is
+equal to the probability of X, at time
+
+49
+00:04:13,039 --> 00:04:21,047
+zero. Times the probability of each
+consecutive time points, t + one, given.
+
+50
+00:04:21,047 --> 00:04:31,001
+So, this is the state at t + one. Given
+the state. At all previous claim points,
+
+51
+00:04:31,001 --> 00:04:36,070
+zero up to T. So this is not in any way an
+assumption, this is just a way of
+
+52
+00:04:36,070 --> 00:04:42,009
+re-expressing this probability
+distribution in the way that time flows
+
+53
+00:04:42,009 --> 00:04:50,076
+forward. But it's not an assumption. You
+can represent any probability distribution
+
+54
+00:04:50,076 --> 00:04:55,019
+over these random variables in this way.
+But now we're going to add this
+
+55
+00:04:55,019 --> 00:04:59,086
+assumption. And this is an assumption.
+This is an independence assumption. And
+
+56
+00:04:59,086 --> 00:05:04,066
+this independence assumption tells me that
+X of P+1, that is the state of time P+1,
+
+57
+00:05:04,066 --> 00:05:11,086
+the next step. So this is the next step.
+Is independent of the past. Given the
+
+58
+00:05:11,086 --> 00:05:19,065
+present. So this is a forgetting
+assumption. Once you know the current
+
+59
+00:05:19,065 --> 00:05:28,052
+states. You don't care anymore about your
+past. [sound] If you do that, we can now
+
+60
+00:05:28,052 --> 00:05:34,034
+go back to this chain rule over here, and
+simplify it. Because whereas, before, we
+
+61
+00:05:34,034 --> 00:05:40,008
+conditioned on X up to zero, from time
+zero to time T. Now everything up to T-1
+
+62
+00:05:40,008 --> 00:05:45,090
+is conditionally independent. Given, so
+all this is conditionally independent of
+
+63
+00:05:45,090 --> 00:05:51,072
+P+1, given X of T. Which means that I've
+allowed myself to move X of P here as the
+
+64
+00:05:51,072 --> 00:05:57,039
+only thing that I'm conditioned on,
+conditioning on, in order to determine the
+
+65
+00:05:57,039 --> 00:06:03,009
+probability of distribution of X, P+1. So
+to what extent is this assumption
+
+66
+00:06:03,009 --> 00:06:14,068
+warranted? So is this true? And let's take
+as an example; x equals the location, or
+
+67
+00:06:14,068 --> 00:06:22,097
+pos. Of a robot, or an object that's
+moving. Is it the case that the location
+
+68
+00:06:22,097 --> 00:06:29,086
+of the robot at T+1, so L of T+1+1, is
+independent of, say, L of P-1, just to
+
+69
+00:06:29,086 --> 00:06:38,085
+simplify our lives, given L of P. Is this
+a reasonable assumption? Well, in most
+
+70
+00:06:38,085 --> 00:06:47,028
+cases, probably not. And the reason is
+that it completely ignores the issue of
+
+71
+00:06:47,028 --> 00:06:53,020
+velocity. Which direction are you moving
+and how fast? And so this is a classical
+
+72
+00:06:53,020 --> 00:06:59,054
+example of where the Markov assumption,
+for this particular model, is probably too
+
+73
+00:06:59,054 --> 00:07:05,079
+strong of an assumption. So what do we do
+fix it? The one, one way to fix it is to
+
+74
+00:07:05,079 --> 00:07:14,019
+enrich the state description. So estimate
+the mark-up assumption to better
+
+75
+00:07:14,019 --> 00:07:19,031
+approximation. Just like any independent
+estimation the mark-up assumption is
+
+76
+00:07:19,031 --> 00:07:23,097
+always going to be an approximation. But
+the question is, how good of an
+
+77
+00:07:23,097 --> 00:07:30,007
+approximation? And if we add for example
+ZUT. Which is the velocity at time t and
+
+78
+00:07:30,007 --> 00:07:35,098
+maybe the [inaudible] at time t, maybe the
+robot's intent, where its goal is, I mean,
+
+79
+00:07:35,098 --> 00:07:42,038
+all sorts of additional stuff into the
+state, then at that point. The Markov
+
+80
+00:07:42,038 --> 00:07:48,049
+assumption becomes much more warranted.
+Okay? And so that's one way of proving the
+
+81
+00:07:48,049 --> 00:07:54,037
+Markov assumption true. An alternative
+strategy which we are not going to talk
+
+82
+00:07:54,037 --> 00:08:00,056
+about right now is to move away from the
+Markov assumption by adding dependencies.
+
+83
+00:08:02,051 --> 00:08:14,096
+They go further back in time. Back in
+time. And that's called a semi mark up
+
+84
+00:08:14,096 --> 00:08:25,050
+model. And we're not going to talk about
+that right now. The second big assumption,
+
+85
+00:08:25,050 --> 00:08:31,016
+that we are going to have to make, in
+order to simplify the model, is intended
+
+86
+00:08:31,016 --> 00:08:38,070
+to deal with the question of, well fine,
+so we've reduced the model to encoding A
+
+87
+00:08:38,070 --> 00:08:43,094
+probability of X of P+1, given X of P. But
+it's still an unbounded number of
+
+88
+00:08:43,094 --> 00:08:49,039
+conditional probabilities. Now at least
+each of them is compact, but there is
+
+89
+00:08:49,039 --> 00:08:55,013
+still a probabilistic models for every P.
+And this is where we're going to end up
+
+90
+00:08:55,013 --> 00:09:00,080
+with a, with a template based model. We're
+going to stipulate that there is a
+
+91
+00:09:00,080 --> 00:09:06,026
+probabilistic model, P of X prime, given
+X. X prime denotes the next time point,
+
+92
+00:09:06,026 --> 00:09:14,052
+and X denotes the current time point. And
+we're going to see that, that model is
+
+93
+00:09:14,052 --> 00:09:19,049
+replicated. For every single time point.
+That is, when you're moving from time zero
+
+94
+00:09:19,049 --> 00:09:23,091
+to time one, you use the small one. You
+move from time one to time two, you also
+
+95
+00:09:23,091 --> 00:09:28,022
+use the small. And, and that assumption,
+for obvious reasons, is called time
+
+96
+00:09:28,022 --> 00:09:32,058
+invariance, because it assumes that the
+dynamics of the system, not the actual
+
+97
+00:09:32,058 --> 00:09:37,006
+position of the robot, but rather the
+dynamics that move it from state to state
+
+98
+00:09:37,006 --> 00:09:41,038
+or the dynamics of the system, don't
+depend on the current time point t. And
+
+99
+00:09:41,038 --> 00:09:47,049
+once again, this is an assumption and it's
+an assumption that's warranted in certain
+
+100
+00:09:47,049 --> 00:09:53,091
+cases and not in others. So, let's imagine
+that this represents now the traffic. On
+
+101
+00:09:53,091 --> 00:10:02,083
+some road. Well, does that traffic. Do the
+dynamics of that traffic depend on; on say
+
+102
+00:10:02,083 --> 00:10:09,050
+the current time point of the system? On
+most roads, the answer is probably yes. It
+
+103
+00:10:09,050 --> 00:10:19,098
+might depend on the time of day. On the
+day of the week. And on whether there is a
+
+104
+00:10:19,098 --> 00:10:27,035
+big football match and all sorts of thing
+that might affect the dynamics of traffic.
+
+105
+00:10:27,035 --> 00:10:33,050
+The point being that just like in the
+previous example we can correct
+
+106
+00:10:33,050 --> 00:10:40,008
+inaccuracies in our assumption by
+enriching the model. So once again we can
+
+107
+00:10:40,008 --> 00:10:47,037
+enrich the model by including. These
+variables in it and once we have that then
+
+108
+00:10:47,037 --> 00:10:52,092
+again the model becomes a much better
+reflection of reality. So now, how do we
+
+109
+00:10:52,092 --> 00:10:58,007
+represent this probabilistic model in, in
+the context of a graphical model like we
+
+110
+00:10:58,007 --> 00:11:03,016
+had before? So let's now assume that our
+[inaudible] is composed of a set of random
+
+111
+00:11:03,016 --> 00:11:08,044
+variables. And so we're [inaudible], so we
+have we have a little baby traffic system,
+
+112
+00:11:08,044 --> 00:11:12,097
+where we have the weather at the current
+time point. The location of, say, a
+
+113
+00:11:12,097 --> 00:11:17,094
+vehicle, the velocity of the vehicle. We
+also have the sensor, whose observation we
+
+114
+00:11:17,094 --> 00:11:22,091
+get at each of those time points. And the
+sensor may or may not be failing at the
+
+115
+00:11:22,091 --> 00:11:29,032
+current time point. And what we've done
+here is we've encoded, the, the
+
+116
+00:11:29,032 --> 00:11:36,075
+probabilistic model of, this, next state.
+So W prime, V prime, L prime, F prime, and
+
+117
+00:11:36,075 --> 00:11:43,088
+O prime, Given, the previous state. So
+given W V L F. Why is O not here on the
+
+118
+00:11:43,088 --> 00:11:49,038
+right hand side? It's not here on the
+right hand side, because it doesn't affect
+
+119
+00:11:49,038 --> 00:11:54,075
+any of the next state variables. So it
+would be kinda hanging down here, if we
+
+120
+00:11:54,075 --> 00:12:00,060
+included it. But since it doesn't affect
+anything, we don't choose to, to represent
+
+121
+00:12:00,060 --> 00:12:06,045
+it. So this model represents a conditional
+distribution. Now we have a little network
+
+122
+00:12:06,045 --> 00:12:11,047
+fragment, so this is a network fragment.
+And it doesn't represent a joint
+
+123
+00:12:11,047 --> 00:12:17,061
+distribution. It represents additional
+distribution. The condition distribution
+
+124
+00:12:17,061 --> 00:12:26,091
+of the C plus one, gives them C. But, wa,
+but. In order to represent that we still
+
+125
+00:12:26,091 --> 00:12:32,069
+use the same tools that we had in the
+context of vary, of graphical models. And
+
+126
+00:12:32,069 --> 00:12:38,062
+so we can write that as the same kind of
+chain rule that we used before. So this
+
+127
+00:12:38,062 --> 00:12:44,048
+would be the probability of W prime, given
+W, based on the schedule over here. The
+
+128
+00:12:44,048 --> 00:12:49,024
+probability of the prime, the velocity, so
+this says that the weather, the first one
+
+129
+00:12:49,024 --> 00:12:54,012
+says that the weather [inaudible] depends
+on the weather time T. The second one that
+
+130
+00:12:54,012 --> 00:12:58,089
+the velocity of time T plus one depends on
+the weather time T and the velocity of
+
+131
+00:12:58,089 --> 00:13:03,031
+time T which indicates a certain
+persistence in the velocity as well as the
+
+132
+00:13:03,031 --> 00:13:07,090
+fact that if it's raining you might slip
+sideways so the velocity might change.
+
+133
+00:13:07,090 --> 00:13:12,014
+Also if you're careful you might
+[inaudible] down if it's raining and so
+
+134
+00:13:12,014 --> 00:13:16,099
+again there might be an effect of the
+weather and the velocity. The probability
+
+135
+00:13:16,099 --> 00:13:23,023
+of the location at time t plus one given
+the location at time t and the velocity at
+
+136
+00:13:23,023 --> 00:13:28,026
+time t. The probability of the sensor
+failure time t plus one give them a
+
+137
+00:13:28,026 --> 00:13:33,045
+failure and the previous time and the
+weather. Which indicates that once the
+
+138
+00:13:33,045 --> 00:13:39,012
+sensor is failed it?s probably more likely
+to stay failed but if many rain can make
+
+139
+00:13:39,012 --> 00:13:44,086
+the sensor behave badly. And then finally,
+the probability of the observation of time
+
+140
+00:13:44,086 --> 00:13:50,046
+t plus one gives them the location of time
+t plus one and the failure time t plus
+
+141
+00:13:50,046 --> 00:13:58,051
+one. So there are several important things
+to note about this diagram that are worth
+
+142
+00:13:58,051 --> 00:14:06,000
+highlighting. First of all, we have a
+dependencies both within and across time.
+
+143
+00:14:06,000 --> 00:14:12,053
+So here we have a dependency that goes
+from T to T+1. And here we have a
+
+144
+00:14:12,053 --> 00:14:18,087
+dependency that is within T plus one
+alone. What, what induces us to make a d-,
+
+145
+00:14:18,087 --> 00:14:25,037
+a modeling choice like this go one way
+versus the other, the assumption here is
+
+146
+00:14:25,037 --> 00:14:33,024
+that this is a fairly [inaudible]. The
+[inaudible] dependency. So that a, the
+
+147
+00:14:33,024 --> 00:14:38,099
+observation is relatively instantaneous
+compared to our time granularity. And so
+
+148
+00:14:38,099 --> 00:14:44,088
+we, we don't want that to go across time,
+but rather, we want it to be within a time
+
+149
+00:14:44,088 --> 00:14:50,070
+slice, because it's a better reflection
+for, which variable is it that actually
+
+150
+00:14:50,070 --> 00:14:56,037
+influences the observation? Is it the
+current location or the previous location?
+
+151
+00:14:56,037 --> 00:15:02,026
+So, these kinds of edges, let's just give
+them names. These are called intra time
+
+152
+00:15:02,026 --> 00:15:12,027
+slice. Edges. That means they're called,
+inter, or between times five. And the
+
+153
+00:15:12,027 --> 00:15:20,051
+model can include a combination of both of
+these. Another kind of, anoth-, particular
+
+154
+00:15:20,051 --> 00:15:26,040
+type of inter-time slice edge that's worth
+highlighting specifically, are edges that
+
+155
+00:15:26,040 --> 00:15:31,094
+go from a variable at one time point to
+the value of that variable at the next
+
+156
+00:15:31,094 --> 00:15:37,012
+time point. These are often called
+persistence edges, because they indicate
+
+157
+00:15:37,012 --> 00:15:42,087
+the, the tendency of a variable to persist
+in state from one time point to another.
+
+158
+00:15:43,067 --> 00:15:50,029
+Finally, let's just go back and look at
+the parameterization that we have in. This
+
+159
+00:15:50,029 --> 00:15:55,073
+model. So what CPDs did we actually
+need to include in this model? So we can
+
+160
+00:15:55,073 --> 00:16:00,059
+see that we have CPDs for the
+variables of the right hand side, the
+
+161
+00:16:00,059 --> 00:16:05,092
+prime variables. But there is no CPDs for
+the variables, that are unprimed, the
+
+162
+00:16:05,092 --> 00:16:11,012
+variables on the left. And this is because
+the model doesn't actually try and
+
+163
+00:16:11,012 --> 00:16:16,032
+represent the distribution o-, over W, V,
+L and F. It doesn't try and do that. It
+
+164
+00:16:16,032 --> 00:16:21,079
+tries to represent the probability of the
+next time slice, given the previous one.
+
+165
+00:16:21,079 --> 00:16:26,065
+So, as we can see, this graphical model
+only has CPDs for a subset of the
+
+166
+00:16:26,065 --> 00:16:32,043
+variables in it. The ones that represent
+the next time point. So that represents
+
+167
+00:16:32,043 --> 00:16:37,038
+the transition dynamics if we want to
+represent the probability distribution over
+
+168
+00:16:37,038 --> 00:16:42,050
+the entire system we also need to provide
+a distribution over the initial state and
+
+169
+00:16:42,050 --> 00:16:47,081
+this is just the standard generic Bayesian
+network which represents the probability
+
+170
+00:16:47,081 --> 00:16:54,032
+over the state at time zero using some
+appropriate chain rule. So, nothing very
+
+171
+00:16:54,032 --> 00:17:02,067
+fancy here. With those two pieces we can
+now represent probability distributions
+
+172
+00:17:02,067 --> 00:17:10,000
+over arbitrarily long trajectories. So we
+represent this by taking for time slice zero
+
+173
+00:17:10,000 --> 00:17:17,006
+and copying the time zero bayesian network.
+Which represents the probability
+
+174
+00:17:17,006 --> 00:17:23,034
+distribution over the time zero variables,
+and now we have a bunch of copies, that
+
+175
+00:17:23,034 --> 00:17:31,073
+represent, the probability distribution at
+time one given time zero. And here we
+
+176
+00:17:31,073 --> 00:17:37,049
+have another copy of exactly the same set
+of parameters that represents time two
+
+177
+00:17:37,049 --> 00:17:43,032
+given time one. And if we continue copying
+this indefinitely, and each copy gives us
+
+178
+00:17:43,032 --> 00:17:49,029
+the probability distributions of the next
+time slice given the one that we just had.
+
+179
+00:17:49,029 --> 00:17:55,038
+And so we can construct arbitrary long
+bayesian networks. So to make this definition
+
+180
+00:17:55,038 --> 00:18:01,021
+slightly more formal we define the notion
+of a two time slide Bayesian network also
+
+181
+00:18:01,021 --> 00:18:07,057
+known as a 2TBN. And the 2TBN over a
+set of template variables X1 up to XN, is
+
+182
+00:18:07,057 --> 00:18:14,053
+specifying as a Bayesian network fragment
+along exactly the same lines that we used
+
+183
+00:18:14,053 --> 00:18:21,065
+in the example. The nodes have two copies
+the next time state variables X1 prime up to XN prime
+
+184
+00:18:21,065 --> 00:18:28,027
+prime up to XN prime, and some subset of
+X1 up to XN, which are the variables, the
+
+185
+00:18:28,027 --> 00:18:44,038
+time T variables. That affect directly.
+The state at T plus one. Okay. And,
+
+186
+00:18:44,038 --> 00:18:49,018
+because we want this to represent a
+conditional probability distribution. Only
+
+187
+00:18:49,018 --> 00:18:54,010
+the time T plus one nodes
+have parents and a CPD. Because we don't
+
+188
+00:18:54,010 --> 00:18:59,021
+really want to model the distribution over
+the variables of time T. And the 2TBN
+
+189
+00:18:59,021 --> 00:19:07,030
+defines a conditional distribution,
+using the chain rule. Using something that
+
+190
+00:19:07,030 --> 00:19:12,058
+looks exactly like the chain rule. So the
+probability of x prime given x is the
+
+191
+00:19:12,058 --> 00:19:18,007
+product of each variable in time t plus
+one so only the prime variables given its
+
+192
+00:19:18,007 --> 00:19:23,062
+parents. Which may or be, which may be in
+time t plus one or time t or a combination
+
+193
+00:19:23,062 --> 00:19:33,056
+of both. A dynamic Bayesian network is now
+basically defined by a two TBN. Which we
+
+194
+00:19:33,056 --> 00:19:41,081
+just defined and a Basian network over time zero. So this is the dynamics. And this
+
+195
+00:19:41,081 --> 00:19:48,053
+is the initial state. And we can use that
+to define arbitrary probability
+
+196
+00:19:48,053 --> 00:19:54,066
+distributions for sorry probability
+distributions over arbitrarily long
+
+197
+00:19:54,066 --> 00:20:01,020
+trajectories, using what's called the
+unrolled network or also called the ground
+
+198
+00:20:01,020 --> 00:20:07,058
+network. And this is exactly in the as in
+the example that I showed, dependency
+
+199
+00:20:07,058 --> 00:20:13,096
+model for time zero is copied from the
+base net for time zero, and this is the
+
+200
+00:20:13,096 --> 00:20:19,023
+transition is copied. From the bayes net that denotes
+the conditional probability for
+
+201
+00:20:19,023 --> 00:20:23,078
+transitions. So before we conclude this
+lecture let's look at an example of a
+
+202
+00:20:23,078 --> 00:20:28,058
+dynamic Bayesian network that is a more
+realistic one than the simple examples
+
+203
+00:20:28,058 --> 00:20:33,056
+that we've shown before. This is a network
+that was actually designed for tracking
+
+204
+00:20:33,056 --> 00:20:38,085
+vehicles in a traffic situation. And so we
+can see that there are multiple variables
+
+205
+00:20:38,085 --> 00:20:44,003
+here that represent both the position and
+velocity. Of the vehicle. Both in an
+
+206
+00:20:44,003 --> 00:20:50,003
+absolute sense. For example, this is X dot
+and Y dot are the velocities. As well as
+
+207
+00:20:50,003 --> 00:20:55,018
+various more semantic notions of location
+like whether you?re in the lane.
+
+208
+00:20:55,018 --> 00:21:00,088
+[inaudible] There are contextual
+variables, such as left clear and right
+
+209
+00:21:00,088 --> 00:21:08,056
+clear. The engine status for example. As
+well as what the driver is currently
+
+210
+00:21:08,056 --> 00:21:16,062
+doing. For example the forward action and
+the lateral action. We can see that there
+
+211
+00:21:16,062 --> 00:21:23,095
+are persistence edges. That denote the
+persistence of. There is [inaudible] of
+
+212
+00:21:23,095 --> 00:21:29,041
+the state from time t to time t plus one.
+As well as a variety of this intermediate
+
+213
+00:21:29,041 --> 00:21:34,061
+variables over here, that allow us to
+represent the probability distribution in
+
+214
+00:21:34,061 --> 00:21:39,095
+even more compact way by incorporating
+variables that do not persist to at least
+
+215
+00:21:39,095 --> 00:21:45,013
+a simple five model that not persist. And
+finally. We see that there are a large
+
+216
+00:21:45,013 --> 00:21:50,021
+number of sensor observations, such as
+turn signal. Whether it be cars clear on
+
+217
+00:21:50,021 --> 00:21:55,056
+the right and on the left, or appears to
+be clear on the right and the left, and so
+
+218
+00:21:55,056 --> 00:22:01,010
+on. So this is a much more realistic model
+of how traffic evolves than the simplified
+
+219
+00:22:01,010 --> 00:22:09,062
+one that we saw before. To summarize,
+dynamic Bayesian networks provide us with
+
+220
+00:22:09,062 --> 00:22:15,078
+a language for encoding structure
+distributions over time. And by making the
+
+221
+00:22:15,078 --> 00:22:22,020
+assumptions of a Markovian evolution, as
+well as time and variants, we can use a
+
+222
+00:22:22,020 --> 00:22:28,085
+single compact network to allow us to
+encode arbitrarily long transitions, over
+
+223
+00:22:28,085 --> 00:22:35,087
+arbitrarily long time sequences. [sound].
+But these assumptions that we made, the
+
+224
+00:22:35,087 --> 00:22:40,069
+Markovian assumption, and the time
+invariance assumption, are not
+
+225
+00:22:40,069 --> 00:22:46,048
+immediately, correct, and might require
+that we redesign the model, so as to,
+
+226
+00:22:46,071 --> 00:22:52,058
+enforce, so as to make these assumptions a
+better approximation to, the true
+
+227
+00:22:52,058 --> 00:23:00,029
+underlying distribution. By, for example,
+adding variables as we showed. [sound]

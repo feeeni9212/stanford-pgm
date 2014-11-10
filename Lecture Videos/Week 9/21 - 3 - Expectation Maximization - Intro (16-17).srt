@@ -1,0 +1,865 @@
+
+1
+00:00:00,000 --> 00:00:05,293
+We talked about the problem of, learning
+models with missing variables, missing
+
+2
+00:00:05,293 --> 00:00:09,998
+data. And discussed some of the
+complexities of that learning problem. So,
+
+3
+00:00:09,998 --> 00:00:14,964
+now we're going to basically bite the
+bullet and try and understand how one
+
+4
+00:00:14,964 --> 00:00:19,996
+might go about doing, say, parameter
+estimation in the context of missing data
+
+5
+00:00:19,996 --> 00:00:25,681
+nevertheless. So let's remind ourselves of
+one of the more important, difficulties in
+
+6
+00:00:25,681 --> 00:00:30,984
+learning. Parameters for the missing data.
+So let's draw here the likelihood function
+
+7
+00:00:30,984 --> 00:00:36,122
+that we might have. So the x-axis here is
+the param-, is a pictorial description of
+
+8
+00:00:36,122 --> 00:00:40,897
+the parameter vector theta. And it's a
+one-dimensional depiction, but usually, of
+
+9
+00:00:40,897 --> 00:00:45,431
+course, it'll be multidimensional. And
+what we see here on the y-axis is the
+
+10
+00:00:45,431 --> 00:00:51,232
+likelihood function. In the context of
+complete data as, as we might remember the
+
+11
+00:00:51,232 --> 00:00:57,427
+likely function had this really nice form.
+It was nice log concave function and in
+
+12
+00:00:57,427 --> 00:01:02,967
+the context of daisy networks it could
+actually be optimized in closed form
+
+13
+00:01:02,967 --> 00:01:07,888
+using, using a simply formula. In the
+context of missing data, however, the
+
+14
+00:01:07,888 --> 00:01:12,524
+situation became considerably more
+complicated now like the assumption looks
+
+15
+00:01:12,524 --> 00:01:17,100
+more like this. It's this nasty
+complicated multi model function, which is
+
+16
+00:01:17,100 --> 00:01:21,985
+really impossible to optimism in closed
+form. So how do we go about optimizing a
+
+17
+00:01:21,985 --> 00:01:26,647
+function that looks like this. There is it
+turns out two general classes of
+
+18
+00:01:26,647 --> 00:01:31,060
+strategies. The first is a generic
+optimization method such as gradient
+
+19
+00:01:31,060 --> 00:01:36,157
+ascent. So here for example, we have a
+pictorial depiction of gradient ascent. We
+
+20
+00:01:36,157 --> 00:01:41,254
+might start out with a particular point in
+the parameter space. And we compute the
+
+21
+00:01:41,254 --> 00:01:46,288
+gradient of that point. And we go in the
+direction of steepest ascent, which might
+
+22
+00:01:46,288 --> 00:01:51,510
+take us to the next point. At which point
+we compute the gradient, and we continue
+
+23
+00:01:51,510 --> 00:01:56,533
+until we reach what is going to be a. In
+generally local optimum of the function
+
+24
+00:01:56,533 --> 00:02:01,503
+that we're trying to optimize. Now what I
+describe right now is a very simple
+
+25
+00:02:01,503 --> 00:02:07,415
+radiant assent over parameter space but in
+general there are more efficient methods
+
+26
+00:02:07,415 --> 00:02:12,987
+for improving the convergence, the rate of
+convergence of these algorithms, methods
+
+27
+00:02:12,987 --> 00:02:18,831
+such as line search or [inaudible] radiant
+methods that basically are going to get us
+
+28
+00:02:18,831 --> 00:02:24,666
+faster to whatever [inaudible] whatever
+[inaudible] we're gonna end up at So key
+
+29
+00:02:24,666 --> 00:02:29,902
+question when applying [inaudible] such as
+this is how difficult it is to compute the
+
+30
+00:02:29,902 --> 00:02:34,712
+gradient in this high dimensional space,
+fortunately the context of [inaudible]
+
+31
+00:02:34,712 --> 00:02:39,401
+networks we can actually come up with a
+[inaudible] formed solution for that
+
+32
+00:02:39,401 --> 00:02:44,211
+gradient, and that solution takes the
+following form. So the gradient of our log
+
+33
+00:02:44,211 --> 00:02:49,137
+[inaudible] function relative to a
+particular parameter, theta of xi given
+
+34
+00:02:49,137 --> 00:02:54,283
+UI. So this is in the context of, a
+standard say multinomial Bayesian network
+
+35
+00:02:54,283 --> 00:02:59,103
+and little xi's of particular assignment
+to big XY and little UI and some
+
+36
+00:02:59,103 --> 00:03:04,379
+assignment to its parents. That gradient
+has the following form: it's one over the
+
+37
+00:03:04,379 --> 00:03:09,785
+value of the parameter at the point that
+which we are computing the gradient, times
+
+38
+00:03:09,785 --> 00:03:18,546
+the summation over data instances. M. I of
+the probability of that particular
+
+39
+00:03:18,546 --> 00:03:27,025
+assignment x I n u I to the node and its
+parent, that particular joint assignment,
+
+40
+00:03:27,025 --> 00:03:35,052
+given all of the evidence in the nth
+instance. At the current value of
+
+41
+00:03:35,052 --> 00:03:44,885
+parameter. So, we basically look at each
+and every one of the data instances,
+
+42
+00:03:44,885 --> 00:03:52,050
+compute the probability of this event, xi,
+UI given whatever observations I happen to
+
+43
+00:03:52,050 --> 00:03:57,798
+have seen. Whether x i or u i are observed
+or not, and then I compute that
+
+44
+00:03:57,798 --> 00:04:04,129
+probability add this all up and divide by
+the values of parameter. So that's a nice
+
+45
+00:04:04,129 --> 00:04:10,461
+sort of usable formula except that we have
+to understand some of the repercussions of
+
+46
+00:04:10,461 --> 00:04:15,762
+that, specifically this requires that we
+compute this probability over a
+
+47
+00:04:15,762 --> 00:04:22,093
+[inaudible] that is a [inaudible] , given
+the [inaudible] m , and we need to compute
+
+48
+00:04:22,093 --> 00:04:29,175
+that for all variables i and for all data
+instances m So this effectively means that
+
+49
+00:04:29,175 --> 00:04:35,666
+we have to run inference for every
+instance. And furthermore we need to
+
+50
+00:04:35,666 --> 00:04:42,529
+compute the probability for every family
+in the Bayesian network. Now. Fortunately
+
+51
+00:04:42,529 --> 00:04:47,708
+we can at least reduce the second part of
+this computational cost which is the fact
+
+52
+00:04:47,708 --> 00:04:52,701
+of, that we need to run this for all i. By
+remembering the fact that we have, if we,
+
+53
+00:04:52,701 --> 00:04:57,510
+say calibrate a clique tree or even a
+cluster graph then when we're done with
+
+54
+00:04:57,510 --> 00:05:02,319
+the calibration because of the family
+preservation property a node and its
+
+55
+00:05:02,319 --> 00:05:07,374
+parents are all going to be in the same
+clique or in the same cluster. So a single
+
+56
+00:05:07,374 --> 00:05:12,650
+calibration process is going to give us
+all of these probabilities. At once but
+
+57
+00:05:12,650 --> 00:05:19,056
+that's only true for given data instance
+m, which means that effectively what we
+
+58
+00:05:19,056 --> 00:05:25,221
+end up with is the following computational
+cost which is that we need to run
+
+59
+00:05:25,221 --> 00:05:32,107
+inference for each and every data instance
+at every iteration of the gradient process
+
+60
+00:05:32,107 --> 00:05:38,456
+which is a very costly computation Now
+what are the pros of gradient ascent as a,
+
+61
+00:05:38,456 --> 00:05:44,624
+as an optimization algorithm. It's a very
+flexible strategy, so whereas I, we just
+
+62
+00:05:44,624 --> 00:05:50,483
+show how the formula applies to table
+CPS's. It can also be extended to long
+
+63
+00:05:50,483 --> 00:05:56,838
+table CPD's via the chain rule for
+derivative. Which is not the same as the
+
+64
+00:05:56,838 --> 00:06:04,319
+[inaudible]. However it also has some
+significant cons. First its, it turned out
+
+65
+00:06:04,319 --> 00:06:09,579
+to be a little bit tricky. Not horrible,
+but a little bit tricky to ensure that the
+
+66
+00:06:09,579 --> 00:06:14,583
+parameters define legal CPDs. So this
+gives rise to a constrained optimization
+
+67
+00:06:14,583 --> 00:06:19,844
+problem where we need to make sure that
+the entries in the CPD are all graded and
+
+68
+00:06:19,844 --> 00:06:24,912
+equal to zero and sum to one, and that
+imposes some additional burden on the
+
+69
+00:06:24,912 --> 00:06:29,437
+optimization problem. And then it turns
+out that if you want to get any kind of
+
+70
+00:06:29,437 --> 00:06:33,930
+reasonable convergence, you can't just do
+straight gradient accent. One needs to do
+
+71
+00:06:33,930 --> 00:06:38,093
+something more clever like [inaudible]
+gradient or a line surge, which again
+
+72
+00:06:38,093 --> 00:06:43,184
+tends to increase the computational cost.
+The second strategy, the one typically
+
+73
+00:06:43,184 --> 00:06:47,695
+uses for optimizing the likelihood
+function, is, is a strategy that is
+
+74
+00:06:47,695 --> 00:06:52,795
+specifically geared for, for likelihood
+functions. So it's a special-purpose
+
+75
+00:06:52,795 --> 00:06:58,156
+algorithm that doesn't optimize any old
+function, but rather just specifically for
+
+76
+00:06:58,156 --> 00:07:03,728
+likelihood functions. What?s the intuition
+behind this algorithm called expectation
+
+77
+00:07:03,728 --> 00:07:09,097
+maximization or '''em for short, the
+intuition that you have a chicken and an
+
+78
+00:07:09,097 --> 00:07:14,672
+egg problem here, if we had complete data
+then parameter estimation would be easy
+
+79
+00:07:14,672 --> 00:07:19,834
+because we know how to do [inaudible]
+parameter estimation and [inaudible]
+
+80
+00:07:19,834 --> 00:07:24,879
+networks in fact its a closed form
+problem. Conversely if we had Those full
+
+81
+00:07:24,879 --> 00:07:29,526
+set of parameters, then computing the
+probability of the missing data would also
+
+82
+00:07:29,526 --> 00:07:34,174
+be easy. Easy in the sense that it
+requires making [inaudible] using straight
+
+83
+00:07:34,174 --> 00:07:38,415
+probabilistic inference which merely may
+not be computationally easy but
+
+84
+00:07:38,415 --> 00:07:43,003
+conceptually computing the probability of
+missing data is an easy well-defined
+
+85
+00:07:43,005 --> 00:07:51,085
+problem. So, we have two, sets of, of
+things that we need to infer or estimate.
+
+86
+00:07:51,085 --> 00:07:59,960
+One is the parameters. And the other is
+the values of the missing variables.
+
+87
+00:08:01,160 --> 00:08:05,987
+Missing data. And each of those is easy,
+given the other. And so what the EML
+
+88
+00:08:05,987 --> 00:08:10,878
+rhythm does is effectively an iteration
+process, or, in fact, one can formally
+
+89
+00:08:10,878 --> 00:08:16,285
+show a coordinate ascent process. Where we
+start out with some set of parameters use
+
+90
+00:08:16,285 --> 00:08:21,434
+that to estimate the values of the missing
+data and then use that completion to
+
+91
+00:08:21,434 --> 00:08:26,573
+re-estimate the parameters, and so on and
+so forth, until we reach convergence. So
+
+92
+00:08:26,573 --> 00:08:31,758
+more formally we pick some starting point
+for the parameters. In fact, one can also
+
+93
+00:08:31,758 --> 00:08:36,822
+initialize on, on the missing var-, on the
+values of the missing data. It's more
+
+94
+00:08:36,822 --> 00:08:42,008
+standard to, to in many applications, to
+initialize with the parameters, but both
+
+95
+00:08:42,008 --> 00:08:46,950
+are completely legitimate. So, say we pick
+a starting point for the parameters, and
+
+96
+00:08:46,950 --> 00:08:51,647
+then we iterate these two steps. The first
+is what's called the "E" step, "E" step
+
+97
+00:08:51,647 --> 00:08:55,979
+stands for expectation, in which we
+complete the data using the current
+
+98
+00:08:55,979 --> 00:09:01,710
+parameters, and the second is the "M"
+step. Standing for maximization, and that.
+
+99
+00:09:01,902 --> 00:09:07,104
+Estimates the parameters relative to data
+completion and maximization comes from,
+
+100
+00:09:07,104 --> 00:09:13,614
+basically something like maximum
+likelihood. That's. That's where the M in
+
+101
+00:09:13,614 --> 00:09:19,745
+maximization comes from. And it turns out
+that this iterative process is guaranteed
+
+102
+00:09:19,745 --> 00:09:24,902
+to improve the likelihood function at each
+iteration. That is, at each iteration the
+
+103
+00:09:24,902 --> 00:09:30,183
+likelihood function is going to be better
+than it was before the previous one. And
+
+104
+00:09:30,183 --> 00:09:36,164
+so this process is an iterative improving
+process. Let's make this process more
+
+105
+00:09:36,164 --> 00:09:44,191
+precise. So, let's consider each of those
+e steps and n steps separately. So, the
+
+106
+00:09:44,191 --> 00:09:51,723
+expectation or estep. Remember this going
+from the parameters to the missing,
+
+107
+00:09:52,020 --> 00:10:00,147
+variables. For each beta case D, and each
+family x, u, we are going to compute the
+
+108
+00:10:00,147 --> 00:10:08,074
+probability of x, u. Given the observed
+values in, in that data instance, and
+
+109
+00:10:08,074 --> 00:10:16,625
+given the current parameter setting, theta
+T. With that completion, which, note, is a
+
+110
+00:10:16,625 --> 00:10:25,005
+soft completion. Because its a probability
+distribution over the parameters, over the
+
+111
+00:10:25,005 --> 00:10:30,318
+missing variables not a single assignment
+to x and u. With that soft completion we
+
+112
+00:10:30,318 --> 00:10:35,177
+are going to compute what is called the
+expected sufficient statistics, the
+
+113
+00:10:35,177 --> 00:10:40,424
+expected sufficient statistics is very
+similar to the sufficient statistics that
+
+114
+00:10:40,424 --> 00:10:45,802
+we had before, when we were computing
+sufficient statistics we were counting the
+
+115
+00:10:45,802 --> 00:10:51,050
+number of times that we saw a particular
+combination x comma u, remember we had m
+
+116
+00:10:51,050 --> 00:10:56,355
+Of X, U as being our sufficient
+statistics. Now we have a soft completion
+
+117
+00:10:56,355 --> 00:11:02,398
+and so we have expected a soft sufficient
+statistics, which we are going to denote
+
+118
+00:11:02,398 --> 00:11:08,288
+with an M hat. Sub-scripted by the
+parameter vector that gave rise to the
+
+119
+00:11:08,288 --> 00:11:14,714
+completion. And, and had sub-theta T for a
+particular assignment X comma, U is going
+
+120
+00:11:14,714 --> 00:11:20,175
+to be simply the sum. Over all the data
+instances of the probability that we just
+
+121
+00:11:20,175 --> 00:11:25,218
+computed. The probability of X, U given
+the assignment D sub M and the parameter
+
+122
+00:11:25,218 --> 00:11:29,823
+state of D. And that is a notion of
+expected counts or expected sufficient
+
+123
+00:11:29,823 --> 00:11:34,953
+statistics which are now in the context of
+the m step going to use as if they were
+
+124
+00:11:34,953 --> 00:11:39,897
+real sufficient statistics and so we're
+going to take these expected sufficient
+
+125
+00:11:39,897 --> 00:11:45,088
+statistics and use them to perform maximum
+[inaudible] using the exact same formula
+
+126
+00:11:45,088 --> 00:11:50,156
+that we would have used had these been
+real sufficient statistics so specifically
+
+127
+00:11:50,156 --> 00:11:55,285
+for example in the context of multinomial
+[inaudible] we would have the next value
+
+128
+00:11:55,285 --> 00:12:03,727
+of the parameters [inaudible] E plus one
+given X U, is M. Hat and bar of beta T Xu
+
+129
+00:12:03,727 --> 00:12:11,024
+divided by m bar theta t of u. Which is,
+in using the soft count, the fraction of
+
+130
+00:12:11,024 --> 00:12:17,537
+xu's among the u's. Let's consider, a
+concrete very simple example, which is
+
+131
+00:12:17,537 --> 00:12:23,045
+that of, Bayesian clustering. So what we
+see here is your standard naive
+
+132
+00:12:23,045 --> 00:12:29,223
+[inaudible] model, where we have a single
+class variable. And, a bunch of observed
+
+133
+00:12:29,223 --> 00:12:35,104
+features. And the assumption here is that
+the class variable is, is missing. That
+
+134
+00:12:35,104 --> 00:12:39,764
+is, it's. Sometimes are never, in most
+cases, never observed in the data, and so
+
+135
+00:12:39,764 --> 00:12:44,845
+effectively, we're trying to identify what
+are the categories or classes of instances
+
+136
+00:12:44,845 --> 00:12:49,627
+in this data under the assumption that
+within each class the feature values are,
+
+137
+00:12:49,627 --> 00:12:54,469
+are, are independent. That is the features
+are conditionally independent in the
+
+138
+00:12:54,469 --> 00:12:59,699
+class, as in the [inaudible] phase model.
+So instantiating our formula from the
+
+139
+00:12:59,699 --> 00:13:05,677
+'''em algorithm for this setting, we get
+the following very natural formula. So the
+
+140
+00:13:05,677 --> 00:13:12,103
+sufficient statistics for, for the class
+variable is simply the sum over all of the
+
+141
+00:13:12,103 --> 00:13:18,380
+data instances of the probability of the
+class variable given the observed features
+
+142
+00:13:18,380 --> 00:13:23,906
+for that data instances, for, for that
+data instance. And. The and the val-,
+
+143
+00:13:23,906 --> 00:13:29,994
+current value of the parameters. That is,
+it's the soft counts of how many instances
+
+144
+00:13:29,994 --> 00:13:35,871
+fall into each category when each instance
+is allowed to divide itself up of cross
+
+145
+00:13:35,871 --> 00:13:41,418
+multiple categories so to use a soft
+assignment. The second set of sufficient
+
+146
+00:13:41,418 --> 00:13:46,826
+statistics which represents the
+dependencies between one of the features
+
+147
+00:13:46,826 --> 00:13:53,124
+and the class variable is [inaudible] had
+sub theta of x i [inaudible] and that once
+
+148
+00:13:53,124 --> 00:13:59,273
+again sums up over all the data instances
+and simply looks at the probability of a
+
+149
+00:13:59,273 --> 00:14:05,645
+particular class variable and a particular
+feature, variable and particular feature
+
+150
+00:14:05,645 --> 00:14:11,626
+given the observed instance, the observed
+feature at that particular instance now
+
+151
+00:14:11,626 --> 00:14:16,736
+with these expected counts we can now go
+ahead and do maximum [inaudible]
+
+152
+00:14:16,736 --> 00:14:22,192
+destination and that gives rise to the
+following [inaudible] very simple
+
+153
+00:14:22,192 --> 00:14:27,509
+equations which is that the theta
+[inaudible] is equal to [inaudible] sub
+
+154
+00:14:27,509 --> 00:14:33,310
+theta [inaudible] divided by m which is a
+total number of [inaudible] instances and
+
+155
+00:14:33,310 --> 00:14:39,688
+theta of [inaudible] given [inaudible] is
+going to be a sign N half, feta x I comma
+
+156
+00:14:39,688 --> 00:14:45,875
+c. Divided by n half feta of c. Which
+again is the standard formula. But using
+
+157
+00:14:45,875 --> 00:00:47,283
+soft rather than the hard counts.
+20120229<u>23-01-32-532<u>c1979a83-046d-47e7-b4cd-af0448a5141e.mp3</u></u>
+
+158
+00:00:47,283 --> 00:03:07,207
+So, to summarize the '''em algorithm, if
+we have in this case, the exact same
+
+159
+00:03:07,207 --> 00:05:55,881
+problem that we had in the context of the
+gradient ascent algorithm, which is that
+
+160
+00:05:55,881 --> 00:08:31,138
+we need to run inference, the probability
+of (xI, c) for each data inference of
+
+161
+00:08:31,138 --> 00:10:58,729
+each generation. As for, the gradient
+ascent algorithm, this only requires a
+
+162
+00:10:58,729 --> 00:13:32,069
+single calibration, because of the same
+family preservation property that was
+
+163
+00:13:32,069 --> 00:15:25,204
+useful there applies equally here. What
+are the pros of [inaudible] its very easy
+
+164
+00:15:25,204 --> 00:15:30,339
+to implement on top of an existing
+[inaudible] destination procedure that one
+
+165
+00:15:30,339 --> 00:15:35,407
+might have for complete data so having
+implemented an mle procedure one can
+
+166
+00:15:35,407 --> 00:15:40,342
+easily build on top of that by adding a
+separate e step for computing the
+
+167
+00:15:40,342 --> 00:15:45,920
+[inaudible] expected sufficient statistics
+... >> Empirically, it turns out that the
+
+168
+00:15:45,920 --> 00:15:51,341
+'''em also makes very rapid process,
+progress, in terms of converging, to a
+
+169
+00:15:51,341 --> 00:15:56,894
+better and better set of parameters.
+Especially in early iterations. And we'll
+
+170
+00:15:56,894 --> 00:16:01,923
+see some empirical results for that in a
+bit. The cons of the '''em algorithm is
+
+171
+00:16:01,923 --> 00:16:07,145
+that the convergence generally slows down
+at later iterations, and so it requires
+
+172
+00:16:07,338 --> 00:16:12,754
+sometimes that later iterations might use
+say some kind of conjugate gradient
+
+173
+00:16:12,754 --> 00:16:16,880
+algorithm because it turns out that that's
+more effective there.

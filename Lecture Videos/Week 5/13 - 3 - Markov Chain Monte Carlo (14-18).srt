@@ -1,0 +1,738 @@
+
+1
+00:00:00,000 --> 00:00:04,008
+One of the most generally useful class of
+sampling methods is one that's very
+
+2
+00:00:04,008 --> 00:00:10,000
+commonly used in practice, is the class of
+Markov chain Monte-Carlo methods. And those are
+
+3
+00:00:10,000 --> 00:00:14,008
+methods that allow us to design an
+iterative sampling process that, through a
+
+4
+00:00:14,008 --> 00:00:20,001
+sequence of steps, allows us to generate a
+sample from a desired target distribution
+
+5
+00:00:20,001 --> 00:00:25,002
+that might be intractable to sample from
+directly. So what are these Markov chains,
+
+6
+00:00:25,002 --> 00:00:32,004
+and how do you how do you use them? So. A
+Markov chain is a, is a method for sampling
+
+7
+00:00:32,004 --> 00:00:38,003
+from a distribution P That is intractable
+to sample from. And so we've seen one
+
+8
+00:00:38,003 --> 00:00:43,003
+example such a distribution P. If you'd
+like to sample from a distri-, from a,
+
+9
+00:00:43,003 --> 00:00:48,003
+say, a Bayesian network, where we have
+some evidence we don't really know-how to
+
+10
+00:00:48,003 --> 00:00:53,003
+sample from that. If you'd like to sample
+from a Markov network, we don't really
+
+11
+00:00:53,003 --> 00:00:58,002
+know how to sample from that either, in
+general. And so, here we have examples of
+
+12
+00:00:58,002 --> 00:01:03,005
+distributions P, and we'd like to come up
+with a way of generating even one example
+
+13
+00:01:03,005 --> 00:01:09,004
+from the distribution P. So markup chain
+gives us a general mechanism for doing
+
+14
+00:01:09,004 --> 00:01:15,007
+that. And what the markup chain does is,
+it defines an iterative process by which
+
+15
+00:01:15,007 --> 00:01:22,001
+the first sample that you generate is not
+going to be from a distribution p, but
+
+16
+00:01:22,001 --> 00:01:27,004
+ultimately as you move along. You are
+going to get closer and closer to
+
+17
+00:01:27,004 --> 00:01:32,008
+generating a sample from p so. So let's
+understand what that Mm-hm, what that
+
+18
+00:01:32,008 --> 00:01:38,007
+means. Hm, so we have a mark up chain and
+the mark up chain is defined over a state
+
+19
+00:01:38,007 --> 00:01:45,000
+space which we are going to use X's to
+denote. And so here's an example of such a
+
+20
+00:01:45,000 --> 00:01:50,008
+state space. This is a very simple state
+space. It starts with the zero point over
+
+21
+00:01:50,008 --> 00:01:56,003
+here, and you could imagine it has four
+negative numbers to the left and four
+
+22
+00:01:56,003 --> 00:02:02,005
+positive numbers to the right. And a markov
+ chain defines a probabilistic transition model,
+
+23
+00:02:02,005 --> 00:02:08,006
+which given that I'm at a given state x, tells me
+
+24
+00:02:08,006 --> 00:02:14,005
+how likely I am to transition to a different state x prime. 
+And that is the probability distribution
+
+25
+00:02:14,005 --> 00:02:20,000
+as indicated in this formula here, so that's for any x, the
+probability, the sum over the probability
+
+26
+00:02:20,000 --> 00:02:26,001
+of states to which you can transition is
+exactly one. So, for example, if, in this
+
+27
+00:02:26,001 --> 00:02:31,003
+case, we have our little grass,
+grasshopper who starts out at state zero,
+
+28
+00:02:31,003 --> 00:02:37,000
+we can see that it has a probability of
+0.25 of transitioning to the right. A
+
+29
+00:02:37,000 --> 00:02:43,000
+probability of 0.25 of transitioning to
+the left. And a probability of 0.5 of not
+
+30
+00:02:43,000 --> 00:02:48,006
+making any progress, and staying exactly
+where it is. And, in fact, that
+
+31
+00:02:48,006 --> 00:02:52,009
+same general probability distribution is
+actually, in this example, replicated
+
+32
+00:02:52,009 --> 00:02:57,004
+across the different states in the chain,
+with the exception of the states at the
+
+33
+00:02:57,004 --> 00:03:01,007
+end, where, if the poor grasshopper tries
+to go to the left when it's at - four,
+
+34
+00:03:01,007 --> 00:03:06,003
+it's going to hit the wall, and it's going
+to end up staying where it is, regardless.
+
+35
+00:03:06,003 --> 00:03:10,008
+And so the probability in this case of
+staying is actually 0.75 corresponding to
+
+36
+00:03:10,008 --> 00:03:14,008
+the two different cases that we just
+talked about. But anyway, this is a
+
+37
+00:03:14,008 --> 00:03:20,008
+Markov chain, and it's, and you can
+imagine. Simulating a random process by
+
+38
+00:03:20,008 --> 00:03:28,001
+which a grasshopper traverses the chain.
+And so initially it starts out with, let's
+
+39
+00:03:28,001 --> 00:03:35,000
+say state zero and then, and then what
+happens as it moves, it selects to move
+
+40
+00:03:35,000 --> 00:03:41,009
+left with probability a quarter, right
+with probability a quarter and, and stay
+
+41
+00:03:41,009 --> 00:03:49,000
+the same place with probability 0.5. Once
+the [inaudible] moves it the left, it now
+
+42
+00:03:49,000 --> 00:03:55,002
+does exactly the same thing. So let's
+think about the temporal dynamics of this
+
+43
+00:03:55,002 --> 00:04:01,001
+type of process. We can ask what is the
+probability that a time, that a step P
+
+44
+00:04:01,001 --> 00:04:09,001
+plus one, this is a step. What is the
+probability that at that time step, the
+
+45
+00:04:09,001 --> 00:04:16,004
+state at time T plus one is equal to some
+value X prime? So we can get that by a
+
+46
+00:04:16,004 --> 00:04:22,005
+recurrence relationship that looks at the
+state of time T. So if we had previously
+
+47
+00:04:22,005 --> 00:04:28,007
+computed the probability distribution over
+where the grasshopper might be at time T.
+
+48
+00:04:29,006 --> 00:04:36,002
+We can sum up over all possible states
+where X, where the grasshopper might be
+
+49
+00:04:36,002 --> 00:04:43,003
+and asked if it was at, at state X at time
+T, what is the probability that it ends up
+
+50
+00:04:43,003 --> 00:04:49,007
+with being, that it ends up going to X
+prime. So this, together gives me a
+
+51
+00:04:49,007 --> 00:04:56,003
+distributional repairs. X comma X prime.
+Where this, which, which measure the
+
+52
+00:04:56,003 --> 00:05:02,000
+probability that at the time T the
+grasshopper is at state X and the T+1 is
+
+53
+00:05:02,000 --> 00:05:07,008
+at X prime. And since I'm only interested
+now in asking about T+1, I sum up or
+
+54
+00:05:07,008 --> 00:05:14,004
+marginalize the time key step state X. So
+to go back to our grasshopper example, we
+
+55
+00:05:14,004 --> 00:05:20,008
+can simulate this process and here is the
+first three steps of this. So, at time
+
+56
+00:05:20,008 --> 00:05:26,008
+zero, the grasshopper is at state zero
+with probability one. At time one, it's
+
+57
+00:05:26,008 --> 00:05:33,000
+going to be if -one with probability a
+quarter and if it's +one with probability
+
+58
+00:05:33,000 --> 00:05:38,007
+a quarter, probability half it's stuck. At
+the same state. And now we can simulate
+
+59
+00:05:38,007 --> 00:05:43,005
+the next step. So it's, at the next time
+step the probability that it moves,
+
+60
+00:05:43,005 --> 00:05:48,008
+manages to move all the way to negative
+two is.25 squared because it considers two
+
+61
+00:05:48,008 --> 00:05:54,001
+successful moves to the left. Here you
+have two successful moves to the right. >>
+
+62
+00:05:54,001 --> 00:05:59,002
+At state zero you have e.g. A sum of
+different events which is the probability
+
+63
+00:05:59,002 --> 00:06:04,002
+that it stayed in the same state twice,
+so.5 squared plus the two events that
+
+64
+00:06:04,002 --> 00:06:09,006
+correspond to moving to left one and back
+to the right, one moving to the right and
+
+65
+00:06:09,006 --> 00:06:14,007
+that the left each of which happens would
+probability.25 squared. So this is the
+
+66
+00:06:14,007 --> 00:06:22,001
+example how you do this. Now it turns out
+that for many of these chains, and we'll
+
+67
+00:06:22,001 --> 00:06:27,008
+describe conditions in a moment
+ultimately as the process evolves, the
+
+68
+00:06:27,008 --> 00:06:33,009
+probability distribution kinda equalizes,
+which means that the probability that at
+
+69
+00:06:33,009 --> 00:06:39,005
+time t, here at state x prime, is
+almost the same as the probability that at
+
+70
+00:06:39,005 --> 00:06:45,003
+time t plus one here at x prime. So,
+sorta a kind of distribution over where
+
+71
+00:06:45,003 --> 00:06:52,000
+you might be past the equalize. And, and
+so we can then consider what's called the
+
+72
+00:06:52,000 --> 00:06:57,002
+limiting process, the limiting
+distribution you would get as you simulate
+
+73
+00:06:57,002 --> 00:07:03,001
+the process for more and more steps. And
+that is typically denoted by pi, which is
+
+74
+00:07:03,001 --> 00:07:10,004
+called the stationary distribution. It
+also has a bunch of other names but
+
+75
+00:07:10,004 --> 00:07:17,004
+stationary is the most common. And if you
+plug in. You see basically take out this
+
+76
+00:07:17,004 --> 00:07:23,000
+approximate equality and you can see that
+what we have is a condition on pie, is
+
+77
+00:07:23,000 --> 00:07:28,001
+that the distribution at one
+time step is needs to be the, the
+
+78
+00:07:28,001 --> 00:07:33,006
+probability of x prime and the stationary
+distribution needs to be equal to the
+
+79
+00:07:33,006 --> 00:07:39,005
+summation over here, where pie now appears
+both in the left-hand side and within the
+
+80
+00:07:39,005 --> 00:07:45,009
+summation on the right-hand side. Now it
+turns out that this concept of a
+
+81
+00:07:45,009 --> 00:07:50,007
+stationary distribution is actually at the
+heart of Google's PageRank algorithm. So
+
+82
+00:07:50,007 --> 00:07:55,000
+what they're actually computing, at least
+in the original PageRank, is the
+
+83
+00:07:55,000 --> 00:08:00,001
+probability that if you take a random walk
+on the web that you end up at a particular
+
+84
+00:08:00,001 --> 00:08:04,007
+website. So this notion of a stationary
+distribution is actually quite powerful,
+
+85
+00:08:04,007 --> 00:08:12,000
+as we've seen. So lets take a simple
+example which is this three state
+
+86
+00:08:12,000 --> 00:08:18,008
+markup chain shown here. So for example note
+that from state one there's a probability
+
+87
+00:08:18,008 --> 00:08:25,009
+of 0.75 we are going to state two and 0.25
+we're going to stay in the same state. And
+
+88
+00:08:25,009 --> 00:08:31,000
+we can now write down a set of equations
+that represent, what the fixed, what
+
+89
+00:08:31,000 --> 00:08:36,000
+properties the fixed-point distribution
+needs to satisfy. And if you do that
+
+90
+00:08:36,000 --> 00:08:40,006
+you're going to get the following
+equations. So, for example it tells me
+
+91
+00:08:40,006 --> 00:08:52,003
+that pi of X1 Has to be equal to 0.25
+times 5x1 because soft transition here
+
+92
+00:08:52,003 --> 00:09:09,001
+plus oops zero. Yes, sorry pi of x1 is
+equal to 0.25 times pi of X1 + 0.5 times
+
+93
+00:09:09,001 --> 00:09:16,001
+pi of X3. Because there, if you were to pi
+that you can end up in X one in one of two
+
+94
+00:09:16,001 --> 00:09:21,001
+ways. Either by starting on X one and
+staying there, or by starting out at X
+
+95
+00:09:21,001 --> 00:09:27,004
+three and moving to X one which happens
+with probability 0.5. Similarly, at Pi(x2)
+
+96
+00:09:27,004 --> 00:09:32,009
+you can end up either by being at X2
+and staying there, which is this
+
+97
+00:09:32,009 --> 00:09:39,001
+transition. Or, by being at X3 and moving
+to X2, which happens with probability 0.5.
+
+98
+00:09:39,001 --> 00:09:43,009
+And, so, this is a set of three
+simultaneous equations and three
+
+99
+00:09:43,009 --> 00:09:48,008
+variables. This by itself is an under
+determined system because you can multiply
+
+100
+00:09:48,008 --> 00:09:53,004
+all of the Pi's by a factor of a 100 and
+it would still, be a solution, but we can
+
+101
+00:09:53,004 --> 00:09:57,009
+add to that the one constraint that says
+that all of the Pi's have to be, equal.
+
+102
+00:09:57,009 --> 00:10:02,000
+The sum of all the Pi's has to be one,
+which, is because of the probability
+
+103
+00:10:02,000 --> 00:10:06,007
+distribution and once you do that, you end
+up with a unique solution, to the system
+
+104
+00:10:06,007 --> 00:10:11,003
+of linear equations and its not difficult
+to plug those Pi's into the system and
+
+105
+00:10:11,003 --> 00:10:15,006
+confirm that indeed this is the stationary
+distribution, that satisfies these
+
+106
+00:10:15,006 --> 00:10:19,007
+equations. By the way, through the
+grasshopper example that we showed on the
+
+107
+00:10:19,007 --> 00:10:24,004
+previous slide the stationary distribution
+is the uniform distribution, so this has
+
+108
+00:10:24,004 --> 00:10:28,002
+to be one of the dumbest ways of
+generating a sample from the uniform
+
+109
+00:10:28,002 --> 00:10:31,008
+distribution. But, it does in fact
+generate eventually a sample from
+
+110
+00:10:31,008 --> 00:10:36,007
+something that is very close to uniform
+distribution. So, when does a Markov chain
+
+111
+00:10:36,007 --> 00:10:42,002
+converge to a stationary distribution? I
+said, many of them do but, it turns out
+
+112
+00:10:42,002 --> 00:10:47,004
+that not all of them. And, so, a condition
+that guarantees convergence to a
+
+113
+00:10:47,004 --> 00:10:52,008
+stationary distribution is something
+called regularity. So, a Markov chain is
+
+114
+00:10:52,008 --> 00:11:00,004
+regular. If the following condition holds,
+and notice the order of the quantifiers.
+
+115
+00:11:00,004 --> 00:11:07,008
+If there exists some number K, integer K,
+such that, for every pair of states. So
+
+116
+00:11:07,008 --> 00:11:15,002
+this is the universal quantifier. The
+probability of getting from X to X prime
+
+117
+00:11:15,002 --> 00:11:22,007
+in exactly K steps is greater than 0.
+Now notice what that means. It means that
+
+118
+00:11:22,007 --> 00:11:28,002
+you pick the k first. And, and only and,
+and so you can't have a different k for
+
+119
+00:11:28,002 --> 00:11:33,004
+different pairs of states. You can pick k
+to be 1,000 or a million, it doesn't
+
+120
+00:11:33,004 --> 00:11:39,001
+matter for this purpose. But you need to
+pick it first and then there needs to be a
+
+121
+00:11:39,001 --> 00:11:43,008
+way of getting from x to x prime in
+exactly that number of steps with
+
+122
+00:11:43,008 --> 00:11:49,004
+probability greater than zero. It turns
+out that, that is a sufficient, not a
+
+123
+00:11:49,004 --> 00:11:54,009
+necessary but a sufficient condition to
+guarantee that the Markov Chain converges
+
+124
+00:11:54,009 --> 00:11:59,008
+to a unique stationary distribution
+regardless of its start state. So it
+
+125
+00:11:59,008 --> 00:12:04,005
+converges and it converges to a single
+stationary distribution that's
+
+126
+00:12:04,005 --> 00:12:11,009
+characterized by the equation that we saw
+on the previous slide. Now, what are some
+
+127
+00:12:11,009 --> 00:12:17,000
+sufficient conditions for regularity
+because this one is a little bit hard to
+
+128
+00:12:17,000 --> 00:12:22,004
+check and so one sufficient condition for
+regularity that people often use in
+
+129
+00:12:22,004 --> 00:12:27,007
+practice, is first that every pair of
+states X and X prime need to be connected
+
+130
+00:12:27,007 --> 00:12:33,000
+with a path of probability greater than
+one, sorry with probability greater than
+
+131
+00:12:33,000 --> 00:12:44,006
+zero. And, for every state there is a
+self-transition. So you can always
+
+132
+00:12:44,006 --> 00:12:52,000
+transition from a state to itself. So if
+you think about that, that means that if
+
+133
+00:12:52,000 --> 00:12:59,002
+you take K to be, the diameter of this
+graph, so if you set K to be, the, the
+
+134
+00:12:59,002 --> 00:13:11,001
+distance, between the furthest. Pair of
+states. Then, you can get between every
+
+135
+00:13:11,001 --> 00:13:16,000
+pair of states using exactly k steps
+because you can take less than k and then
+
+136
+00:13:16,000 --> 00:13:21,000
+just stick around for a while until you
+hit k, because of self-transitions. So
+
+137
+00:13:21,000 --> 00:13:28,002
+this is a way of guaranteeing, that, that
+for this value K, you can get from every
+
+138
+00:13:28,002 --> 00:13:33,007
+state, every state. And that's what
+people typically do, they typically add
+
+139
+00:13:33,007 --> 00:13:38,002
+these self transitions to guarantee
+regularity. So to summarize we've
+
+140
+00:13:38,002 --> 00:13:43,000
+defined the notion of a Markov chain,
+which defines a general dynamical system,
+
+141
+00:13:43,000 --> 00:13:47,007
+or an iterative sampling process from
+which we can sample trajectories that
+
+142
+00:13:47,007 --> 00:13:52,005
+traverse the space of the chain. Under
+certain conditions, such as the regularity
+
+143
+00:13:52,005 --> 00:13:56,008
+condition that we defined, which is
+sufficient, although not necessary. This
+
+144
+00:13:56,008 --> 00:14:01,006
+iterative sampling process is guaranteed
+to converge to a stationary distribution
+
+145
+00:14:01,006 --> 00:14:05,008
+at, at the limit. That is, after we
+generate enough samples. And so this
+
+146
+00:14:05,008 --> 00:14:10,004
+provides us with a general approach to
+sample from a distribution indirectly.
+
+147
+00:14:10,004 --> 00:14:15,001
+Which means that if we have a distribution
+from which it's intractable to sample,
+
+148
+00:14:15,001 --> 00:14:18,000
+this provides us with an alternative.

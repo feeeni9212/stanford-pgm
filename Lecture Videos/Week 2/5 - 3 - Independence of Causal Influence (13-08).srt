@@ -1,0 +1,599 @@
+
+1
+00:00:00,000 --> 00:00:05,098
+So, we previously talked about the
+importance of allowing CPD
+
+2
+00:00:05,098 --> 00:00:10,097
+representations that encode additional
+structure in the local dependency model
+
+3
+00:00:10,097 --> 00:00:16,029
+of a variable on it's parents. And we
+talked about the cases are tree CPD's
+
+4
+00:00:16,029 --> 00:00:21,094
+which allow us to depend on different
+variables in different context. But none
+
+5
+00:00:21,094 --> 00:00:28,002
+of that helps us deal with the situation
+that we use as a motivation for this which
+
+6
+00:00:28,002 --> 00:00:33,046
+is where we have a variable such, as for
+example, cough that depends on multiple
+
+7
+00:00:33,046 --> 00:00:37,092
+different factors: pneumonia, flu,
+tuberculosis, bronchitis, and so on and so
+
+8
+00:00:37,092 --> 00:00:42,098
+forth. This doesn't lend itself say to a
+tree CPD because it's not the case that
+
+9
+00:00:42,098 --> 00:00:47,099
+you depend on one only in certain context
+and not and not in others. Really you
+
+10
+00:00:47,099 --> 00:00:53,023
+depend on all of them and all of them sort
+of contribute something to the probability
+
+11
+00:00:53,023 --> 00:00:58,068
+of exhibiting a cough. So, one way for
+capturing that kind of interaction is
+
+12
+00:00:58,068 --> 00:01:04,051
+a model called the noisy OR CPD.
+And the noisy a noisy OR [CPD] can, is best
+
+13
+00:01:04,051 --> 00:01:10,050
+understood by simply considering, a
+slightly larger graphical model, where we
+
+14
+00:01:10,050 --> 00:01:16,056
+have, where we're trying, where we break
+down the dependencies of Y on its
+
+15
+00:01:16,056 --> 00:01:22,039
+parents, X1 up to XK, by introducing a
+bunch of intervening variables. So let's
+
+16
+00:01:22,039 --> 00:01:29,093
+imagine that this is, again, like cough
+variable. And this is different diseases,
+
+17
+00:01:29,093 --> 00:01:38,048
+for example. And what we're doing here is
+we're introducing an intermediate variable
+
+18
+00:01:38,048 --> 00:01:46,014
+that captures the event that this disease
+X1, if present, causes a cough by itself. So,
+
+19
+00:01:46,014 --> 00:01:57,032
+this is X1 by itself causes a cough or
+causes Y. You can think of it,
+
+20
+00:01:57,032 --> 00:02:03,051
+each of these as a noisy transmitter. If
+you have the disease, say, if X1 is true,
+
+21
+00:02:03,051 --> 00:02:09,069
+then Z1 sort of says, fine, X1
+succeeded in it's intent to make Y true.
+
+22
+00:02:10,053 --> 00:02:20,010
+X2 has it's own little filter called Z2.
+And Z2 makes that same decision relative
+
+23
+00:02:20,010 --> 00:02:29,050
+to X2. And so, ultimately, Y is true. So Y
+is true if, someone succeeded in making it true,
+
+24
+00:02:29,050 --> 00:02:45,029
+which means that Y is a deterministic OR of its parents Z1 up to Zk,
+
+25
+00:02:45,029 --> 00:02:52,000
+Z0 up to Zk. So, now let's make this a
+little bit more precise. So, the
+
+26
+00:02:52,000 --> 00:02:59,017
+probability of Zi being true given Xi. There's two cases. If Xi equals zero, well
+
+27
+00:02:59,017 --> 00:03:06,097
+Xi isn't even trying to make Zi true. So in
+this case the probability of Zi equals one
+
+28
+00:03:06,097 --> 00:03:16,061
+is zero. If Xi is not true, Zi doesn't get turned on, ever. If Z, if
+
+29
+00:03:16,061 --> 00:03:22,027
+Xi is true, then there's some probability
+for Zi to get turned on. And that
+
+30
+00:03:22,027 --> 00:03:28,054
+probability is something called Lambda i.
+And Lambda i is in the interval [0,1]. And you
+
+31
+00:03:28,054 --> 00:03:34,088
+can think of it as defining some kind of
+penetrance of, how good is Xi at turning Y
+
+32
+00:03:34,088 --> 00:03:43,035
+on? So if we actually write this down as a
+probability and we just consider the CPD of
+
+33
+00:03:43,035 --> 00:03:49,081
+Y equals zero, so why doesn't get turned
+on, given some set of cases X1 up to Xk.
+
+34
+00:03:49,081 --> 00:03:55,077
+So now we're asking, what is the
+probablity that all of these guys failed
+
+35
+00:03:55,077 --> 00:04:02,014
+to turn on the variable Y? So, what I forgot to say is that Z0 is what's called a
+
+36
+00:04:02,014 --> 00:04:09,024
+leak probability and that's the probablity
+that Y gets turned on just by itself. And
+
+37
+00:04:09,024 --> 00:04:15,041
+that has, that happens when probability
+lands to zero. So, when does Y fail to get
+
+38
+00:04:15,041 --> 00:04:21,019
+turned on? First of all, when it doesn't
+get turned on by the leak. So
+
+39
+00:04:21,019 --> 00:04:27,006
+that's one minus [inaudible] to zero.
+Times, the probability that none of the
+
+40
+00:04:27,006 --> 00:04:35,044
+causes that are on, so none of causes
+that are on. Which are the x size that are
+
+41
+00:04:35,044 --> 00:04:42,063
+equal to one turn Y on. And so, that's a
+product of one minus Lambda i for all of
+
+42
+00:04:42,063 --> 00:04:48,062
+the XI's that are on. So, that gives us
+the probability of Y equals one. And
+
+43
+00:04:48,062 --> 00:04:54,076
+obviously the probability of Y equals
+one is just the compliment of that. One
+
+44
+00:04:54,076 --> 00:05:06,074
+minus. Sorry, this should be zero. But, since the noisy OR
+
+45
+00:05:06,074 --> 00:05:12,075
+CPD, and you can generalize this to a
+much broader notion of independence of
+
+46
+00:05:12,075 --> 00:05:17,069
+causal influence. This is called
+independence of causal influence, because
+
+47
+00:05:17,069 --> 00:05:22,089
+it assumes that you have a bunch of causes
+for a variable, and each of them acts
+
+48
+00:05:22,089 --> 00:05:27,096
+independently to affect the truth of that
+variable. So, there's no interactions
+
+49
+00:05:27,096 --> 00:05:32,097
+between the different causes. They each
+have their own separate mechanism, and
+
+50
+00:05:32,097 --> 00:05:38,043
+ultimately, it's all aggregated together
+in, in a single, in a single variable, z,
+
+51
+00:05:38,043 --> 00:05:44,002
+from which the truth of y is then, is then
+determined from this aggregate effect of
+
+52
+00:05:44,002 --> 00:05:49,031
+all of the, All of these [inaudible] ZIs
+of the different causes. So, one example
+
+53
+00:05:49,031 --> 00:05:54,032
+of this is, we've already seen the noisy
+[inaudible]. But you easily generalize
+
+54
+00:05:54,032 --> 00:05:59,002
+this to a broad range of other cases.
+There's noisy [inaudible], where the
+
+55
+00:05:59,002 --> 00:06:04,029
+aggregation function is and, and. There's
+noisy maxes, which apply in the non binary
+
+56
+00:06:04,029 --> 00:06:09,050
+case, when causes might not just be turned
+on or off, but rather, different sort of
+
+57
+00:06:09,050 --> 00:06:14,099
+extensive being turned on. And then Z is
+actually sort of the maximal extent. Of,
+
+58
+00:06:15,060 --> 00:06:21,024
+of. Of the being independent effect of
+this cause and so on. So there is a large
+
+59
+00:06:21,024 --> 00:06:25,089
+range of different models, all of which
+fits into this family. [inaudible],
+
+60
+00:06:25,089 --> 00:06:30,093
+probably the one most commonly used but
+the other ones have been used in other
+
+61
+00:06:30,093 --> 00:06:37,013
+settings as well. One model that might not
+immediately be seen to fit into this
+
+62
+00:06:37,013 --> 00:06:43,025
+framework but actually does is a model
+that corresponds to the sigmoid CPD. So
+
+63
+00:06:43,025 --> 00:06:51,020
+what's a sigmoid CPD? A [inaudible] CPD
+says that each XI induces a continuous
+
+64
+00:06:51,020 --> 00:06:59,031
+variable which represents WI-XI. So
+imagine if each XI is discreet. Then ZI is
+
+65
+00:06:59,031 --> 00:07:06,089
+just a continuous value WI, which
+parameterizes this edge. And it tell us,
+
+66
+00:07:06,089 --> 00:07:15,049
+sort of, how much force, XI is going to
+exert on making Y true. So if WI is zero,
+
+67
+00:07:15,049 --> 00:07:21,063
+it tells us that XI exerts no influence
+whatsoever. If WI is positive, XY is going
+
+68
+00:07:21,063 --> 00:07:28,001
+to make, Y, more likely to be true. And if
+WI is negative, it's going to make Y less
+
+69
+00:07:28,001 --> 00:07:34,046
+likely to be true. All of these influences
+are aggregated together in this expression
+
+70
+00:07:34,046 --> 00:07:40,083
+for the variable Z, which effectively adds
+up all of these different insolences, plus
+
+71
+00:07:40,083 --> 00:07:47,044
+an additional bias term. W. Zero. And now
+we need to turn this ultimately into the
+
+72
+00:07:47,044 --> 00:07:55,030
+probability of the variable Y., which is
+the variable that we care about. And in
+
+73
+00:07:55,030 --> 00:08:00,074
+order to do that, what we're going to do
+is we're going to pass this continuous
+
+74
+00:08:00,074 --> 00:08:06,031
+quantity z, which is real number between
+negative infinity and infinity, through a
+
+75
+00:08:06,031 --> 00:08:11,082
+Sigmoid function. The Sigmoid function is
+defined as follows, and it's a function
+
+76
+00:08:11,082 --> 00:08:17,054
+that, some of you have seen in the context
+of machine learning, for example. So
+
+77
+00:08:17,054 --> 00:08:23,012
+Sigmoid takes the variable, the value, the
+continuous value z, exponentiates it, and
+
+78
+00:08:23,012 --> 00:08:28,081
+then divides one plus that exponent of z,
+and Since E. Of Z., since E. To the power
+
+79
+00:08:28,081 --> 00:08:34,041
+of Z. Is a positive number, this gives us
+a number that is always an interval of 01.
+
+80
+00:08:35,072 --> 00:08:43,064
+And if we look at what this function looks
+like. It looks like this, so this is the
+
+81
+00:08:43,064 --> 00:08:51,060
+Sigmoid function. The X. Axis here is, the
+value Z., and the Y. Axis is the Sigmoid
+
+82
+00:08:51,060 --> 00:08:59,056
+function. And you can see that as'z' gets
+very negative the probability goes to
+
+83
+00:08:59,056 --> 00:09:04,088
+zero. As'z' gets very high the probability
+gets close to one and there is this
+
+84
+00:09:04,088 --> 00:09:11,097
+interval in the middle where intermediate
+values are taken. You can, so this is kind
+
+85
+00:09:11,097 --> 00:09:18,098
+of like a squelching function that, that
+sort of squashes the function on both
+
+86
+00:09:18,098 --> 00:09:26,050
+ends. Let's look at the behavior of the
+Sigmoid C. P. D. As a function of
+
+87
+00:09:26,050 --> 00:09:32,084
+different parameters. So here is a case
+where all of the X. Sides have the same
+
+88
+00:09:32,084 --> 00:09:39,038
+parameter W. And, so what we see here is
+the value of this parameter w and over
+
+89
+00:09:39,038 --> 00:09:45,058
+here is the number of xi that are true.
+So, let's look at first this axis over
+
+90
+00:09:45,058 --> 00:09:52,076
+here. The more parents that are true, the
+more parents that are on the higher. The
+
+91
+00:09:52,076 --> 00:09:58,082
+probability of Y to be true, okay? And
+this holds for any value of W, because
+
+92
+00:09:58,082 --> 00:10:05,004
+these are all positive influences, okay?
+So the more parents are true, the more
+
+93
+00:10:05,004 --> 00:10:11,066
+things are pushing Y to take, the value
+true. This axis over here is the axis of
+
+94
+00:10:11,066 --> 00:10:18,004
+the weight. And we can see this, for low
+weights, you need an awful lot of X's to
+
+95
+00:10:18,004 --> 00:10:24,027
+get Y to be true. But as W increases, Y
+becomes true with a lot fewer positive
+
+96
+00:10:24,027 --> 00:10:32,059
+influences. This graph on the right now.
+Is what we get when we basically just
+
+97
+00:10:32,059 --> 00:10:37,068
+increase the amplitude of the whole
+system. We mulitply both W and W0 by a
+
+98
+00:10:37,068 --> 00:10:43,019
+factor of ten. And what happens is that,
+that means that the exponent gets pushed
+
+99
+00:10:43,019 --> 00:10:48,097
+up through extreme values much quicker. Z
+gets effectively multiplied by a factor of
+
+100
+00:10:48,097 --> 00:10:54,058
+ten. And that means that the transition
+becomes considerably sharper. That gives
+
+101
+00:10:54,058 --> 00:10:58,086
+us a little bit of an intuition on how the
+[inaudible] function and how the
+
+102
+00:10:58,086 --> 00:11:06,045
+[inaudible] CBD behaves. So what are some
+examples of this kind of a, this kind of a
+
+103
+00:11:06,067 --> 00:11:12,033
+an a application of this. So, I showed
+this network on an earlier part of this
+
+104
+00:11:12,033 --> 00:11:18,072
+course. It's the CPS network and it's used
+for the, it was developed for the Stanford
+
+105
+00:11:18,072 --> 00:11:24,038
+Medical School, for the diagnosis of
+internal diseases and, so, up here we have
+
+106
+00:11:24,038 --> 00:11:30,088
+things that represent pre disposing
+factors. And there is actually a fairly
+
+107
+00:11:30,088 --> 00:11:36,056
+eclectic range here. So, for example, one
+predisposing factor is intimate contact
+
+108
+00:11:36,056 --> 00:11:41,095
+with small rodents, 'cause that's the
+contributing factor at the [inaudible]
+
+109
+00:11:41,095 --> 00:11:47,063
+virus. And so there's a whole range of
+predisposing factors. Down here, in the
+
+110
+00:11:47,063 --> 00:11:54,013
+middle, we have the [inaudible]. And down
+at the bottom we have symptoms and test
+
+111
+00:11:54,013 --> 00:12:05,050
+results. Now, as I previously mentioned,
+there is approximately 500, variables in
+
+112
+00:12:05,050 --> 00:12:11,098
+this network. And they take an average
+about four values. So the total number of
+
+113
+00:12:11,098 --> 00:12:20,000
+entries in a joined distribution [sound]
+over this space would be. Approximately
+
+114
+00:12:20,000 --> 00:12:25,088
+four to the 500 are different parameters,
+which is clearly, an attractable number.
+
+115
+00:12:25,088 --> 00:12:30,083
+If we were to take this network, and just,
+if we take this distribution
+
+116
+00:12:30,083 --> 00:12:36,035
+representative using the network shown in
+this diagram, we get considerable
+
+117
+00:12:36,035 --> 00:12:44,036
+sparsification, and the [inaudible] form.
+Has approximately, 134,000,000,
+
+118
+00:12:44,036 --> 00:12:53,058
+parameters, which is still much too many,
+to have a human estimate. By using, as in
+
+119
+00:12:53,058 --> 00:13:00,007
+this case they use a noisy Max. Cpd. They
+brought out the number of parameters to
+
+120
+00:13:00,007 --> 00:13:05,047
+about 8,000 total parameters, to this net
+worth which is a much more attractable
+
+121
+00:13:05,047 --> 00:13:06,077
+number to deal with.

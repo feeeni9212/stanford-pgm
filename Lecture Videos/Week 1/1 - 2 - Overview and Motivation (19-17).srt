@@ -1,0 +1,1075 @@
+
+1
+00:00:00,000 --> 00:00:03,000
+Hello and welcome to the class in
+Probabilistic Graphical Models.
+
+2
+00:00:03,000 --> 00:00:07,000
+Probabilistic Graphical Models are a bit
+of a mouthful, so before we define them,
+
+3
+00:00:07,000 --> 00:00:11,000
+let's first figure out what they might be
+used for. So, one example application,
+
+4
+00:00:11,000 --> 00:00:15,000
+which in fact is the one with
+Probabilistic Graphical Models, or PGMs
+
+5
+00:00:15,000 --> 00:00:19,000
+as they're called, first made its way into
+computer science and artificial
+
+6
+00:00:19,000 --> 00:00:23,000
+intelligence, is that of medical
+diagnosis. Consider a doctor who is faced
+
+7
+00:00:23,000 --> 00:00:28,000
+with a patient. The doctor has a fair
+amount of information at her disposal when
+
+8
+00:00:28,000 --> 00:00:32,000
+she looks at the patient. Predisposing
+factors, symptoms, the results of various
+
+9
+00:00:32,000 --> 00:00:36,000
+tests. And, from that, she's supposed to
+figure out what diseases the patient
+
+10
+00:00:36,000 --> 00:00:41,000
+might have, and what the response to
+different treatment might be. A very
+
+11
+00:00:41,000 --> 00:00:45,000
+different application where PGMs have
+also been used is that of image
+
+12
+00:00:45,000 --> 00:00:49,000
+segmentation. Here, we might have an
+image, such as this, that has thousands,
+
+13
+00:00:49,000 --> 00:00:54,000
+or even hundreds of thousands, of pixels.
+And, what we'd like to do is, we'd like to
+
+14
+00:00:54,000 --> 00:01:00,000
+figure out what each pixel corresponds to.
+For example, if we break up the image into
+
+15
+00:01:00,000 --> 00:01:04,000
+these, fairly larger regions that have
+less stuff to reason about, we want to,
+
+16
+00:01:05,000 --> 00:01:09,000
+figure out which of these corresponds to
+grass, sky, cow, or horse. What do these
+
+17
+00:01:09,000 --> 00:01:14,000
+two problems have in common? First, they
+have a very large number of variables,
+
+18
+00:01:14,000 --> 00:01:19,000
+that we have to reason about. In the context
+of the doctor it's all these predisposing
+
+19
+00:01:19,000 --> 00:01:24,000
+factors, test results, possible diseases
+and so on. And in the context of the image
+
+20
+00:01:24,000 --> 00:01:29,000
+segmentation, it's the labels for different
+pixels or these larger regions called
+
+21
+00:01:29,000 --> 00:01:34,000
+superpixels. The second thing these applications have in
+common is that fundamentally there is going to be
+
+22
+00:01:34,000 --> 00:01:39,000
+significant uncertainty about the right
+answer, no matter how clever the
+
+23
+00:01:39,000 --> 00:01:44,000
+algorithms that we design. So
+Probabilistic Graphical Models are a
+
+24
+00:01:44,000 --> 00:01:51,000
+framework for dealing with this kind of
+application. So let's first
+
+25
+00:01:51,000 --> 00:01:56,000
+understand what each of these words mean
+in the context of this framework. So,
+
+26
+00:01:56,000 --> 00:02:02,000
+first, let's consider the word "models". So,
+what is a model? A model is a declarative
+
+27
+00:02:02,000 --> 00:02:07,000
+representation of our understanding of the
+world. So, it is a representation, within
+
+28
+00:02:07,000 --> 00:02:11,000
+the computer, that captures our
+understanding of what these variables are,
+
+29
+00:02:11,000 --> 00:02:16,000
+and how they interact with each other.
+And the fact that it's declarative means
+
+30
+00:02:16,000 --> 00:02:22,000
+that the representation stands on its own,
+which means that we can look into it and
+
+31
+00:02:22,000 --> 00:02:27,000
+make sense of it, aside from any algorithm
+that we might choose to apply on it. So
+
+32
+00:02:27,000 --> 00:02:31,000
+why is that important? It's important
+because that same representation, that
+
+33
+00:02:31,000 --> 00:02:35,000
+same model, can then be used in the
+context of one algorithm that answers
+
+34
+00:02:35,000 --> 00:02:39,000
+maybe one kind of question, or other
+algorithms that might answer different
+
+35
+00:02:39,000 --> 00:02:43,000
+kinds of questions, or the same question
+in more efficient ways, or that make
+
+36
+00:02:43,000 --> 00:02:48,000
+different trade-offs between accuracy and
+computational costs. The other advantage
+
+37
+00:02:48,000 --> 00:02:53,000
+of having a stand-alone model is that we
+can separate out the construction of the
+
+38
+00:02:53,000 --> 00:02:58,000
+model from the algorithms that are used to
+reason over it. So, we can construct
+
+39
+00:02:58,000 --> 00:03:03,000
+methodologies that elicit these models
+from a human expert, or ones that learn it
+
+40
+00:03:03,000 --> 00:03:08,000
+from historical data using statistical
+machine-learning techniques, or a
+
+41
+00:03:08,000 --> 00:03:13,000
+combination of the two. And once again,
+the separation between the algorithm
+
+42
+00:03:13,000 --> 00:03:18,000
+and the model, and the learning and the
+model, allows us to tackle each of these
+
+43
+00:03:18,000 --> 00:03:23,000
+problems separately. So that was the word
+"model". What about "probabilistic"? The word
+
+44
+00:03:23,000 --> 00:03:28,000
+"probabilistic" is in there because these
+models are designed to help us deal with
+
+45
+00:03:28,000 --> 00:03:32,000
+large amounts of uncertainty. So,
+uncertainty comes in many forms and
+
+46
+00:03:32,000 --> 00:03:37,000
+for many different reasons. So
+first it comes because we just have
+
+47
+00:03:37,000 --> 00:03:42,000
+partial knowledge of the thing below. For
+example, the doctor doesn't get to measure
+
+48
+00:03:42,000 --> 00:03:47,000
+every symptom or every test result, and
+she's certainly uncertain about the diseases
+
+49
+00:03:47,000 --> 00:03:51,000
+that the patient has. Uncertainty comes
+because of noisy observation. So, even
+
+50
+00:03:51,000 --> 00:03:56,000
+when we get to observe certain things,
+like blood pressure, those observations
+
+51
+00:03:56,000 --> 00:04:01,000
+are often subject to significant amounts
+of noise. Their uncertainty also comes in
+
+52
+00:04:01,000 --> 00:04:06,000
+because of modeling limitations. So we're
+going to have phenomena that are just not
+
+53
+00:04:06,000 --> 00:04:10,000
+covered by our model. All sorts of
+different, obscure diseases, for example,
+
+54
+00:04:10,000 --> 00:04:15,000
+that might cause the same set of symptoms.
+It's impossible for us to write down the
+
+55
+00:04:15,000 --> 00:04:20,000
+model that is so detailed that it includes
+every possible contingency and every
+
+56
+00:04:20,000 --> 00:04:25,000
+possible factor. And so you're going to
+have uncertainty and variability that is
+
+57
+00:04:25,000 --> 00:04:30,000
+simply due to modeling limitations. And
+finally, some people would argue that the
+
+58
+00:04:30,000 --> 00:04:35,000
+world is inherently stochastic. Certainly,
+if you go down to the quantum level,
+
+59
+00:04:35,000 --> 00:04:40,000
+that's true. But even at a higher level,
+the modeling limitations of complicated
+
+60
+00:04:40,000 --> 00:04:45,000
+systems are such that, one might as well
+view the world as inherently stochastic.
+
+61
+00:04:45,000 --> 00:04:50,000
+Probability theory is a framework that
+allows us to deal with uncertainty in ways
+
+62
+00:04:50,000 --> 00:04:55,000
+that are principled and that bring to
+bear important and valuable tools. So,
+
+63
+00:04:55,000 --> 00:04:59,000
+first, probabilistic models provide us,
+again, this word "declarative". A
+
+64
+00:04:59,000 --> 00:05:04,000
+declarative representation that is
+stand-alone, where you could look at a
+
+65
+00:05:04,000 --> 00:05:09,000
+probability distribution, and it has clear
+semantics, that represent our uncertainty
+
+66
+00:05:09,000 --> 00:05:14,000
+about different states that the world
+might be in. It also provides us, with a,
+
+67
+00:05:14,000 --> 00:05:20,000
+a toolbox comprising powerful reasoning
+patterns that include, for example,
+
+68
+00:05:20,000 --> 00:05:31,000
+conditioning on new forms of evidence. Or
+decision making under uncertainty.
+
+69
+00:05:31,000 --> 00:05:36,000
+And because of the intricate connection
+between probability theory and statistics,
+
+70
+00:05:36,000 --> 00:05:41,000
+we can bring to bear a range of
+powerful learning methodologies from
+
+71
+00:05:41,000 --> 00:05:47,000
+statistical learning to allow us to learn
+these models effectively from historical
+
+72
+00:05:47,000 --> 00:05:52,000
+data. Avoiding the need for a human to
+elicit, to, to specify every single aspect
+
+73
+00:05:52,000 --> 00:05:59,000
+of the model by hand. Finally the word
+"graphical". The word "graphical" is here from
+
+74
+00:05:59,000 --> 00:06:04,000
+the perspective of computer science,
+because Probabilistic Graphical Models are a
+
+75
+00:06:04,000 --> 00:06:09,000
+synthesis between ideas from probability
+theory and statistics and ideas from computer
+
+76
+00:06:09,000 --> 00:06:15,000
+science. And the idea here is to use techniques
+from computer science, specifically
+
+77
+00:06:15,000 --> 00:06:20,000
+that of graphs. To allow us to represent
+systems that are very complicated, that
+
+78
+00:06:20,000 --> 00:06:25,000
+involve large numbers of variables. And
+we've already seen those large number of
+
+79
+00:06:25,000 --> 00:06:30,000
+variables in both of the applications that
+we used as driving examples. Both in
+
+80
+00:06:30,000 --> 00:06:35,000
+the medical example as well as in the
+image segmentation example. And so, in order to
+
+81
+00:06:35,000 --> 00:06:40,000
+capture probability distributions over
+spaces involving such a large number of
+
+82
+00:06:40,000 --> 00:06:45,000
+factors, we need to have probability
+distributions over what are called random
+
+83
+00:06:45,000 --> 00:06:50,000
+variables. And so the focus of this
+class, and what we'll do for most of
+
+84
+00:06:50,000 --> 00:06:55,000
+it, is to think about the world as
+represented by a set of random variables,
+
+85
+00:06:55,000 --> 00:07:00,000
+X1 up to Xn, each of which captures some
+facet of the world. So, one symptom that
+
+86
+00:07:00,000 --> 00:07:05,000
+may be present or absent. Or a test
+result that might have a continuous set of
+
+87
+00:07:05,000 --> 00:07:10,000
+possible values. Or a pixel that might
+have one of several labels. So each of
+
+88
+00:07:10,000 --> 00:07:16,000
+these is a random variable and our goal is
+to capture our uncertainty about the
+
+89
+00:07:16,000 --> 00:07:21,000
+possible states of the world in terms of
+the probability distribution or what's
+
+90
+00:07:21,000 --> 00:07:26,000
+called a joint distribution over the
+possible assignments to the set of random
+
+91
+00:07:26,000 --> 00:07:31,000
+variables. Now the important thing to
+realize when looking at this is that,
+
+92
+00:07:31,000 --> 00:07:37,000
+even in the simplest case where each of
+these is a binary value, which is not
+
+93
+00:07:37,000 --> 00:07:43,000
+often the case, but say, just for the sake
+of argument, if you have n binary-valued
+
+94
+00:07:43,000 --> 00:07:51,000
+variables, then this is a distribution
+over 2 to the n possible states of the
+
+95
+00:07:51,000 --> 00:07:57,000
+world, one for each possible assignment
+of the n variables. And so we have to deal with
+
+96
+00:07:57,000 --> 00:08:03,000
+objects that are intrinsically
+exponentially large. And our only way to do
+
+97
+00:08:03,000 --> 00:08:10,000
+that is by exploiting data structures that
+encode, that use ideas from computer
+
+98
+00:08:10,000 --> 00:08:16,000
+science in this case, to exploit the
+structure in distribution and
+
+99
+00:08:16,000 --> 00:08:23,000
+represent and manipulate it in an effective
+way. So what are graphical models? Let's
+
+100
+00:08:23,000 --> 00:08:29,000
+look at a couple of very simple examples. So
+here's a toy Bayesian network, one that will
+
+101
+00:08:29,000 --> 00:08:35,000
+accompany us through much of the first
+part of this course. A Bayesian network
+
+102
+00:08:35,000 --> 00:08:40,000
+is one of the two main classes of
+probabilistic graphical models, and it
+
+103
+00:08:40,000 --> 00:08:46,000
+uses a directed graph as the intrinsic
+representation here. In this case,
+
+104
+00:08:46,000 --> 00:08:52,000
+remember we had a set of random variables
+X1 up to Xn. The random
+
+105
+00:08:52,000 --> 00:08:58,000
+variables are represented by nodes in
+the graph. So to take a look at this
+
+106
+00:08:58,000 --> 00:09:03,000
+very simple example which we'll discuss
+again later, here we have a situation
+
+107
+00:09:03,000 --> 00:09:08,000
+where we have a student who takes a course
+and gets a grade in the course. And, so
+
+108
+00:09:08,000 --> 00:09:13,000
+that's one of our random variables. We
+have other random variables that are also
+
+109
+00:09:13,000 --> 00:09:17,000
+related to that. For example, the
+intelligence of the students in the
+
+110
+00:09:17,000 --> 00:09:22,000
+course, the difficulty of the course, and
+others that might also be of
+
+111
+00:09:22,000 --> 00:09:27,000
+interest. For example, the quality of the
+recommendation letter that the student
+
+112
+00:09:27,000 --> 00:09:32,000
+gets in the course, which is dependent on
+perhaps the student's grade, and the
+
+113
+00:09:32,000 --> 00:09:36,000
+score that the student might have received
+at the, on the SAT. So, this is a
+
+114
+00:09:36,000 --> 00:09:41,000
+representation of a probability
+distribution, in this case over these five
+
+115
+00:09:41,000 --> 00:09:46,000
+random variables. And the edges in this
+graph represent the probabilistic
+
+116
+00:09:46,000 --> 00:09:52,000
+connections between those random variables
+in a way that is very formal, as we'll
+
+117
+00:09:52,000 --> 00:09:58,000
+define later on. The other main class of
+probabilistic graphical models is what's called a
+
+118
+00:09:58,000 --> 00:10:06,000
+Markov network, and that uses an
+undirected graph. And in this case, we
+
+119
+00:10:06,000 --> 00:10:12,000
+have an undirected graph over four random
+variables A, B, C, and D. And we'll give
+
+120
+00:10:12,000 --> 00:10:20,000
+an example of this type of network maybe a
+little bit later on. So these were toy
+
+121
+00:10:20,000 --> 00:10:27,000
+examples. Here are some real examples of
+the same type of framework. So, this is a
+
+122
+00:10:27,000 --> 00:10:33,000
+real Bayesian network. It's a network
+that's actually called CPCS. It's a real
+
+123
+00:10:33,000 --> 00:10:39,000
+medical diagnosis network. It was designed
+at Stanford University for the purpose of
+
+124
+00:10:39,000 --> 00:10:45,000
+diagnosis of internal diseases. And it
+has 480-some nodes, and a little bit over
+
+125
+00:10:45,000 --> 00:10:52,000
+900 edges. And it was used for diagnosing
+internal diseases by physicians here.
+
+126
+00:10:52,000 --> 00:10:58,000
+Another real graphical model, in this
+case on the Markov network side, is
+
+127
+00:10:58,000 --> 00:11:04,000
+one that's used for the image segmentation
+task that we talked about before. Here, the
+
+128
+00:11:04,000 --> 00:11:11,000
+random variables represent the labels of
+pixels or superpixels. So one per each
+
+129
+00:11:11,000 --> 00:11:16,000
+superpixel, say. And the edges
+represent again probabilistic
+
+130
+00:11:16,000 --> 00:11:21,000
+relationships between the label of a pixel
+and the label of an adjacent pixel,
+
+131
+00:11:21,000 --> 00:11:29,000
+since these are likely to be related to
+each other. So to summarize: the graphical
+
+132
+00:11:29,000 --> 00:11:35,000
+representation gives us an intuitive and
+compact data structure for capturing these
+
+133
+00:11:35,000 --> 00:11:40,000
+high-dimensional probability distributions. It
+provides us at the same time, as we'll see
+
+134
+00:11:40,000 --> 00:11:45,000
+later in the course, a suite of methods
+for efficient reasoning using general
+
+135
+00:11:45,000 --> 00:11:51,000
+purpose algorithms that exploit the
+graphical structure. And because of the
+
+136
+00:11:51,000 --> 00:11:57,000
+way in which the graph structure encodes
+the parametrization of the probability
+
+137
+00:11:57,000 --> 00:12:02,000
+distribution, we can represent these
+high-dimensional probability
+
+138
+00:12:02,000 --> 00:12:08,000
+distributions efficiently using a very
+small number of parameters, which allows
+
+139
+00:12:08,000 --> 00:12:13,000
+us both feasible elicitation by hand from
+an expert, as well as automatically
+
+140
+00:12:13,000 --> 00:12:19,000
+learning from data. And, in both
+cases, a reduction in the number of
+
+141
+00:12:19,000 --> 00:12:25,000
+parameters is very valuable. This
+framework is a very general one and has
+
+142
+00:12:25,000 --> 00:12:30,000
+been applied to a very broad range of
+applications. And I'm not going to list
+
+143
+00:12:30,000 --> 00:12:36,000
+all of the ones on this slide, and
+there is many others that I could have put
+
+144
+00:12:36,000 --> 00:12:42,000
+on the slide had there been more space.
+Let me just very briefly mention a few of
+
+145
+00:12:42,000 --> 00:12:47,000
+them on subsequent slides. So, we've
+already discussed the image segmentation.
+
+146
+00:12:47,000 --> 00:12:53,000
+So, just to, motivate the benefits of a,
+of the PGM framework in this context,
+
+147
+00:12:53,000 --> 00:12:58,000
+let's look at these two images as an
+example. Here is the original images. This
+
+148
+00:12:58,000 --> 00:13:04,000
+is the division of these images into what
+I mentioned were called superpixels,
+
+149
+00:13:04,000 --> 00:13:10,000
+which are these sort of slightly larger
+coherent regions. And this is what you
+
+150
+00:13:10,000 --> 00:13:18,000
+get if you apply a state-of-the-art
+machine-learning framework to individual
+
+151
+00:13:18,000 --> 00:13:25,000
+superpixels separately. So just trying
+to classify each superpixel separately.
+
+152
+00:13:25,000 --> 00:13:31,000
+And you can see that you get, especially
+in the case of the cow, a total mess, with
+
+153
+00:13:31,000 --> 00:13:37,000
+different superpixels having drastically
+different labels. You can't even see the
+
+154
+00:13:37,000 --> 00:13:42,000
+cow in this segmented image. Whereas, if
+you construct a probabilistic graphical
+
+155
+00:13:42,000 --> 00:13:48,000
+model that captures the global structure of
+the scene and the correlations, the probabilistic
+
+156
+00:13:48,000 --> 00:13:53,000
+relationships between these superpixels,
+you end up with a much more coherent
+
+157
+00:13:53,000 --> 00:13:59,000
+segmentation that captures the structure
+of the scene beautifully. We've already
+
+158
+00:13:59,000 --> 00:14:05,000
+discussed medical diagnosis as an example.
+So, here is a real-world application. This
+
+159
+00:14:05,000 --> 00:14:11,000
+was something that was fielded on the
+Microsoft network for helping parents
+
+160
+00:14:11,000 --> 00:14:16,000
+figure out what was wrong with a sick
+child. The site was called
+
+161
+00:14:16,000 --> 00:14:21,000
+"On Parenting", and, parents could enter the
+primary complaint, and then were led
+
+162
+00:14:21,000 --> 00:14:27,000
+through a series of questions that allowed
+the system to provide a probability
+
+163
+00:14:27,000 --> 00:14:34,000
+distribution over the most likely
+diagnosis of what was ailing the child.
+
+164
+00:14:34,000 --> 00:14:39,000
+A very different application is one of textual
+information extraction where we might have
+
+165
+00:14:39,000 --> 00:14:44,000
+an article from say, a newspaper, and we'd
+like to take this unstructured data and
+
+166
+00:14:44,000 --> 00:14:48,000
+convert it into a structured form where we
+have some representation of the people,
+
+167
+00:14:48,000 --> 00:14:52,000
+and the sentences, locations,
+organizations, and perhaps relationships.
+
+168
+00:14:52,000 --> 00:14:56,000
+So one such task might be to take this
+kind of sentence and recognize that these
+
+169
+00:14:56,000 --> 00:15:01,000
+two words together form a person. Which
+might not be that hard, given the presence
+
+170
+00:15:01,000 --> 00:15:07,000
+of the word "Mrs." But this is a little
+bit harder because "Green" is also a word
+
+171
+00:15:07,000 --> 00:15:12,000
+and yet, we want to identify it as a person.
+We might want to, then, infer that
+
+172
+00:15:12,000 --> 00:15:21,000
+this is a location. And perhaps, that
+this is an organization. It turns out
+
+173
+00:15:21,000 --> 00:15:26,000
+that the state-of-the-art methodology
+for solving this problem is as a
+
+174
+00:15:26,000 --> 00:15:32,000
+probabilistic graphical model, where we
+have a variable for each word that encodes
+
+175
+00:15:32,000 --> 00:15:37,000
+the label for that word. For example, here
+we have the beginning of a person unit,
+
+176
+00:15:37,000 --> 00:15:43,000
+and an intermediate label for the person
+unit. And here is another person unit.
+
+177
+00:15:43,000 --> 00:15:49,000
+Whereas here, in this variable, we
+would like to label it as a location, but
+
+178
+00:15:49,000 --> 00:15:55,000
+we would like to capture importantly the
+correlations between both adjacent words
+
+179
+00:15:55,000 --> 00:16:00,000
+as well as between nonadjacent words. By
+using this occurrence of the word "Green" to
+
+180
+00:16:00,000 --> 00:16:07,000
+infer that this occurrence of the word
+"Green" is also a name. A very different
+
+181
+00:16:07,000 --> 00:16:13,000
+example altogether is one that
+integrates data from multiple sensors.
+
+182
+00:16:13,000 --> 00:16:20,000
+This occurs in many applications. One such
+is for integrating data related to traffic
+
+183
+00:16:20,000 --> 00:16:26,000
+from both sensors that we might have in
+the road, or on the top of bridges, or
+
+184
+00:16:26,000 --> 00:16:32,000
+weather information, incident reports that
+we might get in some form, we'd like to
+
+185
+00:16:32,000 --> 00:16:37,000
+take all this together and use a model
+that, as it happens, was learned from
+
+186
+00:16:37,000 --> 00:16:43,000
+data. And that model is then used to
+predict both current and future road
+
+187
+00:16:43,000 --> 00:16:49,000
+speed, including not only on roads where
+we have sensors that measure traffic, but
+
+188
+00:16:49,000 --> 00:16:56,000
+even more interestingly, on roads where
+traffic wasn't measured. And it turns out
+
+189
+00:16:56,000 --> 00:17:01,000
+that this was a very successful
+application that was fielded on, in
+
+190
+00:17:01,000 --> 00:17:06,000
+several large cities, and with very good
+results. From a totally different
+
+191
+00:17:07,000 --> 00:17:12,000
+application domain, probabilistic
+graphical models have been used very
+
+192
+00:17:12,000 --> 00:17:17,000
+successfully for discovering new knowledge
+that we didn't have before. In this case,
+
+193
+00:17:17,000 --> 00:17:21,000
+the application was biological network
+reconstruction, where a biologist
+
+194
+00:17:21,000 --> 00:17:27,000
+measured protein levels of a diverse set
+of proteins in different conditions,
+
+195
+00:17:27,000 --> 00:17:32,000
+under different perturbations, and from
+that, they learned the relationships
+
+196
+00:17:32,000 --> 00:17:37,000
+between those proteins and discovered 
+interactions between those proteins
+
+197
+00:17:37,000 --> 00:17:41,000
+where one was controlling another
+including the ones that were not known
+
+198
+00:17:41,000 --> 00:17:46,000
+before. So, let's conclude this
+introduction with an overview of what
+
+199
+00:17:46,000 --> 00:17:51,000
+we'll learn in the class. So we'll cover
+three main pieces related to probabilistic
+
+200
+00:17:51,000 --> 00:17:56,000
+graphical models.  We'll cover
+representations of PGMs including both
+
+201
+00:17:56,000 --> 00:18:01,000
+directed and undirected representations.
+We'll also talk about higher level
+
+202
+00:18:01,000 --> 00:18:07,000
+structures that allow us to encode more
+complicated scenarios including ones that
+
+203
+00:18:07,000 --> 00:18:12,000
+involve temporal structure as well as
+ones that involve repeated or relational
+
+204
+00:18:12,000 --> 00:18:18,000
+structure, specifically a class of models
+called plate models. We'll talk
+
+205
+00:18:18,000 --> 00:18:24,000
+about inference or reasoning using these
+models, covering both exact reasoning where
+
+206
+00:18:24,000 --> 00:18:29,000
+exact probabilities are the output, as well as
+approximate methods that provide a
+
+207
+00:18:29,000 --> 00:18:35,000
+different tradeoff regarding accuracy in
+computation, and we'll also talk about how
+
+208
+00:18:35,000 --> 00:18:40,000
+this class of models can be used for
+decision making under uncertainty. And
+
+209
+00:18:40,000 --> 00:18:45,000
+finally, we'll talk about how you might
+learn these models from historical
+
+210
+00:18:45,000 --> 00:18:51,000
+statistical data.  We'll talk about learning
+both parameters as well as structure of
+
+211
+00:18:51,000 --> 00:18:56,000
+these models automatically, and dealing
+with both the somewhat simpler scenario
+
+212
+00:18:56,000 --> 00:19:02,000
+where we have complete data, that is, all
+the variables are always observed, as well as
+
+213
+00:19:02,000 --> 00:19:07,000
+the more difficult case where some of the
+variables might not be observed all the
+
+214
+00:19:07,000 --> 00:19:12,000
+time, or perhaps not at all. And that
+introduces an interesting set of
+
+215
+00:19:12,000 --> 00:19:17,000
+complications, but also a wealth of
+very exciting applications, as we'll see.

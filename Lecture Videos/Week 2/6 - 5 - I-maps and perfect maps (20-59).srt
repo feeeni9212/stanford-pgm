@@ -1,0 +1,960 @@
+
+1
+00:00:01,015 --> 00:00:06,054
+We have previously shown that a graph
+structure encodes a set of independencies
+
+2
+00:00:06,054 --> 00:00:12,005
+and that, that set of independencies then
+necessarily holds for every distribution
+
+3
+00:00:12,005 --> 00:00:17,068
+that can be encoded as a Bayesian network
+over that graph. What we're going to talk
+
+4
+00:00:17,068 --> 00:00:23,034
+about now is the question of how to take a
+distribution that has a certain set of
+
+5
+00:00:23,034 --> 00:00:29,014
+independencies that, that it satisfies, and
+encode it within a graph structure. How
+
+6
+00:00:29,014 --> 00:00:34,081
+well can we take that distribution and
+capture its independencies in the context
+
+7
+00:00:34,081 --> 00:00:40,055
+of the graphical model. So first, let's
+understand what the independencies of a
+
+8
+00:00:40,055 --> 00:00:46,062
+distribution are. So we're going define this notion of I(P) for distribution P,
+
+9
+00:00:46,062 --> 00:00:52,041
+as the set of all independence statements.
+X is independent of Y, given Z. That
+
+10
+00:00:52,041 --> 00:00:58,005
+hold for the distribution P. So one
+can write down, potentially, an
+
+11
+00:00:58,005 --> 00:01:04,014
+exponentially large set of independence statements. Each of those is going to be
+
+12
+00:01:04,014 --> 00:01:10,001
+either true in a given distribution P,
+or not. And what we're going to do is
+
+13
+00:01:10,001 --> 00:01:16,021
+we're going to define I(P) to be the ones
+that are true in that distribution. Ok, so these
+
+14
+00:01:16,021 --> 00:01:32,062
+are independencies that hold in P. 
+And we've already seen that if P
+
+15
+00:01:32,062 --> 00:01:41,051
+factorizes over a particular graph
+G, then, G is an I map for P, which means
+
+16
+00:01:41,051 --> 00:01:49,058
+that every independence that holds in G,
+that is, is implied by the D separation
+
+17
+00:01:49,058 --> 00:01:57,095
+statements, or the D separation properties in
+G, every such independence also holds in P.
+
+18
+00:01:59,098 --> 00:02:05,059
+But that doesn't mean that the converse
+holds. That is, there can be
+
+19
+00:02:05,059 --> 00:02:12,025
+independencies that hold in P that are 
+members of I(P) . But are not
+
+20
+00:02:17,073 --> 00:02:23,021
+encoded by the graph structure. So. Why
+does that matter? Because, if we have a
+
+21
+00:02:23,021 --> 00:02:29,005
+graph that doesn't capture, some of the
+Independencies in P, then, it's
+
+22
+00:02:29,005 --> 00:02:34,050
+unnecessarily complicated. And conversely
+the sparser the graph the more
+
+23
+00:02:34,050 --> 00:02:39,090
+independencies it encodes then the sparser it is and therefore it has fewer
+
+24
+00:02:39,090 --> 00:02:45,024
+parameters that we need to elicit or
+learn. Fewer edges also means that
+
+25
+00:02:45,024 --> 00:02:51,036
+inference is more efficient and finally it
+means that the graph is intrinsically more
+
+26
+00:02:51,036 --> 00:02:57,020
+informative about the properties of P. So
+we would like graphs that capture as much
+
+27
+00:02:57,020 --> 00:03:06,002
+of the properties, independence properties of P as possible. So what do we want in
+
+28
+00:03:06,002 --> 00:03:12,029
+terms of sparsity? Something that is
+fairly basic that we might choose to
+
+29
+00:03:12,029 --> 00:03:19,007
+require is what's called a minimal
+IMAP. That is, we want an IMAP for the
+
+30
+00:03:19,007 --> 00:03:25,086
+distribution P that at least doesn't have
+redundant edges. So for example, if we
+
+31
+00:03:25,086 --> 00:03:31,098
+have a graph X. Y, where Y really doesn't
+depend on X in the sense that P of Y
+
+32
+00:03:31,098 --> 00:03:38,022
+given, say, X zero in the CPD is equal to
+P of Y given X one, then we could remove
+
+33
+00:03:38,022 --> 00:03:44,054
+this edge and still have something that
+was an iMAP for this distribution. And so
+
+34
+00:03:44,054 --> 00:03:50,078
+this edge is now redundant, and so from
+our definition that would mean that this
+
+35
+00:03:50,078 --> 00:03:57,009
+iMAP is not minimal because you can have
+an iMAP from which edges can be removed.
+
+36
+00:03:58,003 --> 00:04:03,084
+So that might seem to be a reasonable
+strategy but it turns out that it's not
+
+37
+00:04:03,084 --> 00:04:09,073
+sufficient in terms of insuring that our graph is as sparse as it might be. So to
+
+38
+00:04:09,073 --> 00:04:16,013
+understand why that's the case let's look
+at a distribution such as that corresponds
+
+39
+00:04:16,013 --> 00:04:22,038
+to this example that we've seen before where the student's grade G depends on these two
+
+40
+00:04:22,038 --> 00:04:28,012
+variables I and D. So that in fact is a
+minimal iMAP for a distribution where D
+
+41
+00:04:28,012 --> 00:04:33,098
+and I are independent and G depends on
+both of them. But it turns out that this is
+
+42
+00:04:33,098 --> 00:04:39,012
+not the only minimal iMAP for
+distribution. A different minimal iMAP is
+
+43
+00:04:39,012 --> 00:04:47,055
+this one. Where we have an edge that goes from D to I, from D to G, and from G to I.
+
+44
+00:04:47,055 --> 00:04:53,004
+Let's convince ourselves that in fact this
+is a minimal iMAP. Let's try and remove
+
+45
+00:04:53,004 --> 00:04:58,073
+any one of those edges and see if we still
+get an iMAP for the original distribution.
+
+46
+00:04:58,073 --> 00:05:04,022
+So if for example we try and remove this
+edge, that would correspond to
+
+47
+00:05:04,022 --> 00:05:09,044
+a statement that D is independent of G
+which is certainly not the case in our
+
+48
+00:05:09,044 --> 00:05:15,022
+original distribution. So that one doesn't
+work. What about the second one. If we try
+
+49
+00:05:15,022 --> 00:05:22,035
+and remove the second edge from G to I
+that would correspond to a statement that
+
+50
+00:05:22,035 --> 00:05:33,037
+D, sorry, that G is independent of I,
+given D, which is also not the case in our
+
+51
+00:05:33,037 --> 00:05:40,033
+original distribution. What about the
+final edge, the one that doesn't
+
+52
+00:05:40,033 --> 00:05:45,064
+correspond to an edge in our original
+network. This one. Can we remove that one?
+
+53
+00:05:45,064 --> 00:05:52,012
+That one seems most promising of the
+lot but if you remove that one it would
+
+54
+00:05:52,012 --> 00:05:58,025
+correspond to the assumption that D is
+independent of I, given G. And that is
+
+55
+00:05:58,025 --> 00:06:03,083
+exactly the dependence that is induced by
+inter-causal reasoning that we've seen
+
+56
+00:06:03,083 --> 00:06:09,001
+before. So in fact, this is a minimal I
+Map. None of the edges can be reduced.
+
+57
+00:06:09,001 --> 00:06:14,066
+There is a better minimal I Map, but this
+is a minimal I Map. So minimal I Maps are
+
+58
+00:06:14,066 --> 00:06:19,076
+not necessarily the best tool for
+capturing structure in the distribution.
+
+59
+00:06:19,076 --> 00:06:25,026
+What we'd really like is a perfect map. A
+perfect map is one where the independencies
+
+60
+00:06:25,026 --> 00:06:30,035
+in G exactly corresponds to the
+independencies in P. So the G perfectly
+
+61
+00:06:30,035 --> 00:06:35,044
+captures the independencies in P. And
+sure enough if we could get that, that
+
+62
+00:06:35,044 --> 00:06:41,038
+would be ideal. Unfortunately perfect maps
+are often hard to come by. So here's an
+
+63
+00:06:41,038 --> 00:06:48,000
+example of one scenario that doesn't have a perfect map. This is a distribution P
+
+64
+00:06:48,000 --> 00:06:54,039
+that is actually represented by this pairwise Markov network that
+
+65
+00:06:54,039 --> 00:07:00,094
+we've seen before. So, one where we have pairwise interactions ab bc cd and ad.
+
+66
+00:07:00,094 --> 00:07:07,029
+So we know that this distribution
+satisfies certain independencies, because
+
+67
+00:07:07,029 --> 00:07:11,099
+of the Markov network property.
+Specifically we know that, a is
+
+68
+00:07:11,099 --> 00:07:17,084
+independent of c, given b and d, because b
+and d separate a and c in the graph, and
+
+69
+00:07:17,084 --> 00:07:23,022
+at the same time we know that b is
+independent of d, given a and c. So now
+
+70
+00:07:23,022 --> 00:07:29,083
+that we, let's imagine that we have a
+distribution P that satisfies these
+
+71
+00:07:29,083 --> 00:07:36,068
+independencies, so P satisfies this
+pair of independencies, and now
+
+72
+00:07:36,068 --> 00:07:43,079
+let's try and code those independencies
+using a Bayesian network as a perfect
+
+73
+00:07:43,079 --> 00:07:52,019
+map. Let's try. One possible attempt
+would be to just try and direct the edges say
+
+74
+00:07:52,019 --> 00:08:00,094
+this way. Is that an iMap for this
+distribution? Well, among other things one
+
+75
+00:08:00,094 --> 00:08:09,002
+of the independencies implied by this
+graph would be that B is independent of D
+
+76
+00:08:09,002 --> 00:08:16,033
+given A. And that's certainly not
+supported by the original distribution. So
+
+77
+00:08:16,033 --> 00:08:25,006
+this in fact is not an iMap. So try a
+different way of organizing the edges.
+
+78
+00:08:26,022 --> 00:08:44,025
+So, for example. Here we have, sure
+enough, and this is good, that B
+
+79
+00:08:44,025 --> 00:08:53,082
+and D are independent given A and C.
+And that's one of our independencies that
+
+80
+00:08:53,082 --> 00:08:59,079
+we had before so it captures correctly
+that one. But, if, but, not all, but, it
+
+81
+00:08:59,079 --> 00:09:06,042
+doesn't capture the but it also makes
+other independent assumptions that are not
+
+82
+00:09:06,042 --> 00:09:12,074
+true in the original distribution. For example, that A and C, are marginally independent.
+
+83
+00:09:14,001 --> 00:09:20,027
+And, that's certainly not true in the
+original distribution. So once again, this
+
+84
+00:09:20,027 --> 00:09:28,002
+is not, an I-map. What is an I-map for
+this distribution as a directed graph?
+
+85
+00:09:28,002 --> 00:09:35,049
+Well, one possible iMAP for this
+distribution as directed graph. Here's
+
+86
+00:09:35,049 --> 00:09:45,042
+several. Is this one? And, you can confirm that this distribution satisfies, that
+
+87
+00:09:45,042 --> 00:09:53,056
+this graph implies that A is independent
+of C. Given B and D. And that's it in
+
+88
+00:09:53,056 --> 00:09:59,031
+terms of independencies. And so this in
+fact is an iMap for the distribution
+
+89
+00:09:59,031 --> 00:10:05,051
+because in this case I of D is a subset of
+I of P, which is this set over here. But
+
+90
+00:10:05,051 --> 00:10:10,080
+it doesn't capture all of the
+independencies. It only captures one out
+
+91
+00:10:10,080 --> 00:10:16,085
+of the two. So this is the distribution
+that does have a perfect map as a Bayesian
+
+92
+00:10:16,085 --> 00:10:22,081
+network. Let's come up, let's provide
+another example of an imperfect map. And
+
+93
+00:10:22,081 --> 00:10:28,059
+in fact this is a distribution
+that doesn't have a perfect map as
+
+94
+00:10:28,059 --> 00:10:33,074
+either a Bayesian network or a
+Markov network. And this is the
+
+95
+00:10:33,074 --> 00:10:39,066
+famous example of the XOR which is
+as we'll see a counter example to many, many
+
+96
+00:10:39,066 --> 00:10:45,038
+things. Here we have two random variables X1 and X2 which were assuming are binary
+
+97
+00:10:45,038 --> 00:10:52,090
+valued and say... Each of them takes the
+value 0,1 with probability 50-50. Y on the
+
+98
+00:10:52,090 --> 00:11:01,024
+other hand is the Exclusive Or of X1 and
+X2, which means that Y is equal to one
+
+99
+00:11:01,024 --> 00:11:09,057
+if and only if exactly one of X1 or X2,
+is equal to one. Okay, so let's talk
+
+100
+00:11:09,057 --> 00:11:16,019
+about, this probability distribution P,
+looks like, here it is, we have that,
+
+101
+00:11:16,019 --> 00:11:23,042
+there's four possible configurations, that
+have nonzero probability, and, each of
+
+102
+00:11:23,042 --> 00:11:29,052
+them, has equal probability of 0.25, so
+X1, X2, can be, either, zero, or, one,
+
+103
+00:11:29,052 --> 00:11:37,029
+with probability 50-50, and, here is the
+value of Y over here. But now
+
+104
+00:11:37,029 --> 00:11:43,002
+let's think about other, so let's see some
+independent statements are true for this
+
+105
+00:11:43,002 --> 00:11:48,049
+distribution. So most obviously looking
+at this graph we see that X1 is marginally
+
+106
+00:11:48,049 --> 00:11:54,077
+independent of X2. But if you close your
+eyes, on this part of the image
+
+107
+00:11:54,077 --> 00:12:01,081
+And just look at the right hand
+side. You'll see that really X1, X2,
+
+108
+00:12:01,081 --> 00:12:08,086
+and Y are all symmetrical in terms of
+their structure. So it's not difficult to
+
+109
+00:12:08,086 --> 00:12:15,065
+verify that we also have that X1 in fact 
+is independent  of Y and X2 is
+
+110
+00:12:15,065 --> 00:12:22,050
+independent of Y. And all three of these
+pairwise independencies hold in this
+
+111
+00:12:22,050 --> 00:12:28,086
+distribution. And, so this is not in fact
+the, the, the graph on the left is not a
+
+112
+00:12:28,086 --> 00:12:34,064
+perfect map for this distribution because
+there are  independencies that hold in P
+
+113
+00:12:34,064 --> 00:12:40,016
+that are not visible in the graph. And in
+fact you can organize the nodes in this
+
+114
+00:12:40,016 --> 00:12:45,061
+graph any which way and, but you cannot
+get all three of these independencies
+
+115
+00:12:45,061 --> 00:12:50,092
+captured at the same time. Because the
+only way to do that would be to have X1,
+
+116
+00:12:50,092 --> 00:12:56,023
+X2, and Y be separate variables. And of
+course that wouldn't be an IMAP for the
+
+117
+00:12:56,023 --> 00:13:02,086
+distribution. So we've talked about Bayes nets as a
+perfect map. What about Markov networks
+
+118
+00:13:02,086 --> 00:13:07,068
+as a perfect map? The definition here is
+the same except that we've replaced G by
+
+119
+00:13:07,068 --> 00:13:12,009
+H, so a Markov network H is a
+perfect map if the independencies
+
+120
+00:13:12,009 --> 00:13:17,016
+encoded by H exactly correspond
+to the independencies in P, and can we capture
+
+121
+00:13:17,016 --> 00:13:21,092
+all possible distributions in terms of
+a Markov network as a perfect map?
+
+122
+00:13:21,092 --> 00:13:26,069
+So I'm sure you're all expecting, expecting your answer
+to be no, and sure enough that's true.
+
+123
+00:13:26,069 --> 00:13:30,087
+So here is an example of a distribution that has a perfect map, in this
+
+124
+00:13:30,087 --> 00:13:35,074
+case is as a Bayesian network, but not as a Markov network. So this is the famous
+
+125
+00:13:36,000 --> 00:13:41,059
+V-structure example, in this case the
+Difficulty, Intelligence, Grade
+
+126
+00:13:41,059 --> 00:13:49,017
+V-structure and let's think about what in
+the, what we need to encode as in terms of
+
+127
+00:13:49,017 --> 00:13:55,092
+edges for being an I-map of this distribution. So clearly we need
+
+128
+00:13:55,092 --> 00:14:03,010
+to introduce an edge between D and G and
+between I and G. Because it's certainly
+
+129
+00:14:03,010 --> 00:14:10,037
+not the case that we can make D and G
+independent given I or vice versa. And so
+
+130
+00:14:10,037 --> 00:14:17,091
+this would be the obvious I map for this
+distribution but this example if we choose
+
+131
+00:14:17,091 --> 00:14:24,046
+this as, as a candidate I map it would
+imply among other things that D is
+
+132
+00:14:24,046 --> 00:14:31,050
+independent of I given G. And that of
+course is exactly wrong because we know
+
+133
+00:14:31,050 --> 00:14:38,069
+that when we condition on G, 
+D and I become dependent and
+
+134
+00:14:38,069 --> 00:14:45,015
+so the only iMAP. For this distribution is
+one that has all three edges, and that
+
+135
+00:14:45,015 --> 00:14:50,081
+loses the independence we had over 
+here, which is D is marginally independent 
+of I. So
+
+136
+00:14:50,081 --> 00:14:56,020
+once again, there's no perfect map for
+this distribution as Markov network. The
+
+137
+00:14:56,020 --> 00:15:02,021
+final question that we might ask ourselves
+is, the extent to which a representation
+
+138
+00:15:02,021 --> 00:15:07,039
+of a distribution is, in fact, unique. And
+so say that we could represent the
+
+139
+00:15:07,039 --> 00:15:12,016
+distribution using some graph, say, as a
+perfect map. Is that a unique
+
+140
+00:15:12,016 --> 00:15:19,045
+representation? So, to understand that
+let's look first at the simplest example.
+
+141
+00:15:19,045 --> 00:15:27,071
+One where we have two variables X and Y.
+And here we have one graph that captures
+
+142
+00:15:27,071 --> 00:15:36,058
+in this case no independence assumptions so
+I of G is equal to the empty set. G1 and
+
+143
+00:15:36,058 --> 00:15:42,078
+here's G2. It looks the same except that
+the edges are inverted, the one edge is
+
+144
+00:15:42,078 --> 00:15:48,074
+inverted. And, once again, this is a
+different graph that has exactly the same
+
+145
+00:15:48,074 --> 00:15:55,062
+vacuous set of independencies. So we can
+see that here we have two distinct graphs
+
+146
+00:15:55,062 --> 00:16:01,095
+that have the exact same of independent
+assumptions and because of that they can
+
+147
+00:16:01,095 --> 00:16:17,038
+represent exactly the same set.of distributions.
+Which in this case
+
+148
+00:16:17,038 --> 00:16:23,023
+is all distributions over the variables X,
+Y. Now, one might think that this is a degenerate example,
+
+149
+00:16:23,023 --> 00:16:27,095
+because, it's a fully connected graph.
+But it turns out to be not the case,
+
+150
+00:16:27,095 --> 00:16:32,093
+there are many other situations, where,
+two distinct graphs, with edges going in
+
+151
+00:16:32,093 --> 00:16:37,072
+different directions, represent the
+exact same set of independence
+
+152
+00:16:37,072 --> 00:16:42,089
+assumptions. So, for example, when we look
+at graphs over three random variables, it
+
+153
+00:16:42,089 --> 00:16:48,019
+turns out, that, of these four scenarios,
+one of those represents adifferent
+
+154
+00:16:48,019 --> 00:16:53,011
+set of independent assumptions than all
+the others, but, all the others are the
+
+155
+00:16:53,011 --> 00:16:58,098
+same. So, which is the odd man out? Which
+of these following graphs does not encode
+
+156
+00:16:58,098 --> 00:17:05,004
+the same independence assumptions as the
+others? As I'm sure most of you realize,
+
+157
+00:17:05,004 --> 00:17:11,032
+the answer here is the V-structure, which
+is one that we've seen before. So this one
+
+158
+00:17:11,032 --> 00:17:16,073
+has the independence assumption X is
+independent of Z marginally, whereas
+
+159
+00:17:16,073 --> 00:17:23,005
+these other three. Have the independent
+assumption that X is independent of  Z.,
+
+160
+00:17:23,005 --> 00:17:28,090
+given Y. So these three graphs, again,
+represent the same set of independence
+
+161
+00:17:28,090 --> 00:17:34,020
+assumptions, which is this set over here.
+And as such, they also can take
+
+162
+00:17:34,020 --> 00:17:39,065
+any probability distribution that can be
+represented by one of these graphs, can
+
+163
+00:17:39,065 --> 00:17:44,095
+also be represented by another, by the
+other. So the formal notion for this, the
+
+164
+00:17:44,095 --> 00:17:50,033
+formal term for this notion is what's
+called I-equivalence. Where two graphs
+
+165
+00:17:50,033 --> 00:17:56,069
+G1 and G2 over the same space are said to
+be I-equivalent if they make the exact
+
+166
+00:17:56,069 --> 00:18:05,027
+same set of independence assumptions. And
+in the previous example we saw for example
+
+167
+00:18:05,027 --> 00:18:17,050
+that X, Y, Z is I-equivalent to say. Y
+being a parent of both X and Z, and. This
+
+168
+00:18:17,050 --> 00:18:23,021
+third one over here, whereas the
+V-structure is not I-equivalent.
+
+169
+00:18:23,021 --> 00:18:29,038
+Now, why is I-equivalence an important
+notion? It's important because it tells us
+
+170
+00:18:29,038 --> 00:18:35,040
+that there are certain aspects of the
+graphical model that are unidentifiable.
+
+171
+00:18:39,074 --> 00:18:44,074
+Which means that if we end up, for
+whatever reason, thinking that, say, this
+
+172
+00:18:44,074 --> 00:18:49,088
+is the graph that represents our
+probability distribution, it could just as
+
+173
+00:18:49,088 --> 00:18:54,095
+easily be this one, or that one. So
+without prior knowledge of some kind or
+
+174
+00:18:54,095 --> 00:19:00,077
+another, for example that we prefer X to
+be a parent of Y, there's no way for us to
+
+175
+00:19:00,077 --> 00:19:06,033
+select among these different
+choices. And it turns out that this is not
+
+176
+00:19:06,033 --> 00:19:11,036
+an exception, rather it's the rule. Most
+graphs have a large number of
+
+177
+00:19:11,036 --> 00:19:16,068
+I-equivalent variants. And
+that turns out to be a complicating
+
+178
+00:19:16,068 --> 00:19:22,062
+factor, especially when we get to learning
+models from data. So in summary, we prefer
+
+179
+00:19:22,062 --> 00:19:28,017
+to have graphs that capture as much of the
+structure in I(P) as possible, because they
+
+180
+00:19:28,017 --> 00:19:33,033
+are more compact. Therefore easier to
+learn and easier to inference with, and
+
+181
+00:19:33,033 --> 00:19:38,095
+also provide us with more insight about
+the distribution. We talked about minimal I-maps,
+
+182
+00:19:38,095 --> 00:19:44,013
+as one option for sparse
+graphs and we showed that, that's not a
+
+183
+00:19:44,013 --> 00:19:49,037
+particularly good option because it might fail
+to capture structure even if
+
+184
+00:19:49,037 --> 00:19:54,075
+it's present in the distribution and even
+if it is representable, as a Bayes net, or as
+
+185
+00:19:54,075 --> 00:20:02,036
+a graphical model. A better notion is a perfect
+map, which is great, but there are many
+
+186
+00:20:02,036 --> 00:20:08,019
+cases where a perfect map might not exist.
+And we've also seen that when we take a
+
+187
+00:20:08,019 --> 00:20:12,088
+distribution that was naturally
+represented as a Bayes net, and tried to
+
+188
+00:20:12,088 --> 00:20:17,063
+represent it as a Markov net, as a, we
+generally do not get a perfect map, we
+
+189
+00:20:17,063 --> 00:20:22,051
+lose independencies and vice versa.
+Something that was naturally represented
+
+190
+00:20:22,051 --> 00:20:27,046
+as a Markov net, you try and encode it as a
+Bayes net once again, you lose
+
+191
+00:20:27,046 --> 00:20:32,015
+independencies. Specifically, when we go
+from a Bayes net to a Markov
+
+192
+00:20:32,015 --> 00:20:37,066
+network, we lose the independencies in
+V-structures. And when you go from a
+
+193
+00:20:37,066 --> 00:20:44,078
+Markov network to a Bayesian network, we
+need to add edges that inside, loops like
+
+194
+00:20:44,078 --> 00:20:52,091
+the, A, B, C, D Loop. We had to add this
+edge in the middle. An edge typically
+
+195
+00:20:52,091 --> 00:20:59,048
+called a triangulating edge, because it
+turns the loop into a pair of triangles.

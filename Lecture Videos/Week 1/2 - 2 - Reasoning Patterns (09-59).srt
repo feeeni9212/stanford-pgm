@@ -1,0 +1,518 @@
+
+1
+00:00:02,001 --> 00:00:07,002
+Having defined the Bayesian network, let's
+look at some of the reasoning patterns
+
+2
+00:00:07,002 --> 00:00:12,003
+that allow models to perform. So lets go
+back to our good old student network
+
+3
+00:00:12,003 --> 00:00:17,001
+with the following CPDs. We have already
+seen those, so I'm not gonna dwell on it,
+
+4
+00:00:17,001 --> 00:00:21,009
+and lets look at some of the probabilities
+that one would get if you took the
+
+5
+00:00:21,009 --> 00:00:26,004
+Bayesian network and produced the joint
+distribution using the chain rule for
+
+6
+00:00:26,004 --> 00:00:30,005
+a Bayesian network and now we've computed and saved
+the values of different marginal
+
+7
+00:00:30,005 --> 00:00:35,006
+probabilities. So, for example now we are
+asking what is the probability of getting
+
+8
+00:00:35,006 --> 00:00:41,008
+a strong letter, and we're not going to go
+through the calculation, because it's
+
+9
+00:00:41,008 --> 00:00:48,003
+going to be tedious to sum up all these
+numbers, and I can just tell you that the
+
+10
+00:00:48,003 --> 00:00:54,001
+probability of the of l1 is 0.5. But we
+can do more interesting queries, so we can
+
+11
+00:00:54,001 --> 00:00:59,000
+now condition on one variable, remember we
+talked about conditioning and probability
+
+12
+00:00:59,000 --> 00:01:03,004
+distribution, and ask how that
+changes this probability. So, for example,
+
+13
+00:01:03,004 --> 00:01:07,007
+if we're going to condition on low
+intelligence, we're going to use red to
+
+14
+00:01:07,007 --> 00:01:12,002
+denote the "false" value.
+
+15
+00:01:12,002 --> 00:01:14,008
+And it's going to affect the good letter's
+probability, it turns out the probability, not
+
+16
+00:01:14,008 --> 00:01:16,007
+surprisingly, goes down. It goes down to
+0.39, because if the intelligence goes down,
+
+17
+00:01:16,007 --> 00:01:21,004
+the probability of getting a good grade
+goes down and so does the probability of
+
+18
+00:01:21,004 --> 00:01:27,009
+getting a strong letter. So, this is an example
+of causal reasoning because intuitively,
+
+19
+00:01:27,009 --> 00:01:35,003
+the reasoning goes in the causal direction, from
+top to bottom. We could also make things
+
+20
+00:01:35,003 --> 00:01:40,007
+more interesting. So we can ask what
+happens if we make the difficulty of the
+
+21
+00:01:40,007 --> 00:01:46,006
+course low. And in this case, we have the
+probability of l1 given i0 and d0,
+
+22
+00:01:46,006 --> 00:01:51,004
+and what you expect the
+probability to do, well, if it's an easy
+
+23
+00:01:51,004 --> 00:01:56,008
+course, one would expect the grade to go
+up. And sure enough, the probability goes
+
+24
+00:01:56,008 --> 00:02:02,002
+back up, and we're back to 50/50, more or
+less. Okay, so this is another example of
+
+25
+00:02:02,002 --> 00:02:07,003
+causal reasoning, in this case,
+with a little bit more evidence. You can
+
+26
+00:02:07,003 --> 00:02:12,007
+also do evidential reasoning, evidential
+goes from the bottom up. So we can, in this
+
+27
+00:02:12,007 --> 00:02:18,003
+case, condition on the grade and ask what
+happens to the probability of variables
+
+28
+00:02:18,003 --> 00:02:23,005
+that are parents or in general,
+ancestors of the grade. So let's just
+
+29
+00:02:23,005 --> 00:02:29,001
+imagine, let's suppose if a student takes
+the class and he gets a C, initially the
+
+30
+00:02:29,001 --> 00:02:34,009
+probability that the class was difficult is
+0.4 and the probability if the student was
+
+31
+00:02:34,009 --> 00:02:40,002
+intelligent is 0.3 but now with this
+additional evidence, again this is not
+
+32
+00:02:40,002 --> 00:02:46,001
+surprising, the probability that the student is
+intelligent goes down by a fair amount.
+
+33
+00:02:46,001 --> 00:02:53,003
+The other, alternative, hypothesis that the
+class is difficult, also the probability of
+
+34
+00:02:53,003 --> 00:03:02,000
+that goes up as well. So. Now,
+however, there is an interesting type of
+
+35
+00:03:02,000 --> 00:03:07,008
+reasoning that is not quite as standard,
+and that is reasoning that is called
+
+36
+00:03:07,008 --> 00:03:13,008
+intercausal because effectively, it is
+flow of information between two causes of
+
+37
+00:03:14,001 --> 00:03:20,000
+a single effect. So, remember, we have
+the -- we're going to continue with the
+
+38
+00:03:20,000 --> 00:03:26,001
+scenario before where our poor student
+gets a C. It's now going to tell you: wait
+
+39
+00:03:26,001 --> 00:03:32,006
+a minute, this class really is difficult.
+So I'm going to condition on d1. And
+
+40
+00:03:32,006 --> 00:03:39,001
+notice that the probability of the student, his
+intelligence has gone up. It went up from
+
+41
+00:03:39,001 --> 00:03:44,009
+0.08 to 0.11. So that's not a huge
+increase. And as you'll see when you play
+
+42
+00:03:44,009 --> 00:03:50,007
+around with Bayesian Networks, often the
+changes in probability are somewhat
+
+43
+00:03:50,007 --> 00:03:57,002
+subtle. And the reason is that you have to --
+I mean, even in a hard class, if you go back
+
+44
+00:03:57,002 --> 00:04:03,005
+and look at the CPD, it's kinda hard to
+get a C according to this model. Which is
+
+45
+00:04:03,005 --> 00:04:10,008
+that the student gets a B. And so now, we
+have that the probability of high intelligence
+
+46
+00:04:10,008 --> 00:04:18,002
+still goes down, it goes down from 0.3 to
+0.175, but now, if I tell you the class is
+
+47
+00:04:18,002 --> 00:04:25,006
+hard, the probability goes up. In fact, it
+goes up even higher than this, okay? So
+
+48
+00:04:25,006 --> 00:04:30,003
+this is an illustration where this 
+intercausal reasoning can actually
+
+49
+00:04:30,003 --> 00:04:35,003
+make a fairly significant difference in
+the probabilities. So intercausal
+
+50
+00:04:35,003 --> 00:04:40,000
+reasoning is a little hard to understand,
+I mean, it seems a little bit mysterious,
+
+51
+00:04:40,000 --> 00:04:44,009
+because, after all,
+you look at these, you look at difficulties, you
+
+52
+00:04:44,009 --> 00:04:49,006
+look at intelligence, there is no edge
+between them. How would one cause affect another?
+
+53
+00:04:49,006 --> 00:04:54,008
+So let's drill down
+into a concrete scenario, which is this one,
+
+54
+00:04:55,000 --> 00:05:00,000
+and just, to sort of really understand the
+mechanism. So this is the most, sort of
+
+55
+00:05:00,000 --> 00:05:04,008
+purest form, of intercausal reasoning.
+Here we have two random variables, X1 and
+
+56
+00:05:04,008 --> 00:05:10,002
+X2. We're going to assume that they're
+distributed uniformly, so each of them is
+
+57
+00:05:10,002 --> 00:05:14,006
+one with probability of 50% and
+zero with probability of 50%, and we have
+
+58
+00:05:14,006 --> 00:05:19,007
+one effect, one joined effect, which is
+simply the deterministic or of those two
+
+59
+00:05:19,007 --> 00:05:24,006
+parents. And in general, when we have the
+deterministic variable, we're going to
+
+60
+00:05:24,006 --> 00:05:30,004
+denote it with these double
+lines. So, in this case there's only four
+
+61
+00:05:30,006 --> 00:05:36,005
+assignments that have non-zero
+probability, because the value of Y is
+
+62
+00:05:36,005 --> 00:05:43,003
+completely determined by the values of
+X1 and X2. And so, we have these
+
+63
+00:05:43,003 --> 00:05:50,001
+four distributions over here, and now I'm
+going to condition on the evidence Y=1.
+
+64
+00:05:50,001 --> 00:05:56,006
+Now, let's look at what happened. Before I
+conditioned on this evidence, [X1 and X2]
+
+65
+00:05:56,006 --> 00:06:03,000
+were independent of each other, right? I
+mean, look at this, they're independent of
+
+66
+00:06:03,000 --> 00:06:08,003
+each other. What happens when I condition
+on Y=1? Well, we talked about
+
+67
+00:06:08,003 --> 00:06:14,008
+conditioning. This one goes away, and we
+have 0.33, 0.33, 0.33,  or rather one-third,
+
+68
+00:06:14,008 --> 00:06:21,000
+one-third, one-third. Okay, in this
+probability distribution X1 and X2 are no
+
+69
+00:06:21,000 --> 00:06:32,007
+longer independent of each other. Okay?
+Why is that? Because if I now condition on,
+
+70
+00:06:33,003 --> 00:06:44,007
+say X1=0,  then -- okay, so,
+actually before we do that, so the, in
+
+71
+00:06:44,007 --> 00:06:50,007
+this probabilty distribution the
+probability of X1=1 is equal to
+
+72
+00:06:50,007 --> 00:07:00,006
+2/3, and the probabilty of X2=1
+is also equal to 2/3. And now if I
+
+73
+00:07:00,006 --> 00:07:13,001
+condition on X1=1... so now we're
+going to condition on condition X1=1,
+
+74
+00:07:13,001 --> 00:07:23,003
+so that means we're going to remove this
+line and then, all of a sudden, the probability
+
+75
+00:07:23,003 --> 00:07:30,008
+of X2=1 given X1=1 is back to
+being 50%. So it was 50% before. It
+
+76
+00:07:30,008 --> 00:07:36,001
+went up to two-thirds, and then, if we
+condition on X1 = 1, it goes back to
+
+77
+00:07:36,001 --> 00:07:40,004
+50%. And the reason for this is the
+following, if you think about it
+
+78
+00:07:40,004 --> 00:07:45,009
+intuitively: If I know that Y is equal to
+one there's two possible things that could
+
+79
+00:07:45,009 --> 00:07:51,007
+have made Y equal to one. Either X1 was
+one or X2 was one. If I've told you that
+
+80
+00:07:51,007 --> 00:07:57,001
+X1=1, I've completely explained away
+the evidence that Y = 1, I've given you
+
+81
+00:07:57,001 --> 00:08:02,006
+a complete explanation of what happened
+and so now it's going back to being the
+
+82
+00:08:02,006 --> 00:08:08,001
+way it was before because there is no
+longer anything to suggest that it should
+
+83
+00:08:08,001 --> 00:08:13,001
+be anything other than 50/50. So, this
+particular type of intercausal reasoning, because
+
+84
+00:08:13,001 --> 00:08:17,009
+it's so common, it's called "explaining
+away". And it's where one cause
+
+85
+00:08:17,009 --> 00:08:22,007
+explains away the reason that made me
+suspect a different cause. And if you
+
+86
+00:08:22,007 --> 00:08:27,009
+think about it, it's something that people
+do all the time when they are reasoning about,
+
+87
+00:08:27,009 --> 00:08:32,005
+for example, on a medical setting, you,
+you're very sick, you think, you're very
+
+88
+00:08:32,005 --> 00:08:37,001
+worried, you don't know if
+you have the swine flu. You go to the
+
+89
+00:08:37,001 --> 00:08:42,000
+doctor, the doctor says "oh, don't worry
+it's just a common cold". You don't know
+
+90
+00:08:42,000 --> 00:08:47,009
+that you don't have the swine flu, but because
+you've explained away your symptoms you're
+
+91
+00:08:47,009 --> 00:08:54,003
+not worried as much any more. Finally,
+let's look, lets go back to our example and
+
+92
+00:08:54,003 --> 00:08:59,009
+look at an interesting reasoning pattern
+that is not -- that involves even longer sort
+
+93
+00:08:59,009 --> 00:09:05,001
+of paths in the graph, so let's imagine
+that we have this student the student got
+
+94
+00:09:05,001 --> 00:09:10,005
+a C, but now we have this additional piece
+of information that the student actually
+
+95
+00:09:10,005 --> 00:09:15,009
+aced the SAT, so hopefully what happens
+there. Remember that when we just had the
+
+96
+00:09:15,009 --> 00:09:20,005
+evidence regarding the grade, we had the
+probability of the student being
+
+97
+00:09:20,005 --> 00:09:24,009
+intelligent was only 0.08. But now we have
+this additional conflicting piece of
+
+98
+00:09:24,009 --> 00:09:29,009
+evidence. And all of a sudden, the
+probability went up very dramatically to
+
+99
+00:09:29,009 --> 00:09:35,007
+0.58. Okay. What do you think is going to
+happen to difficulty?
+
+100
+00:09:35,007 --> 00:09:40,007
+So now, it's explaining away in action, going in a
+different direction, right? Because if
+
+101
+00:09:40,007 --> 00:09:46,003
+it's not the fact that the student -- I mean,
+if the student didn't get a C because he
+
+102
+00:09:46,003 --> 00:09:51,008
+wasn't very bright, probably the reason is
+that the class is very difficult. And so
+
+103
+00:09:51,008 --> 00:09:57,002
+that probability goes up and so we have
+effectively, and we're gonna talk about
+
+104
+00:09:57,002 --> 00:09:59,008
+this, an inference that flows like that.

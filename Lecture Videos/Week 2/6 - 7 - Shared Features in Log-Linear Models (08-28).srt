@@ -1,0 +1,390 @@
+
+1
+00:00:02,033 --> 00:00:07,097
+Shared structure and shared parameters
+comes up in directed models, but it comes
+
+2
+00:00:07,097 --> 00:00:13,040
+up as much or perhaps even more in
+undirected models. And that is because for
+
+3
+00:00:13,040 --> 00:00:19,039
+reasons we've already discussed and will
+continue to discuss, eliciting parameters
+
+4
+00:00:19,039 --> 00:00:24,068
+in an undirected model is much more
+difficult because they don't represent
+
+5
+00:00:24,068 --> 00:00:30,074
+[inaudible] probabilities or probabilities
+and so it's a lot easier to represent them
+
+6
+00:00:30,074 --> 00:00:36,071
+as, sort of templates that, are comprised
+of smaller building blocks. So let's talk
+
+7
+00:00:36,071 --> 00:00:41,018
+about log-linear models and how we, why
+and how we might share parameters in
+
+8
+00:00:41,018 --> 00:00:45,096
+log-linear models. And it turns out to be
+quite easy once you think about life in
+
+9
+00:00:45,096 --> 00:00:51,081
+terms of log-linear models. So, let's go
+to the, one of the simplest examples that
+
+10
+00:00:51,081 --> 00:00:57,084
+we've discussed, which is that of icing
+models. So icing models, as you recall, is
+
+11
+00:00:57,084 --> 00:01:03,086
+a model that was first invented in the
+context of statistical physics where we
+
+12
+00:01:03,086 --> 00:01:09,096
+have a bunch of binary random variables,
+each, which in this case, in the original
+
+13
+00:01:09,096 --> 00:01:16,014
+application, represent the spin of atoms
+in a certain grid. So here is, one here's
+
+14
+00:01:16,014 --> 00:01:20,046
+a spin going one way and here's a spin
+going, the orang-, the pink one is a spin
+
+15
+00:01:20,046 --> 00:01:24,095
+going in the opposite direction. And we
+have correlations between the spins of the
+
+16
+00:01:24,095 --> 00:01:30,034
+adj-, of the electrons in the adjacent
+atoms. And what we have as our energy
+
+17
+00:01:30,034 --> 00:01:38,003
+model in an icing model, is a sum over all
+of the edges in the icing model. So in
+
+18
+00:01:38,003 --> 00:01:45,063
+this example the edges are organized in a
+grid of the weight. That represents the
+
+19
+00:01:45,063 --> 00:01:51,052
+connection of the spin of the two adjacent
+atoms times this feature over here. So F
+
+20
+00:01:51,052 --> 00:01:57,034
+of XIXJ, which is the product of XI and XJ
+and it just, as a reminder XI are all in
+
+21
+00:01:57,034 --> 00:02:02,095
+the inter, are all either minus one or
+plus one. So the product is always either
+
+22
+00:02:02,095 --> 00:02:08,077
+negative one or positive one. Negative if
+the two have different spin and positive
+
+23
+00:02:08,077 --> 00:02:14,089
+one if they have the same spin. Now, this
+doesn't have any shared parameters because
+
+24
+00:02:14,089 --> 00:02:21,009
+we have a separate parameter WIJ for every
+pair of atoms. I and J. But clearly we're
+
+25
+00:02:21,009 --> 00:02:27,031
+not going to have, in general, a separate
+model for every, for every number of atoms
+
+26
+00:02:27,031 --> 00:02:33,016
+in, of the material that we're trying to
+model. So usually, what's going to happen
+
+27
+00:02:33,016 --> 00:02:38,057
+is that we're going to just have a single
+parameter W that represents the
+
+28
+00:02:38,057 --> 00:02:44,020
+interconnectivity between or the, the
+extent of the influence. Extent and type
+
+29
+00:02:44,020 --> 00:02:50,004
+of the influence of two adjacent atoms on
+each other. And so this is now a model
+
+30
+00:02:50,004 --> 00:02:58,047
+that has the same feature And the same
+weight. So same feature. And same weight.
+
+31
+00:02:58,047 --> 00:03:05,000
+Reused across different sets of, different
+pairs of random variables in the model.
+
+32
+00:03:05,000 --> 00:03:15,077
+Okay? In, the natural language processing
+example that we have used previously, so
+
+33
+00:03:15,077 --> 00:03:25,024
+we have, again, parameter sharing where we
+have in this case, these are the, just as
+
+34
+00:03:25,024 --> 00:03:30,079
+a reminder we have these being the actual
+words. These being the labels for the
+
+35
+00:03:30,079 --> 00:03:35,066
+words, this is the name that's a
+[inaudible] recognition problem. But the
+
+36
+00:03:35,066 --> 00:03:40,065
+same thing happens in other examples. So
+here we have, we've talked previously
+
+37
+00:03:40,065 --> 00:03:45,044
+about the kinds of features that
+represen-, that relate, for example, the
+
+38
+00:03:45,044 --> 00:03:50,063
+label of the word and the word itself. For
+example if it's capitalized it's more
+
+39
+00:03:50,063 --> 00:03:55,049
+likely to be a person, if the previous
+word is Mrs. It's more likely to be a
+
+40
+00:03:55,049 --> 00:04:02,056
+person too. And so, And so here again we
+have features, which are the ones we just
+
+41
+00:04:02,056 --> 00:04:13,074
+talked about, feature of for example, is
+why I a person An XI is capitalized. And
+
+42
+00:04:13,074 --> 00:04:22,095
+we would have a term that uses this
+feature repeated for every position in the
+
+43
+00:04:22,095 --> 00:04:28,031
+sequence. That is the same feature which
+talks about the connection between the
+
+44
+00:04:28,031 --> 00:04:33,040
+label of the word and the word itself
+would recur in every position in the
+
+45
+00:04:33,040 --> 00:04:38,002
+sequence. Because you wouldn't want that
+same, to represent different
+
+46
+00:04:38,002 --> 00:04:43,065
+parameterizations for different positions
+in the sequence. And similarly, we have
+
+47
+00:04:43,065 --> 00:04:49,015
+the same energy terms, for example, that
+relate adjacent words also being repeated
+
+48
+00:04:49,015 --> 00:04:57,059
+across different pairs, in this case, of
+adjacent words. [inaudible] in, in this
+
+49
+00:04:57,059 --> 00:05:07,060
+example. Once again we have no potentials
+that represent in this case the connection
+
+50
+00:05:07,060 --> 00:05:19,062
+between the image features And the label
+And once again we're going to use the
+
+51
+00:05:19,062 --> 00:05:25,035
+exact same potentials for all pixels and
+we're going to have a difference in this
+
+52
+00:05:25,035 --> 00:05:30,037
+case sudden potentials that are going to
+be re-used for all [inaudible],
+
+53
+00:05:30,037 --> 00:05:36,009
+[inaudible] pixels or super pixels. So how
+do we do this? It turns out to be really
+
+54
+00:05:36,009 --> 00:05:42,050
+simple. What we basically need to specify
+for a given feature that we want to reuse,
+
+55
+00:05:42,050 --> 00:05:48,075
+we're going to specify for it a set of
+scopes. That is a set of scopes for which
+
+56
+00:05:48,075 --> 00:05:55,014
+we would like it to be applied. And, so if
+we have a set of scopes, and let's assume
+
+57
+00:05:55,014 --> 00:06:01,069
+that DK is one of the scopes that to which
+we would like apply the feature K, so our
+
+58
+00:06:01,069 --> 00:06:08,025
+energy function now is going to include a
+term WKFKDK in the energy function. So for
+
+59
+00:06:08,025 --> 00:06:21,059
+example, if FK is We have we want to have
+SKB applied to Adjacent to adjacent
+
+60
+00:06:21,059 --> 00:06:32,008
+super-pixels in the image. So the scopes
+of feature FK will be the label YIYJ such
+
+61
+00:06:32,008 --> 00:06:40,088
+that I, J are adjacent. And that's going
+to be the set of scopes to which we apply
+
+62
+00:06:40,088 --> 00:06:47,089
+that feature. And every time that we have
+that apply we're going to have a term that
+
+63
+00:06:47,089 --> 00:06:54,056
+multiplies in the value of that feature
+times the weight which is shared. The
+
+64
+00:06:54,056 --> 00:07:03,066
+weight depends on the feature, so WK
+depends on K [inaudible] So this is just a
+
+65
+00:07:03,066 --> 00:07:09,063
+way of replicating the feature with its
+weight across different, different subsets
+
+66
+00:07:09,063 --> 00:07:17,076
+of random variables in the image. Or in
+the, in the, in the model. So, said
+
+67
+00:07:17,076 --> 00:07:27,088
+otherwise and I wrote all over this so
+let's see if I can erase this. Yes. We
+
+68
+00:07:27,088 --> 00:07:35,037
+will have a term in the energy function.
+Which has W K times the sum of the
+
+69
+00:07:35,037 --> 00:07:41,069
+features across all the scopes to which it
+applies. Which is just the way of
+
+70
+00:07:41,069 --> 00:07:48,049
+aggregating like terms that all have W K
+in them. So to summarize, in log-linear
+
+71
+00:07:48,049 --> 00:07:53,036
+models it's very common to use the exact
+same feature and weight for multiple
+
+72
+00:07:53,036 --> 00:07:58,074
+subsets of variables. We've given multiple
+examples of that. And this allows us, just
+
+73
+00:07:58,074 --> 00:08:03,073
+as in the other examples that we've seen
+in the direct case to provide a single
+
+74
+00:08:03,073 --> 00:08:08,011
+template for multiple [inaudible]
+networks. Whether it's different, the
+
+75
+00:08:08,011 --> 00:08:13,028
+[inaudible] network for different images
+or for different sentences. And, the
+
+76
+00:08:13,028 --> 00:08:20,034
+parameter M structure are then allow-, are
+then reused both within and across Markov
+
+77
+00:08:20,034 --> 00:08:25,039
+networks. And the only thing we need to do
+in order to apply this is to specify a set
+
+78
+00:08:25,039 --> 00:08:28,062
+of scopes to which particular feature is
+it going to be applied.

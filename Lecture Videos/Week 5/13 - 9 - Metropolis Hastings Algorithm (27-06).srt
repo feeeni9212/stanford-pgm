@@ -1,0 +1,1399 @@
+
+1
+00:00:00,000 --> 00:00:04,046
+We define the notion of [inaudible] chain
+Monte Carlo?s sampling as a general
+
+2
+00:00:04,046 --> 00:00:08,098
+paradigm for generating samples from a
+distribution from which it is otherwise
+
+3
+00:00:08,098 --> 00:00:13,026
+difficult or perhaps intractable to
+generate samples directly. Markov chain
+
+4
+00:00:13,026 --> 00:00:18,010
+gives us a general way of, of approaching
+this problem. But they, but the framework
+
+5
+00:00:18,010 --> 00:00:22,039
+leaves open the question of where the
+Markov chain comes from. That is, how do
+
+6
+00:00:22,039 --> 00:00:26,085
+we design a Markov chain that has the
+desired stationary distribution? We talked
+
+7
+00:00:26,085 --> 00:00:31,019
+about the Gibbs chain as a general
+solution to this problem in the context of
+
+8
+00:00:31,019 --> 00:00:35,076
+graphical models. But we also mentioned
+that the Gibbs chain has limitations in
+
+9
+00:00:35,076 --> 00:00:40,049
+terms of its convergence rates for certain
+types of graphical models. So what happens
+
+10
+00:00:40,049 --> 00:00:44,058
+if we have a graphical model for which the
+Gibbs chain. And doesn't have good
+
+11
+00:00:44,058 --> 00:00:48,067
+convergence properties. How do we design a
+market chain for that? Well, it turns out
+
+12
+00:00:48,067 --> 00:00:53,053
+that there's a general class of, methods
+called Metropolis-Hastings. And the
+
+13
+00:00:53,053 --> 00:00:58,057
+Metropolis-Hastings algorithm gives us a
+general approach for designing a Markov
+
+14
+00:00:58,057 --> 00:01:03,000
+chain with a desired stationary
+distribution. In fact it, for a given
+
+15
+00:01:03,000 --> 00:01:07,085
+stationary distribution, we can construct
+the whole family of different Markov
+
+16
+00:01:07,085 --> 00:01:12,090
+chains that explore the space differently,
+and then try and select among those, or
+
+17
+00:01:12,090 --> 00:01:17,031
+construct one among those, that has good
+convergence properties for our
+
+18
+00:01:17,031 --> 00:01:22,088
+distribution. So the key insight behind
+the metropolis hastings method is the
+
+19
+00:01:22,088 --> 00:01:28,049
+notion of a reversible chain. So what does
+it mean for a chain to be reversible?
+
+20
+00:01:28,049 --> 00:01:34,004
+Imagine that we have a chain with a
+particular stationary distribution pi. And
+
+21
+00:01:34,004 --> 00:01:39,032
+we're going to consider two different
+experiments. In the first experiment,
+
+22
+00:01:39,032 --> 00:01:44,047
+we're going to pick a, a point in the
+space. We're gonna pick a point in the
+
+23
+00:01:44,047 --> 00:01:49,095
+state space, according to the probability
+of distribution PI. So say we land on this
+
+24
+00:01:49,095 --> 00:01:55,023
+one. And then we're going to pick a random
+edge emanating from the state that we
+
+25
+00:01:55,023 --> 00:02:00,064
+picked, according to the transition model
+defined by the chain P. So say we pick
+
+26
+00:02:00,064 --> 00:02:05,098
+this edge. That's the first experiment.
+The second experiment is exactly the same
+
+27
+00:02:05,098 --> 00:02:11,044
+thing. We're going to basically do the
+this experiment twice. So now we are going
+
+28
+00:02:11,044 --> 00:02:17,050
+to pick a. [inaudible] and once again
+we're going to pick an outgoing.
+
+29
+00:02:19,034 --> 00:02:25,054
+Transition from that state. A chain is
+reversible if when I do this experiment,
+
+30
+00:02:25,054 --> 00:02:32,013
+the probability of traversing this edge,
+this red edge over here is in this process
+
+31
+00:02:32,013 --> 00:02:38,065
+is exactly the same as the probability of
+traversing this green edge in the other
+
+32
+00:02:38,065 --> 00:02:44,076
+direction. That is, if picking I and then
+traversing to J occurs with the same
+
+33
+00:02:44,076 --> 00:02:49,087
+probability as picking J and then
+traversing to I. So, written in,
+
+34
+00:02:50,012 --> 00:02:56,088
+mathematical notation, this tells us that,
+PI of X, which is a red state, times the
+
+35
+00:02:56,088 --> 00:03:03,048
+transition along the red edge, is equal to
+the probability of X prime. That was my
+
+36
+00:03:03,048 --> 00:03:10,016
+green experiment. Times the probability of
+transitioning in the opposite direction.
+
+37
+00:03:10,016 --> 00:03:15,043
+Now, it's very easy to construct Markov
+chains that are not reversible. So this is
+
+38
+00:03:15,043 --> 00:03:20,012
+by no means, a universal property of
+Markov chains. But it turns out that
+
+39
+00:03:20,012 --> 00:03:24,074
+reversible Markov chains have elegant
+properties that allow them to be
+
+40
+00:03:24,074 --> 00:03:29,055
+constructed, so as to give rise to
+particular stationary distributions. And
+
+41
+00:03:29,055 --> 00:03:34,075
+specifically, we can show and it's not a
+very difficult proof, we'll show it in a
+
+42
+00:03:34,075 --> 00:03:45,015
+moment, that if this equation which is
+called the detailed balance equation. If
+
+43
+00:03:45,015 --> 00:03:50,002
+this equation holds and T is a regular
+mark off chain. Then T has a unique
+
+44
+00:03:50,002 --> 00:03:55,067
+stationary distribution which we know from
+the fact that it's regular but furthermore
+
+45
+00:03:55,067 --> 00:04:02,023
+that stationary distribution is pie. Let's
+go ahead and prove it. And it turns out to
+
+46
+00:04:02,023 --> 00:04:09,077
+be actually a very, a one line proof. So,
+here we have, we take the two sides of the
+
+47
+00:04:09,077 --> 00:04:17,072
+detailed balance equation, and we put one
+of them on this side, and the other one on
+
+48
+00:04:17,072 --> 00:04:25,030
+this side. And because the two sides are
+equal, if we sum up over X, then the two
+
+49
+00:04:25,030 --> 00:04:32,077
+summations are also equal. And now we
+notice, by looking at the right hand side,
+
+50
+00:04:32,077 --> 00:04:41,032
+that Pi of X prime doesn't depend on the
+[inaudible] X. Alright, on variable x
+
+51
+00:04:41,032 --> 00:04:49,033
+since, so we can move [inaudible] out of
+destination. And so this can now be
+
+52
+00:04:49,033 --> 00:04:57,081
+rewritten as pi of x prime time?s sum over
+x t of x prime. X. And this information
+
+53
+00:04:57,081 --> 00:05:03,080
+over here because P is a probability
+distribution over it out going, over the
+
+54
+00:05:03,080 --> 00:05:10,026
+edges that are out going from the X prime
+is necessarily equal to one, and so if we
+
+55
+00:05:10,026 --> 00:05:16,064
+rewrite what we've just proved in this one
+line derivation, we just prove that the
+
+56
+00:05:16,064 --> 00:05:22,094
+sum over X, [inaudible] of X, T of X to X
+prime is equal to [inaudible] of X prime
+
+57
+00:05:22,094 --> 00:05:31,040
+which is exactly the definition. Of the
+stationary distribution. This is a one
+
+58
+00:05:31,040 --> 00:05:37,003
+line proof that a reversible chain gives
+me sorry, a chain that is reversible
+
+59
+00:05:37,003 --> 00:05:42,074
+relative to a particular distribution of
+pi necessarily has pi as its stationary
+
+60
+00:05:42,074 --> 00:05:48,051
+distribution. Now, why is this a useful
+transition between the definition of the
+
+61
+00:05:48,051 --> 00:05:54,029
+stationary distribution of pi in terms of
+this equation down at the bottom, versus
+
+62
+00:05:54,029 --> 00:05:59,045
+this alternative definition of the
+stationary distribution of pi? Because
+
+63
+00:05:59,045 --> 00:06:05,040
+this distribution, this definition down at
+the bottom involves the summation over
+
+64
+00:06:05,040 --> 00:06:11,036
+what is in general an exponentially large
+space. Whereas this one is, as we'll see
+
+65
+00:06:11,036 --> 00:06:17,045
+in a minute, much more constructive in
+that it allows us to construct P so as to
+
+66
+00:06:17,045 --> 00:06:23,093
+match pi. And so, that is exactly the idea
+behind the Metropolis Hastings, the
+
+67
+00:06:23,093 --> 00:06:30,075
+definition of a Metropolis Hastings chain.
+So how does a Metropolis Hastings chain
+
+68
+00:06:30,075 --> 00:06:37,023
+work? It starts out by saying, well; we
+want to move around broadly in the state
+
+69
+00:06:37,023 --> 00:06:43,005
+space. So we're going to have a
+distribution Q, which is kind of like a
+
+70
+00:06:43,005 --> 00:06:47,066
+transition model. So this is my
+[inaudible], this is my distribution q,
+
+71
+00:06:47,066 --> 00:06:52,070
+and q is going to, to roam freely over the
+state space. Unlike the Gibbs chain it's
+
+72
+00:06:52,070 --> 00:06:57,062
+not going to necessarily take just little
+local steps from one state to a state
+
+73
+00:06:57,062 --> 00:07:02,054
+that's very nearby it can look very far
+away and, and go into large into very
+
+74
+00:07:02,054 --> 00:07:07,070
+distant parts of the state space. Now that
+by itself of course is just going to give
+
+75
+00:07:07,070 --> 00:07:12,013
+me a stationary distribution that has
+absolutely no relationship to the
+
+76
+00:07:12,013 --> 00:07:17,004
+stationary distribution pi that I care
+about and so what I'm going to have is a
+
+77
+00:07:17,004 --> 00:07:21,062
+critic. The critic is the guy who says,
+whoa, wait a minute; you can't go there
+
+78
+00:07:21,062 --> 00:07:26,074
+right now because it doesn't that's not
+going to give you the right stationary
+
+79
+00:07:26,074 --> 00:07:31,055
+distribution. So what does the critic do?
+The critic listens to the proposal that
+
+80
+00:07:31,055 --> 00:07:36,042
+was made by the proposal distribution
+queue. So it says, oh you want to go from
+
+81
+00:07:36,042 --> 00:07:41,036
+X to X prime, well what is the probability
+with which I'm going to let you do that?
+
+82
+00:07:41,036 --> 00:07:46,024
+That's the acceptance probability. And
+that's a binary random variable for each x
+
+83
+00:07:46,024 --> 00:07:50,095
+and x prime. What is the probability that
+we accept that proposal? So that gives
+
+84
+00:07:50,095 --> 00:07:57,017
+rise to the following process. I haven't
+told you how to pick Q or A or anything
+
+85
+00:07:57,017 --> 00:08:02,040
+yet. But let's just understand the
+process. At each state X, we sample a
+
+86
+00:08:02,040 --> 00:08:08,047
+potential successor state, X prime, from
+my proposal distribution Q. So X, and we
+
+87
+00:08:08,047 --> 00:08:14,038
+sort of have a proposal to go to X prime.
+And I no-, denoted this using a dashed
+
+88
+00:08:14,038 --> 00:08:19,069
+line. And now the [inaudible], the
+acceptor says, do I accept that? And if
+
+89
+00:08:19,069 --> 00:08:25,087
+the proposal is accepted. Then, I actually
+make that transition and if the proposal
+
+90
+00:08:25,087 --> 00:08:32,033
+is rejected, I just stay where I am. So
+what transition model does this give rise
+
+91
+00:08:32,033 --> 00:08:37,055
+to, because ultimately this just gives us
+a transition model from x to x prime? So
+
+92
+00:08:37,055 --> 00:08:42,089
+there's two cases. Case number one is if x
+is not is the same, x prime is not x, that
+
+93
+00:08:42,089 --> 00:08:48,058
+is x prime is a state other than x. Well
+in this case, the only chance that I have
+
+94
+00:08:48,058 --> 00:08:54,070
+of moving to X prime is if I proposed to
+move to X prime and if that proposal was
+
+95
+00:08:54,070 --> 00:09:00,045
+accepted. So I need to multiply these two
+probabilities and that gives me the
+
+96
+00:09:00,045 --> 00:09:06,084
+expression, this expression for the
+transition. What about transition from X
+
+97
+00:09:06,084 --> 00:09:12,083
+to X? Well, there's two different cases.
+Either I propose a move to X, and it was
+
+98
+00:09:12,083 --> 00:09:18,092
+accepted. Or, X also gets the benefit of
+all of the transitions that were rejected
+
+99
+00:09:18,092 --> 00:09:24,079
+by, the, from other states that were
+proposed, but [inaudible], where the move
+
+100
+00:09:24,079 --> 00:09:30,032
+wasn't accepted. And so what we have here
+is Q. Of x to x which we assume is always
+
+101
+00:09:30,032 --> 00:09:34,089
+accepted. That's sort of a one with the
+exception of this model. And then we sum
+
+102
+00:09:34,089 --> 00:09:39,063
+up over all possible other transitions of
+the probability that they were proposed
+
+103
+00:09:39,063 --> 00:09:43,061
+times the probability that they were
+rejected which is one minus the
+
+104
+00:09:43,061 --> 00:09:47,089
+probability that they were accepted.
+[inaudible] give rise to a transition
+
+105
+00:09:47,089 --> 00:09:55,013
+model. So this is a general definition of
+a marcovchain but as stated, there's no
+
+106
+00:09:55,013 --> 00:10:00,080
+reason to expect to have a particular
+stationary distribution. And so, now this
+
+107
+00:10:00,080 --> 00:10:05,057
+is where we bring back the intuition from
+the detailed balance equation. And we're
+
+108
+00:10:05,057 --> 00:10:10,006
+going to use the detail balance to
+construct an acceptance probability that
+
+109
+00:10:10,006 --> 00:10:14,093
+has the property that we want. And so,
+here is a detailed balance equation
+
+110
+00:10:14,093 --> 00:10:20,072
+rewritten. And now, let's write down, and
+we're going to assume in this, in this
+
+111
+00:10:20,072 --> 00:10:26,072
+particular example, that X is not equal to
+X prime. And so, we're going to, because
+
+112
+00:10:26,072 --> 00:10:32,035
+this is trivial for the case, X is= to X
+prime, this equality always holds. Pi of
+
+113
+00:10:32,035 --> 00:10:38,014
+X, P of XX is= to PI of X, P of XX. And so
+let's look at the case, X is not equal to
+
+114
+00:10:38,014 --> 00:10:46,053
+X prime. And our goal is to construct A.
+So the goal is to construct A such that.
+
+115
+00:10:50,027 --> 00:11:01,039
+Such that detailed balance. Old. Or Q. I'm
+given Q; the setup is I'm given a proposal
+
+116
+00:11:01,039 --> 00:11:07,093
+distribution Q. And now I'm going to pick
+A, so as to make detailed balance hold.
+
+117
+00:11:07,093 --> 00:11:14,097
+And if detailed balance holds, for Q, Pi,
+then I'm going to, then that is going to
+
+118
+00:11:14,097 --> 00:11:21,038
+guarantee that the process, overall, has
+the correct stationary distribution. So,
+
+119
+00:11:21,038 --> 00:11:26,092
+this is the quality that we want to have
+happen. And now let's go ahead and just
+
+120
+00:11:26,092 --> 00:11:31,084
+define this as a constraint on the
+acceptance probabilities, so we have
+
+121
+00:11:31,084 --> 00:11:37,024
+acceptance probability A, occurring on
+both sides of the equation. So I'm going
+
+122
+00:11:37,024 --> 00:11:42,099
+to divide, move both As to one side, move
+everything else to the other side and so I
+
+123
+00:11:42,099 --> 00:11:48,053
+get a constraint on the ratios, between
+the acceptance probability from XX prime
+
+124
+00:11:48,053 --> 00:11:54,001
+and the acceptance probability from X
+prime X and that has to be equal to this
+
+125
+00:11:54,001 --> 00:11:59,031
+ratio over here. And so I'm going to
+assume, without loss of generality, that
+
+126
+00:11:59,031 --> 00:12:04,055
+this ratio. Notice that this ra-, we have
+we can decide this in any way that we
+
+127
+00:12:04,055 --> 00:12:09,029
+want. We can either consider the ratio
+from X to X prime is the numerator, or
+
+128
+00:12:09,029 --> 00:12:14,047
+from X prime to X. I picked this one under
+the assumption that this is a, some value
+
+129
+00:12:14,047 --> 00:12:18,084
+[inaudible], sorry. This is equal to
+[inaudible], which is less than one.
+
+130
+00:12:22,051 --> 00:12:40,074
+[sound] And, so now if we. Kick a. So now
+we need to pick the values of the two
+
+131
+00:12:40,074 --> 00:12:48,000
+acceptance probabilities x and x prime so
+as to make this equality hold. And one
+
+132
+00:12:48,000 --> 00:12:55,027
+simple way to do that is to take the
+smaller of the two which we assume was the
+
+133
+00:12:55,027 --> 00:13:02,062
+numerator and we make A of x to x prime
+equal of roll and we make A, x prime to x
+
+134
+00:13:02,062 --> 00:13:10,060
+equal to one and that gives me immediately
+that this [inaudible] hold. Now of course,
+
+135
+00:13:10,060 --> 00:13:15,055
+we could have picked these probabilities
+to be otherwise. We could have picked for
+
+136
+00:13:15,055 --> 00:13:20,013
+example, AX to X prime to be half of
+[inaudible], and A of X prime to X to be
+
+137
+00:13:20,013 --> 00:13:25,014
+equal to half. But notice what that would
+do. That would just reduce the probability
+
+138
+00:13:25,014 --> 00:13:29,079
+that our proposals are accepted, which
+would just make the chain move half as
+
+139
+00:13:29,079 --> 00:13:35,004
+quickly, because you end up staying at the
+same state twice as often as you would if
+
+140
+00:13:35,004 --> 00:13:39,080
+the acceptance probability was higher. So
+these are in fact, the highest numbers
+
+141
+00:13:39,080 --> 00:13:47,043
+that we could possibly pick, while still
+making this ratio constraint hold. And so,
+
+142
+00:13:47,043 --> 00:13:52,044
+that gives me, when you actually put it
+together, as a general formula for the
+
+143
+00:13:52,044 --> 00:13:57,058
+acceptance probability, it gives us this
+expression, which, if you look at it, you
+
+144
+00:13:57,058 --> 00:14:05,097
+will see that it gives the right values
+for both XX find and for X find X. So
+
+145
+00:14:05,097 --> 00:14:13,014
+that's how many how to pick a given q. And
+the question is what about q? How do I
+
+146
+00:14:13,014 --> 00:14:20,004
+pick q? Well that turns out to be the
+$64,000,000 question. Picking q is an art
+
+147
+00:14:20,004 --> 00:14:25,070
+and it's not an easy choice in many
+applications. But let's think about some
+
+148
+00:14:25,070 --> 00:14:31,035
+conditions that Q must satisfy before we
+think about how to pick one. So one
+
+149
+00:14:31,035 --> 00:14:36,093
+condition on Q is derived simply by
+looking at the formal expression for A.
+
+150
+00:14:36,093 --> 00:14:42,083
+And we can see that this here involves a
+ratio. And if you have a ratio then one
+
+151
+00:14:42,083 --> 00:14:48,073
+condition is that you better not have a
+denominator that's equal to zero. And so
+
+152
+00:14:48,073 --> 00:14:55,020
+one of the cases that, one of the things
+that we must guarantee regarding Q in
+
+153
+00:14:55,020 --> 00:15:01,093
+order for this to be a valid set of
+acceptance probabilities is that Q itself
+
+154
+00:15:01,093 --> 00:15:08,069
+must be reversible in the following sense.
+That is, if the If the denominator, if, if
+
+155
+00:15:08,069 --> 00:15:14,044
+the numerator is greater than zero, then
+the denominator is greater than zero, and
+
+156
+00:15:14,044 --> 00:15:20,026
+vice versa. That is, if you can propose a
+step from X to X prime, you better be able
+
+157
+00:15:20,026 --> 00:15:25,087
+to propose a step from X prime to X, with
+non zero probability, which guarantees
+
+158
+00:15:25,087 --> 00:15:34,044
+that this ratio is always well defined.
+Now the problem with this constraint on Q,
+
+159
+00:15:34,044 --> 00:15:44,006
+is that it actually, induces an tension in
+the design of Q. Now, on the one hand, we
+
+160
+00:15:44,006 --> 00:15:49,023
+like you to be very broad. So if you're at
+this state over here, we like to, we like
+
+161
+00:15:49,023 --> 00:15:54,034
+you to go really, really far away from the
+current state. Because the further away
+
+162
+00:15:54,034 --> 00:15:59,039
+you can go, the faster you move around in
+the state space. You don't want to stay
+
+163
+00:15:59,039 --> 00:16:03,099
+local, you don't want make the same
+mistakes that the Gibbs chain does by
+
+164
+00:16:03,099 --> 00:16:08,028
+staying very near to the current
+assignment. You want to move around
+
+165
+00:16:08,028 --> 00:16:14,021
+quickly and that improves mixing. On the
+hand, if you look at the implications that
+
+166
+00:16:14,021 --> 00:16:20,002
+this formula has when the proposal
+distribution is very broad. And so that
+
+167
+00:16:20,002 --> 00:16:26,077
+you have one state that for example has
+low pi and the other state has a very high
+
+168
+00:16:26,077 --> 00:16:33,063
+value of pi. Which is what you get when
+you move around from a hilly part of the
+
+169
+00:16:33,063 --> 00:16:40,069
+space to a low part of the space. You have
+very big differences in terms of height of
+
+170
+00:16:40,069 --> 00:16:47,040
+the two stationeries. So what I'm drawing
+here is the height of pi, and this is my
+
+171
+00:16:47,040 --> 00:16:52,050
+space, space X. And if I move around very
+far I'm liable to get into situations
+
+172
+00:16:52,050 --> 00:16:57,018
+where pi of one state x might be
+considerably larger than pi of x prime and
+
+173
+00:16:57,018 --> 00:17:01,098
+if you think about what that implies
+regarding the acceptance probability. The
+
+174
+00:17:01,098 --> 00:17:06,084
+acceptance probability can get very, very
+low which in turn implies slow mixing
+
+175
+00:17:06,084 --> 00:17:12,001
+again because you might not, you might be
+taking very global steps but you're taking
+
+176
+00:17:12,001 --> 00:17:16,044
+very few of them. And so this is a real
+sort of tension in the design of
+
+177
+00:17:16,063 --> 00:17:22,052
+distributions, of proposal distribution
+skill. Let's take an example of a Markov
+
+178
+00:17:22,052 --> 00:17:27,092
+chain where proposal distributions can
+make a very big difference. And this is a
+
+179
+00:17:27,092 --> 00:17:33,031
+problem that you wouldn't necessarily
+immediately think of as a graphical model
+
+180
+00:17:33,031 --> 00:17:38,070
+but can be formulated as one and it's a
+matching problem and we'll see it other
+
+181
+00:17:38,070 --> 00:17:44,007
+settings as well. So here we have a bunch
+of red dots as we see over here. And we
+
+182
+00:17:44,007 --> 00:17:50,027
+have a bunch of blue dots. And we want. To
+match. The red dots to the blue dots. And
+
+183
+00:17:50,027 --> 00:17:55,085
+there's some sort of preference function.
+So these edges over here are annotated.
+
+184
+00:17:56,003 --> 00:18:00,046
+And I'm gonna mark them green, are
+annotated with some kind of weights that
+
+185
+00:18:00,046 --> 00:18:05,030
+tell us how happy is the red, is this red
+dot to be matched with this blue dot? And
+
+186
+00:18:05,030 --> 00:18:09,090
+this happens a lot, for example, in, in
+various correspondence problems where
+
+187
+00:18:09,090 --> 00:18:14,033
+we're trying to match sensor readings to
+objects, for example, in a tracking
+
+188
+00:18:14,033 --> 00:18:19,041
+application. It also happens in, in image
+problems where you wanna match features in
+
+189
+00:18:19,041 --> 00:18:24,071
+one image to features in another. So it's
+a very common problem. So, one formulation
+
+190
+00:18:24,071 --> 00:18:31,061
+of the matching problem as a graphical
+model is that we have a variable x I for
+
+191
+00:18:31,061 --> 00:18:37,086
+each red dot, so the green, so the red
+dots are going to be the variables. The
+
+192
+00:18:37,086 --> 00:18:44,069
+blue dots are going to represent values.
+And we're going to have that x I is equal.
+
+193
+00:18:44,069 --> 00:18:54,022
+J. If I match the I to J. [cough] So that
+can now be written as a probability
+
+194
+00:18:54,022 --> 00:19:02,037
+distribution over a space. And so we can
+consider the probability of an assignment
+
+195
+00:19:02,037 --> 00:19:08,010
+of. Values to, the variables. And we're
+going to say that, first of all, has to be
+
+196
+00:19:08,010 --> 00:19:13,081
+matching. So if we don't have that every
+X, every red dot is matched to a different
+
+197
+00:19:13,081 --> 00:19:19,052
+blue dot, that's probably zero assignment.
+So this would be the case if you had two
+
+198
+00:19:19,052 --> 00:19:25,024
+red dots that matched, to the same blue
+dot. And otherwise we're going to define
+
+199
+00:19:25,024 --> 00:19:29,098
+some kind of weighted combination of,
+sorry, it's, it's going to be an
+
+200
+00:19:29,098 --> 00:19:35,069
+exponential of the sum of the quality of
+the matches between the red dots and the
+
+201
+00:19:35,069 --> 00:19:40,088
+blue dots. So we are summing up the
+quality of the edges that participate in
+
+202
+00:19:40,088 --> 00:19:54,056
+matching. So for example if this is my
+matching over here. And notice that I
+
+203
+00:19:54,056 --> 00:20:01,035
+didn't get to match all the red dots.
+That's, well, actually here. We're going
+
+204
+00:20:01,035 --> 00:20:08,077
+to match all the red dots. So now we have
+a matching on, on the, for each red dot we
+
+205
+00:20:08,077 --> 00:20:15,092
+assigned a blue dot as a value. And now
+the overall quality is the total sum of
+
+206
+00:20:15,092 --> 00:20:22,007
+the, of the quality of the matching and
+that defines, and that can be
+
+207
+00:20:22,007 --> 00:20:29,020
+exponentiated to different probability
+distribution. So and we're going to
+
+208
+00:20:29,020 --> 00:20:34,057
+represent these qualities visually in this
+example as, as distances so that we're
+
+209
+00:20:34,057 --> 00:20:40,022
+going to assume for example that this red
+dot prefers to be matched to this blue dot
+
+210
+00:20:40,022 --> 00:20:51,024
+more then it prefers to be matched to this
+further away blue dot. So, one can imagine
+
+211
+00:20:51,024 --> 00:20:58,085
+running a Gibbs sampling distribution on
+this model, by taking a variable and say
+
+212
+00:20:59,012 --> 00:21:06,028
+one of the red dots and, picking a new
+value for it that is a new blue dot that
+
+213
+00:21:06,028 --> 00:21:12,041
+it wasn't attached to. This is going to
+change things very, very slowly. Because
+
+214
+00:21:12,041 --> 00:21:17,042
+most of the blue dots are going to be
+taken by the for red dot. And so, those
+
+215
+00:21:17,042 --> 00:21:22,089
+assignments where a red dot is matched to
+a previously taken blue dot are going to
+
+216
+00:21:22,089 --> 00:21:27,064
+have very well probability. Zero
+probability. Okay. And so those are going
+
+217
+00:21:27,064 --> 00:21:32,065
+to be impossible. So the only thing I can
+do is I can make the red dot match
+
+218
+00:21:32,065 --> 00:21:37,060
+different blue dot. Match one of the
+unmatched blue dots. And that?s going to
+
+219
+00:21:37,060 --> 00:21:43,014
+take a very long time for things to
+change. Here is a different way of doing
+
+220
+00:21:43,014 --> 00:21:48,086
+this, which is the Metropolis Hastings
+which is one way of constructing a
+
+221
+00:21:48,086 --> 00:21:55,018
+proposal distribution and using Metropolis
+Hastings. And that's called an augmenting
+
+222
+00:21:55,018 --> 00:22:01,020
+path proposal distribution. So what that
+does is, let's assume that this is my
+
+223
+00:22:01,020 --> 00:22:07,068
+current match, and I'm going to define the
+following proposal. I'm going to pick one
+
+224
+00:22:07,068 --> 00:22:13,009
+of the variables, XI, say this one. And
+I'm going to say, I'm going to pick.
+
+225
+00:22:13,009 --> 00:22:19,054
+Another value for it pretending that
+everything is available. So I'm going to
+
+226
+00:22:19,054 --> 00:22:23,097
+ignore the fact that this guy is already
+matched. I'm going to pick this one. I
+
+227
+00:22:23,097 --> 00:22:27,082
+would, I'm, I'm thinking it's
+probabilistically, so I could have picked,
+
+228
+00:22:27,099 --> 00:22:32,053
+a different one. I could have picked the
+same one that I was matched to before. I
+
+229
+00:22:32,053 --> 00:22:36,090
+could pick a further away one. But say I
+pick this one. Well now, this guy, poor
+
+230
+00:22:36,090 --> 00:22:41,043
+guy, this one is unmatched. Sorry, this
+red guy over here. So [inaudible] has to
+
+231
+00:22:41,043 --> 00:22:48,016
+pick a new partner. And so, say it picks
+this one. This red guy is unmatched now.
+
+232
+00:22:48,016 --> 00:22:54,066
+And so it might take one, and say fix this
+one. And that leaves me with this red guy
+
+233
+00:22:54,066 --> 00:23:00,013
+and say; this red guy picks this one and
+notice that now I have a new legal
+
+234
+00:23:00,013 --> 00:23:06,012
+matching. Every, I've closed the loop and
+I've defined what's called an 'alternating
+
+235
+00:23:06,012 --> 00:23:12,018
+cycle' where basically I can switch all of
+the black edges to green edges and that
+
+236
+00:23:12,018 --> 00:23:18,071
+gives me a new legal matching. And that's
+my proposal. And with a little bit of,
+
+237
+00:23:18,092 --> 00:23:24,044
+numerical calculation, one can figure out
+the acceptance probability for this
+
+238
+00:23:24,044 --> 00:23:30,024
+proposal distribution. And it turns out
+that it's actually a really good proposal
+
+239
+00:23:30,024 --> 00:23:35,061
+distribution. So let me show you some
+examples on the next slide. So this is,
+
+240
+00:23:35,082 --> 00:23:41,063
+the results on the chain. If I just apply
+Gibb sampling. And you can see over here,
+
+241
+00:23:41,063 --> 00:23:47,036
+four chains. So the four colors represent
+the four chains. And what you see on, in
+
+242
+00:23:47,036 --> 00:23:53,073
+the X axis, is numbered steps. And on the
+y axis there's some kind of statistic that
+
+243
+00:23:53,073 --> 00:23:59,001
+I'm tracking in order to gauge whether the
+chain is mixing. As is happens it's the
+
+244
+00:23:59,001 --> 00:24:04,002
+probability that the first red dot is
+matched to the first blue dot but it
+
+245
+00:24:04,002 --> 00:24:08,098
+doesn't matter. Any statistic would've
+illustrated the point here. And you can
+
+246
+00:24:08,098 --> 00:24:13,094
+see that there is a lot of long range
+fluctuations in this chain. That is the
+
+247
+00:24:13,094 --> 00:24:19,015
+probabilities change over time. The
+probabilities by the way are computed over
+
+248
+00:24:19,015 --> 00:24:24,022
+windows of size 500. From the samples in
+that window. And you can see that the
+
+249
+00:24:24,022 --> 00:24:28,086
+chain takes, that the chain takes a long
+time to move from one region of the space
+
+250
+00:24:28,086 --> 00:24:33,092
+to the other. The proposal distribution
+that I just showed you by contrast is
+
+251
+00:24:33,092 --> 00:24:39,025
+totally different. You can see that the
+probabilities are almost totally flat. And
+
+252
+00:24:39,025 --> 00:24:44,013
+that there is basically all four chains
+are the same, and there is, almost the
+
+253
+00:24:44,013 --> 00:24:49,008
+same and there is very little change in
+windows overtime. And there is an even
+
+254
+00:24:49,008 --> 00:24:54,054
+better proposal distribution that I didn't
+show you that modifies the augmenting path
+
+255
+00:24:54,054 --> 00:25:02,013
+by just a little bit. And that gives you
+effectively perfect mixing across the
+
+256
+00:25:02,013 --> 00:25:08,023
+entire time. If we look at the other
+metric that we define for evaluating
+
+257
+00:25:08,046 --> 00:25:13,094
+mixing, we, we can compare the
+probabilities of these different statistic
+
+258
+00:25:13,094 --> 00:25:20,033
+of, of, of different statistics across the
+two chains. So for example this might be
+
+259
+00:25:20,033 --> 00:25:25,063
+just for example, the red chain. And this
+might be the green chain, and what we see
+
+260
+00:25:25,063 --> 00:25:30,063
+here are the are the statistics that you
+get for different kinds of probabilities.
+
+261
+00:25:30,063 --> 00:25:35,034
+For the probability that this variable is
+match, sorry, that this dot is match to
+
+262
+00:25:35,034 --> 00:25:39,094
+that dot, for example. And you can see
+that the [inaudible] change the estimate
+
+263
+00:25:39,094 --> 00:25:44,018
+that you get are very noisy, and the
+different chains give you divergent
+
+264
+00:25:44,018 --> 00:25:47,044
+estimates. The second
+Metropolis\u2013Hasting, sorry the first
+
+265
+00:25:47,044 --> 00:25:52,017
+of the Metropolis\u2013Hastings gives you,
+things that are almost on the diagonal,
+
+266
+00:25:52,017 --> 00:25:58,022
+and here, things are effectively, exactly
+on a diagonal, perfect mixing. But to
+
+267
+00:25:58,022 --> 00:26:02,078
+summarize, Metropolis-Hastings is a very
+general framework for building markup
+
+268
+00:26:02,078 --> 00:26:07,054
+chains so that they are designed to have a
+particular stationary distribution. It
+
+269
+00:26:07,054 --> 00:26:12,033
+requires that you come up with a proposal
+distribution. And that proposal
+
+270
+00:26:12,033 --> 00:26:17,054
+distribution has, needs to have certain
+properties in order to be valid. But once
+
+271
+00:26:17,054 --> 00:26:22,036
+you give me such a proposal distribution,
+the detail-balanced equation, which is
+
+272
+00:26:22,036 --> 00:26:27,042
+this nice, simple equation, tells me how I
+can construct the acceptance distribution
+
+273
+00:26:27,042 --> 00:26:33,066
+so as to, enforce the fact. That we get
+the right stationary distribution. So,
+
+274
+00:26:33,066 --> 00:26:38,007
+this is great in some ways, because it
+gives us this huge flexibility in
+
+275
+00:26:38,007 --> 00:26:42,097
+designing proposal distributions that
+explore the space quickly, and move around
+
+276
+00:26:42,097 --> 00:26:47,093
+to faraway parts of the space. But as we
+saw, picking the proposal distribution is
+
+277
+00:26:47,093 --> 00:26:52,095
+actually a, an important design point, and
+it makes a big difference to performance.
+
+278
+00:26:52,095 --> 00:26:57,091
+And it's not, there isn't, like, a science
+of how you should do this, effectively.
+
+279
+00:26:57,091 --> 00:27:03,017
+And so there are, and so this is something
+that is really an art and requires a non
+
+280
+00:27:03,017 --> 00:27:05,025
+trivial amount of. Thought in engineering.

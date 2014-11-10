@@ -1,0 +1,959 @@
+
+1
+00:00:00,000 --> 00:00:06,074
+A lot of our thinking so far as gone into
+constructing algorithms for the problem of
+
+2
+00:00:06,074 --> 00:00:12,080
+computing marginals in a graphical model.
+But as we previously discussed, a very
+
+3
+00:00:12,080 --> 00:00:19,001
+different type of inference problem, but
+one that has many applications in itself
+
+4
+00:00:19,001 --> 00:00:24,054
+is that of finding a single coherent joint
+assignment that has the highest
+
+5
+00:00:24,054 --> 00:00:29,062
+probability. And we. Showed already that,
+that doesn't have the same, that you can't
+
+6
+00:00:29,062 --> 00:00:33,091
+just solve the marginals problem, and
+pick the highest probability assignment
+
+7
+00:00:33,091 --> 00:00:38,031
+for each variable, and that gives you the
+map assignment. That's not what, that's
+
+8
+00:00:38,031 --> 00:00:42,088
+not what happens. And so we need to have
+an alg-, a different set of algorithms for
+
+9
+00:00:42,088 --> 00:00:47,018
+solving the map problem. And we're going
+to talk now about the first of these,
+
+10
+00:00:47,018 --> 00:00:53,032
+which is, Effectively following the exact
+same lines that we did for exact inference
+
+11
+00:00:53,032 --> 00:00:59,023
+for computing marginals only it turns out
+that one can re purpose them with a small
+
+12
+00:00:59,023 --> 00:01:05,077
+change to computing the map assignment. So the
+first operation that going to do in order
+
+13
+00:01:05,077 --> 00:01:10,075
+to get this to work, is that we are going to take
+products and turn them into summations.
+
+14
+00:01:10,075 --> 00:01:16,053
+And we are going to be doing that by
+observing that p of the our distribution p
+
+15
+00:01:16,053 --> 00:01:22,096
+of Phi is proportional as we know
+to a product of factors. And if we, if we
+
+16
+00:01:22,096 --> 00:01:30,083
+are trying to find the argmax of that
+particular product. It can also be
+
+17
+00:01:30,083 --> 00:01:39,022
+written, reformulated as the argmax of
+summation where each of these theta ks
+
+18
+00:01:39,022 --> 00:01:45,070
+is the log. Of the potential phi of k. Which is
+basically the same as taking the table
+
+19
+00:01:45,070 --> 00:01:52,012
+that represents the factor and converting
+each entry into its logarithm. And that
+
+20
+00:01:52,012 --> 00:01:58,070
+gives you something that, rather than
+being a product of factors, is the sum of
+
+21
+00:01:58,070 --> 00:02:04,078
+these log factors. And there's really good
+reasons for doing that. First, because
+
+22
+00:02:04,078 --> 00:02:09,057
+summations are easier to handle than, than
+products. But also because, if you're
+
+23
+00:02:09,057 --> 00:02:14,019
+multiplying a whole bunch of very small
+numbers, you're going to get numerical
+
+24
+00:02:14,019 --> 00:02:18,086
+underflows. And converting this into
+summations is a much more robust algorithm
+
+25
+00:02:18,086 --> 00:02:25,011
+numerically, in, in terms of a practical
+implementation. And so now we are going to
+
+26
+00:02:25,011 --> 00:02:30,085
+consider the problem, of that we just
+wrote here which is the argmax of an
+
+27
+00:02:30,085 --> 00:02:37,030
+expression that we are going to call theta
+of X1 up to Xn which is defined as the
+
+28
+00:02:37,030 --> 00:02:45,046
+sum of factors over smaller scopes which
+are these theta ks. And this is the
+
+29
+00:02:45,046 --> 00:02:51,035
+example that I meant to show a moment ago.
+So this is taking a factor over scope A
+
+30
+00:02:51,035 --> 00:02:56,080
+and B, and converting it to its log
+factor, by taking log base two. And you'll
+
+31
+00:02:56,080 --> 00:03:02,047
+notice that the numbers were carefully
+selected to give me nice, outputs. But
+
+32
+00:03:02,047 --> 00:03:10,003
+that doesn't have to be the case. So now
+that we've reduced problem to one that
+
+33
+00:03:10,003 --> 00:03:15,071
+we're taking the max over summation, we're
+going to now go back to our simple example
+
+34
+00:03:15,071 --> 00:03:21,040
+of a chain and we're going to think about
+how we can do max sum variable elimination
+
+35
+00:03:21,040 --> 00:03:26,029
+in chain. And this is going to look.
+Almost identical to the max, to the sum
+
+36
+00:03:26,029 --> 00:03:31,067
+product algorithm that we had before. So
+let's understand what we are trying to do
+
+37
+00:03:31,067 --> 00:03:36,072
+here. So we're trying, assuming what we
+are trying to do now is, forget the arg
+
+38
+00:03:36,072 --> 00:03:43,065
+max, let's assume that we just want to
+find the max of this of this. Expression
+
+39
+00:03:43,065 --> 00:03:54,007
+theta of A, B. C, D and E. And so just
+like in the sum product case, we can break
+
+40
+00:03:54,007 --> 00:04:00,077
+up the maxes into a max over A and then a
+max over B and a max over C and a max over
+
+41
+00:04:00,077 --> 00:04:07,031
+D. And while we might not be quite as used
+to doing this kind of operation that I'm
+
+42
+00:04:07,031 --> 00:04:13,069
+about to show, it's equally valid to point
+out, that because none these guys, theta
+
+43
+00:04:13,069 --> 00:04:22,022
+two, theta three or theta four depend on A
+we can. Add them up, the max over this
+
+44
+00:04:22,022 --> 00:04:32,011
+guy, over theta one and AB, after
+completing the max. And so that's going to
+
+45
+00:04:32,011 --> 00:04:40,063
+give me a factor here. Which, which looks
+like max over A, theta one of AB. And I'm
+
+46
+00:04:40,063 --> 00:04:46,015
+going to call that Lambda one of B.
+Because notice that this is not a
+
+47
+00:04:46,015 --> 00:04:52,070
+constant. It's a function that depends on
+B. For different values of B, you're gonna
+
+48
+00:04:52,070 --> 00:04:58,094
+have different val-, different A's of
+maximize, and different values of the max
+
+49
+00:04:58,094 --> 00:05:05,033
+expression. And so this Lambda one of B is
+simply the max over A of theta one, AB.
+
+50
+00:05:05,089 --> 00:05:12,080
+And that process has effectively now
+eliminated A from this expression, and
+
+51
+00:05:12,080 --> 00:05:20,010
+given me a maximization problem over one
+fewer variable, only B, C, D, and E. Just
+
+52
+00:05:20,010 --> 00:05:24,054
+like in the context of sum product
+algorithms, we can view all of these
+
+53
+00:05:24,054 --> 00:05:29,041
+operations as operations over factors,
+rather than just thinking about them in
+
+54
+00:05:29,041 --> 00:05:34,033
+terms of expression. So whereas before we
+defined things like factor product and
+
+55
+00:05:34,033 --> 00:05:39,032
+factor marginalization, we can now define
+analogous operations that correspond to
+
+56
+00:05:39,032 --> 00:05:44,013
+factor summation and factor maximization.
+So factor summation's a very obvious
+
+57
+00:05:44,013 --> 00:05:49,000
+operation, does exactly what we did here,
+so if we want to, in the case of factor
+
+58
+00:05:49,000 --> 00:05:55,025
+product, if we want to define. In the row
+for A1, B1, C1, we're going to add up. The
+
+59
+00:05:55,025 --> 00:06:01,030
+entry three from A1 B1. And the entry four
+from B1C1 and that is going to give me
+
+60
+00:06:01,030 --> 00:06:06,030
+seven. And I can similarly define all of
+the other entries in the factor summation
+
+61
+00:06:06,030 --> 00:06:12,046
+which we're showing here on the right.
+Factor maximization is same way that we
+
+62
+00:06:12,046 --> 00:06:19,063
+could sum marginalize a factor. This is
+something that max marginalizes, is called
+
+63
+00:06:19,063 --> 00:06:28,081
+the max marginalization. And what it does
+is, it looks, if I, so I'm trying to get
+
+64
+00:06:28,081 --> 00:06:35,087
+rid of B. I have these two rows here. Say,
+for example, A1, B1, C1. And A1, B2, C1,
+
+65
+00:06:35,087 --> 00:06:42,092
+that only differ on B. And my new entry
+here, A1, C1, is going to be the max of
+
+66
+00:06:42,092 --> 00:06:49,052
+these two entries over here. Which, in
+this case, is going to be seven. And
+
+67
+00:06:49,052 --> 00:06:57,018
+similarly for, say, A1-C2. I am going to
+end up with a max of 4.5 and two which is
+
+68
+00:06:57,018 --> 00:07:02,052
+4.5. So this is another form of
+marginalization where I remove a variable
+
+69
+00:07:02,052 --> 00:07:08,033
+B but using an operation other than
+summation. So now that we've defined these
+
+70
+00:07:08,033 --> 00:07:14,040
+two operations, we can go back and define
+the max sum variable elimination in
+
+71
+00:07:14,040 --> 00:07:20,055
+chains, as a set of factor operations.
+Where I eliminate A, then B, and so on and
+
+72
+00:07:20,055 --> 00:07:26,006
+so forth. So, for example, having
+eliminated A as in the previous step, I
+
+73
+00:07:26,006 --> 00:07:32,053
+can now do the exact same operation by
+noticing that the only factors that depend
+
+74
+00:07:32,053 --> 00:07:39,015
+on B are theta two of B, and lambda one of
+B. So these other two. I can move outside
+
+75
+00:07:39,015 --> 00:07:45,064
+of the maximization. And that's going to
+give me a max over B of a factor that is
+
+76
+00:07:45,064 --> 00:07:51,064
+the sum of the two factors Theta 2BC and
+Lambda one of B that I got from the
+
+77
+00:07:51,064 --> 00:07:57,038
+previous elimination step. And that's 
+going to give me a new factor lambda 2 of C
+
+78
+00:07:57,038 --> 00:08:02,083
+and the process continues. In exactly the
+same way as variable elimination did for
+
+79
+00:08:02,083 --> 00:08:11,050
+the case of sum product. And that's basically
+the algorithm. So now let's think about
+
+80
+00:08:11,050 --> 00:08:18,083
+what we get at the end of this execution,
+for the final factor. What is Lambda four,
+
+81
+00:08:18,083 --> 00:08:25,072
+having gone through Lambda two and Lambda
+three, and now we get Lambda four of e.
+
+82
+00:08:25,072 --> 00:08:34,088
+What is Lambda four for a given value,
+little e? Lambda four of little e is what
+
+83
+00:08:34,088 --> 00:08:49,015
+we got by maximizing. Over A, B, C and D
+of theta A, B, C and D. So this is, the
+
+84
+00:08:49,015 --> 00:09:00,008
+best possible assignment. The best value.
+That I can get, that I can possibly get.
+
+85
+00:09:01,024 --> 00:09:14,018
+If, we mandate that E equals little e.
+Okay. And so, this is a factor, and it
+
+86
+00:09:14,018 --> 00:09:21,031
+gives me that value, for each one of the,
+value score, the, effectively, for each
+
+87
+00:09:21,031 --> 00:09:33,084
+value little e of E. This is called a max
+marginal. In the same way that we took
+
+88
+00:09:33,084 --> 00:09:40,011
+variable elimination for sum product and
+we used that to define a clique tree
+
+89
+00:09:40,011 --> 00:09:45,084
+algorithm, we can do exactly the same
+thing for max product, for er, max sum,
+
+90
+00:09:45,084 --> 00:09:51,057
+using the exact same type of data
+structure. So here we def, we're going to
+
+91
+00:09:51,057 --> 00:09:57,046
+use the exact same clique tree, and we
+have cliques over AB, BC, CD, and DE. And
+
+92
+00:09:57,069 --> 00:10:06,014
+we're going to as, as usual, assign the
+potentials. To the appropriate, cliques
+
+93
+00:10:06,014 --> 00:10:14,098
+using. The family preservation property.
+And now let's go ahead and see how
+
+94
+00:10:14,098 --> 00:10:21,023
+messages are passed, in this, clique tree
+architecture So initially, the AB clique
+
+95
+00:10:21,023 --> 00:10:27,024
+is going to define the message lambda 1-2,
+which is obtained by maximizing out A over
+
+96
+00:10:27,024 --> 00:10:32,090
+theta one. And the resulting message over
+B gets passed to clique two. Clique two
+
+97
+00:10:32,090 --> 00:10:38,049
+can take that message; multiply it with
+its own, factor, theta two. And add that,
+
+98
+00:10:38,049 --> 00:10:44,001
+this is max sum, remember? I'm going to
+add that to lambda 1-2, and that gives me
+
+99
+00:10:44,001 --> 00:10:49,029
+the message lambda 2-3. And the same thing
+can happen when clique three passes a
+
+100
+00:10:49,029 --> 00:10:53,051
+message to clique four in this case over
+the scope of E. So exactly the same
+
+101
+00:10:53,051 --> 00:10:58,030
+message passing process except using max
+and sum instead of sum and product. We can
+
+102
+00:10:58,030 --> 00:11:04,019
+equally well pass messages in the other
+direction. So four to three over scope D
+
+103
+00:11:04,019 --> 00:11:10,087
+three to two and two to one. And all the
+properties that we said hold in the
+
+104
+00:11:10,087 --> 00:11:16,089
+context of sum product clique trees hold
+here as well. First notice for example,
+
+105
+00:11:16,089 --> 00:11:23,006
+that once this message lambda one two is
+sent, it never changes again. It's, it's
+
+106
+00:11:23,006 --> 00:11:29,016
+defined once and for all. Lambda two
+three, once it receives the message lambda
+
+107
+00:11:29,016 --> 00:11:34,095
+one two, it too has stabilized and will
+never change, and similarly for lambda
+
+108
+00:11:34,095 --> 00:11:40,048
+three four. So we can do one pass. From
+left to right to compute all of the left
+
+109
+00:11:40,048 --> 00:11:45,070
+to right messages. And a similar pass
+right to left to compute all of the right
+
+110
+00:11:45,070 --> 00:11:51,038
+to left messages. And as soon as we do
+that, they've all converged. The second
+
+111
+00:11:51,038 --> 00:11:58,091
+thing to notice is what is the value of
+this clique over here. So, if we look at
+
+112
+00:11:58,091 --> 00:12:06,008
+this, we can see that when I've compute,
+when I finally get all of the messages
+
+113
+00:12:06,008 --> 00:12:13,018
+from both sides, I have integrated in
+theta one. Theta two, theta three which is
+
+114
+00:12:13,018 --> 00:12:20,018
+stored in the clique itself, and
+theta four coming in from the message on
+
+115
+00:12:20,018 --> 00:12:27,018
+the right, and maximize out all of the
+variables A, B, and E so that what I have
+
+116
+00:12:27,018 --> 00:12:34,017
+left is a factor over the clique three
+which is the max over A, B, and E of the
+
+117
+00:12:34,017 --> 00:12:40,086
+sum of all of the factors in this network.
+So, just to summarize, once the clique I
+
+118
+00:12:40,086 --> 00:12:47,021
+receives the final message from all of its
+neighbors except c j, then that message is
+
+119
+00:12:47,021 --> 00:12:53,004
+also final, will never change, and the
+messages from all leaves are immediately
+
+120
+00:12:53,004 --> 00:12:59,024
+final. And so what we have is an algorithm
+that at convergence, that converges after
+
+121
+00:12:59,024 --> 00:13:04,070
+two passes and gives us correct max
+marginals at every single one of the
+
+122
+00:13:04,070 --> 00:13:11,096
+cliques. So. Let's take a simple example
+just to convince ourselves that this is
+
+123
+00:13:11,096 --> 00:13:18,071
+doing the right thing. So, I'm looking now
+at a much simpler [inaudible] that only
+
+124
+00:13:18,071 --> 00:13:24,097
+has a, b, and c. So, there's is two
+factors one over theta one of ab and theta
+
+125
+00:13:24,097 --> 00:13:36,078
+two of BC. And first we are going to
+construct the overall math theta which is
+
+126
+00:13:36,078 --> 00:13:44,095
+the sum of theta one and theta two. So this
+is a factor summation [inaudible] this
+
+127
+00:13:44,095 --> 00:13:51,060
+expression. And let's look at it and see
+what is the map assignment in this
+
+128
+00:13:51,060 --> 00:13:58,008
+example. And if we just look at the
+numbers that we computed, we see that the
+
+129
+00:13:58,008 --> 00:14:05,078
+map assignment is A1 B1 C1 with a value of
+seven. Now let's look at the message
+
+130
+00:14:05,078 --> 00:14:10,077
+passings, process that you will have, on
+this, very simple clique tree with two
+
+131
+00:14:10,077 --> 00:14:17,066
+cliques. So, this is theta one, it's
+assigned to clique one. Theta two is
+
+132
+00:14:17,066 --> 00:14:25,058
+assigned to clique two. And let's look at
+the two messages that are passed. So, here
+
+133
+00:14:25,058 --> 00:14:33,098
+was my a one so a b passes a message to b
+c, and that message is the max marginal.
+
+134
+00:14:34,025 --> 00:14:42,090
+Max marginalization over the variable a.
+And so we can see here we have a max
+
+135
+00:14:42,090 --> 00:14:51,032
+between three and, and -one so we get
+three, because this is the max over the
+
+136
+00:14:51,032 --> 00:15:00,018
+two values of a that are consistent with b
+one. And for b two we have the max over
+
+137
+00:15:00,018 --> 00:15:07,061
+zero and one so we get one. >> And exactly
+the same process gives us, for this
+
+138
+00:15:07,061 --> 00:15:14,042
+message, where I'm max marginalizing C, I
+get this message. This path from left to
+
+139
+00:15:14,042 --> 00:15:20,025
+right. Now each of these two cliques takes
+its message, and note this is, I've gotten
+
+140
+00:15:20,025 --> 00:15:25,017
+immediate convergence here because there
+was only one message to pass in each
+
+141
+00:15:25,017 --> 00:15:30,003
+direction. And, so what I get here is the
+sum of this factor plus the incoming
+
+142
+00:15:30,003 --> 00:15:37,065
+message. I've added these two together and
+so I have for example, for the first row
+
+143
+00:15:37,065 --> 00:15:43,056
+A1, for A1B1, I have three from here and
+four from here. So I get three + four
+
+144
+00:15:43,056 --> 00:15:52,094
+which is equal to seven. For a1, b2, I get
+a zero from here, and a2 from there, zero
+
+145
+00:15:52,094 --> 00:16:01,098
++ two = two. And I can do exactly the same
+operation to get this, to get this, set,
+
+146
+00:16:01,098 --> 00:16:08,054
+to get this factor on the right. I get
+that by summing up this, with that, and I
+
+147
+00:16:08,054 --> 00:16:15,078
+get this factor over here. And you'll
+notice that miraculously. The map, the map
+
+148
+00:16:15,078 --> 00:16:22,069
+had each of these factors separately. Is
+a1 b1 on the left and b1 c1 on the right?
+
+149
+00:16:22,069 --> 00:16:29,039
+So sure enough what I got here was the
+most likely assignment consistent with a1
+
+150
+00:16:29,039 --> 00:16:35,004
+b1 and over here the most likely
+assignment consistent with b1c2. And
+
+151
+00:16:35,004 --> 00:16:40,020
+you'll notice, if you go back and check,
+and I'm not going to do that right now.
+
+152
+00:16:40,020 --> 00:16:45,009
+But if you go back and check this, big
+table over here, you can convince
+
+153
+00:16:45,009 --> 00:16:50,025
+yourselves that this doesn't only hold
+true for A1-B1. If you look, for example,
+
+154
+00:16:50,025 --> 00:16:55,048
+at A2-B1, you'll see that what you get
+here, the value three, is the value of the
+
+155
+00:16:55,048 --> 00:17:00,037
+most likely assignments that are
+consistent, that is consistent with A2-B1.
+
+156
+00:17:00,037 --> 00:17:06,006
+So actually, let's go back and check that.
+So here is A2-B1. We have two assignments
+
+157
+00:17:06,006 --> 00:17:11,071
+consistent with A two B one, one is 0.5
+and one is three. Three is the best one,
+
+158
+00:17:11,071 --> 00:17:16,071
+and sure enough the value that we get here
+is three. So, it all works. So what can we
+
+159
+00:17:16,071 --> 00:17:20,099
+say about this algorithm once it
+converges? The important thing is that we
+
+160
+00:17:20,099 --> 00:17:25,056
+can compute beliefs at each clique that
+represent exactly the max marginals of
+
+161
+00:17:25,056 --> 00:17:30,030
+that clique. So how do we compute these
+beliefs? Analogously to what we had in the
+
+162
+00:17:30,030 --> 00:17:34,075
+context of sum product, we look at the
+factor assigned to the clique, which is
+
+163
+00:17:34,075 --> 00:17:39,085
+the theta I. And we add to it the incoming
+messages. Before you remember we had the
+
+164
+00:17:39,085 --> 00:17:45,055
+factor assigned to the clique multiplied
+by the incoming message because we were
+
+165
+00:17:45,055 --> 00:17:51,039
+doing products instead of summations. What
+does this belief, what does this belief
+
+166
+00:17:51,039 --> 00:17:57,055
+encode? This belief the max marginal. So
+specifically, it, we can consider for any
+
+167
+00:17:57,055 --> 00:18:04,034
+given assignment to the clique Ci we can
+look at the best possible, the score of
+
+168
+00:18:04,034 --> 00:18:11,056
+the best possible completion to the clique
+Ci and that is the value of the belief at
+
+169
+00:18:11,056 --> 00:18:17,054
+that clique. So it's the max over all of
+the variables, WI, that are not assigned
+
+170
+00:18:17,054 --> 00:18:23,001
+to the clique. One important
+consequence of the fact that we have max
+
+171
+00:18:23,001 --> 00:18:29,003
+marginals is that we get a, a calibration
+property here as well. So, f, the cliques
+
+172
+00:18:29,003 --> 00:18:35,016
+must agree on the variables that they
+share. So to understand this let, let's
+
+173
+00:18:35,016 --> 00:18:42,009
+look at these two cliques that we have in
+the simple 2-clique example. And here are
+
+174
+00:18:42,009 --> 00:18:48,053
+the beliefs that we had for clique one,
+and for clique two. It's the sum of theta
+
+175
+00:18:48,053 --> 00:18:58,026
+one plus the incoming message over here.
+And theta two plus nine over two. And,
+
+176
+00:18:58,026 --> 00:19:05,029
+let's look at what the calibration
+property tells us. It tells us that, for
+
+177
+00:19:05,029 --> 00:19:11,059
+example, if we look at. The implications
+of this clique regarding the variable b.
+
+178
+00:19:11,080 --> 00:19:17,065
+We would have that, that the, this clique
+tells us that the best possible completion
+
+179
+00:19:17,065 --> 00:19:23,029
+for b one has a score of seven, and the
+best possible completion for b two has a
+
+180
+00:19:23,029 --> 00:19:28,065
+score of three. This clique, if we look at
+it, tells us that the best possible
+
+181
+00:19:28,065 --> 00:19:34,007
+completion for b1 also has a score of
+seven, and the best possible completion
+
+182
+00:19:34,007 --> 00:19:39,064
+for b two also has a score of three. So
+these two cliques agree regarding their
+
+183
+00:19:39,085 --> 00:19:43,089
+regarding the variable in their
+shared scope, which is the variable
+
+184
+00:19:43,089 --> 00:19:48,094
+B. So to summarize, we can apply, in the
+context of max sum, exactly the same
+
+185
+00:19:48,094 --> 00:19:54,007
+clique tree algorithm used for sum
+product. Messages are passed in the same
+
+186
+00:19:54,007 --> 00:19:59,055
+way. The clique trees is constructed in
+the same way. The only difference is that
+
+187
+00:19:59,055 --> 00:20:05,003
+the message passing operations use max and
+sum as opposed to sum and product. At
+
+188
+00:20:05,003 --> 00:20:10,050
+exactly, as in sum product, convergence is
+[inaudible], achieved after a single up
+
+189
+00:20:10,050 --> 00:20:15,070
+and down pass. And the result of that is a
+set of beliefs that represent max
+
+190
+00:20:15,070 --> 00:20:20,070
+marginals at each of those cliques.
+Where, as a reminder, the max marginals
+
+191
+00:20:20,070 --> 00:20:26,010
+tells for each assignment, what is the
+score of the best possible completion to
+
+192
+00:20:26,010 --> 00:20:27,020
+that assignment.

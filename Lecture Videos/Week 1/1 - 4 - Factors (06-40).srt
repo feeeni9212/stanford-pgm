@@ -1,0 +1,369 @@
+
+1
+00:00:00,000 --> 00:00:04,007
+A critical building block in a lot of what
+we'll do, both in terms of the finding
+
+2
+00:00:04,007 --> 00:00:09,007
+probability distributions and in terms of
+manipulating them for inference, is the
+
+3
+00:00:09,007 --> 00:00:14,007
+notion of a factor. So let's define what a
+factor is and the kinds of operations that
+
+4
+00:00:14,007 --> 00:00:20,007
+you can do on factors. So a factor really
+is a function or a table. It takes a bunch
+
+5
+00:00:20,007 --> 00:00:26,007
+of arguments, in this case, a set of
+random variables X1 up to Xk. And just like
+
+6
+00:00:26,007 --> 00:00:32,001
+any function, it gives us a value for
+every assignment to those random
+
+7
+00:00:32,001 --> 00:00:38,001
+variables. So it takes all possible
+assignments in the cross-product space of
+
+8
+00:00:38,001 --> 00:00:43,007
+X1 up to Xk, that is all possible
+combinations of assignments, and in this
+
+9
+00:00:43,007 --> 00:00:49,001
+case it gives me a real value for each
+such combination. And the set of
+
+10
+00:00:49,001 --> 00:00:53,005
+variables X1 up to XK is called the scope
+of the factor, that is, it's a set of
+
+11
+00:00:53,005 --> 00:00:58,002
+arguments that the factor takes.
+Let's look at some examples of factors.
+
+12
+00:00:58,002 --> 00:01:03,002
+We've already seen a joint distribution.
+A joint distribution is a factor. For every
+
+13
+00:01:03,002 --> 00:01:08,000
+combination, for example here of the
+variables I, D and G, it gives me a number.
+
+14
+00:01:08,000 --> 00:01:12,004
+As it happens this number is a
+probability, and it happens it sums to one.
+
+15
+00:01:12,004 --> 00:01:17,003
+But that doesn't matter, what's 
+important is that for every value of I, D
+
+16
+00:01:17,003 --> 00:01:22,002
+and G, a combination of values, I get a
+number. That's why it's a factor. Here is
+
+17
+00:01:22,002 --> 00:01:28,007
+a different factor: an unnormalized
+measure is a factor also. In this case, we
+
+18
+00:01:28,007 --> 00:01:35,001
+have a factor such as the probability of
+I, D comma g1, and notice that in this case, the
+
+19
+00:01:35,001 --> 00:01:41,009
+scope of a factor is actually I and D, because
+there is no dependence of the factor on
+
+20
+00:01:41,009 --> 00:01:48,005
+the value of the variable G, because the
+variable G in this case is constant. So
+
+21
+00:01:48,005 --> 00:01:57,000
+this is a factor whose scope is I and D.
+Finally: a type of factor that we will use
+
+22
+00:01:57,000 --> 00:02:02,003
+extensively is what's called a Conditional
+Probability Distribution, typically
+
+23
+00:02:02,003 --> 00:02:07,009
+abbreviated CPD. This, as it happens, is a
+CPD that's written as a table, although
+
+24
+00:02:07,009 --> 00:02:13,006
+that's not necessarily the case, and this
+is a CPD that gives us the conditional
+
+25
+00:02:13,006 --> 00:02:19,000
+probability of the variable G given I
+and D. So what does that mean? It means
+
+26
+00:02:19,000 --> 00:02:24,004
+that for every combination of values to
+the variables I and D, we have a
+
+27
+00:02:24,004 --> 00:02:30,002
+probability distribution over G. So, for
+example, if I have an intelligent
+
+28
+00:02:30,002 --> 00:02:36,000
+student in a difficult class, which is
+this last line over here, this tells us
+
+29
+00:02:36,000 --> 00:02:41,008
+that the probability of getting an A is
+0.5, a B, 0.3, and a C is 0.2. And as we
+
+30
+00:02:41,008 --> 00:02:47,009
+can see, these numbers sum to one, as they
+should, because this is a probability
+
+31
+00:02:47,009 --> 00:02:54,003
+distribution over G for this particular
+conditioning context. And you can easily
+
+32
+00:02:54,003 --> 00:02:59,008
+verify that this is this is true for all
+of the other lines in this table. So this
+
+33
+00:02:59,008 --> 00:03:05,003
+is again a particular type of factor: one
+that satisfies certain constraints, in this
+
+34
+00:03:05,003 --> 00:03:11,000
+case, that each row sums to one. Now
+this is--, these are--, the factors that we're
+
+35
+00:03:11,000 --> 00:03:15,004
+dealing with will not always correspond to
+probability. So here is an example of a
+
+36
+00:03:15,004 --> 00:03:19,009
+general factor that really doesn't
+map in any way to probability. Because the
+
+37
+00:03:19,009 --> 00:03:24,001
+numbers aren't even in the range 0...1. As
+we'll see, these kinds of
+
+38
+00:03:24,001 --> 00:03:29,004
+factors are nonetheless useful. This is a
+factor whose scope is the set of variables
+
+39
+00:03:29,004 --> 00:03:35,001
+A comma B, and it's probably using a real-valued
+number for each of those, for each
+
+40
+00:03:35,001 --> 00:03:41,008
+assignment to A and B. Some operations that
+we're going to do on factors: One of
+
+41
+00:03:41,008 --> 00:03:47,003
+the most common operations is what's
+called factor product. It's taking two
+
+42
+00:03:47,003 --> 00:03:52,009
+factors, say phi1 and phi2, and
+multiplying them together. So, let's think
+
+43
+00:03:52,009 --> 00:03:59,002
+what that means. Here we have a factor phi1.
+It has a scope of A, B. phi2 has a
+
+44
+00:03:59,002 --> 00:04:05,007
+scope of B, C. And what we're doing is, we're
+kind of like multiplying a function.
+
+45
+00:04:05,007 --> 00:04:12,001
+f of x y times g of y z: you're going to get a
+function that is of all three arguments
+
+46
+00:04:12,004 --> 00:04:18,008
+x, y, z. So in this case we have a factor
+whose scope is A, B and C. And if we want
+
+47
+00:04:18,008 --> 00:04:23,008
+to figure out, (oops, that didn't come out
+good). If we wanna figure out, for example,
+
+48
+00:04:23,008 --> 00:04:28,008
+value of the row a1, b1, c1, it's going to
+come by taking the a1, b1 row from here,
+
+49
+00:04:28,008 --> 00:04:33,008
+the b1, c1 row from here, and multiplying
+them together. So we're gonna get 0.25. So
+
+50
+00:04:33,008 --> 00:04:38,009
+this is effectively taking the functions
+or the tables, and just multiplying them
+
+51
+00:04:38,009 --> 00:04:44,001
+together. Another important operation is
+factor marginalization. Factor
+
+52
+00:04:44,001 --> 00:04:49,001
+marginalization is, is oh, is very similar
+to, in fact identical to the
+
+53
+00:04:49,001 --> 00:04:54,001
+marginalization of probability
+distributions. So here we have, except
+
+54
+00:04:54,001 --> 00:04:59,008
+that it doesn't have to be a probability
+distribution, so for example, if we have a
+
+55
+00:04:59,008 --> 00:05:06,008
+factor here who's scope is A, B, and C.
+And we want to marginalize out B, to get a
+
+56
+00:05:06,008 --> 00:05:12,004
+factor whose scope is A, C: what we're going
+to be doing is, again, taking both possible
+
+57
+00:05:12,004 --> 00:05:17,003
+values of B, in this case there's on-
+because B is binary there's only two
+
+58
+00:05:17,003 --> 00:05:23,001
+values, and we add them up, in order to get
+the entry for a1, c1: so 0.25 plus 0.08.
+
+59
+00:05:23,001 --> 00:05:28,005
+And the same all the other rows in
+this table are acquired, are computed in
+
+60
+00:05:28,005 --> 00:05:33,002
+exactly the same way from the
+corresponding rows in the original larger
+
+61
+00:05:33,002 --> 00:05:39,003
+factor. Finally, factor reduction. Again
+very similar to the context of probability
+
+62
+00:05:39,003 --> 00:05:44,002
+distributions. You want to reduce, for
+example, to the context c1. So we're
+
+63
+00:05:44,002 --> 00:05:49,006
+going to only focus on the rows that have
+the value C=c1. And that's going to give
+
+64
+00:05:49,006 --> 00:05:56,008
+us the reduced factor which only has C1.
+And once again, the scope of this factor is
+
+65
+00:05:56,008 --> 00:06:02,005
+A, B, because there is no longer any
+dependence on C. So that's basically the
+
+66
+00:06:02,005 --> 00:06:07,004
+final operation. Now, why factors? It
+turns out that factors are the fundamental
+
+67
+00:06:07,004 --> 00:06:11,002
+building block in defining these
+distributions in high-dimensional spaces.
+
+68
+00:06:11,002 --> 00:06:15,006
+That is, the way in which we're going to
+define an exponentially large probability
+
+69
+00:06:15,006 --> 00:06:20,001
+distribution over n random variables,
+is by taking a bunch of little pieces and
+
+70
+00:06:20,001 --> 00:06:24,002
+putting them together by multiplying
+factors, in order to define this
+
+71
+00:06:24,002 --> 00:06:28,006
+high-dimensional probability distribution.
+It turns out, also, that the same set of
+
+72
+00:06:28,006 --> 00:06:33,000
+basic operations that we use to define the
+probability distributions in these
+
+73
+00:06:33,000 --> 00:06:37,007
+high-dimensional spaces are also what we use
+for manipulating them, in order to give us
+
+74
+00:06:37,007 --> 00:06:40,002
+a set of basic inference algorithms.

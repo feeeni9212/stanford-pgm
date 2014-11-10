@@ -1,0 +1,894 @@
+
+1
+00:00:01,001 --> 00:00:05,042
+We showed how influence diagrams can allow
+an agent to make decisions regarding what
+
+2
+00:00:05,042 --> 00:00:09,058
+course of action the agent should take,
+given a set of observations. But often, we
+
+3
+00:00:09,058 --> 00:00:12,095
+want to answer a different type of
+question. Which is, what observations
+
+4
+00:00:12,095 --> 00:00:16,038
+should I even make before making the
+decision? For example, a doctor
+
+5
+00:00:16,038 --> 00:00:20,010
+encountering a particular patient might
+have to decide which set of tests to
+
+6
+00:00:20,010 --> 00:00:24,065
+perform on that patient. Tests are not
+free, they cause pain to the patient, they
+
+7
+00:00:24,065 --> 00:00:28,033
+come with a risk, and they cost money. So
+which ones are worthwhile, and which ones
+
+8
+00:00:28,033 --> 00:00:31,097
+are not? The same kind of question comes
+up in many other scenarios. So, for
+
+9
+00:00:31,097 --> 00:00:34,082
+example, if you're running a sensor
+network, which sensor should I
+
+10
+00:00:34,082 --> 00:00:38,087
+measure? The sensor might require energy
+in order to transmit the information, and
+
+11
+00:00:38,087 --> 00:00:42,031
+that might be something that we want to
+consider carefully. And there is many
+
+12
+00:00:42,031 --> 00:00:46,065
+other examples of that. It turns out that
+the same framework of influence diagrams
+
+13
+00:00:46,065 --> 00:00:51,013
+can also be used to answer that question
+using rigorous formal foundations.
+
+14
+00:00:51,013 --> 00:00:58,068
+So how do we provide a formal semantics for
+the notion of the value of getting
+
+15
+00:00:58,068 --> 00:01:06,041
+information or the value of making an
+observation? So, the, the, formal
+
+16
+00:01:06,041 --> 00:01:13,014
+definition that one can provide for this
+is the value of perfect information, so
+
+17
+00:01:13,014 --> 00:01:26,055
+this stands for value...of
+perfect information. About a variable X is
+
+18
+00:01:26,055 --> 00:01:32,066
+the value that we have by observing X
+before choosing an action at A and perfect
+
+19
+00:01:32,066 --> 00:01:38,002
+means that we observe X would perfectly
+without, without any noise. How do we
+
+20
+00:01:38,002 --> 00:01:43,075
+give that a formal
+value? Well, if D was our original
+
+21
+00:01:43,075 --> 00:01:48,048
+influence diagram before I had the
+opportunity to observe x. We can compare
+
+22
+00:01:48,048 --> 00:01:54,023
+the value of d to the value of a different
+influence diagram which is the one where I
+
+23
+00:01:54,023 --> 00:01:59,065
+introduce an edge from x to a. Because
+that tells me what the value of the
+
+24
+00:01:59,065 --> 00:02:05,050
+situation would be, if, if I had that, the
+ability to make that observation. So we
+
+25
+00:02:05,050 --> 00:02:09,040
+can now define the value of perfect
+information to be simply a difference
+
+26
+00:02:09,040 --> 00:02:15,010
+between the maximum expected utility that
+I have in the situation where I have this
+
+27
+00:02:15,010 --> 00:02:19,051
+observation. Minus the value of the
+expected utility to the agent in a
+
+28
+00:02:19,051 --> 00:02:25,079
+scenario where I don't. So in this example
+that we presented before, we saw that we
+
+29
+00:02:25,079 --> 00:02:30,042
+compared two decision situations, one
+where the agent has found the company
+
+30
+00:02:30,042 --> 00:02:35,048
+without any kind of additional information
+about the value of the market and the
+
+31
+00:02:35,048 --> 00:02:42,015
+other is where the agent gets to make an
+observation regarding the survey variable
+
+32
+00:02:42,015 --> 00:02:46,095
+prior to making the decision whether to
+found the company. So we can compare the
+
+33
+00:02:46,095 --> 00:02:58,084
+value of the decision making situation
+with a variable from S to F minus the
+
+34
+00:02:58,084 --> 00:03:04,039
+value of the decision making situation
+assuming the agent makes optimal decisions
+
+35
+00:03:04,039 --> 00:03:08,043
+of the original decision making situation
+D. And we can compare that and see how
+
+36
+00:03:08,043 --> 00:03:13,048
+much the agent's gained by this and if you
+recall, we computed this to be 3.25 and
+
+37
+00:03:13,048 --> 00:03:20,013
+this was two so the value of perfect
+information was 1.25. Which means that the
+
+38
+00:03:20,013 --> 00:03:27,054
+agent should be willing to pay anything up
+to 1.25 utility points before, in order to
+
+39
+00:03:27,054 --> 00:03:35,028
+conduct the survey because doing that will
+increase his expected utility. So let's
+
+40
+00:03:35,028 --> 00:03:43,019
+look at some properties of the value of
+perfect information. So the first
+
+41
+00:03:43,019 --> 00:03:47,093
+important property of the value of perfect
+information, is assuming that there is no
+
+42
+00:03:47,093 --> 00:03:51,084
+cost to the information. So not counting
+in how much it might cost to conduct a
+
+43
+00:03:51,084 --> 00:03:57,061
+survey. One can show that the value of
+perfection information is always greater
+
+44
+00:03:57,061 --> 00:04:02,024
+than or equal to zero. So let's first go
+ahead and convince ourselves that this is
+
+45
+00:04:02,024 --> 00:04:06,087
+true. So, let's look at this expression
+over here which compares the maximum
+
+46
+00:04:06,087 --> 00:04:14,011
+expected utility between two different
+influence diagrams. And remember, that
+
+47
+00:04:14,011 --> 00:04:21,098
+each of these is obtained by optimizing
+over a decision rule. This one is,
+
+48
+00:04:21,098 --> 00:04:28,055
+optimizes the, the MU of the original
+decision, D, is optimizing a decision rule
+
+49
+00:04:28,055 --> 00:04:36,072
+delta, which is a CPD of A given its
+current set of parents Z. And this one,
+
+50
+00:04:36,072 --> 00:04:45,038
+the new influence diagram, is optimizing a
+decision rule delta, where A has Z as a,
+
+51
+00:04:45,038 --> 00:04:54,007
+all the original parents Z. Plus an
+additional parent X. And the point that
+
+52
+00:04:54,007 --> 00:05:02,067
+one, that becomes on this when you think
+of it this way is that this is strictly
+
+53
+00:05:02,067 --> 00:05:04,096
+larger class of CPDs than this. That is
+any CPD. Of the form delta of A given Z,
+
+54
+00:05:04,096 --> 00:05:24,090
+is also a CPD. Of the form delta of A
+given Z and X. Which means, any decision
+
+55
+00:05:24,090 --> 00:05:29,019
+rule that I could have implemented in my
+original influence diagram, I can also
+
+56
+00:05:29,019 --> 00:05:32,055
+implement in the context of my current
+influence diagram. And if it had a
+
+57
+00:05:32,055 --> 00:05:36,066
+particular value there, it would still
+have that same expected utility varia-,
+
+58
+00:05:36,066 --> 00:05:44,012
+value, in the original diagram. But to go
+back to our example for, for instance, if
+
+59
+00:05:44,012 --> 00:05:51,005
+the agent. Has a decision rule that found,
+[inaudible] to found the company
+
+60
+00:05:51,005 --> 00:05:55,005
+regardless of the value of the survey.
+That is still legitimate decision rule
+
+61
+00:05:55,005 --> 00:05:57,080
+even when they get to observe the survey,
+and it would have exactly the same
+
+62
+00:05:57,080 --> 00:06:03,083
+expected utility. And so that means that
+the set of decisions that I get to
+
+63
+00:06:03,083 --> 00:06:10,059
+consider is just larger in the context of
+the richer, of the richer influence
+
+64
+00:06:10,059 --> 00:06:16,079
+diagram. And therefore one cannot possibly
+lose by exploring a larger, a larger space
+
+65
+00:06:16,079 --> 00:06:24,005
+over which to optimize. Okay. So now let's
+think about the second property which is
+
+66
+00:06:24,005 --> 00:06:29,089
+when this value of perfect information is
+equal to zero. And this follows from very
+
+67
+00:06:29,089 --> 00:06:37,006
+similar reason to the one that we just
+talked about. So if the optimal decision
+
+68
+00:06:37,006 --> 00:06:43,053
+rule for D. For my original influence
+diagram B is still optimal for the
+
+69
+00:06:43,053 --> 00:06:48,000
+extended influence diagram. Then I've
+gained nothing from the information. That
+
+70
+00:06:48,000 --> 00:06:52,060
+is I, any, any decision that I could, any
+decision move that I could of applied
+
+71
+00:06:52,060 --> 00:06:57,023
+before I could still apply. And therefore,
+there I gained nothing from this initial
+
+72
+00:06:57,023 --> 00:07:07,051
+observation. And so this gives us a very
+clear notion of when information is
+
+73
+00:07:07,051 --> 00:07:18,026
+useful. Information is useful precisely
+when it changes my decision. In the police
+
+74
+00:07:18,026 --> 00:07:33,008
+one case. >> Which, thinking about this
+from the other perspective. If there is no
+
+75
+00:07:33,008 --> 00:07:37,077
+ability for an observation to change my
+decision, there really is no point in
+
+76
+00:07:37,077 --> 00:07:48,013
+making it. Let?s see how this intuition
+manifests in an actual decision making
+
+77
+00:07:48,013 --> 00:07:52,058
+scenario. So let?s imagine that our
+entrepreneur has decided against founding
+
+78
+00:07:52,058 --> 00:07:55,042
+a widget company, and is now starting to
+pick between two companies that he can
+
+79
+00:07:55,042 --> 00:08:04,038
+choose to join. For each company, there is
+the state that the company is in, so S1 is
+
+80
+00:08:04,038 --> 00:08:08,042
+that the company is not, doesn't have that
+great of a management, things are not
+
+81
+00:08:08,042 --> 00:08:13,076
+necessarily going so well, so that's S1.
+S2 is medium and S3 is the company's doing
+
+82
+00:08:13,076 --> 00:08:22,025
+great. And the same thing holds for both
+companies. We are assuming that the
+
+83
+00:08:22,025 --> 00:08:30,032
+company funders have access to some of the
+information, to this information about the
+
+84
+00:08:30,032 --> 00:08:33,021
+company state because they can do some
+very in depth [inaudible] diligence and so
+
+85
+00:08:33,021 --> 00:08:39,057
+the chances of the company to get funding.
+Depends on the state of the company. So
+
+86
+00:08:39,057 --> 00:08:44,025
+you can see that if the company's state is
+poor, S one, then the chances of getting
+
+87
+00:08:44,025 --> 00:08:48,047
+funding are 0.1, whereas if the company's
+doing great, the f, chances of getting
+
+88
+00:08:48,047 --> 00:08:55,078
+funding are 0.9. And we're assuming that
+the agent's utility is one if the company
+
+89
+00:08:55,078 --> 00:09:08,042
+that he cho, that he joins. It's funded
+and zero otherwise. But now let's think
+
+90
+00:09:08,042 --> 00:09:14,087
+about the two strategies that the agent
+can take without information. And so, if
+
+91
+00:09:14,087 --> 00:09:25,013
+the agent chooses to join company one. One
+can see company one is That the expected
+
+92
+00:09:25,013 --> 00:09:33,074
+utility now is 0.72 and the expected
+utility of company two which is not doing
+
+93
+00:09:33,074 --> 00:09:38,033
+as great is only 0.33 which's you know, if
+you look at the state of the company, that
+
+94
+00:09:38,033 --> 00:09:45,089
+makes perfect sense. Now what happen if
+the agents now get to make an observation?
+
+95
+00:09:45,089 --> 00:09:52,072
+And specifically we're going to let the
+agent make the observation. Of S two,
+
+96
+00:09:52,072 --> 00:10:00,037
+regarding S two. Which is, in this case
+the weaker of the two companies. So, the
+
+97
+00:10:00,037 --> 00:10:05,090
+agent has a little mole inside the company
+and can get access to that information
+
+98
+00:10:05,090 --> 00:10:15,006
+before making his decision. What happens
+then? Well. The, if you look at the
+
+99
+00:10:15,006 --> 00:10:23,069
+utilities values, you can see that if
+company one is in state, sorry if company
+
+100
+00:10:23,069 --> 00:10:31,051
+two is in state one. Then, which is a not
+unlikely scenario, it happen with
+
+101
+00:10:31,051 --> 00:10:36,018
+probability 40%, the chances of getting
+funding are 0.1. And so the agents
+
+102
+00:10:36,018 --> 00:10:45,099
+expected utility in this case. So the
+expected utility if. The agent chooses C2
+
+103
+00:10:45,099 --> 00:10:56,065
+and S, and the state of the second company
+is S1 is 0.1. The expected utility if the
+
+104
+00:10:56,065 --> 00:11:10,084
+agent chooses the second company and it?s
+doing moderately well is 0.4. Both of
+
+105
+00:11:10,084 --> 00:11:18,088
+these are lower than 0.72 that the agent
+can guarantee on expectation if he chooses
+
+106
+00:11:18,088 --> 00:11:24,049
+for company one; even without any
+additional information from company one.
+
+107
+00:11:24,049 --> 00:11:32,090
+And so in both of these cases the agent is
+going to prefer to stick with his original
+
+108
+00:11:32,090 --> 00:11:39,052
+Choice Of going with company one. It is
+only in the one scenario that, that we
+
+109
+00:11:39,052 --> 00:11:50,099
+have where. S, where the second company is
+doing really great. Then, his expected
+
+110
+00:11:50,099 --> 00:11:55,082
+utility from going with that company is
+0.9 because that's the chances of getting
+
+111
+00:11:55,082 --> 00:12:02,086
+funding in this case. And in that case, he
+would prefer. The changes in opinion and
+
+112
+00:12:02,086 --> 00:12:10,010
+go with C two. But that happens with very
+low probability, that only happens if
+
+113
+00:12:10,010 --> 00:12:16,041
+probability is at 0.1. And so that means
+that the value of information here is
+
+114
+00:12:16,041 --> 00:12:20,037
+going to be very low because although
+there is a situation in which the agent
+
+115
+00:12:20,037 --> 00:12:25,035
+changes his mind, it?s a very unlikely
+scenario. And sure enough if you look at
+
+116
+00:12:25,035 --> 00:12:29,096
+the expected utility in the influence
+diagram with that edge I just added, it
+
+117
+00:12:29,096 --> 00:12:35,060
+only goes up from 0.7 to 0.743, which
+means that the agent shouldn't be willing
+
+118
+00:12:35,060 --> 00:12:39,079
+to pay his mall and company too much money
+in order to get that information about
+
+119
+00:12:39,079 --> 00:12:46,025
+company two. Okay. Now let's look at a
+slightly different situation. Where now,
+
+120
+00:12:46,025 --> 00:12:51,076
+neither company is doing so great. So, you
+can see that now company one is also kind
+
+121
+00:12:51,076 --> 00:12:56,068
+of this sort of rocky start up without a
+very good benefit structure and, and
+
+122
+00:12:56,068 --> 00:13:02,005
+unclear business model. In this case what
+happens? So once again we can complete the
+
+123
+00:13:02,005 --> 00:13:07,031
+expected utility of the two actions and
+now we can see that the expected utility
+
+124
+00:13:07,031 --> 00:13:12,074
+of choosing company one is 0.35 as
+compared to the expected utility of
+
+125
+00:13:12,074 --> 00:13:18,008
+company two which is 0.33. Now the
+decisions are much more balanced relate to
+
+126
+00:13:18,008 --> 00:13:21,008
+each other and so you would think that
+there would be a much high value of
+
+127
+00:13:21,008 --> 00:13:26,085
+information and the chances that the agent
+would change his mind are considerably
+
+128
+00:13:26,085 --> 00:13:36,032
+larger. So let's work our way through that
+and see that once again if we consider
+
+129
+00:13:36,032 --> 00:13:41,080
+adding this edge from the mole and company
+too, we can now see that the agent is
+
+130
+00:13:41,080 --> 00:13:48,074
+going to want to change his mind either
+when he observes S2 or when he observes S3
+
+131
+00:13:48,074 --> 00:13:54,068
+because both of these, both 0.4 and 0.9
+are larger than, than the expected utility
+
+132
+00:13:54,068 --> 00:14:03,048
+that he gets from sticking company one.
+And now indeed the expected utility rate
+
+133
+00:14:03,048 --> 00:14:09,061
+goes up in the case where we have the
+influence diagram and it goes up to 0.43
+
+134
+00:14:09,061 --> 00:14:14,052
+which is a much more significant increase
+in the expected utility relative to what
+
+135
+00:14:14,052 --> 00:14:20,005
+we have before because now there is more
+value to the information. We change, the
+
+136
+00:14:20,005 --> 00:14:26,036
+agent changes their opinion in two out of
+three scenarios and that happens with
+
+137
+00:14:26,036 --> 00:14:35,063
+probability 0.6. Now let's look at. Yea,
+the third scenario, where now we've
+
+138
+00:14:35,063 --> 00:14:41,042
+changed the probability that the company
+gets funded. Now we're back in the bubble
+
+139
+00:14:41,042 --> 00:14:47,090
+days of the internet womb and basically,
+pretty much every company gets funded with
+
+140
+00:14:47,090 --> 00:14:54,091
+a pretty high probability. Even if their
+business model is totally dubious. And in
+
+141
+00:14:54,091 --> 00:15:01,029
+this case, what happens so now we can once
+again compute the expected [inaudible] of
+
+142
+00:15:01,029 --> 00:15:10,084
+C-1. Which is 0.788. The expected
+[inaudible] of C-2. Which is 0.779. And we
+
+143
+00:15:10,084 --> 00:15:17,029
+can see that again these expect
+[inaudible] are really close to each
+
+144
+00:15:17,029 --> 00:15:24,098
+other. And intuitively what that's going
+to mean is that even if the agent changes
+
+145
+00:15:24,098 --> 00:15:31,008
+their mind. It doesn't make much of the
+difference in terms of their expected
+
+146
+00:15:31,008 --> 00:15:40,063
+[inaudible]. So here we see that because
+of, in this case we can see that 0.8 which
+
+147
+00:15:40,063 --> 00:15:47,099
+is their expected utility in the case of
+the observed s2. This value S2 is bigger
+
+148
+00:15:47,099 --> 00:15:55,011
+than 0.788 and so they're going to pick.
+They're going to the sight to change their
+
+149
+00:15:55,011 --> 00:16:02,014
+mind. And go from C1 to C2 and similarly
+for S3. But the actual utility games in
+
+150
+00:16:02,014 --> 00:16:08,066
+this case are fairly small. And so now the
+utility, the expected utility that we have
+
+151
+00:16:08,066 --> 00:16:13,057
+in this scenario, where the agent gets to
+observe this variable without, before
+
+152
+00:16:13,057 --> 00:16:19,049
+making a decision is zero. Eight one four
+two which is only a fairly small increase
+
+153
+00:16:19,049 --> 00:16:23,096
+over the 0.788 that they could have
+guaranteed themselves without making that
+
+154
+00:16:23,096 --> 00:16:28,065
+observation. So once again, this is a case
+where as a promo in company two doesn't
+
+155
+00:16:28,065 --> 00:16:35,095
+get that much money. But to summarize,
+influence diagrams provide a very clear
+
+156
+00:16:35,095 --> 00:16:40,057
+and eloquent interpretation for what it
+means to make an observation as simply the
+
+157
+00:16:40,057 --> 00:16:45,015
+vow, the difference in the expected
+utility value or the NU values rather
+
+158
+00:16:45,015 --> 00:16:50,080
+between two influence diagrams. And this
+allows us to provide an intuition about
+
+159
+00:16:50,080 --> 00:16:57,040
+when information is valuable and that is
+only when it is induces a change in the
+
+160
+00:16:57,040 --> 00:17:03,032
+action in at least one context. And now
+quantitatively it means that the extent
+
+161
+00:17:03,032 --> 00:17:09,004
+which information is valuable depends both
+on how much my utility improves based on
+
+162
+00:17:09,004 --> 00:17:14,050
+that change and on how likely the context
+or in which I changed the decision.
+
+163
+00:17:14,050 --> 99:59:59,000
+We showed how influence diagrams can allow an agent to make decisions regarding what course of action
+
+164
+99:59:59,000 --> 99:59:59,000
+the agent should take given a set of observations but often we want to answer a different type of question
+
+165
+99:59:59,000 --> 99:59:59,000
+which is observations should I even make before making the decision?  For example a doctor encountering
+
+166
+99:59:59,000 --> 99:59:59,000
+a particular patient might have to decide what kind of test to perform on that patient.  Tests are not
+
+167
+99:59:59,000 --> 99:59:59,000
+they cause pain to the patient, they come with a risk and they cost money.  So which ones are worthwhile
+
+168
+99:59:59,000 --> 99:59:59,000
+and which ones are not.  The same type of decisions comes up in many other scenarios.  So for example,
+
+169
+99:59:59,000 --> 99:59:59,000
+if you're running a sensor network, which sensor should I measure? The sensor might require energy in
+
+170
+99:59:59,000 --> 99:59:59,000
+order to transmit the information, and that might be something we want to consider carefully, and there
+
+171
+99:59:59,000 --> 99:59:59,000
+are many other examples of that.  It turns out that the same framework of influence diagrams can also
+
+172
+99:59:59,000 --> 99:59:59,000
+be used to answer that question using rigorous formal foundations.  So how do we provide formal semantics
+
+173
+99:59:59,000 --> 99:59:59,000
+for the notion of the value of getting information?  Or the value of making an observation?  So the,
+
+174
+99:59:59,000 --> 99:59:59,000
+the, formal definition that one can provide for this is the value of perfect of information.  So this
+
+175
+99:59:59,000 --> 99:59:59,000
+stands for value of perfect information...  about a variable x is the value that we have by observing
+
+176
+99:59:59,000 --> 99:59:59,000
+x before choosing an action at A.  And perfect means we observe x with, um, perfectly, without any noise.
+
+177
+99:59:59,000 --> 99:59:59,000
+So how do we give that a formal value?  Well, if D was our original influence diagram before I had the
+
+178
+99:59:59,000 --> 99:59:59,000
+opportunity to observe x, we can observe that value of D to the value of a different influence diagram
+
+179
+99:59:59,000 --> 99:59:59,000
+which is the one where I introduce an edge from X to A, because that tells me what the value of the situation
+
+180
+99:59:59,000 --> 99:59:59,000
+would be if I had the ability to make that observation.  SO we can define the value of perfect information
+
+181
+99:59:59,000 --> 99:59:59,000
+to simply be the difference between the maximum expected utility I have in the situation where I have
+
+182
+99:59:59,000 --> 99:59:59,000
+this observation, minus the value of the expected utility to the agent in the scenario where I don't.f
+
+183
+99:59:59,000 --> 99:59:59,000
+So in this example that we have presented before, we compared two decision situations, one where the

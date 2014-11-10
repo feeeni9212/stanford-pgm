@@ -1,0 +1,1090 @@
+
+1
+00:00:00,000 --> 00:00:04,697
+Perhaps the most common use of the
+expectation maximization algorithm is to
+
+2
+00:00:04,697 --> 00:00:09,209
+the problem of learning with latent
+variables. These are situations where
+
+3
+00:00:09,209 --> 00:00:14,277
+there is a certain set of variables that
+we just never get to observe. But they
+
+4
+00:00:14,277 --> 00:00:19,098
+turn out to be important for capturing
+some important latent structure in the
+
+5
+00:00:19,098 --> 00:00:24,228
+distribution of the data instances that we
+have. So let's look at a number of these
+
+6
+00:00:24,228 --> 00:00:29,371
+examples and talk about how '''em was
+applied in those settings. So perhaps the
+
+7
+00:00:29,371 --> 00:00:34,421
+simplest example is in the context of
+[inaudible] clustering. Where, we have
+
+8
+00:00:34,421 --> 00:00:39,600
+some kind of latent class variables and
+some set of observed features, and we're
+
+9
+00:00:39,600 --> 00:00:44,779
+trying to basically segment the instances
+that we have into categories where we
+
+10
+00:00:44,779 --> 00:00:49,959
+assume that for each category, there is a
+similar distribution over the observed
+
+11
+00:00:49,959 --> 00:00:55,138
+features. And specifically in many of
+these applications that distribution takes
+
+12
+00:00:55,138 --> 00:01:00,382
+the fall of the [inaudible]. That is that
+the features are independent once given
+
+13
+00:01:00,382 --> 00:01:08,100
+the class. So, one example application of
+this, is the segmenting, a set of users
+
+14
+00:01:08,660 --> 00:01:15,076
+into a similarity groups. And so, one cute
+example of that is, the following
+
+15
+00:01:15,336 --> 00:01:22,706
+segmentation of users on the msnbc website
+based on which of the stories on msnbc
+
+16
+00:01:22,706 --> 00:01:29,642
+site the users chose to click. And this is
+due to jack freeze and callings in
+
+17
+00:01:29,642 --> 00:01:36,957
+Microsoft research. So Here we see, we're
+gonna see four clusters. The first of
+
+18
+00:01:36,957 --> 00:01:42,395
+these is a cluster that a human given name
+to, because the machine doesn't give a
+
+19
+00:01:42,395 --> 00:01:47,332
+name to the cluster, it just calls it
+cluster one. Turns out to be readers of
+
+20
+00:01:47,332 --> 00:01:51,895
+commerce and technology stories. So these
+are people for whom the highest
+
+21
+00:01:51,895 --> 00:01:56,645
+probability clicks on stories were, for
+example, email delivery isn't exactly
+
+22
+00:01:56,645 --> 00:02:01,270
+guaranteed, or should you buy a DVD
+player? So, remember, the stories are the
+
+23
+00:02:01,270 --> 00:02:06,332
+features, and they're binary valuables.
+Did you click or did you not click on that
+
+24
+00:02:06,332 --> 00:02:10,386
+particular article? [inaudible] And the
+cluster is the segmentation of the users
+
+25
+00:02:10,386 --> 00:02:15,889
+into these different categories. So this
+is category one. The second cluster are
+
+26
+00:02:15,889 --> 00:02:21,700
+people who primarily clicked on sports
+stories. So the highest probability
+
+27
+00:02:21,926 --> 00:02:28,039
+features in this, for this user group,
+were, for example, stories such as Cowboys
+
+28
+00:02:28,039 --> 00:02:33,774
+are reborn, and win over Eagles, or
+something like that. The third cluster are
+
+29
+00:02:33,774 --> 00:02:39,660
+the people who went to the top page, and
+basically clicked on the top promoted
+
+30
+00:02:39,660 --> 00:02:46,871
+stories. This says [inaudible], 29 percent
+of the users. And one can. Dates this by
+
+31
+00:02:46,871 --> 00:02:54,396
+at least this article. Oh, this one seems
+pretty perennial. And so we can, so that's
+
+32
+00:02:54,396 --> 00:02:59,848
+the third category. The last one was the
+surprising one. These are people who
+
+33
+00:02:59,848 --> 00:03:04,926
+traversed all over the site. So for the
+previous three categories, there were
+
+34
+00:03:04,926 --> 00:03:10,472
+actual pages that existed, for sports, for
+top promoted stories, and for commerce and
+
+35
+00:03:10,472 --> 00:03:15,817
+technology. This last category are people
+who went all over the site to look for
+
+36
+00:03:15,817 --> 00:03:21,430
+stories that you might call softer news.
+And, so, this was an interesting discovery
+
+37
+00:03:21,430 --> 00:03:26,709
+for the MSNBC website about its user
+population. And suggested that the website
+
+38
+00:03:26,709 --> 00:03:31,274
+might. Be better redesigned to capture
+this kind of structure and give these
+
+39
+00:03:31,274 --> 00:03:35,741
+users a page where they can find these
+articles. [sound]. A very different
+
+40
+00:03:35,741 --> 00:03:40,512
+application is to speech recognition,
+which is one that we've talked about
+
+41
+00:03:40,512 --> 00:03:45,605
+before. In the context of speech
+recognition, we've already discussed that
+
+42
+00:03:45,605 --> 00:03:50,698
+the standard representation of choice is a
+hidden Markov model. And in a hidden
+
+43
+00:03:50,698 --> 00:03:55,855
+Markov model, we have hidden variables,
+and we have parameters. The parameters are
+
+44
+00:03:55,855 --> 00:04:01,469
+the parameters of the HMM. The. Transition
+probabilities for example between one
+
+45
+00:04:01,469 --> 00:04:07,270
+phone and the other. Or, the acoustics, or
+the probability over the acoustics signal
+
+46
+00:04:07,270 --> 00:04:12,841
+that we observe for different pieces are
+states within a phone. The latent
+
+47
+00:04:12,841 --> 00:04:19,564
+variables are the segmentation of the
+initial acoustic signal into which state
+
+48
+00:04:19,564 --> 00:04:26,286
+it belongs to; that is, which phoneme and
+which part of which phoneme. Those are the
+
+49
+00:04:26,286 --> 00:04:32,681
+hidden variables. And that's an awful lot
+of hidden variables. Because, if we're
+
+50
+00:04:32,681 --> 00:04:38,666
+just given an undifferentiated,
+unsegmented signal, it's very difficult to
+
+51
+00:04:38,666 --> 00:04:47,489
+assign. As, as a piece, a small slice of
+that speech into one [inaudible] versus
+
+52
+00:04:47,489 --> 00:04:54,798
+the other. So. In order to train well a
+speech recognition HMM, the standard
+
+53
+00:04:54,798 --> 00:05:02,117
+strategy is a bottom up, boot strap
+training, where one first trains the phone
+
+54
+00:05:02,117 --> 00:05:10,593
+HMM separately for each phone using a
+phone database. Now this, too, is done
+
+55
+00:05:10,593 --> 00:05:17,448
+using yam because the breakdown within a
+phone into these little constituent pieces
+
+56
+00:05:17,448 --> 00:05:21,873
+is not. Labeled and so it still requires
+that we do [inaudible] to address the
+
+57
+00:05:21,873 --> 00:05:25,935
+issue of latent variables, but at least
+it's now self contained because you're
+
+58
+00:05:25,935 --> 00:05:31,257
+only training the model for a single phone
+like [inaudible]. With that model trained,
+
+59
+00:05:31,257 --> 00:05:38,580
+we can now, one can now take entire words
+and use the model initialized with the
+
+60
+00:05:38,580 --> 00:05:45,537
+phone, the, the model trained on
+individual phones to now train the higher
+
+61
+00:05:45,537 --> 00:05:52,275
+level model. And one still retrains the
+phone HMM parameters. In the context of
+
+62
+00:05:52,275 --> 00:05:58,016
+this larger training regime, where one now
+trains on entire words. But the fact that
+
+63
+00:05:58,016 --> 00:06:03,758
+when seated the model, with this much more
+correct initialization on the parameters,
+
+64
+00:06:03,758 --> 00:06:09,222
+allows the segmentation in the E step to
+be performed moderately correctly, and
+
+65
+00:06:09,222 --> 00:06:15,480
+gives rise to a much better local optimum
+in the speech recognition problem. [sound]
+
+66
+00:06:15,480 --> 00:06:23,105
+And yet a different application is that of
+3D robot mapping. So, this is an
+
+67
+00:06:23,105 --> 00:06:31,146
+application that's do to [inaudible] at
+all and Here, the input to the, to the
+
+68
+00:06:31,146 --> 00:06:37,414
+problem, is a sequence of point clouds
+obtained by a laser range finder that were
+
+69
+00:06:37,414 --> 00:06:42,753
+collected by a moving robot. And the
+target output is a 3D map of the
+
+70
+00:06:42,753 --> 00:06:49,176
+environment as a set of planes. And you'll
+see the difference as to why we want the
+
+71
+00:06:49,176 --> 00:06:55,185
+plainar map when we look at the demo. Here
+the parameters of the model are the
+
+72
+00:06:55,185 --> 00:07:01,398
+location and the angles of the walls, or
+the planes in the environment. So we have
+
+73
+00:07:01,398 --> 00:07:07,535
+no idea a priori where there are walls and
+how they're situated. The [inaudible]
+
+74
+00:07:07,535 --> 00:07:14,274
+variables are an association. Variables
+which assign points to walls. And so the
+
+75
+00:07:14,274 --> 00:07:21,406
+'''em algorithm effectively in the E step,
+figures out which points go with which
+
+76
+00:07:21,406 --> 00:07:28,990
+wall. And in the M step it figures out how
+to move the wall around to better fit the
+
+77
+00:07:28,990 --> 00:07:35,780
+points that were assigned to it. So what
+we see here is the raw data collected by
+
+78
+00:07:35,780 --> 00:07:41,871
+the robot. The red box is the robot moving
+around in its environment. The, red beams
+
+79
+00:07:41,871 --> 00:07:47,081
+that emanate from the robot are the
+directions that the laser took in order to
+
+80
+00:07:47,081 --> 00:07:51,895
+collect the point cloud. And what we see
+here, is, the point cloud that was
+
+81
+00:07:51,895 --> 00:07:57,501
+collected by the robot as it traversed the
+environment. And even just looking at this
+
+82
+00:07:57,501 --> 00:08:02,842
+image, we can already see that there's a
+lot of noise in the laser range data. And
+
+83
+00:08:02,842 --> 00:08:08,448
+that, and that this is going to give rise,
+as we can see, to a very noisy map of the
+
+84
+00:08:08,448 --> 00:08:13,745
+environment. If we now look at the model
+constructed by [inaudible], and so now
+
+85
+00:08:13,745 --> 00:08:18,707
+we're going to see the planar map
+constructed by the robot. And this is done
+
+86
+00:08:18,707 --> 00:08:23,547
+on the fly, actually as the robot is
+moving. We can see that... Walls are
+
+87
+00:08:23,547 --> 00:08:29,087
+constructed when there is enough data to
+support them. And, and that's, when enough
+
+88
+00:08:29,087 --> 00:08:34,496
+points are assigned to a wall, then that
+wall gets constructed, and its pose in the
+
+89
+00:08:34,496 --> 00:08:39,509
+environment gets determined by the EN
+algorithm. And so we can see that this
+
+90
+00:08:39,509 --> 00:08:44,785
+constructs a much more plausible and
+realistic map of the environment than just
+
+91
+00:08:44,785 --> 00:08:57,282
+looking at the raw point cloud data.
+[sound] A, different application is also
+
+92
+00:08:57,282 --> 00:09:03,482
+in the context of 3D laser [inaudible].
+And you know, we picked those not because
+
+93
+00:09:03,482 --> 00:09:09,992
+these are the most common applications of
+[inaudible] but because they give rise to
+
+94
+00:09:09,992 --> 00:09:16,812
+some pretty cool movies. So here is, the
+problem of getting, in this case, 3D rain
+
+95
+00:09:16,812 --> 00:09:23,322
+scans of a person in different poses. And
+the goal is to see whether by collecting a
+
+96
+00:09:23,322 --> 00:09:31,470
+bunch of these poses, one can reconstruct.
+A 3D skeleton of. Person. So, from front
+
+97
+00:09:31,470 --> 00:09:38,632
+and from back. So in this particular case.
+The first problem is, actually, to
+
+98
+00:09:38,632 --> 00:09:43,747
+correspond points in the difference
+[inaudible] to each other. And this case
+
+99
+00:09:43,747 --> 00:09:48,862
+that was done by a different algorithm
+that I'm not going to talk about now,
+
+100
+00:09:48,862 --> 00:09:54,179
+although, it also uses graphical models.
+In fact it used a belief propagation
+
+101
+00:09:54,179 --> 00:09:59,631
+algorithm. But now let's talk about the
+clustering problem that is the problem of,
+
+102
+00:09:59,631 --> 00:10:05,486
+of assigning points in each of those scans
+to body parts. So, here we have the notion
+
+103
+00:10:05,486 --> 00:10:12,294
+of a cluster which, in this case,
+corresponds to a part, and. Each part. In
+
+104
+00:10:12,294 --> 00:10:18,803
+a given, in a given scan of the person has
+a transformation. So, that's why we have a
+
+105
+00:10:18,803 --> 00:10:25,236
+plate around each of the parts, because we
+have an insta, because for each of those
+
+106
+00:10:25,236 --> 00:10:31,593
+parts there is multiple instantiations in
+the multiple scans that we have of the
+
+107
+00:10:31,593 --> 00:10:41,316
+same person in different poses. Now a
+landmark is a particular point on that. On
+
+108
+00:10:41,316 --> 00:10:47,580
+that person, in that in that part. And if
+we knew the part, that is if we have the
+
+109
+00:10:47,580 --> 00:10:53,617
+part assignments which is [inaudible]
+unobserved variable then we could predict
+
+110
+00:10:53,617 --> 00:10:59,218
+how the point that we see. On this scan,
+would translate to the point on this scan
+
+111
+00:10:59,218 --> 00:11:04,379
+because that would be effectively a
+deterministic or close to the terministic
+
+112
+00:11:04,379 --> 00:11:09,671
+function of the unobserved transformation
+of the part, that is the fact that the
+
+113
+00:11:09,671 --> 00:11:14,832
+arms they moved from this pose over here
+to this raised arm pose over here. So
+
+114
+00:11:14,832 --> 00:11:20,389
+given the transformation and given that we
+know which part the point, or landmark, is
+
+115
+00:11:20,389 --> 00:11:26,079
+assigned to, we can predict how the point
+transformed from its original position to
+
+116
+00:11:26,079 --> 00:11:32,089
+its new position. So this is a way of
+clustering points into parts. And one can
+
+117
+00:11:32,089 --> 00:11:38,252
+run '''em on that, and if one does that,
+effectively, one gets pretty much garbage.
+
+118
+00:11:38,252 --> 00:11:44,810
+Because it turns out that there is enough
+muscle deformation to make the actual
+
+119
+00:11:44,810 --> 00:11:51,527
+positions here fairly noisy, and it's very
+difficult to get correct parts assignments
+
+120
+00:11:51,527 --> 00:11:56,900
+from that. But, if we now add an
+additional component into this model.
+
+121
+00:11:57,360 --> 00:12:02,658
+Specifically, contiguity of space. We can
+now consider say two points that are
+
+122
+00:12:02,658 --> 00:12:08,439
+adjacent to each other and impose the soft
+constraint, not the hard constraint but a
+
+123
+00:12:08,439 --> 00:12:14,013
+soft constraint, that a part assignment of
+two points that are adjacent should be
+
+124
+00:12:14,013 --> 00:12:19,037
+softly the same. Doesn't have to be
+exactly the same because otherwise of
+
+125
+00:12:19,037 --> 00:12:24,955
+course everything would be assigned to the
+same part but it's a soft constraint which
+
+126
+00:12:24,955 --> 00:12:31,164
+is actually an MRF constraint. In fact
+it's even an amaranth constraint, which is
+
+127
+00:12:31,164 --> 00:12:38,053
+associative or regular. As we discuss
+before. And so, this, this model now, that
+
+128
+00:12:38,053 --> 00:12:45,114
+actually does the questioning not of each
+point in isolation, but rather assigns
+
+129
+00:12:45,114 --> 00:12:51,381
+point jointly to parts taking in
+considerations the geometry of the
+
+130
+00:12:51,381 --> 00:12:58,531
+person?s body is considerably better of
+its right considerably better outputs. And
+
+131
+00:12:58,531 --> 00:13:16,229
+what we see here, is the algorithm in
+action. And we can see that the algorithm
+
+132
+00:13:16,229 --> 00:13:23,516
+converges very nicely to a partition of
+the points into different parts and from
+
+133
+00:13:23,516 --> 00:13:30,873
+this one can easily reconstruct the
+skeleton. A final application that uses
+
+134
+00:13:30,873 --> 00:13:38,176
+'''em in a yet a different model, is one
+that was used in this helicopter demo
+
+135
+00:13:38,176 --> 00:13:45,500
+alignment. Here the input, this was work
+that was done at Stanford by And rings
+
+136
+00:13:45,500 --> 00:13:52,425
+group, and here the input to the algorithm
+is basically different trajectories of the
+
+137
+00:13:52,425 --> 00:13:58,817
+same aerobatic maneuver flown by different
+pilots so they were all trying to do the
+
+138
+00:13:58,817 --> 00:14:04,904
+same thing, but each person has their own
+idiosyncratic way of doing this and so,
+
+139
+00:14:04,904 --> 00:14:11,274
+the pb, the exact sequence was as we see
+exactly the same. The goal of this, was to
+
+140
+00:14:11,274 --> 00:14:16,762
+produce an output, which aligns the
+trajectories to each other, and at the
+
+141
+00:14:16,762 --> 00:14:22,851
+same time, learns a probabilistic model of
+what the target or template trajectory
+
+142
+00:14:22,851 --> 00:14:30,793
+ought to have been. So how does this get
+represented as a graphical model? Here we
+
+143
+00:14:30,793 --> 00:14:37,287
+have, a latent trajectory, which is the
+intended trajectory that, that the users
+
+144
+00:14:37,287 --> 00:14:43,549
+were aiming for. And the states in those
+are labeled as Zs. And we have parameters
+
+145
+00:14:43,549 --> 00:14:49,502
+that tell us how one would move from Z
+zero to Z1 and so on. So those are the
+
+146
+00:14:49,502 --> 00:14:55,488
+model parameters of this Markov model.
+Although it?s a hidden markup model as
+
+147
+00:14:55,488 --> 00:15:01,957
+we'll see. The expert demonstrations, that
+is what we saw in terms of what the expert
+
+148
+00:15:01,957 --> 00:15:07,609
+did at each point in time is a noisy
+observation of the intended trajectory.
+
+149
+00:15:07,609 --> 00:15:13,557
+But, we don't actually know which point in
+the trajectory the expert observation
+
+150
+00:15:13,557 --> 00:15:19,878
+comes from and so we have this additional
+set of latent variables which are the time
+
+151
+00:15:19,878 --> 00:15:28,072
+indices and they basically tell us that at
+time tau zero. The demonstration, which of
+
+152
+00:15:28,072 --> 00:15:34,485
+the. Which of the true states in the
+intended trajectory, the expert was added
+
+153
+00:15:34,485 --> 00:15:40,868
+this point. And it, and Tau one tells us
+which point in the intended trajectory the
+
+154
+00:15:40,868 --> 00:15:47,406
+expert was in time one, and similarly, for
+time two, and so on. Where [inaudible] is
+
+155
+00:15:47,406 --> 00:15:55,437
+the is the expert demonstration. So in
+the, so K is the index on the expert. So,
+
+156
+00:15:55,437 --> 00:16:03,075
+this problem can be solved using an
+expectation maximization algorithm where
+
+157
+00:16:03,075 --> 00:16:11,011
+we have two sets of latent variables, the
+[inaudible] and the z's and one set of
+
+158
+00:16:11,011 --> 00:16:16,981
+model parameters which are. The transition
+probabilities. Although, it's possible
+
+159
+00:16:16,981 --> 00:16:21,540
+that we can also, it's also possible to
+learn the model for the M expert
+
+160
+00:16:21,540 --> 00:16:26,098
+demonstrations. Or we can simply fix the
+noise model. Both are legitimate
+
+161
+00:16:26,098 --> 00:16:30,846
+strategies. So let's see how this works.
+Let's first look at the original
+
+162
+00:16:30,846 --> 00:16:35,277
+trajectories, and we can see that,
+initially, they start out aligned. But
+
+163
+00:16:35,467 --> 00:16:40,595
+after a while, they start to diverge. So,
+for example, by the time we're right about
+
+164
+00:16:40,595 --> 00:16:45,153
+here, you can see the different experts
+are very different places in the
+
+165
+00:16:45,153 --> 00:16:51,944
+trajectory. And so the question is, how
+can we address that limitation. And so if
+
+166
+00:16:51,944 --> 00:16:58,908
+we look at the aligned model, which is
+what we see over here on the right. We can
+
+167
+00:16:58,908 --> 00:17:09,968
+see that the algorithm manages to maintain
+alignment. Fairly well, and that, here you
+
+168
+00:17:09,968 --> 00:17:20,397
+can see. That the. Different trajectories
+are pretty much at exactly the same point
+
+169
+00:17:20,397 --> 00:17:26,702
+in the sequence. And from that it's much
+easier now to learn the model and have the
+
+170
+00:17:26,702 --> 00:17:33,934
+helicopter fly the new, fly the correct
+trajectory. So one important issue
+
+171
+00:17:33,934 --> 00:17:39,618
+regarding latent variables is the number
+of values of the latent variables. And
+
+172
+00:17:39,618 --> 00:17:45,661
+this is something that has been implicit
+in many of the applications that I have
+
+173
+00:17:45,661 --> 00:17:51,705
+mentioned in this module. So how many user
+clusters do we have or how many different
+
+174
+00:17:51,705 --> 00:17:57,532
+pieces of a phone are there. And so how do
+we pick the cardinality for the latent
+
+175
+00:17:57,532 --> 00:18:02,575
+variable? If we use likelihood to evaluate
+a model with fewer values for the latent
+
+176
+00:18:02,575 --> 00:18:07,678
+variables versus one with more it's in the
+same wave as likelihood always over fits.
+
+177
+00:18:07,683 --> 00:18:12,078
+We'll find that more values is always
+better because it's a strictly more
+
+178
+00:18:12,078 --> 00:18:16,972
+expressive model and can therefore achieve
+a higher likelihood. Now one can
+
+179
+00:18:16,972 --> 00:18:23,080
+circumvent that, in the same way that we
+circumvented the likelihood over-fitting
+
+180
+00:18:23,080 --> 00:18:28,534
+phenomenon in the context of other
+structure learning algorithms. So we can
+
+181
+00:18:28,534 --> 00:18:34,377
+use, for example, a score, that penalizes
+complexity. Such as the BIC score. As we
+
+182
+00:18:34,377 --> 00:18:39,790
+mentioned back then, the BIC score tends
+to under fit, and so there has been a
+
+183
+00:18:39,790 --> 00:18:45,701
+range of extensions to the Bayesian score
+for the context of incomplete data. These
+
+184
+00:18:45,701 --> 00:18:51,684
+are always approximations because we can't
+actually do the integration required for
+
+185
+00:18:51,684 --> 00:18:57,096
+the Bayesian score for incomplete data,
+and so we have approximations to the
+
+186
+00:18:57,096 --> 00:19:02,651
+Bayesian score that turn out to work much
+better in practice than BIC in many
+
+187
+00:19:02,651 --> 00:19:07,825
+practical applications. There's also other
+strategies that people have adopted. For
+
+188
+00:19:07,825 --> 00:19:12,439
+example, we can use metrics of cluster
+coherents to look at a cluster, and say,
+
+189
+00:19:12,439 --> 00:19:17,232
+ooh, it seems like this cluster is really
+incoherent, so maybe there's really two
+
+190
+00:19:17,232 --> 00:19:21,726
+clusters in there, so maybe we should
+split it up. Or these two clusters are
+
+191
+00:19:21,726 --> 00:19:26,400
+very similar to each. Maybe we should
+merge them. And there's various heuristic
+
+192
+00:19:26,400 --> 00:19:31,134
+exploration algorithms that basically
+split clusters and add clusters in a way
+
+193
+00:19:31,134 --> 00:19:36,143
+that hopefully converges to the right
+number of clusters. And finally, of great
+
+194
+00:19:36,143 --> 00:19:41,684
+popularity in the last few years, is a
+range of methods that are based on
+
+195
+00:19:41,684 --> 00:19:48,363
+Bayesian techniques. These are methods
+often the most commonly used class is
+
+196
+00:19:48,363 --> 00:19:54,511
+called Dirichlet processes, which instead
+of picking a single cardinality for the
+
+197
+00:19:54,511 --> 00:20:03,578
+latent variable, basically maintain a
+distribution over the cardinality. And
+
+198
+00:20:03,578 --> 00:20:09,332
+then, instead of picking a single value
+for that cardinality, average over the
+
+199
+00:20:09,332 --> 00:20:14,862
+different cardinalities. Using often
+techniques such as Markov Chain, Monte
+
+200
+00:20:14,862 --> 00:20:20,264
+Carlo, although there's also other
+approaches. But this turns out often that
+
+201
+00:20:20,264 --> 00:20:25,633
+the problem of late invariable cardinality
+is often one of the trickier issues that
+
+202
+00:20:25,633 --> 00:20:30,656
+one has to deal with when learning with
+latent variable. To summarize, latent
+
+203
+00:20:30,656 --> 00:20:36,285
+variables are a really common scenario in
+the context of learning graphical models.
+
+204
+00:20:36,285 --> 00:20:41,439
+And one of, perhaps, the most common
+setting for incomplete data. And it turns
+
+205
+00:20:41,439 --> 00:20:46,593
+out that when we want to construct models
+for richly structured domains, the
+
+206
+00:20:46,593 --> 00:20:52,493
+introduction of these latent variables can
+be, can be critical in the success of the
+
+207
+00:20:52,493 --> 00:21:00,331
+model. We, it's, we've already mentioned
+that latent variables satisfy the missing
+
+208
+00:21:00,331 --> 00:21:05,265
+at random assumptions, and so the
+expectation maximization algorithm is
+
+209
+00:21:05,265 --> 00:21:11,034
+applicable in this case. And, and is very
+commonly used for, for optimizing latent
+
+210
+00:21:11,034 --> 00:21:16,663
+variable models. However, it's, we've,
+we've already discussed this, previously
+
+211
+00:21:16,663 --> 00:21:21,598
+as well, that when we're learning with
+latent variables, we have serious
+
+212
+00:21:21,598 --> 00:21:26,663
+problems, both with identifiability. The
+learned model as well a multiple
+
+213
+00:21:26,663 --> 00:21:31,727
+[inaudible] that are often even symmetric
+reflections of each other. Which is a
+
+214
+00:21:31,727 --> 00:21:36,662
+facet of unidentifiability but also ones
+that are not reflections are just
+
+215
+00:21:36,662 --> 00:21:41,341
+symmetric permutations of each other. And
+those really necessitate a good
+
+216
+00:21:41,341 --> 00:21:47,408
+initialization strategy. And, we mentioned
+that picking variable cardinality for the
+
+217
+00:21:47,408 --> 00:21:54,086
+latent variables is a key question in, in
+these latent variable models, and one to
+
+218
+00:21:54,086 --> 00:21:59,460
+which a lot of work has been devoted,
+especially in the last few years.
